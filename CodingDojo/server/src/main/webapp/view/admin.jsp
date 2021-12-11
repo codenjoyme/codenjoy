@@ -210,11 +210,11 @@
                 <td>
                     <c:choose>
                         <c:when test="${data.recording}">
-                            <b>The recording is active</b></br>
+                            <b><spring:message key="recording.active"/></b></br>
                             <input type="submit" name="action" value="Stop recording"/>
                         </c:when>
                         <c:otherwise>
-                            <b>The recording was suspended</b></br>
+                            <b><spring:message key="recording.suspended"/></b></br>
                             <input type="submit" name="action" value="Start recording"/>
                         </c:otherwise>
                     </c:choose>
@@ -232,11 +232,11 @@
                 <td>
                     <c:choose>
                         <c:when test="${data.debugLog}">
-                            <b>The debug in progress</b></br>
+                            <b><spring:message key="debug.active"/></b></br>
                             <input type="submit" name="action" value="Stop debug"/>
                         </c:when>
                         <c:otherwise>
-                            <b>The debug was suspended</b></br>
+                            <b><spring:message key="debug.suspended"/></b></br>
                             <input type="submit" name="action" value="Start debug"/>
                         </c:otherwise>
                     </c:choose>
@@ -275,11 +275,11 @@
                 <td>
                     <c:choose>
                         <c:when test="${data.autoSave}">
-                            <b>The auto save in progress</b></br>
+                            <b><spring:message key="autoSave.active"/></b></br>
                             <input type="submit" name="action" value="Stop auto save"/>
                         </c:when>
                         <c:otherwise>
-                            <b>The auto save was suspended</b></br>
+                            <b><spring:message key="autoSave.suspended"/></b></br>
                             <input type="submit" name="action" value="Start auto save"/>
                         </c:otherwise>
                     </c:choose>
@@ -301,7 +301,7 @@
                             <input type="submit" name="action" value="Close registration"/>
                         </c:when>
                         <c:otherwise>
-                            <b><spring:message key="registration.closed"/></b></br>
+                            <b><spring:message key="registration.suspended"/></b></br>
                             <input type="submit" name="action" value="Open registration"/>
                         </c:otherwise>
                     </c:choose>
@@ -319,7 +319,7 @@
                         <a href="${ctx}/admin/room/registration/stop?room=${data.room}#closeRoomRegistration">Close room registration</a>.
                     </c:when>
                     <c:otherwise>
-                        <b><spring:message key="registration.room.closed"/></b></br>
+                        <b><spring:message key="registration.room.suspended"/></b></br>
                         <a href="${ctx}/admin/room/registration/start?room=${data.room}#closeRoomRegistration">Open room registration</a>.
                     </c:otherwise>
                 </c:choose>
