@@ -45,15 +45,15 @@ public class ServerRegistration {
     private final Server server;
 
     private WebElement status() {
-        return web.element("#closeRegistration td b");
+        return web.element("#serverRegistration td b");
     }
 
     private WebElement closeButton() {
-        return web.button("#closeRegistration", AdminSettings.CLOSE_REGISTRATION);
+        return web.button("#serverRegistration", AdminSettings.CLOSE_REGISTRATION);
     }
 
     private WebElement openButton() {
-        return web.button("#closeRegistration", AdminSettings.OPEN_REGISTRATION);
+        return web.button("#serverRegistration", AdminSettings.OPEN_REGISTRATION);
     }
 
     public void assertClosed() {

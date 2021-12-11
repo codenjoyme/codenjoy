@@ -288,11 +288,11 @@
         </table>
     </form:form>
 
-    <form:form modelAttribute="data" action="admin#closeRegistration" method="POST">
+    <form:form modelAttribute="data" action="admin#serverRegistration" method="POST">
         <input type="hidden" name="game" value="${data.game}"/>
         <input type="hidden" name="room" value="${data.room}"/>
 
-        <table class="admin-table" id="closeRegistration">
+        <table class="admin-table" id="serverRegistration">
             <tr>
                 <td>
                     <c:choose>
