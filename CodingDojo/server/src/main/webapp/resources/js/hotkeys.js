@@ -49,7 +49,15 @@ function initHotkeys() {
             window.open(contextPath);
         } else if (adminKey && ev.keyCode == 74) { // ... + J (Joystick)
             setup.enableJoystick = !setup.enableJoystick;
-        } else if (adminKey && ev.keyCode == 76) { // ... + l (Log)
+            alert("Joystick " + (setup.enableJoystick ? "enabled" : "disabled") + ".\n" +
+                    "Please press:\n" +
+                    " - Arrows [← → ↑ ↓] keys to to send 'DIRECTION' command;\n" +
+                    " - Space key to send 'ACT' command;\n" +
+                    " - Space then Arrows to send 'ACT,DIRECTION' command;\n" +
+                    " - 0..9 to send 'ACT(n)' command\n;" +
+                    " - 0..9 then Arrows to send 'ACT(n),DIRECTION' command."
+            );
+        } else if (adminKey && ev.keyCode == 76) { // ... + L (Log)
             window.open(contextPath + '/board/log/player/'
                 + setup.playerId + '?code='
                 + setup.code + gameParam('&') + roomParam('&'));
