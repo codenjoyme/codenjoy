@@ -220,20 +220,6 @@ public class AdminController {
 
     // ----------------
 
-    @GetMapping("/registration/start")
-    public String close(HttpServletRequest request) {
-        playerService.openRegistration();
-        return getAdmin(request);
-    }
-
-    @GetMapping("/registration/stop")
-    public String open(HttpServletRequest request) {
-        playerService.closeRegistration();
-        return getAdmin(request);
-    }
-
-    // ----------------
-
     @GetMapping("/room/registration/stop")
     public String openRoom(HttpServletRequest request) {
         String room = room(request);

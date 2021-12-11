@@ -79,12 +79,17 @@ Scenario: Admin can create/remove any room but not default
   When Open login page
   Then There is list of rooms '[first, sample, second, third]' on the login and register form
 
-Scenario: Admin can close/open registration
+Scenario: Admin can close/open registration for all server
   Given Login to Admin page
+  Then Check game is 'first' and room is 'first'
   Then Registration is active
 
   # close registration
   When Click Close registration
+  Then Registration was closed
+
+  When Select game room 'second'
+  Then Check game is 'second' and room is 'second'
   Then Registration was closed
 
   When Click logout

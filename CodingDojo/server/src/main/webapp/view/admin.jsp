@@ -288,22 +288,27 @@
         </table>
     </form:form>
 
-    <table class="admin-table" id="closeRegistration">
-        <tr>
-            <td>
-                <c:choose>
-                    <c:when test="${data.opened}">
-                        <b><spring:message key="registration.active"/></b></br>
-                        <a href="${ctx}/admin/registration/stop?room=${data.room}#closeRegistration">Close registration</a>.
-                    </c:when>
-                    <c:otherwise>
-                        <b><spring:message key="registration.closed"/></b></br>
-                        <a href="${ctx}/admin/registration/start?room=${data.room}#closeRegistration">Open registration</a>.
-                    </c:otherwise>
-                </c:choose>
-            </td>
-        </tr>
-    </table>
+    <form:form modelAttribute="data" action="admin#closeRegistration" method="POST">
+        <input type="hidden" name="game" value="${data.game}"/>
+        <input type="hidden" name="room" value="${data.room}"/>
+
+        <table class="admin-table" id="closeRegistration">
+            <tr>
+                <td>
+                    <c:choose>
+                        <c:when test="${data.opened}">
+                            <b><spring:message key="registration.active"/></b></br>
+                            <input type="submit" name="action" value="Close registration"/>
+                        </c:when>
+                        <c:otherwise>
+                            <b><spring:message key="registration.closed"/></b></br>
+                            <input type="submit" name="action" value="Open registration"/>
+                        </c:otherwise>
+                    </c:choose>
+                </td>
+            </tr>
+        </table>
+    </form:form>
 
     <table class="admin-table" id="closeRoomRegistration">
         <tr>

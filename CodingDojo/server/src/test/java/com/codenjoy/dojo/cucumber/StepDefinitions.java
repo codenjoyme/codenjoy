@@ -222,6 +222,8 @@ public class StepDefinitions {
         assertAdminPageOpened(AdminPage.URL + "first");
     }
 
+    // ------------
+
     @Then("Registration is active")
     public void assertRegistrationIsActive() {
         admin.openCloseRegistration().assertOpened();
@@ -234,13 +236,15 @@ public class StepDefinitions {
 
     @When("Click Close registration")
     public void clickCloseRegistration() {
-        admin.openCloseRegistration().openCloseLink().click();
+        admin.openCloseRegistration().close();
     }
 
     @When("Click Open registration")
     public void clickOpenRegistration() {
-        clickCloseRegistration();
+        admin.openCloseRegistration().open();
     }
+
+    // ------------
 
     @When("Open registration page")
     public void openRegistrationPage() {

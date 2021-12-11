@@ -217,6 +217,14 @@ public class AdminService {
                     autoSaver.resume();
                     break;
 
+                case CLOSE_REGISTRATION:
+                    playerService.closeRegistration();
+                    break;
+
+                case OPEN_REGISTRATION:
+                    playerService.openRegistration();
+                    break;
+
             }
         }
 
