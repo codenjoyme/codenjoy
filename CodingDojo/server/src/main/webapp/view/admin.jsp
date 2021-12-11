@@ -202,17 +202,20 @@
     </form:form>
 
     <form:form modelAttribute="data" action="admin#recordGame" method="POST">
+        <input type="hidden" name="game" value="${data.game}"/>
+        <input type="hidden" name="room" value="${data.room}"/>
+
         <table class="admin-table" id="recordGame">
             <tr>
                 <td>
                     <c:choose>
                         <c:when test="${data.recording}">
                             <b>The recording is active</b></br>
-                            <a href="${ctx}/admin/recording/stop?room=${data.room}#recordGame">Stop recording</a>.
+                            <input type="submit" name="action" value="Stop recording"/>
                         </c:when>
                         <c:otherwise>
                             <b>The recording was suspended</b></br>
-                            <a href="${ctx}/admin/recording/start?room=${data.room}#recordGame">Start recording</a>.
+                            <input type="submit" name="action" value="Start recording"/>
                         </c:otherwise>
                     </c:choose>
                 </td>

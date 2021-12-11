@@ -140,6 +140,27 @@ Scenario: Admin can pause/resume game only in this room
   When Click Resume game
   Then Game is resumed
 
+Scenario: Admin can start/stop recording for all server
+  Given Login to Admin page
+  Then Check game is 'first' and room is 'first'
+  Then Game recording is suspended
+
+  # start recording
+  When Click Start game recording
+  Then Game recording is started
+
+  When Select game room 'second'
+  Then Check game is 'second' and room is 'second'
+  Then Game recording is started
+
+  # stop recording
+  When Click Stop game recording
+  Then Game recording is suspended
+
+  When Select game room 'first'
+  Then Check game is 'first' and room is 'first'
+  Then Game recording is suspended
+
 Scenario: Admin can change system tick time
   Given Login to Admin page
   Then Check game is 'first' and room is 'first'

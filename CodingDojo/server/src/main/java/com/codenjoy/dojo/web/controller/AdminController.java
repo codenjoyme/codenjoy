@@ -278,20 +278,6 @@ public class AdminController {
 
     // ----------------
 
-    @GetMapping("/recording/start")
-    public String startRecording(HttpServletRequest request) {
-        actionLogger.resume();
-        return getAdmin(request);
-    }
-
-    @GetMapping("/recording/stop")
-    public String stopRecording(HttpServletRequest request) {
-        actionLogger.pause();
-        return getAdmin(request);
-    }
-
-    // ----------------
-
     @PostMapping()
     public String saveSettings(AdminSettings settings,
                                BindingResult result,

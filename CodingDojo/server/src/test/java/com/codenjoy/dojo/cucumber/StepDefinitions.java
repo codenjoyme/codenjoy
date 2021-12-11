@@ -272,6 +272,26 @@ public class StepDefinitions {
         admin.pauseResume().assertGameIsPaused();
     }
 
+    @When("Click Start game recording")
+    public void clickStartGameRecording() {
+        admin.gameRecording().start();
+    }
+
+    @Then("Game recording is started")
+    public void assertGameRecordingIsStarted() {
+        admin.gameRecording().assertRecordingIsStarted();
+    }
+
+    @When("Click Stop game recording")
+    public void clickStopGameRecording() {
+        admin.gameRecording().stop();
+    }
+
+    @Then("Game recording is suspended")
+    public void assertGameRecordingIsSuspended() {
+        admin.gameRecording().assertRecordingIsSuspended();
+    }
+
     @When("Click Resume game")
     public void clickResumeGame() {
         admin.pauseResume().resumeGame();

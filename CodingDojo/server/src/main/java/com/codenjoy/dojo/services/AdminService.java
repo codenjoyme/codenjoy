@@ -193,6 +193,14 @@ public class AdminService {
                     roomService.setActive(room, true);
                     break;
 
+                case STOP_RECORDING:
+                    actionLogger.pause();
+                    break;
+
+                case START_RECORDING:
+                    actionLogger.resume();
+                    break;
+
             }
         }
 

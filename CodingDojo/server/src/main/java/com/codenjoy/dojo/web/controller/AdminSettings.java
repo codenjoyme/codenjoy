@@ -47,6 +47,8 @@ public class AdminSettings {
     public static final String SAVE_ACTIVE_GAMES = "Save active games";
     public static final String PAUSE_GAME = "Pause game";
     public static final String RESUME_GAME = "Resume game";
+    public static final String STOP_RECORDING = "Stop recording";
+    public static final String START_RECORDING = "Start recording";
     public static final String SET_TIMER_PERIOD = "Set timer period";
 
     private List<PlayerInfo> players;
