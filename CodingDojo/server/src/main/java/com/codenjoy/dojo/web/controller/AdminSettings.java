@@ -44,12 +44,13 @@ public class AdminSettings {
     // actions
     public static final String DELETE_ROOM = "Delete room";
     public static final String CREATE_ROOM = "Create room";
+    public static final String SAVE_ACTIVE_GAMES = "Save active games";
     public static final String PAUSE_GAME = "Pause game";
     public static final String RESUME_GAME = "Resume game";
     public static final String SET_TIMER_PERIOD = "Set timer period";
 
     private List<PlayerInfo> players;
-    private List<Object> games;  // // TODO #4FS тут boolean
+    private List<Object> activeGames;
 
     // used to get data from jsp
     private String action; // submit button value

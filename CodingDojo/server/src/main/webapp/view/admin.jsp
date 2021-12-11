@@ -125,6 +125,9 @@
     </table>
 
     <form:form modelAttribute="data" action="admin#activeGames" method="POST">
+        <input type="hidden" name="game" value="${data.game}"/>
+        <input type="hidden" name="room" value="${data.room}"/>
+
         <table class="admin-table" id="activeGames">
             <tr>
                 <td colspan="3" style="width:300px;">
@@ -134,7 +137,7 @@
             <c:forEach items="${data.gamesRooms.all}" var="gameRooms" varStatus="status">
                 <tr game="${gameRooms.game}">
                     <td class="rightStep">
-                        <form:checkbox id="enable-games-${gameRooms.game}" path="games[${status.index}]"/>
+                        <form:checkbox id="enable-games-${gameRooms.game}" path="activeGames[${status.index}]"/>
                         <label class="check-label" for="enable-games-${gameRooms.game}"></label>
                         <span>${gameRooms.game}</span>
                     </td>
@@ -154,9 +157,7 @@
             </c:forEach>
             <tr>
                 <td>
-                    <input type="hidden" name="game" value="${data.game}"/>
-                    <input type="hidden" name="room" value="${data.room}"/>
-                    <input type="submit" value="Save"/>
+                    <input type="submit" name="action" value="Save active games"/>
                 </td>
             </tr>
         </table>
@@ -200,22 +201,24 @@
         </table>
     </form:form>
 
-    <table class="admin-table" id="recordGame">
-        <tr>
-            <td>
-                <c:choose>
-                    <c:when test="${data.recording}">
-                        <b>The recording is active</b></br>
-                        <a href="${ctx}/admin/recording/stop?room=${data.room}#recordGame">Stop recording</a>.
-                    </c:when>
-                    <c:otherwise>
-                        <b>The recording was suspended</b></br>
-                        <a href="${ctx}/admin/recording/start?room=${data.room}#recordGame">Start recording</a>.
-                    </c:otherwise>
-                </c:choose>
-            </td>
-        </tr>
-    </table>
+    <form:form modelAttribute="data" action="admin#recordGame" method="POST">
+        <table class="admin-table" id="recordGame">
+            <tr>
+                <td>
+                    <c:choose>
+                        <c:when test="${data.recording}">
+                            <b>The recording is active</b></br>
+                            <a href="${ctx}/admin/recording/stop?room=${data.room}#recordGame">Stop recording</a>.
+                        </c:when>
+                        <c:otherwise>
+                            <b>The recording was suspended</b></br>
+                            <a href="${ctx}/admin/recording/start?room=${data.room}#recordGame">Start recording</a>.
+                        </c:otherwise>
+                    </c:choose>
+                </td>
+            </tr>
+        </table>
+    </form:form>
 
     <form:form modelAttribute="data" action="admin#debug" method="POST">
         <table class="admin-table" id="debug">

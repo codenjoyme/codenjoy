@@ -172,6 +172,11 @@ public class AdminService {
                     settings.setRoom(room);
                     break;
 
+                case SAVE_ACTIVE_GAMES:
+                    setActiveGames(settings.getActiveGames());
+
+                    break;
+
                 case SET_TIMER_PERIOD:
                     try {
                         timerService.changePeriod(settings.getTimerPeriod());
@@ -195,10 +200,6 @@ public class AdminService {
             playerService.loadSaveForAll(room, settings.getProgress());
         }
 
-        if (settings.getGames() != null) {
-            setEnable((List) settings.getGames());
-        }
-
         Settings gameSettings = gameService.getGameType(game, room).getSettings();
         List<Exception> errors = new LinkedList<>();
         if (settings.getOtherValues() != null) {
@@ -214,7 +215,7 @@ public class AdminService {
         }
 
         if (!errors.isEmpty()) {
-            throw new IllegalArgumentException("There are errors during save settings: " + errors.toString());
+            throw new IllegalArgumentException("There are errors during save settings: " + errors);
         }
 
         if (settings.getGenerateNameMask() != null) {
@@ -225,15 +226,15 @@ public class AdminService {
         }
     }
 
-    private void setEnable(List<Parameter> games) {
+    private void setActiveGames(List<Object> games) {
         List<String> opened = new LinkedList<>();
         List<String> allGames = gameService.getGames();
         if (games.size() != allGames.size()) {
-            throw new IllegalStateException("Список игр к активации регистрации не полный");
+            throw new IllegalStateException("The list of games is not complete");
         }
-        for (int i = 0; i < allGames.size(); i++) {
-            if (games.get(i) != null) {
-                opened.add(allGames.get(i));
+        for (int index = 0; index < allGames.size(); index++) {
+            if (games.get(index) != null) {
+                opened.add(allGames.get(index));
             }
         }
 
@@ -353,8 +354,8 @@ public class AdminService {
 
         // TODO #4FS тут проверить
         List<String> enabled = roomService.openedGames();
-        result.setGames(gameService.getGames().stream()
-                .map(name -> enabled.contains(name))
+        result.setActiveGames(gameService.getGames().stream()
+                .map(enabled::contains)
                 .collect(toList()));
 
         List<PlayerInfo> saves = saveService.getSaves(room);
