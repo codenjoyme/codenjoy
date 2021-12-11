@@ -26,9 +26,7 @@ Scenario: Admin can create/remove any room but not default
   Then There are players in rooms '{first=0, newSecond=0, sample=0, second=0, third=0}' on the admin page
 
   When Open login page
-  Then There is list of rooms '[first, newSecond, sample, second, third]' on the login form
-  When Press register button
-  Then There is list of rooms '[first, newSecond, sample, second, third]' on the register form
+  Then There is list of rooms '[first, newSecond, sample, second, third]' on the login and register form
 
   # cant delete default game room
   When Open Admin page
@@ -46,9 +44,7 @@ Scenario: Admin can create/remove any room but not default
   Then There are players in rooms '{first=0, newSecond=0, newThird=0, sample=0, second=0, third=0}' on the admin page
 
   When Open login page
-  Then There is list of rooms '[first, newSecond, newThird, sample, second, third]' on the login form
-  When Press register button
-  Then There is list of rooms '[first, newSecond, newThird, sample, second, third]' on the register form
+  Then There is list of rooms '[first, newSecond, newThird, sample, second, third]' on the login and register form
 
   # delete room
   When Open Admin page
@@ -59,9 +55,7 @@ Scenario: Admin can create/remove any room but not default
   Then There are players in rooms '{first=0, newThird=0, sample=0, second=0, third=0}' on the admin page
 
   When Open login page
-  Then There is list of rooms '[first, newThird, sample, second, third]' on the login form
-  When Press register button
-  Then There is list of rooms '[first, newThird, sample, second, third]' on the register form
+  Then There is list of rooms '[first, newThird, sample, second, third]' on the login and register form
 
   # delete room
   When Open Admin page
@@ -72,9 +66,7 @@ Scenario: Admin can create/remove any room but not default
   Then There are players in rooms '{first=0, sample=0, second=0, third=0}' on the admin page
 
   When Open login page
-  Then There is list of rooms '[first, sample, second, third]' on the login form
-  When Press register button
-  Then There is list of rooms '[first, sample, second, third]' on the register form
+  Then There is list of rooms '[first, sample, second, third]' on the login and register form
 
 Scenario: Admin can close/open registration
   Given Login to Admin page

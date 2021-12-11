@@ -317,13 +317,10 @@ public class StepDefinitions {
         page.open(url);
     }
 
-    @Then("There is list of rooms {string} on the login form")
+    @Then("There is list of rooms {string} on the login and register form")
     public void thereIsListOfRoomsOnLoginForm(String rooms) {
         login.assertRoomsAvailable(rooms);
-    }
-
-    @Then("There is list of rooms {string} on the register form")
-    public void thereIsListOfRoomsOnRegisterForm(String rooms) {
+        login.clickRegister();
         registration.assertRoomsAvailable(rooms);
     }
 
