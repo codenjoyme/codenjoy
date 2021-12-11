@@ -79,13 +79,13 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 
+import static com.codenjoy.dojo.client.Utils.split;
 import static com.codenjoy.dojo.services.AdminServiceTest.assertPlayersLastResponse;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.services.helper.ChatDealsUtils.setupReadableName;
 import static com.codenjoy.dojo.services.multiplayer.GamePlayer.DEFAULT_TEAM_ID;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static com.codenjoy.dojo.utils.JsonUtils.clean;
-import static com.codenjoy.dojo.client.Utils.split;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 import static org.fest.reflect.core.Reflection.field;
@@ -372,7 +372,7 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldNotCreatePlayer_whenRegistrationWasClosed() {
         // given
-        assertTrue(playerService.isRegistrationOpened());
+        assertEquals(true, playerService.isRegistrationOpened());
 
         // when
         playerService.closeRegistration();
@@ -381,13 +381,13 @@ public class PlayerServiceImplTest {
         assertNotCreated(createPlayer(USER1));
         assertNotCreated(playerService.get(USER1));
 
-        assertFalse(playerService.isRegistrationOpened());
+        assertEquals(false, playerService.isRegistrationOpened());
 
         // when
         playerService.openRegistration();
 
         // then
-        assertTrue(playerService.isRegistrationOpened());
+        assertEquals(true, playerService.isRegistrationOpened());
 
         assertCreated(createPlayer(USER1));
         assertSame(USER1, playerService.get(USER1).getId());
@@ -785,7 +785,7 @@ public class PlayerServiceImplTest {
         Map sentScreens = sentScreens1;
         assertEquals(players.length, sentScreens.size());
         for (Player player : players) {
-            assertTrue(sentScreens.containsKey(player));
+            assertEquals(true, sentScreens.containsKey(player));
         }
     }
 
@@ -1502,8 +1502,8 @@ public class PlayerServiceImplTest {
         createPlayer(USER1);
 
         // when then
-        assertTrue(playerService.contains(USER1));
-        assertFalse(playerService.contains(USER2));
+        assertEquals(true, playerService.contains(USER1));
+        assertEquals(false, playerService.contains(USER2));
     }
 
     @Test
