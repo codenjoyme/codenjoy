@@ -167,8 +167,8 @@ public class StepDefinitions {
                 country, techSkills, company, experience);
     }
 
-    @When("Try open Admin page")
-    public void tryOpenAdminPage() {
+    @Given("Open Admin page")
+    public void openAdminPage() {
         admin.open();
     }
 

@@ -4,18 +4,21 @@ Feature: Admin page
 Scenario: User cant open admin page but Admin can
   Given User registered with name 'Stiven Pupkin', email 'user1@mail.com', password 'password1', city 'Moon', tech skills 'Java', company 'Home', experience '10 years'
 
+  # unsuccessfull login as user
   When Login as 'user1@mail.com' 'password1'
-  And Try open Admin page
+  And Open Admin page
   Then Error page opened with message 'Something wrong with your request. Please save you ticker number and ask site administrator.'
 
+  # successfull login as admin
   When Login as 'admin@codenjoyme.com' 'admin'
-  And Try open Admin page
+  And Open Admin page
   Then Admin page opened with url '/admin?room=first'
 
 Scenario: Admin can close/open registration
   Given Login to Admin page
   Then Registration is active
 
+  # close registration
   When Click Close registration
   Then Registration was closed
 
@@ -33,7 +36,8 @@ Scenario: Admin can close/open registration
   And Try to login as 'admin@codenjoyme.com' with 'admin' password
   Then Admin page opened with url '/admin?room=first'
 
-  When Try open Admin page
+  # open registration
+  When Open Admin page
   Then Registration was closed
 
   When Click Open registration
@@ -55,6 +59,7 @@ Scenario: Admin can pause/resume game only in this room
   Then Check game is 'first' and room is 'first'
   Then Game is resumed
 
+  # pause game
   When Click Pause game
   Then Game is paused
 
@@ -66,6 +71,7 @@ Scenario: Admin can pause/resume game only in this room
   Then Check game is 'first' and room is 'first'
   Then Game is paused
 
+  # resume game
   When Click Resume game
   Then Game is resumed
 
@@ -74,6 +80,7 @@ Scenario: Admin can change system tick time
   Then Check game is 'first' and room is 'first'
   Then Timer period is 1000
 
+  # update tick
   When Update timer period to 1101
   Then Timer period is 1101
   When Click Set timer period button
@@ -83,6 +90,7 @@ Scenario: Admin can change system tick time
   Then Check game is 'second' and room is 'second'
   Then Timer period is 1101
 
+  # update tick
   When Update timer period to 1000
   Then Timer period is 1000
   When Click Set timer period button
@@ -108,6 +116,7 @@ Scenario: When game room is paused then is no communication with websocket clien
   Then Check game is 'first' and room is 'first'
   Then Game is resumed
 
+  # pause game
   When Click Pause game
   Then Game is paused
 
@@ -126,6 +135,7 @@ Scenario: When game room is paused then is no communication with websocket clien
   Then Check game is 'first' and room is 'first'
   Then Game is paused
 
+  # resume game
   When Click Resume game
   Then Game is resumed
 
@@ -156,6 +166,7 @@ Scenario: Admin can turn on / turn off kick for inactive players
   When Select game room 'sample'
   When Click LoadAll players
 
+  # inactivity enabled
   When Set inactivity kick enabled checkbox to true
   And Set inactivity timeout parameter to 10
   And Press inactivity settings save button
@@ -193,7 +204,7 @@ Scenario: Administrator can change level maps
   When Change map value at 2 to 'MAP3'
   When Save all level maps
 
-  When Try open Admin page
+  When Open Admin page
   When Select game room 'third'
   Then All levels are '(0)[1,1]=MAP1, (1)[1,2]=map2, (2)[2]=MAP3, (3)[3,1]=map4'
 
@@ -202,7 +213,7 @@ Scenario: Administrator can change level maps
   When Change map key at 2 to '[Level] Map[1,1]'
   When Save all level maps
 
-  When Try open Admin page
+  When Open Admin page
   When Select game room 'third'
   Then All levels are '(0)[1,1]=MAP3, (1)[1,2]=map2, (2)[2]=MAP1, (3)[3,1]=map4'
 
@@ -211,7 +222,7 @@ Scenario: Administrator can change level maps
   When Change map key at 3 to ''
   When Save all level maps
 
-  When Try open Admin page
+  When Open Admin page
   When Select game room 'third'
   Then All levels are '(0)[1,1]=MAP3, (1)[2]=MAP1'
 
@@ -229,7 +240,7 @@ Scenario: Administrator can change level maps
   Then All levels are '(0)[1,1]=MAP3, (1)[2]=MAP1, (2)[3,1]=new1, (3)[3,2]=new2'
   When Save all level maps
 
-  When Try open Admin page
+  When Open Admin page
   When Select game room 'third'
   Then All levels are '(0)[1,1]=MAP3, (1)[2]=MAP1, (2)[3,1]=new1, (3)[3,2]=new2'
 
@@ -241,7 +252,7 @@ Scenario: Administrator can change level maps
   Then All levels are '(0)[1,1]=MAP3, (1)[2]=MAP1, (2)[3,1]=new1, (3)[3,2]=new2, (4)[1,2]=new3'
   When Save all level maps
 
-  When Try open Admin page
+  When Open Admin page
   When Select game room 'third'
   Then All levels are '(0)[1,1]=MAP3, (1)[1,2]=new3, (2)[2]=MAP1, (3)[3,1]=new1, (4)[3,2]=new2'
 
@@ -256,6 +267,6 @@ Scenario: Administrator can change level maps
   Then All levels are '(0)[1,1]=MAP3, (1)<EMPTY1>=new3, (2)[2]=MAP1, (3)<EMPTY2>=new1, (4)<EMPTY3>=new2, (5)[3]=MAP2'
   When Save all level maps
 
-  When Try open Admin page
+  When Open Admin page
   When Select game room 'third'
   Then All levels are '(0)[1,1]=MAP3, (1)[2]=MAP1, (2)[3]=MAP2'
