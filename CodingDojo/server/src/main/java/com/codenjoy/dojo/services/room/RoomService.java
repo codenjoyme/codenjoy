@@ -131,7 +131,7 @@ public class RoomService {
      * @return Возвращает все комнаты конкретной игры
      * независимо от того открыта ли регистрация для комнат или нет.
      */
-    public List<String> gameRooms(String game) { // TODO #4FS тут проверить
+    public List<String> gameRooms(String game) {
         return rooms.values().stream()
                 .filter(state -> state.getGame().equals(game))
                 .map(RoomState::getRoom)
@@ -189,11 +189,10 @@ public class RoomService {
     }
 
     public void setOpenedGames(List<String> games) { // TODO #4FS тут проверить
-        rooms.values().stream()
-                .forEach(roomState -> {
-                    boolean opened = games.contains(roomState.getGame());
-                    roomState.setOpened(opened);
-                });
+        rooms.values().forEach(roomState -> {
+            boolean opened = games.contains(roomState.getGame());
+            roomState.setOpened(opened);
+        });
     }
 
     public List<String> openedGames() { // TODO #4FS тут проверить

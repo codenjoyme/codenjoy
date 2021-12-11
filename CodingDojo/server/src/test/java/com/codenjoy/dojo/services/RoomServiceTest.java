@@ -438,6 +438,25 @@ public class RoomServiceTest {
     }
 
     @Test
+    public void shouldGameRooms() {
+        // given
+        service.create("room1", game1);
+        service.create("room2", game1);
+        service.create("room3", game2);
+        service.create("room4", game2);
+
+        // when then
+        assertEquals("[room1, room2]",
+                service.gameRooms("first").toString());
+
+        assertEquals("[room3, room4]",
+                service.gameRooms("second").toString());
+
+        assertEquals("[]",
+                service.gameRooms("third").toString());
+    }
+
+    @Test
     public void shouldGetGameRooms() {
         // given
         service.create("room3", game2);
