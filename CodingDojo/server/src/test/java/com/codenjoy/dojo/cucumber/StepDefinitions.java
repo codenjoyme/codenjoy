@@ -53,6 +53,7 @@ public class StepDefinitions {
         registration.close();
         clients.close();
         storage.close();
+        error.close();
     }
 
     @After
@@ -190,7 +191,7 @@ public class StepDefinitions {
         error.assertOnPage();
         error.assertTicketNumber();
         error.assertErrorMessage(message);
-        error.clear();
+        error.close();
     }
 
     @Then("We are on page with url {string}")

@@ -22,6 +22,7 @@ package com.codenjoy.dojo.cucumber.page;
  * #L%
  */
 
+import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.services.ErrorTicketService;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.WebElement;
@@ -37,7 +38,7 @@ import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
 @RequiredArgsConstructor
-public class ErrorPage {
+public class ErrorPage implements Closeable {
 
     // page objects
     private final Page page;
@@ -58,7 +59,8 @@ public class ErrorPage {
         return new LinkedList<>(tickets.getErrors().keySet());
     }
 
-    public void clear() {
+    @Override
+    public void close() {
         tickets.clear();
     }
 
