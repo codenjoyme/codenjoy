@@ -134,7 +134,7 @@ public class RegistrationValidatorTest {
         validator.validate(player, errors);
 
         // then
-        assertError(errors, "email", "registration.room.closed");
+        assertError(errors, "email", "registration.room.suspended");
     }
 
     @Test
@@ -146,7 +146,7 @@ public class RegistrationValidatorTest {
         validator.validate(player, errors);
 
         // then
-        assertError(errors, "email", "registration.closed");
+        assertError(errors, "email", "registration.suspended");
     }
 
     @Test

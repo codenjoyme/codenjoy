@@ -81,9 +81,9 @@ public class RegistrationValidator implements Validator {
 
         if (!playerService.isRegistrationOpened(room)) {
             if (playerService.isRegistrationOpened()) {
-                errors.rejectValue("email", "registration.room.closed");
+                errors.rejectValue("email", "registration.room.suspended");
             } else {
-                errors.rejectValue("email", "registration.closed");
+                errors.rejectValue("email", "registration.suspended");
             }
         }
 
