@@ -175,6 +175,9 @@ public class PlayerServiceImplTest {
     @Autowired
     private StatisticService statistic;
 
+    @Autowired
+    private ConfigProperties config;
+
     private Information info;
 
     @Mock
@@ -223,9 +226,10 @@ public class PlayerServiceImplTest {
 
         when(chat.getLastRoomMessageIds()).thenReturn(chatIds);
 
-        // по умолчанию все команаты будут активными и открытыми для регистрации
+        // по умолчанию все комнаты будут активными и открытыми для регистрации
         when(roomService.isActive(anyString())).thenReturn(true);
         when(roomService.isOpened(anyString())).thenReturn(true);
+        setRegistrationOpened(true);
 
         setupReadableName(registration);
 
@@ -458,18 +462,73 @@ public class PlayerServiceImplTest {
         assertHostsCaptured(USER1_URL, USER2_URL);
     }
 
-
+    // тикаются ли борды в этой комнате
     protected void setActive(String room, boolean active) {
         when(roomService.isActive(room)).thenReturn(active);
     }
 
+    // открыта ли эта комната для регистрации
     protected void setRegistrationOpened(String room, boolean opened) {
         when(roomService.isOpened(room)).thenReturn(opened);
+    }
+
+    // есть ли хоть одна открытая комната для регистрации
+    protected void setRegistrationOpened(boolean opened) {
+        when(roomService.isOpened()).thenReturn(opened);
+    }
+
+    @Test
+    public void shouldIsRegistrationOpened_roomOpened_serverOpened() {
+        // given
+        setRegistrationOpened(true);
+        setRegistrationOpened("room", true);
+        config.setRegistrationOpened(true);
+
+        // when
+        assertEquals(true, playerService.isRegistrationOpened());
+        assertEquals(true, playerService.isRegistrationOpened("room"));
+    }
+
+    @Test
+    public void shouldIsRegistrationOpened_roomClosed_serverOpened() {
+        // given
+        setRegistrationOpened(false);
+        setRegistrationOpened("room", false);
+        config.setRegistrationOpened(true);
+
+        // when
+        assertEquals(false, playerService.isRegistrationOpened());
+        assertEquals(false, playerService.isRegistrationOpened("room"));
+    }
+
+    @Test
+    public void shouldIsRegistrationOpened_roomOpened_serverClosed() {
+        // given
+        setRegistrationOpened(true);
+        setRegistrationOpened("room", true);
+        config.setRegistrationOpened(false);
+
+        // when
+        assertEquals(false, playerService.isRegistrationOpened());
+        assertEquals(false, playerService.isRegistrationOpened("room"));
+    }
+
+    @Test
+    public void shouldIsRegistrationOpened_roomClosed_serverClosed() {
+        // given
+        setRegistrationOpened(false);
+        setRegistrationOpened("room", false);
+        config.setRegistrationOpened(false);
+
+        // when
+        assertEquals(false, playerService.isRegistrationOpened());
+        assertEquals(false, playerService.isRegistrationOpened("room"));
     }
 
     @Test
     public void shouldNotCreateUsers_forRoomWhereRegistrationIsClosed_case1() {
         // given
+        setRegistrationOpened(true);
         setRegistrationOpened("room1", false);
 
         // when
@@ -494,6 +553,7 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldNotCreateUsers_forRoomWhereRegistrationIsClosed_case2() {
         // given
+        setRegistrationOpened(true);
         setRegistrationOpened("room2", false);
 
         // when
@@ -525,6 +585,7 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldNotCreateUsers_forRoomWhereRegistrationIsClosed_case3() {
         // given
+        setRegistrationOpened(true);
         setRegistrationOpened("room1", false);
         setRegistrationOpened("room3", false);
 
