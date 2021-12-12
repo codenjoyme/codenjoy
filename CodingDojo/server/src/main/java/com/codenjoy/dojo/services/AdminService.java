@@ -281,11 +281,6 @@ public class AdminService {
         }
 
         map.get(settings.getAction()).accept(settings, game, room);
-
-        // action может перенаправить в другую комнату или игру,
-        // сохраняет измененные значения через settings объект
-        room = settings.getRoom();
-        game = settings.getGame();
     }
 
     private void saveActiveGames(AdminSettings settings, String game, String room) {
