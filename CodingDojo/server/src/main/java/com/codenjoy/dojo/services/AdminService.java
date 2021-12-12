@@ -196,7 +196,7 @@ public class AdminService {
     }
 
     private void stopAutoSave(AdminSettings settings, String game, String room) {
-        autoSaver.resume();
+        autoSaver.pause();
     }
 
     private void startAutoSave(AdminSettings settings, String game, String room) {
@@ -212,7 +212,7 @@ public class AdminService {
     }
 
     private void closeRoomRegistration(AdminSettings settings, String game, String room) {
-        roomService.setOpened(room, true);
+        roomService.setOpened(room, false);
     }
 
     private void openRoomRegistration(AdminSettings settings, String game, String room) {
