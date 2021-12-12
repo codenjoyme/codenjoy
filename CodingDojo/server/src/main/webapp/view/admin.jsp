@@ -801,141 +801,222 @@
                             <tr style="" player="${player.email}">
                         </c:otherwise>
                     </c:choose>
+
                         <c:choose>
                             <c:when test="${player.active}">
-                                <td><form:input class="input-id"       path="players[${status.index}].id"   readonly="true" index="${status.index}"/></td>
-                                <td><form:input class="input-code"     path="players[${status.index}].code" readonly="true"/></td>
-                                <td><form:input class="input-readable" path="players[${status.index}].readableName"/></td>
-                                <td><form:input class="input-email"    path="players[${status.index}].email"/></td>
-                                <td><form:input class="input-room"     path="players[${status.index}].room"/></td>
-                                <td><form:input class="input-team"     path="players[${status.index}].teamId"/></td>
-                                <td><form:input class="input-score"    path="players[${status.index}].score"/></td>
-                                <td><form:input class="input-callback" path="players[${status.index}].callbackUrl"/></td>
-                                <td>&nbsp;<span class="input-ticks-inactive">${player.ticksInactive}</span>&nbsp;</td>
-                                <c:choose>
-                                    <c:when test="${player.code != null}">
-                                        <td class="joystick">
-                                            <span class="a" href="${ctx}/rest/joystick/player/${player.id}/do/up#players">U</span>
-                                            <span class="a" href="${ctx}/rest/joystick/player/${player.id}/do/down#players">D</span>
-                                            <span class="a" href="${ctx}/rest/joystick/player/${player.id}/do/left#players">L</span>
-                                            <span class="a" href="${ctx}/rest/joystick/player/${player.id}/do/right#players">R</span>
-                                            <span class="a" href="${ctx}/rest/joystick/player/${player.id}/do/act#players">A</span>
-                                        </td>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <td>UDLRA</td>
-                                    </c:otherwise>
-                                </c:choose>
-                                <td><a href="${ctx}/board/room/${data.room}">${data.room}</a></td>
-                                <td><a href="${ctx}/admin/player/${player.id}/save?room=${data.room}#players">Save</a></td>
-                                <c:choose>
-                                    <c:when test="${player.saved}">
-                                        <td><a href="${ctx}/admin/player/${player.id}/load?room=${data.room}#players">Load</a></td>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <td>Load</td>
-                                    </c:otherwise>
-                                </c:choose>
-                                <c:choose>
-                                    <c:when test="${player.saved}">
-                                        <td><a href="${ctx}/admin/player/${player.id}/save/remove?room=${data.room}#players">RemoveSave</a></td>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <td>RemoveSave</td>
-                                    </c:otherwise>
-                                </c:choose>
-                                <c:choose>
-                                    <c:when test="${player.code != null}">
-                                        <td><a href="${ctx}/admin/player/${player.id}/registration/remove?room=${data.room}#players">RemoveReg</a></td>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <td>RemoveReg</td>
-                                    </c:otherwise>
-                                </c:choose>
-                                <td><a href="${ctx}/admin/player/${player.id}/gameOver?room=${data.room}#players">GameOver</a></td>
-                                <td><a href="${ctx}/board/player/${player.id}?code=${player.code}">ViewGame</a></td>
-                                <c:choose>
-                                    <c:when test="${player.code != null}">
-                                        <td><a href="${ctx}/board/log/player/${player.id}?code=${player.code}&game=${data.game}&room=${data.room}">PlayerLog</a></td>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <td>PlayerLog</td>
-                                    </c:otherwise>
-                                </c:choose>
-                                <c:choose>
-                                    <c:when test="${player.aiPlayer}">
-                                        <td>Loaded</td>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <td><a href="${ctx}/admin/player/${player.id}/ai/reload?room=${data.room}#players">LoadAI</a></td>
-                                    </c:otherwise>
-                                </c:choose>
-                                <c:choose>
-                                    <c:when test="${player.data == null}">
-                                        <td></td>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <td><form:input class="player-save" path="players[${status.index}].data"/></td>
-                                    </c:otherwise>
-                                </c:choose>
+                                <td><form:input class="input-id"
+                                                path="players[${status.index}].id"
+                                                readonly="true"
+                                                index="${status.index}"/></td>
                             </c:when>
-
                             <c:otherwise>
-                                <td><input type="text" readonly="true" class="input-id"       value="${player.id}"/></td>
-                                <td><input type="text" readonly="true" class="input-code"     value="${player.code}"/></td>
-                                <td><input type="text" readonly="true" class="input-readable" value="${player.readableName}"/></td>
-                                <td><input type="text" readonly="true" class="input-email"    value="${player.email}"/></td>
-                                <td><input type="text" readonly="true" class="input-room"     value="${player.room}"/></td>
-                                <td><input type="text" readonly="true" class="input-team"     value="${player.teamId}"/></td>
-                                <td><input type="text" readonly="true" class="input-score"    value="${player.score}"/></td>
-                                <td><input type="text" readonly="true" class="input-callback" value="${player.callbackUrl}"/></td>
+                                <td><input type="text"
+                                           readonly="true"
+                                           class="input-id"
+                                           value="${player.id}"/></td>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <c:choose>
+                            <c:when test="${player.active}">
+                                <td><form:input class="input-code"
+                                                path="players[${status.index}].code"
+                                                readonly="true"/></td>
+                            </c:when>
+                            <c:otherwise>
+                                <td><input type="text"
+                                           readonly="true"
+                                           class="input-code"
+                                           value="${player.code}"/></td>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <c:choose>
+                            <c:when test="${player.active}">
+                                <td><form:input class="input-readable"
+                                                path="players[${status.index}].readableName"/></td>
+                            </c:when>
+                            <c:otherwise>
+                                <td><input type="text"
+                                           readonly="true"
+                                           class="input-readable"
+                                           value="${player.readableName}"/></td>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <c:choose>
+                            <c:when test="${player.active}">
+                                <td><form:input class="input-email"
+                                                path="players[${status.index}].email"/></td>
+                            </c:when>
+                            <c:otherwise>
+                                <td><input type="text"
+                                           readonly="true"
+                                           class="input-email"
+                                           value="${player.email}"/></td>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <c:choose>
+                            <c:when test="${player.active}">
+                                <td><form:input class="input-room"
+                                                path="players[${status.index}].room"/></td>
+                            </c:when>
+                            <c:otherwise>
+                                <td><input type="text"
+                                           readonly="true"
+                                           class="input-room"
+                                           value="${player.room}"/></td>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <c:choose>
+                            <c:when test="${player.active}">
+                                <td><form:input class="input-team"
+                                                path="players[${status.index}].teamId"/></td>
+                            </c:when>
+                            <c:otherwise>
+                                <td><input type="text"
+                                           readonly="true"
+                                           class="input-team"
+                                           value="${player.teamId}"/></td>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <c:choose>
+                            <c:when test="${player.active}">
+                                <td><form:input class="input-score"
+                                                path="players[${status.index}].score"/></td>
+                            </c:when>
+                            <c:otherwise>
+                                <td><input type="text"
+                                           readonly="true"
+                                           class="input-score"
+                                           value="${player.score}"/></td>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <c:choose>
+                            <c:when test="${player.active}">
+                                <td><form:input class="input-callback"
+                                                path="players[${status.index}].callbackUrl"/></td>
+                            </c:when>
+                            <c:otherwise>
+                                <td><input type="text"
+                                           readonly="true"
+                                           class="input-callback"
+                                           value="${player.callbackUrl}"/></td>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <c:choose>
+                            <c:when test="${player.active}">
+                                <td>&nbsp;<span class="input-ticks-inactive">${player.ticksInactive}</span>&nbsp;</td>
+                            </c:when>
+                            <c:otherwise>
                                 <td>&nbsp;<span class="input-ticks-inactive"></span>&nbsp;</td>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <c:choose>
+                            <c:when test="${player.code != null && player.active}">
+                                <td class="joystick">
+                                    <span class="a" href="${ctx}/rest/joystick/player/${player.id}/do/up#players">U</span>
+                                    <span class="a" href="${ctx}/rest/joystick/player/${player.id}/do/down#players">D</span>
+                                    <span class="a" href="${ctx}/rest/joystick/player/${player.id}/do/left#players">L</span>
+                                    <span class="a" href="${ctx}/rest/joystick/player/${player.id}/do/right#players">R</span>
+                                    <span class="a" href="${ctx}/rest/joystick/player/${player.id}/do/act#players">A</span>
+                                </td>
+                            </c:when>
+                            <c:otherwise>
                                 <td>UDLRA</td>
-                                <td><a href="${ctx}/board/room/${data.room}">${data.room}</a></td>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <td><a href="${ctx}/board/room/${data.room}">${data.room}</a></td>
+
+                        <c:choose>
+                            <c:when test="${player.active}">
+                                <td><a href="${ctx}/admin/player/${player.id}/save?room=${data.room}#players">Save</a></td>
+                            </c:when>
+                            <c:otherwise>
                                 <td>Save</td>
-                                <c:choose>
-                                    <c:when test="${player.saved}">
-                                        <td><a href="${ctx}/admin/player/${player.id}/load?room=${data.room}#players">Load</a></td>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <td>Load</td>
-                                    </c:otherwise>
-                                </c:choose>
-                                <c:choose>
-                                    <c:when test="${player.saved}">
-                                        <td><a href="${ctx}/admin/player/${player.id}/save/remove?room=${data.room}#players">RemoveSave</a></td>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <td>RemoveSave</td>
-                                    </c:otherwise>
-                                </c:choose>
-                                <c:choose>
-                                    <c:when test="${player.code != null}">
-                                        <td><a href="${ctx}/admin/player/${player.id}/registration/remove?room=${data.room}#players">RemoveReg</a></td>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <td>RemoveReg</td>
-                                    </c:otherwise>
-                                </c:choose>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <c:choose>
+                            <c:when test="${player.saved}">
+                                <td><a href="${ctx}/admin/player/${player.id}/load?room=${data.room}#players">Load</a></td>
+                            </c:when>
+                            <c:otherwise>
+                                <td>Load</td>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <c:choose>
+                            <c:when test="${player.saved}">
+                                <td><a href="${ctx}/admin/player/${player.id}/save/remove?room=${data.room}#players">RemoveSave</a></td>
+                            </c:when>
+                            <c:otherwise>
+                                <td>RemoveSave</td>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <c:choose>
+                            <c:when test="${player.code != null}">
+                                <td><a href="${ctx}/admin/player/${player.id}/registration/remove?room=${data.room}#players">RemoveReg</a></td>
+                            </c:when>
+                            <c:otherwise>
+                                <td>RemoveReg</td>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <c:choose>
+                            <c:when test="${player.active}">
+                                <td><a href="${ctx}/admin/player/${player.id}/gameOver?room=${data.room}#players">GameOver</a></td>
+                            </c:when>
+                            <c:otherwise>
                                 <td>GameOver</td>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <c:choose>
+                            <c:when test="${player.active}">
+                                <td><a href="${ctx}/board/player/${player.id}?code=${player.code}">ViewGame</a></td>
+                            </c:when>
+                            <c:otherwise>
                                 <td>ViewGame</td>
-                                <c:choose>
-                                    <c:when test="${player.code != null}">
-                                        <td><a href="${ctx}/board/log/player/${player.id}?code=${player.code}&game=${data.game}&room=${data.room}">PlayerLog</a></td>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <td>PlayerLog</td>
-                                    </c:otherwise>
-                                </c:choose>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <c:choose>
+                            <c:when test="${player.code != null}">
+                                <td><a href="${ctx}/board/log/player/${player.id}?code=${player.code}&game=${data.game}&room=${data.room}">PlayerLog</a></td>
+                            </c:when>
+                            <c:otherwise>
+                                <td>PlayerLog</td>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <c:choose>
+                            <c:when test="${player.aiPlayer}">
+                                <td>Loaded</td>
+                            </c:when>
+                            <c:when test="${!player.active}">
                                 <td>LoadAI</td>
-                                <c:choose>
-                                    <c:when test="${player.data == null}">
-                                        <td></td>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <td><form:input class="player-save" path="players[${status.index}].data"/></td>
-                                    </c:otherwise>
-                                </c:choose>
+                            </c:when>
+                            <c:otherwise>
+                                <td><a href="${ctx}/admin/player/${player.id}/ai/reload?room=${data.room}#players">LoadAI</a></td>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <c:choose>
+                            <c:when test="${player.data == null}">
+                                <td></td>
+                            </c:when>
+                            <c:otherwise>
+                                <td><form:input class="player-save"
+                                                path="players[${status.index}].data"/></td>
                             </c:otherwise>
                         </c:choose>
                     </tr>
