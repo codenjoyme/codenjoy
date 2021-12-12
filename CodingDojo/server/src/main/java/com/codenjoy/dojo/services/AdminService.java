@@ -312,9 +312,6 @@ public class AdminService {
     }
 
     private void saveLevelsMaps(AdminSettings settings, String game, String room) {
-        levelsSettings(room)
-                .updateFrom(settings.getLevels().getParameters());
-
         gameService.getGameType(game, room)
                 .getSettings()
                 .updateAll(
@@ -454,12 +451,17 @@ public class AdminService {
 
     private void setupSettings(GameType gameType, String room, AdminSettings result) {
         // сохраняем для отображения semifinal settings pojo
-        result.setSemifinal(semifinalSettings(room)); // TODO тут снова берем getSettings().getParameters()
+        // TODO тут снова берем getSettings().getParameters()
+        result.setSemifinal(semifinalSettings(room));
         // сохраняем для отображения round settings pojo
-        result.setRounds(roundSettings(room)); // TODO тут снова берем getSettings().getParameters()
+        // TODO тут снова берем getSettings().getParameters()
+        result.setRounds(roundSettings(room));
         // сохраняем для отображения round settings pojo
-        LevelsSettingsImpl levels = levelsSettings(room);  // TODO тут снова берем getSettings().getParameters()
-        result.setLevels(levels); // TODO а точно тут нада эту строчку?
+        // TODO тут снова берем getSettings().getParameters()
+        LevelsSettingsImpl levels = levelsSettings(room);
+        // это надо для передачи данных на jsp
+        result.setLevels(levels);
+        // это надо для получения данных от jsp
         result.setLevelsValues(levels
                 .getParameters().stream()
                 .map(Parameter::getValue)
