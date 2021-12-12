@@ -71,6 +71,7 @@ public class AdminPostActions {
     public String gameOverAllPlayers;
     public String loadAIsForAllPlayers;
     public String savePlayer;
+    public String loadPlayer;
 
     @Autowired
     private MessageSource messages;
@@ -114,6 +115,7 @@ public class AdminPostActions {
         gameOverAllPlayers = get("admin.post.gameOverAllPlayers");
         loadAIsForAllPlayers = get("admin.post.loadAIsForAllPlayers");
         savePlayer = get("admin.post.savePlayer");
+        loadPlayer = get("admin.post.loadPlayer");
     }
 
     private String get(String key) {

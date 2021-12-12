@@ -80,14 +80,6 @@ public class AdminController {
 
     // ----------------
 
-    @GetMapping("/player/{player}/load")
-    public String loadDeal(@PathVariable("player") String id,
-                           HttpServletRequest request)
-    {
-        saveService.load(id);
-        return getAdmin(request);
-    }
-
     @GetMapping("/player/{player}/ai/reload")
     public String reloadAI(@PathVariable("player") String id,
                            HttpServletRequest request) {

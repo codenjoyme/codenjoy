@@ -126,6 +126,7 @@ public class AdminService {
         map.put(actions.gameOverAllPlayers, this::gameOverAllPlayers);
         map.put(actions.loadAIsForAllPlayers, this::loadAIsForAllPlayers);
         map.put(actions.savePlayer, this::savePlayer);
+        map.put(actions.loadPlayer, this::loadPlayer);
     }
 
     private void deleteRoom(AdminSettings settings, String game, String room) {
@@ -370,6 +371,10 @@ public class AdminService {
 
     private void savePlayer(AdminSettings settings, String game, String room) {
         saveService.save(settings.getPlayer());
+    }
+
+    private void loadPlayer(AdminSettings settings, String game, String room) {
+        saveService.load(settings.getPlayer());
     }
 
     private InactivitySettingsImpl inactivitySettings(String room) {
