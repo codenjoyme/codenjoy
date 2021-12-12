@@ -194,7 +194,7 @@ public class AdminService {
             saveService.loadAll(room);
         });
 
-        map.put(actions.reloadAllPlayers, (settings, game, room) -> {
+        map.put(actions.loadSaveForAll, (settings, game, room) -> {
             playerService.loadSaveForAll(room, settings.getProgress());
         });
 
