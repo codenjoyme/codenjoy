@@ -48,8 +48,7 @@ import org.springframework.validation.MapBindingResult;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
@@ -93,15 +92,16 @@ public class RegistrationValidatorTest {
             setGame("game");
             setRoom("room");
         }};
-        setupRoomService("game", "room");
+        setupRoomService("game", "room", "room2");
         playerService.openRegistration();
     }
 
-    private void setupRoomService(String game, String room) {
+    private void setupRoomService(String game, String... rooms) {
         roomService.removeAll();
         GameType gameType = mock(GameType.class);
         when(gameType.name()).thenReturn(game);
-        roomService.create(room, gameType);
+        Arrays.stream(rooms).forEach(room ->
+            roomService.create(room, gameType));
     }
 
     @Test
@@ -129,6 +129,7 @@ public class RegistrationValidatorTest {
     public void shouldValidateRoomRegistrationIsActive() {
         // given
         roomService.setOpened("room", false);
+        assertEquals(true, roomService.isOpened());
 
         // when
         validator.validate(player, errors);
@@ -141,6 +142,7 @@ public class RegistrationValidatorTest {
     public void shouldValidateSiteRegistrationIsActive() {
         // given
         playerService.closeRegistration();
+        assertEquals(true, roomService.isOpened());
 
         // when
         validator.validate(player, errors);
@@ -160,7 +162,7 @@ public class RegistrationValidatorTest {
         validator.validate(player, errors);
         
         // then
-        assertError(errors,"readableName", "registration.nickname.alreadyUsed");
+        assertError(errors, "readableName", "registration.nickname.alreadyUsed");
     }
 
     @Test
@@ -211,7 +213,7 @@ public class RegistrationValidatorTest {
         validator.validate(player, errors);
         
         // then
-        assertError(errors,"passwordConfirmation", "registration.password.invalidConfirmation");
+        assertError(errors, "passwordConfirmation", "registration.password.invalidConfirmation");
     }
 
     @Test
@@ -246,8 +248,10 @@ public class RegistrationValidatorTest {
         FieldError fieldError = errors.getFieldError(field);
         assertNotNull("Error field must have been set", fieldError);
 
-        assertTrue(String.format("Missing expected error code for field '%s'\nExpected: '%s', actual ones: %s",
-                field, expectedCode, Arrays.toString(fieldError.getCodes())),
+        assertTrue(String.format("Missing expected error code for field '%s'\n" +
+                                "\tExpected:    [%s]\n" +
+                                "\tActual ones: %s",
+                        field, expectedCode, Arrays.toString(fieldError.getCodes())),
                 Arrays.asList(fieldError.getCodes()).contains(expectedCode));
     }
 
