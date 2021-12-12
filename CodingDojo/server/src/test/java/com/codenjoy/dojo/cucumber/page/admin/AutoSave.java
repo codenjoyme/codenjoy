@@ -22,10 +22,8 @@ package com.codenjoy.dojo.cucumber.page.admin;
  * #L%
  */
 
-import com.codenjoy.dojo.cucumber.page.Page;
-import com.codenjoy.dojo.cucumber.page.Server;
 import com.codenjoy.dojo.cucumber.page.WebDriverWrapper;
-import com.codenjoy.dojo.web.controller.admin.AdminSettings;
+import com.codenjoy.dojo.web.controller.admin.AdminPostActions;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.WebElement;
 import org.springframework.context.annotation.Scope;
@@ -39,31 +37,32 @@ import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 @RequiredArgsConstructor
 public class AutoSave {
 
+    // application services
+    private final AdminPostActions actions;
+
     // page objects
-    private final Page page;
     private final WebDriverWrapper web;
-    private final Server server;
 
     public WebElement status() {
         return web.element("#autoSave td b");
     }
 
     private WebElement stopButton() {
-        return web.button("#autoSave", AdminSettings.STOP_AUTO_SAVE);
+        return web.button("#autoSave", actions.stopAutoSave);
     }
 
     private WebElement startButton() {
-        return web.button("#autoSave", AdminSettings.START_AUTO_SAVE);
+        return web.button("#autoSave", actions.stopAutoSave);
     }
 
     public void assertSuspended() {
         assertEquals("The auto save was suspended", status().getText());
-        assertEquals(AdminSettings.START_AUTO_SAVE, startButton().getAttribute("value"));
+        assertEquals(actions.startAutoSave, startButton().getAttribute("value"));
     }
 
     public void assertStarted() {
         assertEquals("The auto save in progress", status().getText());
-        assertEquals(AdminSettings.STOP_AUTO_SAVE, stopButton().getAttribute("value"));
+        assertEquals(actions.stopAutoSave, stopButton().getAttribute("value"));
     }
 
     public void stop() {

@@ -22,10 +22,8 @@ package com.codenjoy.dojo.cucumber.page.admin;
  * #L%
  */
 
-import com.codenjoy.dojo.cucumber.page.Page;
-import com.codenjoy.dojo.cucumber.page.Server;
 import com.codenjoy.dojo.cucumber.page.WebDriverWrapper;
-import com.codenjoy.dojo.web.controller.admin.AdminSettings;
+import com.codenjoy.dojo.web.controller.admin.AdminPostActions;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.WebElement;
 import org.springframework.context.annotation.Scope;
@@ -39,31 +37,32 @@ import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 @RequiredArgsConstructor
 public class RoomRegistration {
 
+    // application services
+    private final AdminPostActions actions;
+
     // page objects
-    private final Page page;
     private final WebDriverWrapper web;
-    private final Server server;
 
     private WebElement status() {
         return web.element("#roomRegistration td b");
     }
 
     private WebElement closeButton() {
-        return web.button("#roomRegistration", AdminSettings.CLOSE_ROOM_REGISTRATION);
+        return web.button("#roomRegistration", actions.closeRoomRegistration);
     }
 
     private WebElement openButton() {
-        return web.button("#roomRegistration", AdminSettings.OPEN_ROOM_REGISTRATION);
+        return web.button("#roomRegistration", actions.openRoomRegistration);
     }
 
     public void assertClosed() {
         assertEquals("Room registration was closed", status().getText());
-        assertEquals(AdminSettings.OPEN_ROOM_REGISTRATION, openButton().getAttribute("value"));
+        assertEquals(actions.openRoomRegistration, openButton().getAttribute("value"));
     }
 
     public void assertOpened() {
         assertEquals("Room registration is active", status().getText());
-        assertEquals(AdminSettings.CLOSE_ROOM_REGISTRATION, closeButton().getAttribute("value"));
+        assertEquals(actions.closeRoomRegistration, closeButton().getAttribute("value"));
     }
 
     public void close() {

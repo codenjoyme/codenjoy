@@ -22,10 +22,8 @@ package com.codenjoy.dojo.cucumber.page.admin;
  * #L%
  */
 
-import com.codenjoy.dojo.cucumber.page.Page;
-import com.codenjoy.dojo.cucumber.page.Server;
 import com.codenjoy.dojo.cucumber.page.WebDriverWrapper;
-import com.codenjoy.dojo.web.controller.admin.AdminSettings;
+import com.codenjoy.dojo.web.controller.admin.AdminPostActions;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.WebElement;
 import org.springframework.context.annotation.Scope;
@@ -39,31 +37,32 @@ import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 @RequiredArgsConstructor
 public class GameRecording {
 
+    // application services
+    private final AdminPostActions actions;
+    
     // page objects
-    private final Page page;
     private final WebDriverWrapper web;
-    private final Server server;
 
     public WebElement status() {
         return web.element("#recordGame td b");
     }
 
     private WebElement stopButton() {
-        return web.button("#recordGame", AdminSettings.STOP_RECORDING);
+        return web.button("#recordGame", actions.stopRecording);
     }
 
     private WebElement startButton() {
-        return web.button("#recordGame", AdminSettings.START_RECORDING);
+        return web.button("#recordGame", actions.startRecording);
     }
 
     public void assertSuspended() {
         assertEquals("The recording was suspended", status().getText());
-        assertEquals(AdminSettings.START_RECORDING, startButton().getAttribute("value"));
+        assertEquals(actions.startRecording, startButton().getAttribute("value"));
     }
 
     public void assertStarted() {
         assertEquals("The recording is active", status().getText());
-        assertEquals(AdminSettings.STOP_RECORDING, stopButton().getAttribute("value"));
+        assertEquals(actions.stopRecording, stopButton().getAttribute("value"));
     }
 
     public void stop() {

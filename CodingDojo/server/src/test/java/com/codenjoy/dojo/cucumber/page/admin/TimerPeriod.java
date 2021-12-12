@@ -23,10 +23,8 @@ package com.codenjoy.dojo.cucumber.page.admin;
  */
 
 
-import com.codenjoy.dojo.cucumber.page.Page;
-import com.codenjoy.dojo.cucumber.page.Server;
 import com.codenjoy.dojo.cucumber.page.WebDriverWrapper;
-import com.codenjoy.dojo.web.controller.admin.AdminSettings;
+import com.codenjoy.dojo.web.controller.admin.AdminPostActions;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.WebElement;
 import org.springframework.context.annotation.Scope;
@@ -40,10 +38,11 @@ import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 @RequiredArgsConstructor
 public class TimerPeriod {
 
+    // application services
+    private final AdminPostActions actions;
+
     // page objects
-    private final Page page;
     private final WebDriverWrapper web;
-    private final Server server;
 
     private WebElement timerPeriod() {
         return web.element("#timerPeriod");
@@ -63,6 +62,6 @@ public class TimerPeriod {
     }
 
     private WebElement setTimerPeriodButton() {
-        return web.button("#setTimerPeriod", AdminSettings.SET_TIMER_PERIOD);
+        return web.button("#setTimerPeriod", actions.setTimerPeriod);
     }
 }

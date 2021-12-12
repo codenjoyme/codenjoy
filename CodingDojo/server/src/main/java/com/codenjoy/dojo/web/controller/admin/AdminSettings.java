@@ -41,28 +41,6 @@ import java.util.Map;
 @Setter
 public class AdminSettings {
 
-    // actions
-    public static final String DELETE_ROOM = "Delete room";
-    public static final String CREATE_ROOM = "Create room";
-    public static final String SAVE_ACTIVE_GAMES = "Save active games";
-    public static final String PAUSE_GAME = "Pause game";
-    public static final String RESUME_GAME = "Resume game";
-    public static final String STOP_RECORDING = "Stop recording";
-    public static final String START_RECORDING = "Start recording";
-    public static final String STOP_DEBUG = "Stop debug";
-    public static final String START_DEBUG = "Start debug";
-    public static final String UPDATE_LOGGERS = "Update loggers";
-    public static final String STOP_AUTO_SAVE = "Stop auto save";
-    public static final String START_AUTO_SAVE = "Start auto save";
-    public static final String CLOSE_REGISTRATION = "Close registration";
-    public static final String OPEN_REGISTRATION = "Open registration";
-    public static final String CLOSE_ROOM_REGISTRATION = "Close room registration";
-    public static final String OPEN_ROOM_REGISTRATION = "Open room registration";
-    public static final String СLEAN_ALL_SCORES = "Clean all scores";
-    public static final String RELOAD_ALL_ROOMS = "Reload all rooms";
-    public static final String RELOAD_ALL_PLAYERS = "Reload all players";
-    public static final String SET_TIMER_PERIOD = "Set timer period";
-
     private List<PlayerInfo> players;
     private List<Object> activeGames;
 

@@ -22,10 +22,8 @@ package com.codenjoy.dojo.cucumber.page.admin;
  * #L%
  */
 
-import com.codenjoy.dojo.cucumber.page.Page;
-import com.codenjoy.dojo.cucumber.page.Server;
 import com.codenjoy.dojo.cucumber.page.WebDriverWrapper;
-import com.codenjoy.dojo.web.controller.admin.AdminSettings;
+import com.codenjoy.dojo.web.controller.admin.AdminPostActions;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.WebElement;
 import org.springframework.context.annotation.Scope;
@@ -39,31 +37,32 @@ import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 @RequiredArgsConstructor
 public class PauseResume {
 
+    // application services
+    private final AdminPostActions actions;
+
     // page objects
-    private final Page page;
     private final WebDriverWrapper web;
-    private final Server server;
 
     public WebElement gameStatus() {
         return web.element("#pauseResumeGame td b");
     }
 
     private WebElement pauseButton() {
-        return web.button("#pauseResumeGame", AdminSettings.PAUSE_GAME);
+        return web.button("#pauseResumeGame", actions.pauseGame);
     }
 
     private WebElement resumeButton() {
-        return web.button("#pauseResumeGame", AdminSettings.RESUME_GAME);
+        return web.button("#pauseResumeGame", actions.resumeGame);
     }
 
     public void assertPaused() {
         assertEquals("Game in this room was suspended", gameStatus().getText());
-        assertEquals(AdminSettings.RESUME_GAME, resumeButton().getAttribute("value"));
+        assertEquals(actions.resumeGame, resumeButton().getAttribute("value"));
     }
 
     public void assertActive() {
         assertEquals("Game in this room is active", gameStatus().getText());
-        assertEquals(AdminSettings.PAUSE_GAME, pauseButton().getAttribute("value"));
+        assertEquals(actions.pauseGame, pauseButton().getAttribute("value"));
     }
 
     public void pauseGame() {

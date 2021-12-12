@@ -22,10 +22,8 @@ package com.codenjoy.dojo.cucumber.page.admin;
  * #L%
  */
 
-import com.codenjoy.dojo.cucumber.page.Page;
-import com.codenjoy.dojo.cucumber.page.Server;
 import com.codenjoy.dojo.cucumber.page.WebDriverWrapper;
-import com.codenjoy.dojo.web.controller.admin.AdminSettings;
+import com.codenjoy.dojo.web.controller.admin.AdminPostActions;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.WebElement;
 import org.springframework.context.annotation.Scope;
@@ -39,31 +37,32 @@ import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 @RequiredArgsConstructor
 public class ServerRegistration {
 
+    // application services
+    private final AdminPostActions actions;
+
     // page objects
-    private final Page page;
     private final WebDriverWrapper web;
-    private final Server server;
 
     private WebElement status() {
         return web.element("#serverRegistration td b");
     }
 
     private WebElement closeButton() {
-        return web.button("#serverRegistration", AdminSettings.CLOSE_REGISTRATION);
+        return web.button("#serverRegistration", actions.closeRegistration);
     }
 
     private WebElement openButton() {
-        return web.button("#serverRegistration", AdminSettings.OPEN_REGISTRATION);
+        return web.button("#serverRegistration", actions.openRegistration);
     }
 
     public void assertClosed() {
         assertEquals("Server registration was closed", status().getText());
-        assertEquals(AdminSettings.OPEN_REGISTRATION, openButton().getAttribute("value"));
+        assertEquals(actions.openRegistration, openButton().getAttribute("value"));
     }
 
     public void assertOpened() {
         assertEquals("Server registration is active", status().getText());
-        assertEquals(AdminSettings.CLOSE_REGISTRATION, closeButton().getAttribute("value"));
+        assertEquals(actions.closeRegistration, closeButton().getAttribute("value"));
     }
 
     public void close() {

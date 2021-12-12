@@ -39,21 +39,25 @@ import com.codenjoy.dojo.services.semifinal.SemifinalSettingsImpl;
 import com.codenjoy.dojo.services.settings.CheckBox;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
+import com.codenjoy.dojo.web.controller.admin.AdminPostActions;
 import com.codenjoy.dojo.web.controller.admin.AdminSettings;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.util.TriConsumer;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 
 import static com.codenjoy.dojo.services.incativity.InactivitySettings.INACTIVITY;
 import static com.codenjoy.dojo.services.level.LevelsSettings.LEVELS;
 import static com.codenjoy.dojo.services.round.RoundSettings.ROUNDS;
 import static com.codenjoy.dojo.services.semifinal.SemifinalSettings.SEMIFINAL;
-import static com.codenjoy.dojo.web.controller.admin.AdminSettings.*;
 import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.toList;
 
@@ -74,6 +78,119 @@ public class AdminService {
     private final SemifinalService semifinal;
     private final RoomService roomService;
     private final StatisticService statistics;
+    private final AdminPostActions actions;
+
+    private final Map<String, TriConsumer<AdminSettings, String, String>> map = new ConcurrentHashMap<>();
+    
+    @PostConstruct
+    public void init() {
+        map.put(actions.deleteRoom, (settings, game, room) -> {
+            // нельзя удалять единственную комнату соответствующую игре,
+            // потому что потом зайти некуда будет
+            if (!roomService.game(room).equals(room)) {
+                playerService.removeAll(room);
+                saveService.removeAllSaves(room);
+                roomService.remove(room);
+                // после зачистки перейдем в default game room
+                settings.setRoom(game);
+            }
+        });
+
+        map.put(actions.createRoom, (settings, game, room) -> {
+            room = settings.getNewRoom();
+            // если нет такой room
+            if (!roomService.exists(room)){
+                GameType gameType = gameService.getGameType(game);
+                // проверяем есть 0ли game
+                if (gameType instanceof NullGameType) {
+                    return;
+                }
+                // создаем новую комнату
+                roomService.create(room, gameType);
+            }
+            // и тут же будем администрировать новую комнату
+            settings.setRoom(room);
+        });
+
+        map.put(actions.saveActiveGames, (settings, game, room) -> {
+            setActiveGames(settings.getActiveGames());
+        });
+
+        map.put(actions.setTimerPeriod, (settings, game, room) -> {
+            try {
+                timerService.changePeriod(settings.getTimerPeriod());
+            } catch (NumberFormatException e) {
+                // do nothing
+            }
+        });
+
+        map.put(actions.pauseGame, (settings, game, room) -> {
+            roomService.setActive(room, false);
+        });
+
+        map.put(actions.resumeGame, (settings, game, room) -> {
+            roomService.setActive(room, true);
+        });
+
+        map.put(actions.stopRecording, (settings, game, room) -> {
+            actionLogger.pause();
+        });
+
+        map.put(actions.startRecording, (settings, game, room) -> {
+            actionLogger.resume();
+        });
+
+        map.put(actions.stopDebug, (settings, game, room) -> {
+            debugService.pause();
+        });
+
+        map.put(actions.startDebug, (settings, game, room) -> {
+            debugService.resume();
+        });
+
+        map.put(actions.updateLoggers, (settings, game, room) -> {
+            debugService.setLoggersLevels(settings.getLoggersLevels());
+        });
+
+        map.put(actions.stopAutoSave, (settings, game, room) -> {
+            autoSaver.pause();
+        });
+
+        map.put(actions.startAutoSave, (settings, game, room) -> {
+            autoSaver.resume();
+        });
+
+        map.put(actions.closeRegistration, (settings, game, room) -> {
+            playerService.closeRegistration();
+        });
+
+        map.put(actions.openRegistration, (settings, game, room) -> {
+            playerService.openRegistration();
+        });
+
+        map.put(actions.closeRoomRegistration, (settings, game, room) -> {
+            roomService.setOpened(room, false);
+        });
+
+        map.put(actions.openRoomRegistration, (settings, game, room) -> {
+            roomService.setOpened(room, true);
+        });
+
+        map.put(actions.cleanAllScores, (settings, game, room) -> {
+            playerService.cleanAllScores(room);
+        });
+
+        map.put(actions.reloadAllRooms, (settings, game, room) -> {
+            playerService.reloadAllRooms(room);
+        });
+
+        map.put(actions.reloadAllPlayers, (settings, game, room) -> {
+            saveService.saveAll(room);
+            playerService.removeAll(room);
+            saveService.loadAll(room);
+        });
+        
+    }
 
     void updateInactivity(String room, InactivitySettings updated) {
         InactivitySettingsImpl actual = inactivitySettings(room);
@@ -136,118 +253,9 @@ public class AdminService {
                 // do nothing
             }
         }
-
+        
         if (!StringUtils.isEmpty(settings.getAction())) {
-            switch (settings.getAction()) {
-                case DELETE_ROOM:
-                    // нельзя удалять единственную комнату соответствующую игре,
-                    // потому что потом зайти некуда будет
-                    if (!roomService.game(room).equals(room)) {
-                        playerService.removeAll(room);
-                        saveService.removeAllSaves(room);
-                        roomService.remove(room);
-                        // после зачистки перейдем в default game room
-                        room = game;
-                        settings.setRoom(room);
-                    }
-                    break;
-
-                case CREATE_ROOM:
-                    room = settings.getNewRoom();
-                    // если нет такой room
-                    if (!roomService.exists(room)) {
-                        GameType gameType = gameService.getGameType(game);
-                        // проверяем есть ли game
-                        if (gameType instanceof NullGameType) {
-                            break;
-                        }
-                        // создаем новую комнату
-                        roomService.create(room, gameType);
-                    }
-                    // и тут же будем администрировать новую комнату
-                    settings.setRoom(room);
-                    break;
-
-                case SAVE_ACTIVE_GAMES:
-                    setActiveGames(settings.getActiveGames());
-
-                    break;
-
-                case SET_TIMER_PERIOD:
-                    try {
-                        timerService.changePeriod(settings.getTimerPeriod());
-                    } catch (NumberFormatException e) {
-                        // do nothing
-                    }
-                    break;
-
-                case PAUSE_GAME:
-                    roomService.setActive(room, false);
-                    break;
-
-                case RESUME_GAME:
-                    roomService.setActive(room, true);
-                    break;
-
-                case STOP_RECORDING:
-                    actionLogger.pause();
-                    break;
-
-                case START_RECORDING:
-                    actionLogger.resume();
-                    break;
-
-                case STOP_DEBUG:
-                    debugService.pause();
-                    break;
-
-                case START_DEBUG:
-                    debugService.resume();
-                    break;
-
-                case UPDATE_LOGGERS:
-                    debugService.setLoggersLevels(settings.getLoggersLevels());
-                    break;
-
-                case STOP_AUTO_SAVE:
-                    autoSaver.pause();
-                    break;
-
-                case START_AUTO_SAVE:
-                    autoSaver.resume();
-                    break;
-
-                case CLOSE_REGISTRATION:
-                    playerService.closeRegistration();
-                    break;
-
-                case OPEN_REGISTRATION:
-                    playerService.openRegistration();
-                    break;
-
-                case CLOSE_ROOM_REGISTRATION:
-                    roomService.setOpened(room, false);
-                    break;
-
-                case OPEN_ROOM_REGISTRATION:
-                    roomService.setOpened(room, true);
-                    break;
-
-                case СLEAN_ALL_SCORES:
-                    playerService.cleanAllScores(room);
-                    break;
-
-                case RELOAD_ALL_ROOMS:
-                    playerService.reloadAllRooms(room);
-                    break;
-
-                case RELOAD_ALL_PLAYERS:
-                    saveService.saveAll(room);
-                    playerService.removeAll(room);
-                    saveService.loadAll(room);
-                    break;
-
-            }
+            map.get(settings.getAction()).accept(settings, game, room);
         }
 
         if (settings.getProgress() != null) {

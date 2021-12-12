@@ -22,10 +22,8 @@ package com.codenjoy.dojo.cucumber.page.admin;
  * #L%
  */
 
-import com.codenjoy.dojo.cucumber.page.Page;
-import com.codenjoy.dojo.cucumber.page.Server;
 import com.codenjoy.dojo.cucumber.page.WebDriverWrapper;
-import com.codenjoy.dojo.web.controller.admin.AdminSettings;
+import com.codenjoy.dojo.web.controller.admin.AdminPostActions;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.WebElement;
 import org.springframework.context.annotation.Scope;
@@ -39,31 +37,32 @@ import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 @RequiredArgsConstructor
 public class Debug {
 
+    // application services
+    private final AdminPostActions actions;
+
     // page objects
-    private final Page page;
     private final WebDriverWrapper web;
-    private final Server server;
 
     public WebElement status() {
         return web.element("#debug td b");
     }
 
     private WebElement stopButton() {
-        return web.button("#debug", AdminSettings.STOP_DEBUG);
+        return web.button("#debug", actions.stopDebug);
     }
 
     private WebElement startButton() {
-        return web.button("#debug", AdminSettings.START_DEBUG);
+        return web.button("#debug", actions.startDebug);
     }
 
     public void assertSuspended() {
         assertEquals("The debug was suspended", status().getText());
-        assertEquals(AdminSettings.START_DEBUG, startButton().getAttribute("value"));
+        assertEquals(actions.startDebug, startButton().getAttribute("value"));
     }
 
     public void assertStarted() {
         assertEquals("The debug in progress", status().getText());
-        assertEquals(AdminSettings.STOP_DEBUG, stopButton().getAttribute("value"));
+        assertEquals(actions.stopDebug, stopButton().getAttribute("value"));
     }
 
     public void stop() {
