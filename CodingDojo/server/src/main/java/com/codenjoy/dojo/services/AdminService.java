@@ -146,6 +146,23 @@ public class AdminService {
         settings.setRoom(room);
     }
 
+    private void saveActiveGames(AdminSettings settings, String game, String room) {
+        List<Object> games = settings.getActiveGames();
+        List<String> opened = new LinkedList<>();
+        List<String> allGames = gameService.getGames();
+        if (games.size() != allGames.size()) {
+            throw new IllegalStateException("The list of games is not complete");
+        }
+        for (int index = 0; index < allGames.size(); index++) {
+            if (games.get(index) != null) {
+                opened.add(allGames.get(index));
+            }
+        }
+
+        // TODO #4FS тут проверить
+        roomService.setOpenedGames(opened);
+    }
+
     private void setTimerPeriod(AdminSettings settings, String game, String room) {
         timerService.changePeriod(settings.getTimerPeriod());
     }
@@ -281,23 +298,6 @@ public class AdminService {
         }
 
         map.get(settings.getAction()).accept(settings, game, room);
-    }
-
-    private void saveActiveGames(AdminSettings settings, String game, String room) {
-        List<Object> games = settings.getActiveGames();
-        List<String> opened = new LinkedList<>();
-        List<String> allGames = gameService.getGames();
-        if (games.size() != allGames.size()) {
-            throw new IllegalStateException("The list of games is not complete");
-        }
-        for (int index = 0; index < allGames.size(); index++) {
-            if (games.get(index) != null) {
-                opened.add(allGames.get(index));
-            }
-        }
-
-        // TODO #4FS тут проверить
-        roomService.setOpenedGames(opened);
     }
 
     private void updateOtherSettings(AdminSettings settings, String game, String room) {
