@@ -59,6 +59,7 @@ import static com.codenjoy.dojo.services.incativity.InactivitySettings.INACTIVIT
 import static com.codenjoy.dojo.services.level.LevelsSettings.LEVELS;
 import static com.codenjoy.dojo.services.round.RoundSettings.ROUNDS;
 import static com.codenjoy.dojo.services.semifinal.SemifinalSettings.SEMIFINAL;
+import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
 import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.toList;
 
@@ -132,6 +133,9 @@ public class AdminService {
 
     private void createRoom(AdminSettings settings, String game, String room) {
         room = settings.getNewRoom();
+
+        validator.checkRoom(room, Validator.CANT_BE_NULL);
+
         // если нет такой room
         if (!roomService.exists(room)){
             GameType gameType = gameService.getGameType(game);
@@ -384,6 +388,9 @@ public class AdminService {
     }
 
     public AdminSettings loadAdminPage(String game, String room) {
+        validator.checkRoom(room, CAN_BE_NULL);
+        validator.checkGame(game, CAN_BE_NULL);
+
         // если не установили оба - default админкa
         if (room == null && game == null) {
             return null;

@@ -24,10 +24,7 @@ package com.codenjoy.dojo.web.controller.admin;
 
 
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.dao.Registration;
-import com.codenjoy.dojo.services.log.DebugService;
-import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.security.GameAuthoritiesConstants;
 import com.codenjoy.dojo.services.security.ViewDelegationService;
 import com.codenjoy.dojo.web.controller.Validator;
@@ -58,13 +55,8 @@ public class AdminController {
     private final PlayerService playerService;
     private final SaveService saveService;
     private final GameService gameService;
-    private final ActionLogger actionLogger;
-    private final AutoSaver autoSaver;
-    private final DebugService debugService;
     private final Registration registration;
     private final ViewDelegationService viewDelegationService;
-    private final RoomService roomService;
-
     private final AdminService adminService;
 
     // TODO ROOM а этот метод вообще зачем?
