@@ -237,6 +237,28 @@ public class AdminService {
         playerService.loadSaveForAll(room, settings.getProgress());
     }
 
+    private void createDummyUsers(AdminSettings settings, String game, String room) {
+        String mask = settings.getGenerateNameMask();
+        int count = settings.getGenerateCount();
+
+        int numLength = String.valueOf(count).length();
+
+        int created = 0;
+        int index = 0;
+        while (created != count) {
+            String number = StringUtils.leftPad(String.valueOf(++index), numLength, "0");
+            String id = mask.replaceAll("%", number);
+
+            if (playerService.contains(id) && index < playerService.getAll().size()) {
+                continue;
+            }
+
+            created++;
+            String code = register(id);
+            playerService.register(id, game, room, "127.0.0.1");
+        }
+    }
+
     private void updateRoundsSettings(AdminSettings settings, String game, String room) {
         roundSettings(room).update(settings.getRounds());
     }
@@ -344,28 +366,6 @@ public class AdminService {
 
     private Predicate<Parameter> onlyLevels() {
         return parameter -> parameter.getName().startsWith(LEVELS);
-    }
-
-    private void createDummyUsers(AdminSettings settings, String game, String room) {
-        String mask = settings.getGenerateNameMask();
-        int count = settings.getGenerateCount();
-
-        int numLength = String.valueOf(count).length();
-
-        int created = 0;
-        int index = 0;
-        while (created != count) {
-            String number = StringUtils.leftPad(String.valueOf(++index), numLength, "0");
-            String id = mask.replaceAll("%", number);
-
-            if (playerService.contains(id) && index < playerService.getAll().size()) {
-                continue;
-            }
-
-            created++;
-            String code = register(id);
-            playerService.register(id, game, room, "127.0.0.1");
-        }
     }
 
     private String register(String id) {
