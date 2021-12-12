@@ -37,18 +37,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.validation.Errors;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.MapBindingResult;
 
 import java.util.Arrays;
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
+import static java.util.stream.Collectors.joining;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
@@ -110,7 +111,10 @@ public class RegistrationValidatorTest {
         validator.validate(player, errors);
 
         // then
-        assertTrue("Valid player binding result must contain no errors", !errors.hasErrors());
+        assertEquals("",
+                errors.getAllErrors().stream()
+                        .map(DefaultMessageSourceResolvable::getCode)
+                        .collect(joining("\n")));
     }
 
     @Test
@@ -122,7 +126,8 @@ public class RegistrationValidatorTest {
         validator.validate(player, errors);
         
         // then
-        assertError(errors, "readableName", "registration.nickname.invalid");
+        assertError("readableName",
+                "registration.nickname.invalid");
     }
 
     @Test
@@ -135,7 +140,8 @@ public class RegistrationValidatorTest {
         validator.validate(player, errors);
 
         // then
-        assertError(errors, "email", "registration.room.suspended");
+        assertError("email",
+                "registration.room.suspended");
     }
 
     @Test
@@ -148,7 +154,8 @@ public class RegistrationValidatorTest {
         validator.validate(player, errors);
 
         // then
-        assertError(errors, "email", "registration.suspended");
+        assertError("email",
+                "registration.suspended");
     }
 
     @Test
@@ -162,7 +169,21 @@ public class RegistrationValidatorTest {
         validator.validate(player, errors);
         
         // then
-        assertError(errors, "readableName", "registration.nickname.alreadyUsed");
+        assertError("readableName",
+                "registration.nickname.alreadyUsed");
+    }
+
+    @Test
+    public void shouldValidateEmailFormat() {
+        // given
+        player.setEmail("BAD_EMAIL");
+
+        // when
+        validator.validate(player, errors);
+
+        // then
+        assertError("email",
+                "registration.email.invalid");
     }
 
     @Test
@@ -176,7 +197,8 @@ public class RegistrationValidatorTest {
         validator.validate(player, errors);
         
         // then
-        assertError(errors, "email", "registration.email.alreadyUsed");
+        assertError("email",
+                "registration.email.alreadyUsed");
     }
 
     @Test
@@ -188,7 +210,9 @@ public class RegistrationValidatorTest {
         validator.validate(player, errors);
         
         // then
-        assertError(errors, "password", "registration.password.empty");
+        assertError("password",
+                "registration.password.empty\n" +
+                "registration.password.length");
     }
 
     @Test
@@ -200,7 +224,8 @@ public class RegistrationValidatorTest {
         validator.validate(player, errors);
         
         // then
-        assertError(errors, "password", "registration.password.length");
+        assertError("password",
+                "registration.password.length");
     }
 
     @Test
@@ -213,7 +238,8 @@ public class RegistrationValidatorTest {
         validator.validate(player, errors);
         
         // then
-        assertError(errors, "passwordConfirmation", "registration.password.invalidConfirmation");
+        assertError("passwordConfirmation",
+                "registration.password.invalidConfirmation");
     }
 
     @Test
@@ -225,7 +251,8 @@ public class RegistrationValidatorTest {
         validator.validate(player, errors);
 
         // then
-        assertError(errors, "game", "registration.game.invalid");
+        assertError("game",
+                "registration.game.invalid");
     }
 
     @Test
@@ -239,20 +266,15 @@ public class RegistrationValidatorTest {
         validator.validate(player, errors);
 
         // then
-        assertError(errors, "room", "registration.room.invalid");
+        assertError("room",
+                "registration.room.invalid");
     }
 
-    private void assertError(Errors errors, String field, String expectedCode) {
-        assertTrue(errors.getErrorCount() > 0);
-
-        FieldError fieldError = errors.getFieldError(field);
-        assertNotNull("Error field must have been set", fieldError);
-
-        assertTrue(String.format("Missing expected error code for field '%s'\n" +
-                                "\tExpected:    [%s]\n" +
-                                "\tActual ones: %s",
-                        field, expectedCode, Arrays.toString(fieldError.getCodes())),
-                Arrays.asList(fieldError.getCodes()).contains(expectedCode));
+    private void assertError(String field, String expected) {
+        assertEquals(expected,
+                errors.getFieldErrors(field).stream()
+                        .map(DefaultMessageSourceResolvable::getCode)
+                        .collect(joining("\n")));
     }
 
     private static Errors makeErrors() {
