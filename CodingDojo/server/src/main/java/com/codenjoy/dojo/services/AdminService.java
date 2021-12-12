@@ -129,6 +129,7 @@ public class AdminService {
         map.put(actions.loadPlayer, this::loadPlayer);
         map.put(actions.removePlayersSave, this::removePlayersSave);
         map.put(actions.removePlayerRegistration, this::removePlayerRegistration);
+        map.put(actions.gameOverPlayer, this::gameOverPlayer);
     }
 
     private void deleteRoom(AdminSettings settings, String game, String room) {
@@ -385,6 +386,10 @@ public class AdminService {
 
     private void removePlayerRegistration(AdminSettings settings, String game, String room) {
         registration.remove(settings.getPlayer());
+    }
+
+    private void gameOverPlayer(AdminSettings settings, String game, String room) {
+        playerService.remove(settings.getPlayer());
     }
 
     private InactivitySettingsImpl inactivitySettings(String room) {

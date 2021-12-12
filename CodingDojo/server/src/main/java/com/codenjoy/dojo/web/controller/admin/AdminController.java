@@ -87,14 +87,6 @@ public class AdminController {
         return getAdmin(request);
     }
 
-    @GetMapping("/player/{player}/gameOver")
-    public String removePlayer(@PathVariable("player") String id,
-                               HttpServletRequest request)
-    {
-        playerService.remove(id);
-        return getAdmin(request);
-    }
-
     // ----------------
 
     @PostMapping()

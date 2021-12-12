@@ -989,10 +989,14 @@
 
                         <c:choose>
                             <c:when test="${player.active}">
-                                <td><a href="${ctx}/admin/player/${player.id}/gameOver?room=${data.room}#players">GameOver</a></td>
+                                <td>
+                                    <input type="submit" name="action"
+                                           formaction="admin?player=${player.id}#players"
+                                           value="${data.actions.gameOverPlayer}"/>
+                                </td>
                             </c:when>
                             <c:otherwise>
-                                <td>GameOver</td>
+                                <td>${data.actions.gameOverPlayer}</td>
                             </c:otherwise>
                         </c:choose>
 
