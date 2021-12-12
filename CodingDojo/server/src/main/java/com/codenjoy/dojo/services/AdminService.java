@@ -265,11 +265,18 @@ public class AdminService {
             }
         }
         
-        if (!StringUtils.isEmpty(settings.getAction())) {
-            map.get(settings.getAction()).accept(settings, game, room);
-            room = settings.getRoom();
-            game = settings.getGame();
+        if (!map.containsKey(settings.getAction())) {
+            throw new IllegalArgumentException(
+                    "Admin action not found: "
+                    + settings.getAction());
         }
+
+        map.get(settings.getAction()).accept(settings, game, room);
+
+        // action может перенаправить в другую комнату или игру,
+        // сохраняет измененные значения через settings объект
+        room = settings.getRoom();
+        game = settings.getGame();
 
         Settings gameSettings = gameService.getGameType(game, room).getSettings();
         List<Exception> errors = new LinkedList<>();
