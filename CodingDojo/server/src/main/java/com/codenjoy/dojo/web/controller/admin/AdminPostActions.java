@@ -63,7 +63,13 @@ public class AdminPostActions {
     public String updateOtherSettings;
     public String saveLevelsMaps;
     public String addNewLevelMap;
+    public String updateAllPlayers;
     public String saveAllPlayers;
+    public String loadAllPlayers;
+    public String removeAllPlayersSaves;
+    public String removeAllPlayersRegistrations;
+    public String gameOverAllPlayers;
+    public String loadAIsForAllPlayers;
 
     @Autowired
     private MessageSource messages;
@@ -91,15 +97,21 @@ public class AdminPostActions {
         reloadAllPlayers = get("admin.post.reloadAllPlayers");
         setTimerPeriod = get("admin.post.setTimerPeriod");
         loadSaveForAll = get("admin.post.loadSaveForAll");
-        saveRegistrationFormSettings = get("admin.post.saveRegistrationFormSettings");
+        saveRegistrationFormSettings = get("admin.post.saveRegistrationFormSettings"); // without backend action
         createDummyUsers = get("admin.post.createDummyUsers");
         updateRoundsSettings = get("admin.post.updateRoundsSettings");
         updateSemifinalSettings = get("admin.post.updateSemifinalSettings");
         updateInactivitySettings = get("admin.post.updateInactivitySettings");
         updateOtherSettings = get("admin.post.updateOtherSettings");
         saveLevelsMaps = get("admin.post.saveLevelsMaps");
-        addNewLevelMap = get("admin.post.addNewLevelMap");
+        addNewLevelMap = get("admin.post.addNewLevelMap"); // without backend action
+        updateAllPlayers = get("admin.post.updateAllPlayers");
         saveAllPlayers = get("admin.post.saveAllPlayers");
+        loadAllPlayers = get("admin.post.loadAllPlayers");
+        removeAllPlayersSaves = get("admin.post.removeAllPlayersSaves");
+        removeAllPlayersRegistrations = get("admin.post.removeAllPlayersRegistrations");
+        gameOverAllPlayers = get("admin.post.gameOverAllPlayers");
+        loadAIsForAllPlayers = get("admin.post.loadAIsForAllPlayers");
     }
 
     private String get(String key) {

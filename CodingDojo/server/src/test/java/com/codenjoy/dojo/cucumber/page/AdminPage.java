@@ -113,10 +113,6 @@ public class AdminPage extends PageObject implements Closeable {
         return players;
     }
 
-    public void clickLoadAll() {
-        players.loadAllLink().click();
-    }
-
     public Levels levels() {
         return levels;
     }

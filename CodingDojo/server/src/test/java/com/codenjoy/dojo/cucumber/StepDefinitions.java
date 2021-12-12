@@ -460,7 +460,7 @@ public class StepDefinitions {
 
     @When("Click LoadAll players")
     public void clickLoadAllPlayers() {
-        admin.clickLoadAll();
+        admin.players().loadAllPlayers();
         clients.refreshAllRunnersSessions();
     }
 

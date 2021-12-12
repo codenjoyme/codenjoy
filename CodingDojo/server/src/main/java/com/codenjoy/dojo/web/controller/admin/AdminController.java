@@ -38,8 +38,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static java.util.function.Predicate.not;
-
 @Controller
 @RequestMapping(AdminController.URI)
 @Secured(GameAuthoritiesConstants.ROLE_ADMIN)
@@ -90,15 +88,6 @@ public class AdminController {
         return getAdmin(request);
     }
 
-    @GetMapping("/player/saveAll")
-    public String saveAllGames(HttpServletRequest request) {
-        String room = room(request);
-        saveService.saveAll(room);
-        return getAdmin(room);
-    }
-
-    // ----------------
-
     @GetMapping("/player/{player}/load")
     public String loadDeal(@PathVariable("player") String id,
                            HttpServletRequest request)
@@ -107,35 +96,12 @@ public class AdminController {
         return getAdmin(request);
     }
 
-    @GetMapping("/player/loadAll")
-    public String loadAllGames(HttpServletRequest request) {
-        String room = room(request);
-        saveService.loadAll(room);
-        return getAdmin(room);
-    }
-
-    // ----------------
-
     @GetMapping("/player/{player}/ai/reload")
     public String reloadAI(@PathVariable("player") String id,
                            HttpServletRequest request) {
         playerService.reloadAI(id);
         return getAdmin(request);
     }
-
-    @GetMapping("/player/ai/reloadAll")
-    public String reloadAllAI(HttpServletRequest request) {
-        String room = room(request);
-
-        playerService.getAllInRoom(room).stream()
-                .filter(not(Player::hasAi))
-                .map(Player::getId)
-                .forEach(playerService::reloadAI);
-
-        return getAdmin(room);
-    }
-
-    // ----------------
 
     @GetMapping("/player/{player}/gameOver")
     public String removePlayer(@PathVariable("player") String id,
@@ -145,15 +111,6 @@ public class AdminController {
         return getAdmin(request);
     }
 
-    @GetMapping("/player/gameOverAll")
-    public String gameOverAllPlayers(HttpServletRequest request) {
-        String room = room(request);
-        playerService.removeAll(room);
-        return getAdmin(room);
-    }
-
-    // ----------------
-
     @GetMapping("/player/{player}/save/remove")
     public String removePlayerSave(@PathVariable("player") String id,
                                    HttpServletRequest request) {
@@ -161,29 +118,12 @@ public class AdminController {
         return getAdmin(request);
     }
 
-    @GetMapping("/player/save/removeAll")
-    public String removePlayerSave(HttpServletRequest request) {
-        String room = room(request);
-        saveService.removeAllSaves(room);
-        return getAdmin(room);
-    }
-
-    // ----------------
-
     @GetMapping("/player/{player}/registration/remove")
     public String removePlayerRegistration(@PathVariable("player") String id,
                                            HttpServletRequest request)
     {
         registration.remove(id);
         return getAdmin(request);
-    }
-
-    @GetMapping("/player/registration/removeAll")
-    public String removePlayerRegistration(HttpServletRequest request) {
-        String room = room(request);
-        saveService.getSaves(room)
-                .forEach(player -> registration.remove(player.getId()));
-        return getAdmin(room);
     }
 
     // ----------------

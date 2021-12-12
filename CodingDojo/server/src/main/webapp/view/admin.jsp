@@ -742,11 +742,11 @@
     </c:if>
 
     <c:if test="${not empty data.players || savedGames != null}">
-        <form:form modelAttribute="data" action="admin#savePlayersGame" method="POST">
+        <form:form modelAttribute="data" action="admin#players" method="POST">
             <input type="hidden" name="game" value="${data.game}"/>
             <input type="hidden" name="room" value="${data.room}"/>
 
-            <table class="admin-table" id="savePlayersGame">
+            <table class="admin-table" id="players">
                 <tr colspan="4">
                     <td><b>Registered Players</b></td>
                 </tr>
@@ -763,26 +763,32 @@
                     <td class="header">Joystick&nbsp;&nbsp;</td>
                     <td class="header">GameName&nbsp;&nbsp;</td>
                     <td>
-                        <a href="${ctx}/admin/player/saveAll?room=${data.room}#savePlayersGame">SaveAll</a>&nbsp;&nbsp;
+                        <input type="submit" name="action"
+                               value="${data.actions.saveAllPlayers}"/>
                     </td>
                     <td>
-                        <a href="${ctx}/admin/player/loadAll?room=${data.room}#savePlayersGame">LoadAll</a>&nbsp;&nbsp;
+                        <input type="submit" name="action"
+                               value="${data.actions.loadAllPlayers}"/>
                     </td>
                     <td>
-                        <a href="${ctx}/admin/player/save/removeAll?room=${data.room}#savePlayersGame">RemoveSaveAll</a>&nbsp;&nbsp;
+                        <input type="submit" name="action"
+                               value="${data.actions.removeAllPlayersSaves}"/>
                     </td>
                     <td>
-                        <a href="${ctx}/admin/player/registration/removeAll?room=${data.room}#savePlayersGame">RemoveRegAll</a>&nbsp;&nbsp;
+                        <input type="submit" name="action"
+                               value="${data.actions.removeAllPlayersRegistrations}"/>
                     </td>
                     <td>
-                        <a href="${ctx}/admin/player/gameOverAll?room=${data.room}#savePlayersGame">GameOverAll</a>&nbsp;&nbsp;
+                        <input type="submit" name="action"
+                               value="${data.actions.gameOverAllPlayers}"/>
                     </td>
                     <td>
                         <a href="${ctx}/board/room/${data.room}">ViewGameAll</a>&nbsp;&nbsp;
                     </td>
                     <td class="header">PlayerLogAll</td>
                     <td>
-                        <a href="${ctx}/admin/player/ai/reloadAll?room=${data.room}#savePlayersGame">LoadAIAll</a>&nbsp;&nbsp;
+                        <input type="submit" name="action"
+                               value="${data.actions.loadAIsForAllPlayers}"/>
                     </td>
                     <td class="header">Save data&nbsp;&nbsp;</td>
                 </tr>
@@ -809,11 +815,11 @@
                                 <c:choose>
                                     <c:when test="${player.code != null}">
                                         <td class="joystick">
-                                            <span class="a" href="${ctx}/rest/joystick/player/${player.id}/do/up#savePlayersGame">U</span>
-                                            <span class="a" href="${ctx}/rest/joystick/player/${player.id}/do/down#savePlayersGame">D</span>
-                                            <span class="a" href="${ctx}/rest/joystick/player/${player.id}/do/left#savePlayersGame">L</span>
-                                            <span class="a" href="${ctx}/rest/joystick/player/${player.id}/do/right#savePlayersGame">R</span>
-                                            <span class="a" href="${ctx}/rest/joystick/player/${player.id}/do/act#savePlayersGame">A</span>
+                                            <span class="a" href="${ctx}/rest/joystick/player/${player.id}/do/up#players">U</span>
+                                            <span class="a" href="${ctx}/rest/joystick/player/${player.id}/do/down#players">D</span>
+                                            <span class="a" href="${ctx}/rest/joystick/player/${player.id}/do/left#players">L</span>
+                                            <span class="a" href="${ctx}/rest/joystick/player/${player.id}/do/right#players">R</span>
+                                            <span class="a" href="${ctx}/rest/joystick/player/${player.id}/do/act#players">A</span>
                                         </td>
                                     </c:when>
                                     <c:otherwise>
@@ -821,10 +827,10 @@
                                     </c:otherwise>
                                 </c:choose>
                                 <td><a href="${ctx}/board/room/${data.room}">${data.room}</a></td>
-                                <td><a href="${ctx}/admin/player/${player.id}/save?room=${data.room}#savePlayersGame">Save</a></td>
+                                <td><a href="${ctx}/admin/player/${player.id}/save?room=${data.room}#players">Save</a></td>
                                 <c:choose>
                                     <c:when test="${player.saved}">
-                                        <td><a href="${ctx}/admin/player/${player.id}/load?room=${data.room}#savePlayersGame">Load</a></td>
+                                        <td><a href="${ctx}/admin/player/${player.id}/load?room=${data.room}#players">Load</a></td>
                                     </c:when>
                                     <c:otherwise>
                                         <td>Load</td>
@@ -832,7 +838,7 @@
                                 </c:choose>
                                 <c:choose>
                                     <c:when test="${player.saved}">
-                                        <td><a href="${ctx}/admin/player/${player.id}/save/remove?room=${data.room}#savePlayersGame">RemoveSave</a></td>
+                                        <td><a href="${ctx}/admin/player/${player.id}/save/remove?room=${data.room}#players">RemoveSave</a></td>
                                     </c:when>
                                     <c:otherwise>
                                         <td>RemoveSave</td>
@@ -840,13 +846,13 @@
                                 </c:choose>
                                 <c:choose>
                                     <c:when test="${player.code != null}">
-                                        <td><a href="${ctx}/admin/player/${player.id}/registration/remove?room=${data.room}#savePlayersGame">RemoveReg</a></td>
+                                        <td><a href="${ctx}/admin/player/${player.id}/registration/remove?room=${data.room}#players">RemoveReg</a></td>
                                     </c:when>
                                     <c:otherwise>
                                         <td>RemoveReg</td>
                                     </c:otherwise>
                                 </c:choose>
-                                <td><a href="${ctx}/admin/player/${player.id}/gameOver?room=${data.room}#savePlayersGame">GameOver</a></td>
+                                <td><a href="${ctx}/admin/player/${player.id}/gameOver?room=${data.room}#players">GameOver</a></td>
                                 <td><a href="${ctx}/board/player/${player.id}?code=${player.code}">ViewGame</a></td>
                                 <c:choose>
                                     <c:when test="${player.code != null}">
@@ -861,7 +867,7 @@
                                         <td>Loaded</td>
                                     </c:when>
                                     <c:otherwise>
-                                        <td><a href="${ctx}/admin/player/${player.id}/ai/reload?room=${data.room}#savePlayersGame">LoadAI</a></td>
+                                        <td><a href="${ctx}/admin/player/${player.id}/ai/reload?room=${data.room}#players">LoadAI</a></td>
                                     </c:otherwise>
                                 </c:choose>
                                 <c:choose>
@@ -889,7 +895,7 @@
                                 <td>Save</td>
                                 <c:choose>
                                     <c:when test="${player.saved}">
-                                        <td><a href="${ctx}/admin/player/${player.id}/load?room=${data.room}#savePlayersGame">Load</a></td>
+                                        <td><a href="${ctx}/admin/player/${player.id}/load?room=${data.room}#players">Load</a></td>
                                     </c:when>
                                     <c:otherwise>
                                         <td>Load</td>
@@ -897,7 +903,7 @@
                                 </c:choose>
                                 <c:choose>
                                     <c:when test="${player.saved}">
-                                        <td><a href="${ctx}/admin/player/${player.id}/save/remove?room=${data.room}#savePlayersGame">RemoveSave</a></td>
+                                        <td><a href="${ctx}/admin/player/${player.id}/save/remove?room=${data.room}#players">RemoveSave</a></td>
                                     </c:when>
                                     <c:otherwise>
                                         <td>RemoveSave</td>
@@ -905,7 +911,7 @@
                                 </c:choose>
                                 <c:choose>
                                     <c:when test="${player.code != null}">
-                                        <td><a href="${ctx}/admin/player/${player.id}/registration/remove?room=${data.room}#savePlayersGame">RemoveReg</a></td>
+                                        <td><a href="${ctx}/admin/player/${player.id}/registration/remove?room=${data.room}#players">RemoveReg</a></td>
                                     </c:when>
                                     <c:otherwise>
                                         <td>RemoveReg</td>
@@ -937,7 +943,7 @@
                 <tr>
                     <td>
                         <input type="submit" name="action"
-                               value="${data.actions.saveAllPlayers}"/>
+                               value="${data.actions.updateAllPlayers}"/>
                     </td>
                 </tr>
             </table>

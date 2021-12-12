@@ -107,14 +107,24 @@ public class AdminService {
         map.put(actions.cleanAllScores, this::cleanAllScores);          
         map.put(actions.reloadAllRooms, this::reloadAllRooms);          
         map.put(actions.reloadAllPlayers, this::reloadAllPlayers);          
-        map.put(actions.loadSaveForAll, this::loadSaveForAll);          
+        map.put(actions.loadSaveForAll, this::loadSaveForAll);
+        // TODO without backend
+        // map.put(actions.saveRegistrationFormSettings, this::saveRegistrationFormSettings);
         map.put(actions.createDummyUsers, this::createDummyUsers);
         map.put(actions.updateRoundsSettings, this::updateRoundsSettings);
         map.put(actions.updateSemifinalSettings, this::updateSemifinalSettings);
         map.put(actions.updateInactivitySettings, this::updateInactivitySettings);
         map.put(actions.updateOtherSettings, this::updateOtherSettings);
+        // TODO without backend
+        // map.put(actions.addNewLevelMap, this::addNewLevelMap);
         map.put(actions.saveLevelsMaps, this::saveLevelsMaps);
+        map.put(actions.updateAllPlayers, this::updateAllPlayers);
         map.put(actions.saveAllPlayers, this::saveAllPlayers);
+        map.put(actions.loadAllPlayers, this::loadAllPlayers);
+        map.put(actions.removeAllPlayersSaves, this::removeAllPlayersSaves);
+        map.put(actions.removeAllPlayersRegistrations, this::removeAllPlayersRegistrations);
+        map.put(actions.gameOverAllPlayers, this::gameOverAllPlayers);
+        map.put(actions.loadAIsForAllPlayers, this::loadAIsForAllPlayers);
     }
 
     private void deleteRoom(AdminSettings settings, String game, String room) {
@@ -325,8 +335,36 @@ public class AdminService {
                         settings.getLevelsValues());
     }
 
-    private void saveAllPlayers(AdminSettings settings, String game, String room) {
+    private void updateAllPlayers(AdminSettings settings, String game, String room) {
         playerService.updateAll(settings.getPlayers());
+    }
+
+    private void saveAllPlayers(AdminSettings settings, String game, String room) {
+        saveService.saveAll(room);
+    }
+
+    private void loadAllPlayers(AdminSettings settings, String game, String room) {
+        saveService.loadAll(room);
+    }
+
+    private void removeAllPlayersSaves(AdminSettings settings, String game, String room) {
+        saveService.removeAllSaves(room);
+    }
+
+    private void removeAllPlayersRegistrations(AdminSettings settings, String game, String room) {
+        saveService.getSaves(room)
+                .forEach(player -> registration.remove(player.getId()));
+    }
+
+    private void gameOverAllPlayers(AdminSettings settings, String game, String room) {
+        playerService.removeAll(room);
+    }
+
+    private void loadAIsForAllPlayers(AdminSettings settings, String game, String room) {
+        playerService.getAllInRoom(room).stream()
+                .filter(not(Player::hasAi))
+                .map(Player::getId)
+                .forEach(playerService::reloadAI);
     }
 
     private InactivitySettingsImpl inactivitySettings(String room) {
