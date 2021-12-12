@@ -60,6 +60,7 @@ public class AdminPostActions {
     public String updateRoundsSettings;
     public String updateSemifinalSettings;
     public String updateInactivitySettings;
+    public String updateOtherSettings;
     public String saveLevelsMaps;
 
     @Autowired
@@ -93,6 +94,7 @@ public class AdminPostActions {
         updateRoundsSettings = get("admin.post.updateRoundsSettings");
         updateSemifinalSettings = get("admin.post.updateSemifinalSettings");
         updateInactivitySettings = get("admin.post.updateInactivitySettings");
+        updateOtherSettings = get("admin.post.updateOtherSettings");
         saveLevelsMaps = get("admin.post.saveLevelsMaps");
     }
 

@@ -111,6 +111,7 @@ public class AdminService {
         map.put(actions.updateRoundsSettings, this::updateRoundsSettings);
         map.put(actions.updateSemifinalSettings, this::updateSemifinalSettings);
         map.put(actions.updateInactivitySettings, this::updateInactivitySettings);
+        map.put(actions.updateOtherSettings, this::updateOtherSettings);
         map.put(actions.saveLevelsMaps, this::saveLevelsMaps);
     }
 
@@ -290,17 +291,6 @@ public class AdminService {
         // сохраняет измененные значения через settings объект
         room = settings.getRoom();
         game = settings.getGame();
-
-        Settings gameSettings = gameService.getGameType(game, room).getSettings();
-        List<Exception> errors = new LinkedList<>();
-        if (settings.getOtherValues() != null) {
-            List<Object> updated = settings.getOtherValues();
-            updateParameters(gameSettings, onlyUngrouped(), updated, errors);
-        }
-
-        if (!errors.isEmpty()) {
-            throw new IllegalArgumentException("There are errors during save settings: " + errors);
-        }
     }
 
     private void saveActiveGames(AdminSettings settings, String game, String room) {
@@ -320,11 +310,17 @@ public class AdminService {
         roomService.setOpenedGames(opened);
     }
 
-    private void updateParameters(Settings gameSettings, Predicate<Parameter> filter,
-                                 List<Object> updated, List<Exception> errors)
-    {
+    private void updateOtherSettings(AdminSettings settings, String game, String room) {
+        List<Object> updated = settings.getOtherValues();
+        if (updated == null) {
+            return;
+        }
+
+        List<Exception> errors = new LinkedList<>();
+
+        Settings gameSettings = gameService.getGameType(game, room).getSettings();
         List<Parameter> actual = gameSettings.getParameters().stream()
-                .filter(filter)
+                .filter(onlyUngrouped())
                 .collect(toList());
         for (int index = 0; index < actual.size(); index++) {
             try {
@@ -335,6 +331,9 @@ public class AdminService {
             } catch (Exception e) {
                 errors.add(e);
             }
+        }
+        if (!errors.isEmpty()) {
+            throw new IllegalArgumentException("There are errors during save settings: " + errors);
         }
     }
 

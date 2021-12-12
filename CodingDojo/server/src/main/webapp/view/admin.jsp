@@ -660,7 +660,8 @@
                 </c:forEach>
                 <tr>
                     <td>
-                        <input type="submit" value="Save"/>
+                        <input type="submit" name="action"
+                               value="${data.actions.updateOtherSettings}"/>
                     </td>
                 </tr>
             </table>
