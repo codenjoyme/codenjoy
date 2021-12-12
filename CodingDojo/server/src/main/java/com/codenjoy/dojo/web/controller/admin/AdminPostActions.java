@@ -55,6 +55,7 @@ public class AdminPostActions {
     public String reloadAllPlayers;
     public String setTimerPeriod;
     public String loadSaveForAll;
+    public String saveRegistrationFormSettings;
 
     @Autowired
     private MessageSource messages;
@@ -82,6 +83,7 @@ public class AdminPostActions {
         reloadAllPlayers = get("admin.post.reloadAllPlayers");
         setTimerPeriod = get("admin.post.setTimerPeriod");
         loadSaveForAll = get("admin.post.loadSaveForAll");
+        saveRegistrationFormSettings = get("admin.post.saveRegistrationFormSettings");
     }
 
     private String get(String key) {

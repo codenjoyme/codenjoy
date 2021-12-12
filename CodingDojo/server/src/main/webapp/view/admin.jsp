@@ -444,7 +444,8 @@
         </tr>
         <tr>
             <td>
-                <button id="registration-save-button" class="button save">Save settings</button>
+                <button id="registration-save-button" class="button save">
+                    ${data.actions.saveRegistrationFormSettings}</button>
             </td>
         </tr>
     </table>
