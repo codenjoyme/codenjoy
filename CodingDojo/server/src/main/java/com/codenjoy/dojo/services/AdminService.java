@@ -110,6 +110,7 @@ public class AdminService {
         map.put(actions.createDummyUsers, this::createDummyUsers);
         map.put(actions.updateRoundsSettings, this::updateRoundsSettings);
         map.put(actions.updateSemifinalSettings, this::updateSemifinalSettings);
+        map.put(actions.updateInactivitySettings, this::updateInactivitySettings);
     }
 
     private void deleteRoom(AdminSettings settings, String game, String room) {
@@ -225,6 +226,10 @@ public class AdminService {
         semifinal.clean(room);
     }
 
+    private void updateInactivitySettings(AdminSettings settings, String game, String room) {
+        updateInactivity(room, settings.getInactivity());
+    }
+
     void updateInactivity(String room, InactivitySettings updated) {
         InactivitySettingsImpl actual = inactivitySettings(room);
         boolean changed = actual
@@ -263,14 +268,6 @@ public class AdminService {
             }
         }
 
-        if (settings.getInactivity() != null) {
-            try {
-                updateInactivity(room, settings.getInactivity());
-            } catch (Exception e) {
-                // do nothing
-            }
-        }
-        
         if (!map.containsKey(settings.getAction())) {
             throw new IllegalArgumentException(
                     "Admin action not found: " + settings.getAction());
