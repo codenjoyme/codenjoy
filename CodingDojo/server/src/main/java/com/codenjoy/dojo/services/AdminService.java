@@ -108,6 +108,7 @@ public class AdminService {
         map.put(actions.reloadAllPlayers, this::reloadAllPlayers);          
         map.put(actions.loadSaveForAll, this::loadSaveForAll);          
         map.put(actions.createDummyUsers, this::createDummyUsers);
+        map.put(actions.updateRoundsSettings, this::updateRoundsSettings);
     }
 
     private void deleteRoom(AdminSettings settings, String game, String room) {
@@ -214,6 +215,10 @@ public class AdminService {
         playerService.loadSaveForAll(room, settings.getProgress());
     }
 
+    private void updateRoundsSettings(AdminSettings settings, String game, String room) {
+        roundSettings(room).update(settings.getRounds());
+    }
+
     void updateInactivity(String room, InactivitySettings updated) {
         InactivitySettingsImpl actual = inactivitySettings(room);
         boolean changed = actual
@@ -257,15 +262,6 @@ public class AdminService {
             try {
                 levelsSettings(room)
                         .updateFrom(settings.getLevels().getParameters());
-            } catch (Exception e) {
-                // do nothing
-            }
-        }
-
-        if (settings.getRounds() != null) {
-            try {
-                roundSettings(room)
-                        .update(settings.getRounds());
             } catch (Exception e) {
                 // do nothing
             }

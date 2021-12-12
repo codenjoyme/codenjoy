@@ -57,6 +57,7 @@ public class AdminPostActions {
     public String loadSaveForAll;
     public String saveRegistrationFormSettings;
     public String createDummyUsers;
+    public String updateRoundsSettings;
 
     @Autowired
     private MessageSource messages;
@@ -86,6 +87,7 @@ public class AdminPostActions {
         loadSaveForAll = get("admin.post.loadSaveForAll");
         saveRegistrationFormSettings = get("admin.post.saveRegistrationFormSettings");
         createDummyUsers = get("admin.post.createDummyUsers");
+        updateRoundsSettings = get("admin.post.updateRoundsSettings");
     }
 
     private String get(String key) {
