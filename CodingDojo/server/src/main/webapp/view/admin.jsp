@@ -64,7 +64,7 @@
             </tr>
             <tr>
                 <td>
-                    <input type="submit" name="action" value="Delete room"/>
+                    <input type="submit" name="action" value="${data.actions.deleteRoom}"/>
                 </td>
                 <td class="info">
                     You cannot delete the default game room. When you delete a room, <br>
@@ -74,7 +74,7 @@
             <tr>
                 <td>
                     <input type="text" name="newRoom" value=""/><br>
-                    <input type="submit" name="action" value="Create room"/>
+                    <input type="submit" name="action" value="${data.actions.createRoom}"/>
                 </td>
                 <td class="info">
                     We will create a new empty room and show its settings.
@@ -157,7 +157,7 @@
             </c:forEach>
             <tr>
                 <td>
-                    <input type="submit" name="action" value="Save active games"/>
+                    <input type="submit" name="action" value="${data.actions.saveActiveGames}"/>
                 </td>
             </tr>
         </table>
@@ -173,11 +173,11 @@
                     <c:choose>
                         <c:when test="${data.active}">
                             <b><spring:message key="game.active"/></b></br>
-                            <input type="submit" name="action" value="Pause game"/>
+                            <input type="submit" name="action" value="${data.actions.pauseGame}"/>
                         </c:when>
                         <c:otherwise>
                             <b><spring:message key="game.suspended"/></b></br>
-                            <input type="submit" name="action" value="Resume game"/>
+                            <input type="submit" name="action" value="${data.actions.resumeGame}"/>
                         </c:otherwise>
                     </c:choose>
                 </td>
@@ -195,7 +195,7 @@
             </tr>
             <tr>
                 <td>
-                    <input type="submit" name="action" value="Set timer period"/>
+                    <input type="submit" name="action" value="${data.actions.setTimerPeriod}"/>
                 </td>
             </tr>
         </table>
@@ -211,11 +211,11 @@
                     <c:choose>
                         <c:when test="${data.recording}">
                             <b><spring:message key="recording.active"/></b></br>
-                            <input type="submit" name="action" value="Stop recording"/>
+                            <input type="submit" name="action" value="${data.actions.stopRecording}"/>
                         </c:when>
                         <c:otherwise>
                             <b><spring:message key="recording.suspended"/></b></br>
-                            <input type="submit" name="action" value="Start recording"/>
+                            <input type="submit" name="action" value="${data.actions.startRecording}"/>
                         </c:otherwise>
                     </c:choose>
                 </td>
@@ -233,11 +233,11 @@
                     <c:choose>
                         <c:when test="${data.debugLog}">
                             <b><spring:message key="debug.active"/></b></br>
-                            <input type="submit" name="action" value="Stop debug"/>
+                            <input type="submit" name="action" value="${data.actions.stopDebug}"/>
                         </c:when>
                         <c:otherwise>
                             <b><spring:message key="debug.suspended"/></b></br>
-                            <input type="submit" name="action" value="Start debug"/>
+                            <input type="submit" name="action" value="${data.actions.startDebug}"/>
                         </c:otherwise>
                     </c:choose>
                 </td>
@@ -260,7 +260,7 @@
             </tr>
             <tr>
                 <td>
-                    <input type="submit" name="action" value="Update loggers"/>
+                    <input type="submit" name="action" value="${data.actions.updateLoggers}"/>
                 </td>
             </tr>
         </table>
@@ -276,11 +276,11 @@
                     <c:choose>
                         <c:when test="${data.autoSave}">
                             <b><spring:message key="autoSave.active"/></b></br>
-                            <input type="submit" name="action" value="Stop auto save"/>
+                            <input type="submit" name="action" value="${data.actions.stopAutoSave}"/>
                         </c:when>
                         <c:otherwise>
                             <b><spring:message key="autoSave.suspended"/></b></br>
-                            <input type="submit" name="action" value="Start auto save"/>
+                            <input type="submit" name="action" value="${data.actions.startAutoSave}"/>
                         </c:otherwise>
                     </c:choose>
                 </td>
@@ -298,11 +298,11 @@
                     <c:choose>
                         <c:when test="${data.opened}">
                             <b><spring:message key="registration.active"/></b></br>
-                            <input type="submit" name="action" value="Close registration"/>
+                            <input type="submit" name="action" value="${data.actions.closeRegistration}"/>
                         </c:when>
                         <c:otherwise>
                             <b><spring:message key="registration.suspended"/></b></br>
-                            <input type="submit" name="action" value="Open registration"/>
+                            <input type="submit" name="action" value="${data.actions.openRegistration}"/>
                         </c:otherwise>
                     </c:choose>
                 </td>
@@ -320,11 +320,11 @@
                     <c:choose>
                         <c:when test="${data.roomOpened}">
                             <b><spring:message key="registration.room.active"/></b></br>
-                            <input type="submit" name="action" value="Close room registration"/>
+                            <input type="submit" name="action" value="${data.actions.closeRoomRegistration}"/>
                         </c:when>
                         <c:otherwise>
                             <b><spring:message key="registration.room.suspended"/></b></br>
-                            <input type="submit" name="action" value="Open room registration"/>
+                            <input type="submit" name="action" value="${data.actions.openRoomRegistration}"/>
                         </c:otherwise>
                     </c:choose>
                 </td>
@@ -342,7 +342,7 @@
             <tr>
             </tr>
                 <td>
-                    <input type="submit" name="action" value="Clean all scores"/>
+                    <input type="submit" name="action" value="${data.actions.cleanAllScores}"/>
                 </td>
                 <td class="info">
                     Clean all players scores. For some games, the field may also be updated.
@@ -350,7 +350,7 @@
             </tr>
             <tr>
                 <td>
-                    <input type="submit" name="action" value="Reload all rooms"/>
+                    <input type="submit" name="action" value="${data.actions.reloadAllRooms}"/>
                 </td>
                 <td class="info">
                     Not working for !disposable rooms.
@@ -358,7 +358,7 @@
             </tr>
             <tr>
                 <td>
-                    <input type="submit" name="action" value="Reload all players"/>
+                    <input type="submit" name="action" value="${data.actions.reloadAllPlayers}"/>
                 </td>
                 <td class="info">
                     Reload occurs through saves: saveAll -> removeAll -> loadAll.

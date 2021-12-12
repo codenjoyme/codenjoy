@@ -22,6 +22,7 @@ package com.codenjoy.dojo.web.controller.admin;
  * #L%
  */
 
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
@@ -30,6 +31,7 @@ import javax.annotation.PostConstruct;
 import java.util.Locale;
 
 @Component
+@Getter
 public class AdminPostActions {
 
     public String deleteRoom;

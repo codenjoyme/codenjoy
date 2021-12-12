@@ -442,6 +442,7 @@ public class AdminService {
         result.setGamesRooms(roomService.gamesRooms());
         result.setPlayersCount(playerService.getRoomCounts());
         result.setStatistic(statistics);
+        result.setActions(actions);
 
         return result;
     }
