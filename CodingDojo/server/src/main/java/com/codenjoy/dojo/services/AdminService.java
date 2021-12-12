@@ -113,6 +113,7 @@ public class AdminService {
         map.put(actions.updateInactivitySettings, this::updateInactivitySettings);
         map.put(actions.updateOtherSettings, this::updateOtherSettings);
         map.put(actions.saveLevelsMaps, this::saveLevelsMaps);
+        map.put(actions.saveAllPlayers, this::saveAllPlayers);
     }
 
     private void deleteRoom(AdminSettings settings, String game, String room) {
@@ -242,6 +243,10 @@ public class AdminService {
                         settings.getLevelsValues());
     }
 
+    private void saveAllPlayers(AdminSettings settings, String game, String room) {
+        playerService.updateAll(settings.getPlayers());
+    }
+
     void updateInactivity(String room, InactivitySettings updated) {
         InactivitySettingsImpl actual = inactivitySettings(room);
         boolean changed = actual
@@ -266,10 +271,6 @@ public class AdminService {
 
         validator.checkGame(game, Validator.CANT_BE_NULL);
         validator.checkRoom(room, Validator.CANT_BE_NULL);
-
-        if (settings.getPlayers() != null) {
-            playerService.updateAll(settings.getPlayers());
-        }
 
         if (settings.getLevels() != null) {
             try {

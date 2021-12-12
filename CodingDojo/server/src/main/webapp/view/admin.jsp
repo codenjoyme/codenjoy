@@ -935,7 +935,8 @@
                 </c:forEach>
                 <tr>
                     <td>
-                        <input type="submit" value="Save all"/>
+                        <input type="submit" name="action"
+                               value="${data.actions.saveAllPlayers}"/>
                     </td>
                 </tr>
             </table>

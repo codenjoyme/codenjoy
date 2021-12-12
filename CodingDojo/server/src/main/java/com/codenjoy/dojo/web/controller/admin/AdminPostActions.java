@@ -63,6 +63,7 @@ public class AdminPostActions {
     public String updateOtherSettings;
     public String saveLevelsMaps;
     public String addNewLevelMap;
+    public String saveAllPlayers;
 
     @Autowired
     private MessageSource messages;
@@ -98,6 +99,7 @@ public class AdminPostActions {
         updateOtherSettings = get("admin.post.updateOtherSettings");
         saveLevelsMaps = get("admin.post.saveLevelsMaps");
         addNewLevelMap = get("admin.post.addNewLevelMap");
+        saveAllPlayers = get("admin.post.saveAllPlayers");
     }
 
     private String get(String key) {
