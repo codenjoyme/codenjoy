@@ -25,7 +25,7 @@ package com.codenjoy.dojo.cucumber.page.admin;
 import com.codenjoy.dojo.cucumber.page.Page;
 import com.codenjoy.dojo.cucumber.page.Server;
 import com.codenjoy.dojo.cucumber.page.WebDriverWrapper;
-import com.codenjoy.dojo.web.controller.AdminSettings;
+import com.codenjoy.dojo.web.controller.admin.AdminSettings;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.WebElement;
 import org.springframework.context.annotation.Scope;

@@ -28,6 +28,7 @@ import com.codenjoy.dojo.config.meta.SSOProfile;
 import com.codenjoy.dojo.config.oauth2.OAuth2MappingUserService;
 import com.codenjoy.dojo.services.ConfigProperties;
 import com.codenjoy.dojo.web.controller.*;
+import com.codenjoy.dojo.web.controller.admin.AdminController;
 import com.codenjoy.dojo.web.rest.RestBoardController;
 import com.codenjoy.dojo.web.rest.RestSettingsController;
 import lombok.extern.slf4j.Slf4j;

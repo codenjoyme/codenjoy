@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.web.controller;
+package com.codenjoy.dojo.web.controller.admin;
 
 /*-
  * #%L

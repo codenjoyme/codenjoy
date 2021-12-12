@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.web.controller;
+package com.codenjoy.dojo.web.controller.admin;
 
 /*-
  * #%L
@@ -30,6 +30,7 @@ import com.codenjoy.dojo.services.log.DebugService;
 import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.security.GameAuthoritiesConstants;
 import com.codenjoy.dojo.services.security.ViewDelegationService;
+import com.codenjoy.dojo.web.controller.Validator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.annotation.Secured;

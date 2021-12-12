@@ -39,7 +39,7 @@ import com.codenjoy.dojo.services.semifinal.SemifinalSettingsImpl;
 import com.codenjoy.dojo.services.settings.CheckBox;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.web.controller.AdminSettings;
+import com.codenjoy.dojo.web.controller.admin.AdminSettings;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -53,7 +53,7 @@ import static com.codenjoy.dojo.services.incativity.InactivitySettings.INACTIVIT
 import static com.codenjoy.dojo.services.level.LevelsSettings.LEVELS;
 import static com.codenjoy.dojo.services.round.RoundSettings.ROUNDS;
 import static com.codenjoy.dojo.services.semifinal.SemifinalSettings.SEMIFINAL;
-import static com.codenjoy.dojo.web.controller.AdminSettings.*;
+import static com.codenjoy.dojo.web.controller.admin.AdminSettings.*;
 import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.toList;
 
