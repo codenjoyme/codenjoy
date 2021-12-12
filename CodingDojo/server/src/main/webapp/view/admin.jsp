@@ -477,6 +477,9 @@
 
     <c:if test="${not empty data.rounds.parameters}">
         <form:form modelAttribute="data" action="admin#rounds" method="POST">
+            <input type="hidden" name="game" value="${data.game}"/>
+            <input type="hidden" name="room" value="${data.room}"/>
+
             <table class="admin-table" id="rounds">
                 <tr colspan="2">
                     <td><b>Rounds settings</b></td>
@@ -515,8 +518,6 @@
                 </tr>
                 <tr>
                     <td>
-                        <input type="hidden" name="game" value="${data.game}"/>
-                        <input type="hidden" name="room" value="${data.room}"/>
                         <input type="submit" value="Save"/>
                     </td>
                 </tr>
@@ -526,6 +527,9 @@
 
     <c:if test="${not empty data.semifinal.parameters}">
         <form:form modelAttribute="data" action="admin#semifinal" method="POST">
+            <input type="hidden" name="game" value="${data.game}"/>
+            <input type="hidden" name="room" value="${data.room}"/>
+
             <table class="admin-table" id="semifinal">
                 <tr colspan="2">
                     <td><b>Semifinal settings</b></td>
@@ -564,8 +568,6 @@
                 </tr>
                 <tr>
                     <td>
-                        <input type="hidden" name="game" value="${data.game}"/>
-                        <input type="hidden" name="room" value="${data.room}"/>
                         <input type="submit" value="Save"/>
                     </td>
                 </tr>
@@ -575,6 +577,9 @@
 
     <c:if test="${not empty data.inactivity.parameters}">
         <form:form modelAttribute="data" action="admin#inactivity" method="POST">
+            <input type="hidden" name="game" value="${data.game}"/>
+            <input type="hidden" name="room" value="${data.room}"/>
+
             <table class="admin-table" id="inactivity">
                 <tr colspan="2">
                     <td><b>Inactivity settings</b></td>
@@ -589,8 +594,6 @@
                 </tr>
                 <tr>
                     <td>
-                        <input type="hidden" name="game" value="${data.game}"/>
-                        <input type="hidden" name="room" value="${data.room}"/>
                         <input type="submit" value="Save"/>
                     </td>
                 </tr>
@@ -600,6 +603,9 @@
 
     <c:if test="${not empty data.other}">
         <form:form modelAttribute="data" action="admin#gameSettings" method="POST">
+            <input type="hidden" name="game" value="${data.game}"/>
+            <input type="hidden" name="room" value="${data.room}"/>
+
             <table class="admin-table" id="gameSettings">
                 <tr colspan="2">
                     <td><b>Game settings</b></td>
@@ -629,8 +635,6 @@
                 </c:forEach>
                 <tr>
                     <td>
-                        <input type="hidden" name="game" value="${data.game}"/>
-                        <input type="hidden" name="room" value="${data.room}"/>
                         <input type="submit" value="Save"/>
                     </td>
                 </tr>
@@ -640,6 +644,9 @@
 
     <c:if test="${not empty data.levels.parameters}">
         <form:form modelAttribute="data" action="admin#levels" method="POST">
+            <input type="hidden" name="game" value="${data.game}"/>
+            <input type="hidden" name="room" value="${data.room}"/>
+
             <table class="admin-table" id="levels">
                 <tr colspan="2">
                     <td><b>Game levels settings</b></td>
@@ -697,8 +704,6 @@
                 </script>
                 <tr class="levelsButtons">
                     <td>
-                        <input type="hidden" name="game" value="${data.game}"/>
-                        <input type="hidden" name="room" value="${data.room}"/>
                         <input type="button" id="addNewLevelMap" value="Add"/>
                         <input type="submit" value="Save"/>
                     </td>
@@ -709,6 +714,9 @@
 
     <c:if test="${not empty data.players || savedGames != null}">
         <form:form modelAttribute="data" action="admin#savePlayersGame" method="POST">
+            <input type="hidden" name="game" value="${data.game}"/>
+            <input type="hidden" name="room" value="${data.room}"/>
+
             <table class="admin-table" id="savePlayersGame">
                 <tr colspan="4">
                     <td><b>Registered Players</b></td>
@@ -899,8 +907,6 @@
                 </c:forEach>
                 <tr>
                     <td>
-                        <input type="hidden" name="game" value="${data.game}"/>
-                        <input type="hidden" name="room" value="${data.room}"/>
                         <input type="submit" value="Save all"/>
                     </td>
                 </tr>
