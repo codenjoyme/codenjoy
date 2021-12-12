@@ -234,6 +234,9 @@ public class AdminService {
     }
 
     private void saveLevelsMaps(AdminSettings settings, String game, String room) {
+        levelsSettings(room)
+                .updateFrom(settings.getLevels().getParameters());
+
         gameService.getGameType(game, room)
                 .getSettings()
                 .updateAll(
@@ -271,15 +274,6 @@ public class AdminService {
 
         validator.checkGame(game, Validator.CANT_BE_NULL);
         validator.checkRoom(room, Validator.CANT_BE_NULL);
-
-        if (settings.getLevels() != null) {
-            try {
-                levelsSettings(room)
-                        .updateFrom(settings.getLevels().getParameters());
-            } catch (Exception e) {
-                // do nothing
-            }
-        }
 
         if (!map.containsKey(settings.getAction())) {
             throw new IllegalArgumentException(
