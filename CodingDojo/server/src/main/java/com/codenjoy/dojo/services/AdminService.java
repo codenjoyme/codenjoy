@@ -191,7 +191,11 @@ public class AdminService {
             playerService.removeAll(room);
             saveService.loadAll(room);
         });
-        
+
+        map.put(actions.reloadAllPlayers, (settings, game, room) -> {
+            playerService.loadSaveForAll(room, settings.getProgress());
+        });
+
     }
 
     void updateInactivity(String room, InactivitySettings updated) {
@@ -260,10 +264,6 @@ public class AdminService {
             map.get(settings.getAction()).accept(settings, game, room);
             room = settings.getRoom();
             game = settings.getGame();
-        }
-
-        if (settings.getProgress() != null) {
-            playerService.loadSaveForAll(room, settings.getProgress());
         }
 
         Settings gameSettings = gameService.getGameType(game, room).getSettings();

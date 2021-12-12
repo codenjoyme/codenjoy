@@ -380,7 +380,7 @@
             </tr>
             <tr>
                 <td>
-                    <input type="submit" value="Apply for all"/>
+                    <input type="submit" name="action" value="${data.actions.loadSaveForAll}"/>
                 </td>
             </tr>
         </table>

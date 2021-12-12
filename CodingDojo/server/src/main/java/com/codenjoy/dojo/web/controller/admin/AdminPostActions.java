@@ -54,6 +54,7 @@ public class AdminPostActions {
     public String reloadAllRooms;
     public String reloadAllPlayers;
     public String setTimerPeriod;
+    public String loadSaveForAll;
 
     @Autowired
     private MessageSource messages;
@@ -80,6 +81,7 @@ public class AdminPostActions {
         reloadAllRooms = get("admin.post.rooms.reload");
         reloadAllPlayers = get("admin.post.players.reload");
         setTimerPeriod = get("admin.post.timer.setPeriod");
+        loadSaveForAll = get("admin.post.loadSaveForAll");
     }
 
     private String get(String key) {
