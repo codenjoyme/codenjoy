@@ -83,121 +83,134 @@ public class AdminService {
     private final Validator validator;
 
     private final Map<String, TriConsumer<AdminSettings, String, String>> map = new ConcurrentHashMap<>();
-    
+
     @PostConstruct
     public void init() {
-        map.put(actions.deleteRoom, (settings, game, room) -> {
-            // нельзя удалять единственную комнату соответствующую игре,
-            // потому что потом зайти некуда будет
-            if (roomService.game(room).equals(room)) {
+        map.put(actions.deleteRoom, this::deleteRoom);
+        map.put(actions.createRoom, this::createRoom);
+        map.put(actions.saveActiveGames, this::saveActiveGames);
+        map.put(actions.setTimerPeriod, this::setTimerPeriod);
+        map.put(actions.pauseGame, this::pauseGame);
+        map.put(actions.resumeGame, this::resumeGame);
+        map.put(actions.stopRecording, this::stopRecording); 
+        map.put(actions.startRecording, this::startRecording);
+        map.put(actions.stopDebug, this::stopDebug);
+        map.put(actions.startDebug, this::startDebug);          
+        map.put(actions.updateLoggers, this::updateLoggers);          
+        map.put(actions.stopAutoSave, this::stopAutoSave);          
+        map.put(actions.startAutoSave, this::startAutoSave);          
+        map.put(actions.closeRegistration, this::closeRegistration);          
+        map.put(actions.openRegistration, this::openRegistration);          
+        map.put(actions.closeRoomRegistration, this::closeRoomRegistration);
+        map.put(actions.openRoomRegistration, this::openRoomRegistration);          
+        map.put(actions.cleanAllScores, this::cleanAllScores);          
+        map.put(actions.reloadAllRooms, this::reloadAllRooms);          
+        map.put(actions.reloadAllPlayers, this::reloadAllPlayers);          
+        map.put(actions.loadSaveForAll, this::loadSaveForAll);          
+    }
+
+    private void deleteRoom(AdminSettings settings, String game, String room) {
+        // нельзя удалять единственную комнату соответствующую игре,
+        // потому что потом зайти некуда будет
+        if (roomService.game(room).equals(room)) {
+            return;
+        }
+
+        playerService.removeAll(room);
+        saveService.removeAllSaves(room);
+        roomService.remove(room);
+        // после зачистки перейдем в default game room
+        settings.setRoom(game);
+    }
+
+    private void createRoom(AdminSettings settings, String game, String room) {
+        room = settings.getNewRoom();
+        // если нет такой room
+        if (!roomService.exists(room)){
+            GameType gameType = gameService.getGameType(game);
+            // проверяем есть ли game
+            if (gameType instanceof NullGameType) {
                 return;
             }
+            // создаем новую комнату
+            roomService.create(room, gameType);
+        }
+        // и тут же будем администрировать новую комнату
+        settings.setRoom(room);
+    }
 
-            playerService.removeAll(room);
-            saveService.removeAllSaves(room);
-            roomService.remove(room);
-            // после зачистки перейдем в default game room
-            settings.setRoom(game);
-        });
+    private void setTimerPeriod(AdminSettings settings, String game, String room) {
+        timerService.changePeriod(settings.getTimerPeriod());
+    }
 
-        map.put(actions.createRoom, (settings, game, room) -> {
-            room = settings.getNewRoom();
-            // если нет такой room
-            if (!roomService.exists(room)){
-                GameType gameType = gameService.getGameType(game);
-                // проверяем есть 0ли game
-                if (gameType instanceof NullGameType) {
-                    return;
-                }
-                // создаем новую комнату
-                roomService.create(room, gameType);
-            }
-            // и тут же будем администрировать новую комнату
-            settings.setRoom(room);
-        });
+    private void pauseGame(AdminSettings settings, String game, String room) {
+        roomService.setActive(room, false);
+    }
 
-        map.put(actions.saveActiveGames, (settings, game, room) -> {
-            setActiveGames(settings.getActiveGames());
-        });
+    private void resumeGame(AdminSettings settings, String game, String room) {
+        roomService.setActive(room, true);
+    }
 
-        map.put(actions.setTimerPeriod, (settings, game, room) -> {
-            try {
-                timerService.changePeriod(settings.getTimerPeriod());
-            } catch (NumberFormatException e) {
-                // do nothing
-            }
-        });
+    private void stopRecording(AdminSettings settings, String game, String room) {
+        actionLogger.pause();
+    }
 
-        map.put(actions.pauseGame, (settings, game, room) -> {
-            roomService.setActive(room, false);
-        });
+    private void startRecording(AdminSettings settings, String game, String room) {
+        actionLogger.resume();
+    }
 
-        map.put(actions.resumeGame, (settings, game, room) -> {
-            roomService.setActive(room, true);
-        });
+    private void stopDebug(AdminSettings settings, String game, String room) {
+        debugService.pause();
+    }
 
-        map.put(actions.stopRecording, (settings, game, room) -> {
-            actionLogger.pause();
-        });
+    private void startDebug(AdminSettings settings, String game, String room) {
+        debugService.resume();
+    }
 
-        map.put(actions.startRecording, (settings, game, room) -> {
-            actionLogger.resume();
-        });
+    private void updateLoggers(AdminSettings settings, String game, String room) {
+        debugService.setLoggersLevels(settings.getLoggersLevels());
+    }
 
-        map.put(actions.stopDebug, (settings, game, room) -> {
-            debugService.pause();
-        });
+    private void stopAutoSave(AdminSettings settings, String game, String room) {
+        autoSaver.resume();
+    }
 
-        map.put(actions.startDebug, (settings, game, room) -> {
-            debugService.resume();
-        });
+    private void startAutoSave(AdminSettings settings, String game, String room) {
+        autoSaver.resume();
+    }
 
-        map.put(actions.updateLoggers, (settings, game, room) -> {
-            debugService.setLoggersLevels(settings.getLoggersLevels());
-        });
+    private void closeRegistration(AdminSettings settings, String game, String room) {
+        playerService.closeRegistration();
+    }
 
-        map.put(actions.stopAutoSave, (settings, game, room) -> {
-            autoSaver.pause();
-        });
+    private void openRegistration(AdminSettings settings, String game, String room) {
+        playerService.openRegistration();
+    }
 
-        map.put(actions.startAutoSave, (settings, game, room) -> {
-            autoSaver.resume();
-        });
+    private void closeRoomRegistration(AdminSettings settings, String game, String room) {
+        roomService.setOpened(room, true);
+    }
 
-        map.put(actions.closeRegistration, (settings, game, room) -> {
-            playerService.closeRegistration();
-        });
+    private void openRoomRegistration(AdminSettings settings, String game, String room) {
+        roomService.setOpened(room, true);
+    }
 
-        map.put(actions.openRegistration, (settings, game, room) -> {
-            playerService.openRegistration();
-        });
+    private void cleanAllScores(AdminSettings settings, String game, String room) {
+        playerService.cleanAllScores(room);
+    }
 
-        map.put(actions.closeRoomRegistration, (settings, game, room) -> {
-            roomService.setOpened(room, false);
-        });
+    private void reloadAllRooms(AdminSettings settings, String game, String room) {
+        playerService.reloadAllRooms(room);
+    }
 
-        map.put(actions.openRoomRegistration, (settings, game, room) -> {
-            roomService.setOpened(room, true);
-        });
+    private void reloadAllPlayers(AdminSettings settings, String game, String room) {
+        saveService.saveAll(room);
+        playerService.removeAll(room);
+        saveService.loadAll(room);
+    }
 
-        map.put(actions.cleanAllScores, (settings, game, room) -> {
-            playerService.cleanAllScores(room);
-        });
-
-        map.put(actions.reloadAllRooms, (settings, game, room) -> {
-            playerService.reloadAllRooms(room);
-        });
-
-        map.put(actions.reloadAllPlayers, (settings, game, room) -> {
-            saveService.saveAll(room);
-            playerService.removeAll(room);
-            saveService.loadAll(room);
-        });
-
-        map.put(actions.loadSaveForAll, (settings, game, room) -> {
-            playerService.loadSaveForAll(room, settings.getProgress());
-        });
-
+    private void loadSaveForAll(AdminSettings settings, String game, String room) {
+        playerService.loadSaveForAll(room, settings.getProgress());
     }
 
     void updateInactivity(String room, InactivitySettings updated) {
@@ -267,8 +280,7 @@ public class AdminService {
         
         if (!map.containsKey(settings.getAction())) {
             throw new IllegalArgumentException(
-                    "Admin action not found: "
-                    + settings.getAction());
+                    "Admin action not found: " + settings.getAction());
         }
 
         map.get(settings.getAction()).accept(settings, game, room);
@@ -304,7 +316,8 @@ public class AdminService {
         }
     }
 
-    private void setActiveGames(List<Object> games) {
+    private void saveActiveGames(AdminSettings settings, String game, String room) {
+        List<Object> games = settings.getActiveGames();
         List<String> opened = new LinkedList<>();
         List<String> allGames = gameService.getGames();
         if (games.size() != allGames.size()) {
