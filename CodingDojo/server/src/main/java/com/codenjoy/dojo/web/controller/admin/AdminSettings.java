@@ -53,6 +53,7 @@ public class AdminSettings {
     private List<Object> levelsNewKeys;
 
     private String loggersLevels;
+    private String player;
     private String game;
     private String room;
     private String newRoom;

@@ -80,14 +80,6 @@ public class AdminController {
 
     // ----------------
 
-    @GetMapping("/player/{player}/save")
-    public String saveDeal(@PathVariable("player") String id,
-                           HttpServletRequest request)
-    {
-        saveService.save(id);
-        return getAdmin(request);
-    }
-
     @GetMapping("/player/{player}/load")
     public String loadDeal(@PathVariable("player") String id,
                            HttpServletRequest request)

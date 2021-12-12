@@ -125,6 +125,7 @@ public class AdminService {
         map.put(actions.removeAllPlayersRegistrations, this::removeAllPlayersRegistrations);
         map.put(actions.gameOverAllPlayers, this::gameOverAllPlayers);
         map.put(actions.loadAIsForAllPlayers, this::loadAIsForAllPlayers);
+        map.put(actions.savePlayer, this::savePlayer);
     }
 
     private void deleteRoom(AdminSettings settings, String game, String room) {
@@ -365,6 +366,10 @@ public class AdminService {
                 .filter(not(Player::hasAi))
                 .map(Player::getId)
                 .forEach(playerService::reloadAI);
+    }
+
+    private void savePlayer(AdminSettings settings, String game, String room) {
+        saveService.save(settings.getPlayer());
     }
 
     private InactivitySettingsImpl inactivitySettings(String room) {
