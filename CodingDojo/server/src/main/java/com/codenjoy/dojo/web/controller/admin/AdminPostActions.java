@@ -61,26 +61,26 @@ public class AdminPostActions {
 
     @PostConstruct
     public void init() {
-        deleteRoom = get("admin.post.room.delete");
-        createRoom = get("admin.post.room.create");
-        saveActiveGames = get("admin.post.games.active.save");
-        pauseGame = get("admin.post.game.pause");
-        resumeGame = get("admin.post.game.resume");
-        stopRecording = get("admin.post.recording.stop");
-        startRecording = get("admin.post.recording.start");
-        stopDebug = get("admin.post.debug.stop");
-        startDebug = get("admin.post.debug.start");
-        updateLoggers = get("admin.post.loggers.update");
-        stopAutoSave = get("admin.post.autoSave.stop");
-        startAutoSave = get("admin.post.autoSave.start");
-        closeRegistration = get("admin.post.registration.close");
-        openRegistration = get("admin.post.registration.open");
-        closeRoomRegistration = get("admin.post.registration.room.close");
-        openRoomRegistration = get("admin.post.registration.room.open");
-        cleanAllScores = get("admin.post.scores.clean");
-        reloadAllRooms = get("admin.post.rooms.reload");
-        reloadAllPlayers = get("admin.post.players.reload");
-        setTimerPeriod = get("admin.post.timer.setPeriod");
+        deleteRoom = get("admin.post.deleteRoom");
+        createRoom = get("admin.post.createRoom");
+        saveActiveGames = get("admin.post.saveActiveGames");
+        pauseGame = get("admin.post.pauseGame");
+        resumeGame = get("admin.post.resumeGame");
+        stopRecording = get("admin.post.stopRecording");
+        startRecording = get("admin.post.startRecording");
+        stopDebug = get("admin.post.stopDebug");
+        startDebug = get("admin.post.startDebug");
+        updateLoggers = get("admin.post.updateLoggers");
+        stopAutoSave = get("admin.post.stopAutoSave");
+        startAutoSave = get("admin.post.startAutoSave");
+        closeRegistration = get("admin.post.closeRegistration");
+        openRegistration = get("admin.post.openRegistration");
+        closeRoomRegistration = get("admin.post.closeRoomRegistration");
+        openRoomRegistration = get("admin.post.openRoomRegistration");
+        cleanAllScores = get("admin.post.cleanAllScores");
+        reloadAllRooms = get("admin.post.reloadAllRooms");
+        reloadAllPlayers = get("admin.post.reloadAllPlayers");
+        setTimerPeriod = get("admin.post.setTimerPeriod");
         loadSaveForAll = get("admin.post.loadSaveForAll");
     }
 
