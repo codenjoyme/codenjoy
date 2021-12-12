@@ -976,10 +976,14 @@
 
                         <c:choose>
                             <c:when test="${player.code != null}">
-                                <td><a href="${ctx}/admin/player/${player.id}/registration/remove?room=${data.room}#players">RemoveReg</a></td>
+                                <td>
+                                    <input type="submit" name="action"
+                                           formaction="admin?player=${player.id}#players"
+                                           value="${data.actions.removePlayerRegistration}"/>
+                                </td>
                             </c:when>
                             <c:otherwise>
-                                <td>RemoveReg</td>
+                                <td>${data.actions.removePlayerRegistration}</td>
                             </c:otherwise>
                         </c:choose>
 

@@ -73,6 +73,7 @@ public class AdminPostActions {
     public String savePlayer;
     public String loadPlayer;
     public String removePlayersSave;
+    public String removePlayerRegistration;
 
     @Autowired
     private MessageSource messages;
@@ -118,6 +119,7 @@ public class AdminPostActions {
         savePlayer = get("admin.post.savePlayer");
         loadPlayer = get("admin.post.loadPlayer");
         removePlayersSave = get("admin.post.removePlayersSave");
+        removePlayerRegistration = get("admin.post.removePlayerRegistration");
     }
 
     private String get(String key) {

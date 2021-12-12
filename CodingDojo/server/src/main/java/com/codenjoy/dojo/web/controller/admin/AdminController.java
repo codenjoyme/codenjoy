@@ -95,14 +95,6 @@ public class AdminController {
         return getAdmin(request);
     }
 
-    @GetMapping("/player/{player}/registration/remove")
-    public String removePlayerRegistration(@PathVariable("player") String id,
-                                           HttpServletRequest request)
-    {
-        registration.remove(id);
-        return getAdmin(request);
-    }
-
     // ----------------
 
     @PostMapping()

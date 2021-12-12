@@ -128,6 +128,7 @@ public class AdminService {
         map.put(actions.savePlayer, this::savePlayer);
         map.put(actions.loadPlayer, this::loadPlayer);
         map.put(actions.removePlayersSave, this::removePlayersSave);
+        map.put(actions.removePlayerRegistration, this::removePlayerRegistration);
     }
 
     private void deleteRoom(AdminSettings settings, String game, String room) {
@@ -380,6 +381,10 @@ public class AdminService {
 
     private void removePlayersSave(AdminSettings settings, String game, String room) {
         saveService.removeSave(settings.getPlayer());
+    }
+
+    private void removePlayerRegistration(AdminSettings settings, String game, String room) {
+        registration.remove(settings.getPlayer());
     }
 
     private InactivitySettingsImpl inactivitySettings(String room) {
