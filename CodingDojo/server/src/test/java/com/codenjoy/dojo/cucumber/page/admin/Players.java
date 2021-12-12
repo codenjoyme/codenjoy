@@ -22,9 +22,7 @@ package com.codenjoy.dojo.cucumber.page.admin;
  * #L%
  */
 
-import com.codenjoy.dojo.cucumber.page.Page;
-import com.codenjoy.dojo.cucumber.page.Server;
-import com.codenjoy.dojo.cucumber.page.WebDriverWrapper;
+import com.codenjoy.dojo.cucumber.page.PageObject;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -40,7 +38,7 @@ import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
 @RequiredArgsConstructor
-public class Players {
+public class Players extends PageObject {
 
     // selectors
     public static final By ALL_PLAYERS = xpath("//table[@id='savePlayersGame']");
@@ -48,13 +46,7 @@ public class Players {
     public static final Function<String, By> UPDATE_PLAYER_FIELD = key -> xpath(".//input[@class='%s']", key);
     public static final By BOARD_LINK = xpath(".//td[17]/a"); // TODO to use attribute in the td instead of index
     public static final By SAVE = xpath("./../button");
-
     public static final By LOAD_ALL_LINK = xpath("//a[text() = 'LoadAll']");
-
-    // page objects
-    private final Page page;
-    private final WebDriverWrapper web;
-    private final Server server;
 
     public String playerBoardLink(String selectorKey, String selectorValue) {
         WebElement player = player(selectorKey, selectorValue);

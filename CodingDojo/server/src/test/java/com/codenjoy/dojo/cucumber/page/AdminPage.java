@@ -39,9 +39,9 @@ import static com.codenjoy.dojo.cucumber.utils.Assert.assertEquals;
 import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 
 @Component
-@RequiredArgsConstructor
 @Scope(SCOPE_CUCUMBER_GLUE)
-public class AdminPage implements Closeable {
+@RequiredArgsConstructor
+public class AdminPage extends PageObject implements Closeable {
 
     // selectors
     public static final String URL = "/admin?room=";
@@ -56,8 +56,6 @@ public class AdminPage implements Closeable {
     private final PlayerService playerService;
 
     // page objects
-    private final Page page;
-    private final WebDriverWrapper web;
     private final ActiveGames activeGames;
     private final Inactivity inactivity;
     private final Players players;

@@ -38,11 +38,7 @@ import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
 @RequiredArgsConstructor
-public class ErrorPage implements Closeable {
-
-    // page objects
-    private final Page page;
-    private final WebDriverWrapper web;
+public class ErrorPage extends PageObject implements Closeable {
 
     // application services
     private final ErrorTicketService tickets;

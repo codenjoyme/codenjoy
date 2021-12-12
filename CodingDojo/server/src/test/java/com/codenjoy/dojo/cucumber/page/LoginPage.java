@@ -32,7 +32,7 @@ import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
 @RequiredArgsConstructor
-public class LoginPage {
+public class LoginPage extends PageObject {
 
     // selectors
     public static final String PASSWORD_INPUT = "#password input";
@@ -42,10 +42,6 @@ public class LoginPage {
     public static final String REGISTER_BUTTON = "#register-button";
     public static final String ERROR_MESSAGE = "#error-message";
     public static final String EMAIL_INPUT = "#email input";
-
-    // page objects
-    private final Page page;
-    private final WebDriverWrapper web;
 
     public void email(String email) {
         web.text(EMAIL_INPUT, email);

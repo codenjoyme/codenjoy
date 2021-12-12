@@ -22,8 +22,7 @@ package com.codenjoy.dojo.cucumber.page.admin;
  * #L%
  */
 
-import com.codenjoy.dojo.cucumber.page.Page;
-import com.codenjoy.dojo.cucumber.page.WebDriverWrapper;
+import com.codenjoy.dojo.cucumber.page.PageObject;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.util.Lists;
@@ -49,7 +48,7 @@ import static java.util.stream.Collectors.toList;
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
 @RequiredArgsConstructor
-public class Levels {
+public class Levels extends PageObject {
 
     // selectors
     public static final String LEVELS = "//table[@id='levels']";
@@ -58,10 +57,6 @@ public class Levels {
     public static final Function<Integer, By> MAP_VALUE = index -> MAP.apply(format("='%s'", index), "value");
     public static final By SAVE_BUTTON = xpath(LEVELS + "//input[@value='Save']");
     public static final By ADD_BUTTON = xpath(LEVELS + "//input[@value='Add']");
-
-    // page objects
-    private final Page page;
-    private final WebDriverWrapper web;
 
     public String mapKey(int index) {
         return web.text(MAP_KEY.apply(index));

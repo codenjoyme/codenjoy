@@ -22,9 +22,7 @@ package com.codenjoy.dojo.cucumber.page.board;
  * #L%
  */
 
-import com.codenjoy.dojo.cucumber.page.Page;
-import com.codenjoy.dojo.cucumber.page.Server;
-import com.codenjoy.dojo.cucumber.page.WebDriverWrapper;
+import com.codenjoy.dojo.cucumber.page.PageObject;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.openqa.selenium.By;
@@ -48,7 +46,7 @@ import static java.util.stream.Collectors.toMap;
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
 @RequiredArgsConstructor
-public class Leaderboard {
+public class Leaderboard extends PageObject {
 
     // selectors
     public static final By ALL_BOARDS_LINK = xpath("//table[@id='table-logs']//a[text() = '#']");
@@ -58,11 +56,6 @@ public class Leaderboard {
     public static final By TEAM = xpath("./td[2]/span[1]");
     public static final By YOU = xpath("./td[2]/span[2]");
     public static final By SCORE = xpath("./td[3]");
-
-    // page objects
-    private final Page page;
-    private final WebDriverWrapper web;
-    private final Server server;
 
     public Map<String, Map<String, Object>> all() {
         List<WebElement> players = web.elementsBy(ALL_PLAYERS);

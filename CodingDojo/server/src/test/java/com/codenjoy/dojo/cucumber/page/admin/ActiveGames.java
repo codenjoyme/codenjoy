@@ -22,8 +22,7 @@ package com.codenjoy.dojo.cucumber.page.admin;
  * #L%
  */
 
-import com.codenjoy.dojo.cucumber.page.Page;
-import com.codenjoy.dojo.cucumber.page.WebDriverWrapper;
+import com.codenjoy.dojo.cucumber.page.PageObject;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
@@ -48,17 +47,13 @@ import static java.util.stream.Collectors.toMap;
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
 @RequiredArgsConstructor
-public class ActiveGames {
+public class ActiveGames extends PageObject {
 
     // selectors
     public static final By ALL_GAMES = xpath("//form/table[@id='activeGames']//tr[@game]");
     public static final By ROOMS = xpath(".//td/a[count(span)=1]");
     public static final Function<String, By> ROOM_LINK = room -> xpath("//a[@room='%s']", room);
     public static final Function<String, By> ROOM_PLAYERS = room -> xpath("//a[@room='%s']/span", room);
-
-    // page objects
-    private final Page page;
-    private final WebDriverWrapper web;
 
     public Multimap<String, String> getGamesRooms() {
         List<WebElement> gamesRows = web.elementsBy(ALL_GAMES);
