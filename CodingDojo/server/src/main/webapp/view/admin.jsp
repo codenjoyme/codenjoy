@@ -450,8 +450,11 @@
         </tr>
     </table>
 
-    <form:form modelAttribute="data" action="admin#createNewUsers" method="POST">
-        <table class="admin-table" id="createNewUsers">
+    <form:form modelAttribute="data" action="admin#createDummyUsers" method="POST">
+        <input type="hidden" name="game" value="${data.game}"/>
+        <input type="hidden" name="room" value="${data.room}"/>
+
+        <table class="admin-table" id="createDummyUsers">
             <tr colspan="2">
                 <td><b>Create new users</b></td>
             </tr>
@@ -463,13 +466,10 @@
             <tr>
                 <td><form:input path="generateNameMask"/></td>
                 <td><form:input path="generateCount"/></td>
-                <td><form:input path="generateRoom"/></td>
             </tr>
             <tr>
                 <td>
-                    <input type="hidden" name="game" value="${data.game}"/>
-                    <input type="hidden" name="room" value="${data.room}"/>
-                    <input type="submit" value="Create"/>
+                    <input type="submit" name="action" value="${data.actions.createDummyUsers}"/>
                 </td>
             </tr>
         </table>

@@ -56,6 +56,7 @@ public class AdminPostActions {
     public String setTimerPeriod;
     public String loadSaveForAll;
     public String saveRegistrationFormSettings;
+    public String createDummyUsers;
 
     @Autowired
     private MessageSource messages;
@@ -84,6 +85,7 @@ public class AdminPostActions {
         setTimerPeriod = get("admin.post.setTimerPeriod");
         loadSaveForAll = get("admin.post.loadSaveForAll");
         saveRegistrationFormSettings = get("admin.post.saveRegistrationFormSettings");
+        createDummyUsers = get("admin.post.createDummyUsers");
     }
 
     private String get(String key) {

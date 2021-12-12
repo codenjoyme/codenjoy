@@ -58,7 +58,6 @@ public class AdminSettings {
     private String newRoom;
     private String generateNameMask;
     private Integer generateCount;
-    private String generateRoom;
     private Integer timerPeriod;
     private String progress;
     private Integer semifinalTick;

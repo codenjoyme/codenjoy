@@ -107,6 +107,7 @@ public class AdminService {
         map.put(actions.reloadAllRooms, this::reloadAllRooms);          
         map.put(actions.reloadAllPlayers, this::reloadAllPlayers);          
         map.put(actions.loadSaveForAll, this::loadSaveForAll);          
+        map.put(actions.createDummyUsers, this::createDummyUsers);
     }
 
     private void deleteRoom(AdminSettings settings, String game, String room) {
@@ -307,13 +308,6 @@ public class AdminService {
         if (!errors.isEmpty()) {
             throw new IllegalArgumentException("There are errors during save settings: " + errors);
         }
-
-        if (settings.getGenerateNameMask() != null) {
-            String mask = settings.getGenerateNameMask();
-            int count = settings.getGenerateCount();
-            String generateRoom = settings.getGenerateRoom();
-            generateNewPlayers(game, generateRoom, mask, count);
-        }
     }
 
     private void saveActiveGames(AdminSettings settings, String game, String room) {
@@ -370,7 +364,10 @@ public class AdminService {
         return parameter -> parameter.getName().startsWith(LEVELS);
     }
 
-    private void generateNewPlayers(String game, String room, String mask, int count) {
+    private void createDummyUsers(AdminSettings settings, String game, String room) {
+        String mask = settings.getGenerateNameMask();
+        int count = settings.getGenerateCount();
+
         int numLength = String.valueOf(count).length();
 
         int created = 0;
@@ -459,7 +456,6 @@ public class AdminService {
         result.setGameVersion(gameType.getVersion());
         result.setGenerateNameMask("demo%");
         result.setGenerateCount(30);
-        result.setGenerateRoom(room);
         result.setTimerPeriod((int) timerService.getPeriod());
         result.setProgress(gameService.getDefaultProgress(gameType));
         result.setActive(roomService.isActive(room));
