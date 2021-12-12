@@ -195,31 +195,6 @@ public class AdminController {
 
     // ----------------
 
-    @GetMapping("/player/reloadAll")
-    public String resetAllPlayers(HttpServletRequest request) {
-        String room = room(request);
-        saveService.saveAll(room);
-        playerService.removeAll(room);
-        saveService.loadAll(room);
-        return getAdmin(room);
-    }
-
-    @GetMapping("/game/scores/cleanAll")
-    public String cleanAllPlayersScores(HttpServletRequest request) {
-        String room = room(request);
-        playerService.cleanAllScores(room);
-        return getAdmin(room);
-    }
-
-    @GetMapping("/game/board/reloadAll")
-    public String reloadAllPlayersRooms(HttpServletRequest request) {
-        String room = room(request);
-        playerService.reloadAllRooms(room);
-        return getAdmin(request);
-    }
-
-    // ----------------
-
     @PostMapping()
     public String saveSettings(AdminSettings settings,
                                BindingResult result,

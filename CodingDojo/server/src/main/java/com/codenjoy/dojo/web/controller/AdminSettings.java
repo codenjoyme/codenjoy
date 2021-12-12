@@ -58,6 +58,9 @@ public class AdminSettings {
     public static final String OPEN_REGISTRATION = "Open registration";
     public static final String CLOSE_ROOM_REGISTRATION = "Close room registration";
     public static final String OPEN_ROOM_REGISTRATION = "Open room registration";
+    public static final String СLEAN_ALL_SCORES = "Clean all scores";
+    public static final String RELOAD_ALL_ROOMS = "Reload all rooms";
+    public static final String RELOAD_ALL_PLAYERS = "Reload all players";
     public static final String SET_TIMER_PERIOD = "Set timer period";
 
     private List<PlayerInfo> players;

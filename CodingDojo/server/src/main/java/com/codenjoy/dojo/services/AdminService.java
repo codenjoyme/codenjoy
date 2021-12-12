@@ -233,6 +233,20 @@ public class AdminService {
                     roomService.setOpened(room, true);
                     break;
 
+                case СLEAN_ALL_SCORES:
+                    playerService.cleanAllScores(room);
+                    break;
+
+                case RELOAD_ALL_ROOMS:
+                    playerService.reloadAllRooms(room);
+                    break;
+
+                case RELOAD_ALL_PLAYERS:
+                    saveService.saveAll(room);
+                    playerService.removeAll(room);
+                    saveService.loadAll(room);
+                    break;
+
             }
         }
 

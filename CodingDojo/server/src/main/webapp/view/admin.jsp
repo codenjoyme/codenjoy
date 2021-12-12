@@ -332,20 +332,45 @@
         </table>
     </form:form>
 
-    <table class="admin-table" id="cleanGame">
-        <tr>
+    <form:form modelAttribute="data" action="admin#reloadRoom" method="POST">
+        <input type="hidden" name="game" value="${data.game}"/>
+        <input type="hidden" name="room" value="${data.room}"/>
+
+        <table class="admin-table" id="reloadRoom">
             <tr colspan="2">
                 <td><b>Clean / Reset</b></td>
+            <tr>
             </tr>
-            <td>
-                <a href="${ctx}/admin/game/scores/cleanAll?room=${data.room}#cleanGame">Clean all scores</a>. </br>
-                <a href="${ctx}/admin/game/board/reloadAll?room=${data.room}#cleanGame">Reload all rooms</a>. Not working for !disposable rooms. </br>
-                <a href="${ctx}/admin/player/reloadAll?room=${data.room}#cleanGame">Reload all players</a>. Through saves: saveAll -> removeAll -> loadAll
-            </td>
-        </tr>
-    </table>
+                <td>
+                    <input type="submit" name="action" value="Clean all scores"/>
+                </td>
+                <td class="info">
+                    Clean all players scores. For some games, the field may also be updated.
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" name="action" value="Reload all rooms"/>
+                </td>
+                <td class="info">
+                    Not working for !disposable rooms.
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" name="action" value="Reload all players"/>
+                </td>
+                <td class="info">
+                    Reload occurs through saves: saveAll -> removeAll -> loadAll.
+                </td>
+            </tr>
+        </table>
+    </form:form>
 
     <form:form modelAttribute="data" action="admin#loadSaveForAll" method="POST">
+        <input type="hidden" name="game" value="${data.game}"/>
+        <input type="hidden" name="room" value="${data.room}"/>
+
         <table class="admin-table" id="loadSaveForAll">
             <tr>
                 <td><b>Load save (progress) for all</b></td>
@@ -355,15 +380,13 @@
             </tr>
             <tr>
                 <td>
-                    <input type="hidden" name="game" value="${data.game}"/>
-                    <input type="hidden" name="room" value="${data.room}"/>
                     <input type="submit" value="Apply for all"/>
                 </td>
             </tr>
         </table>
     </form:form>
 
-    <table class="admin-table" id="cleanGame">
+    <table class="admin-table" id="registrationSettings">
         <tr>
             <td><b>Registration settings</b></td>
         </tr>
