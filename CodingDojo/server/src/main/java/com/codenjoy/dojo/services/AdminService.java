@@ -39,6 +39,7 @@ import com.codenjoy.dojo.services.semifinal.SemifinalSettingsImpl;
 import com.codenjoy.dojo.services.settings.CheckBox;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
+import com.codenjoy.dojo.web.controller.Validator;
 import com.codenjoy.dojo.web.controller.admin.AdminPostActions;
 import com.codenjoy.dojo.web.controller.admin.AdminSettings;
 import lombok.RequiredArgsConstructor;
@@ -79,6 +80,7 @@ public class AdminService {
     private final RoomService roomService;
     private final StatisticService statistics;
     private final AdminPostActions actions;
+    private final Validator validator;
 
     private final Map<String, TriConsumer<AdminSettings, String, String>> map = new ConcurrentHashMap<>();
     
@@ -219,6 +221,9 @@ public class AdminService {
     public void saveSettings(AdminSettings settings) {
         String game = settings.getGame();
         String room = settings.getRoom();
+
+        validator.checkGame(game, Validator.CANT_BE_NULL);
+        validator.checkRoom(room, Validator.CANT_BE_NULL);
 
         if (settings.getPlayers() != null) {
             playerService.updateAll(settings.getPlayers());
