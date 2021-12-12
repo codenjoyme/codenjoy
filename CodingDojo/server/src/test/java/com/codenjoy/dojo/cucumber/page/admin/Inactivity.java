@@ -45,7 +45,7 @@ public class Inactivity extends PageObject {
     // selectors
     public static final By KICK_ENABLED = xpath("//input[@name='inactivity.kickEnabled']");
     public static final By TIMEOUT_INPUT = xpath("//input[@name='inactivity.inactivityTimeout']");
-    public static final Function<String, By> SAVE_BUTTON = name -> xpath("//table[@id='inactivity']//input[@value='" + name + "']");
+    public static final Function<String, By> SAVE_BUTTON = name -> xpath("//table[@id='inactivity']//input[@value='%s']", name);
     public static final By PLAYER_INACTIVE_TICKS = xpath("//span[@class='input-ticks-inactive']");
     public static final Function<String, By> PLAYER_INACTIVE_TICK = email -> xpath("//tr[@player='%s']//span[@class='input-ticks-inactive']", email);
 

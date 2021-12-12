@@ -55,7 +55,7 @@ public class Levels extends PageObject {
     public static final BiFunction<String, String, By> MAP = (index, with) -> xpath(LEVELS + "//tr[@index%s]//*[@with='%s']", index, with);
     public static final Function<Integer, By> MAP_KEY = index -> MAP.apply(format("='%s'", index), "key");
     public static final Function<Integer, By> MAP_VALUE = index -> MAP.apply(format("='%s'", index), "value");
-    public static final By SAVE_BUTTON = xpath(LEVELS + "//input[@value='Save']");
+    public static final Function<String, By> SAVE_BUTTON = name -> xpath(LEVELS + "//input[@value='%s']", name);
     public static final By ADD_BUTTON = xpath(LEVELS + "//input[@value='Add']");
 
     public String mapKey(int index) {
@@ -110,7 +110,7 @@ public class Levels extends PageObject {
     }
 
     public void save() {
-        web.elementBy(SAVE_BUTTON).click();
+        web.elementBy(SAVE_BUTTON.apply(actions.saveLevelsMaps)).click();
     }
 
     public void add() {

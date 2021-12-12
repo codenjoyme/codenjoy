@@ -60,6 +60,7 @@ public class AdminPostActions {
     public String updateRoundsSettings;
     public String updateSemifinalSettings;
     public String updateInactivitySettings;
+    public String saveLevelsMaps;
 
     @Autowired
     private MessageSource messages;
@@ -92,6 +93,7 @@ public class AdminPostActions {
         updateRoundsSettings = get("admin.post.updateRoundsSettings");
         updateSemifinalSettings = get("admin.post.updateSemifinalSettings");
         updateInactivitySettings = get("admin.post.updateInactivitySettings");
+        saveLevelsMaps = get("admin.post.saveLevelsMaps");
     }
 
     private String get(String key) {

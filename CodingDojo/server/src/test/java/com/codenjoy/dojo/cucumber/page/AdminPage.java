@@ -33,8 +33,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.function.BiFunction;
-
 import static com.codenjoy.dojo.cucumber.utils.Assert.assertEquals;
 import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 
@@ -45,8 +43,6 @@ public class AdminPage extends PageObject implements Closeable {
 
     // selectors
     public static final String URL = "/admin?room=";
-    public static final BiFunction<String, String, String> CREATE_ROOM_URL =
-            (room, game) -> String.format("/admin?room=%s&game=%s", room, game);
 
     // application services
     private final AutoSaver autoSaver;
