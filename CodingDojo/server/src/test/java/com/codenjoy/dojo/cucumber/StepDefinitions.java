@@ -579,6 +579,6 @@ public class StepDefinitions {
 
     @When("Remove room")
     public void removeRoom() {
-        admin.gameRoomStatus().removeCurrent();
+        admin.gameRoomStatus().removeRoom();
     }
 }

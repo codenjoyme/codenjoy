@@ -53,7 +53,7 @@ public class GameRoomStatus {
         return web.element("#gameRoomStatus input[name=\"newRoom\"]");
     }
 
-    public void removeCurrent() {
+    public void removeRoom() {
         web.button("#gameRoomStatus", actions.deleteRoom).click();
     }
 

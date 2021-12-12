@@ -87,13 +87,15 @@ public class AdminService {
         map.put(actions.deleteRoom, (settings, game, room) -> {
             // нельзя удалять единственную комнату соответствующую игре,
             // потому что потом зайти некуда будет
-            if (!roomService.game(room).equals(room)) {
-                playerService.removeAll(room);
-                saveService.removeAllSaves(room);
-                roomService.remove(room);
-                // после зачистки перейдем в default game room
-                settings.setRoom(game);
+            if (roomService.game(room).equals(room)) {
+                return;
             }
+
+            playerService.removeAll(room);
+            saveService.removeAllSaves(room);
+            roomService.remove(room);
+            // после зачистки перейдем в default game room
+            settings.setRoom(game);
         });
 
         map.put(actions.createRoom, (settings, game, room) -> {
@@ -256,6 +258,8 @@ public class AdminService {
         
         if (!StringUtils.isEmpty(settings.getAction())) {
             map.get(settings.getAction()).accept(settings, game, room);
+            room = settings.getRoom();
+            game = settings.getGame();
         }
 
         if (settings.getProgress() != null) {

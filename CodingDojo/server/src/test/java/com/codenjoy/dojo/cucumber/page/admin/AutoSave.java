@@ -52,7 +52,7 @@ public class AutoSave {
     }
 
     private WebElement startButton() {
-        return web.button("#autoSave", actions.stopAutoSave);
+        return web.button("#autoSave", actions.startAutoSave);
     }
 
     public void assertSuspended() {

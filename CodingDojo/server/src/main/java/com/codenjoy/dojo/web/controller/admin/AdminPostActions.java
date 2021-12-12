@@ -56,7 +56,7 @@ public class AdminPostActions {
     public String setTimerPeriod;
 
     @Autowired
-    private MessageSource messageSource;
+    private MessageSource messages;
 
     @PostConstruct
     public void init() {
@@ -83,7 +83,7 @@ public class AdminPostActions {
     }
 
     private String get(String key) {
-        return messageSource.getMessage(key, null, Locale.getDefault());
+        return messages.getMessage(key, null, Locale.getDefault());
     }
 
 }
