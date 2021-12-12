@@ -272,6 +272,33 @@ public class AdminService {
         updateInactivity(room, settings.getInactivity());
     }
 
+    private void updateOtherSettings(AdminSettings settings, String game, String room) {
+        List<Object> updated = settings.getOtherValues();
+        if (updated == null) {
+            return;
+        }
+
+        List<Exception> errors = new LinkedList<>();
+
+        Settings gameSettings = gameService.getGameType(game, room).getSettings();
+        List<Parameter> actual = gameSettings.getParameters().stream()
+                .filter(onlyUngrouped())
+                .collect(toList());
+        for (int index = 0; index < actual.size(); index++) {
+            try {
+                Parameter parameter = actual.get(index);
+                Object value = updated.get(index);
+                value = fixForCheckbox(parameter, value);
+                parameter.update(value);
+            } catch (Exception e) {
+                errors.add(e);
+            }
+        }
+        if (!errors.isEmpty()) {
+            throw new IllegalArgumentException("There are errors during save settings: " + errors);
+        }
+    }
+
     private void saveLevelsMaps(AdminSettings settings, String game, String room) {
         levelsSettings(room)
                 .updateFrom(settings.getLevels().getParameters());
@@ -320,33 +347,6 @@ public class AdminService {
         }
 
         map.get(settings.getAction()).accept(settings, game, room);
-    }
-
-    private void updateOtherSettings(AdminSettings settings, String game, String room) {
-        List<Object> updated = settings.getOtherValues();
-        if (updated == null) {
-            return;
-        }
-
-        List<Exception> errors = new LinkedList<>();
-
-        Settings gameSettings = gameService.getGameType(game, room).getSettings();
-        List<Parameter> actual = gameSettings.getParameters().stream()
-                .filter(onlyUngrouped())
-                .collect(toList());
-        for (int index = 0; index < actual.size(); index++) {
-            try {
-                Parameter parameter = actual.get(index);
-                Object value = updated.get(index);
-                value = fixForCheckbox(parameter, value);
-                parameter.update(value);
-            } catch (Exception e) {
-                errors.add(e);
-            }
-        }
-        if (!errors.isEmpty()) {
-            throw new IllegalArgumentException("There are errors during save settings: " + errors);
-        }
     }
 
     private Object fixForCheckbox(Parameter parameter, Object value) {
