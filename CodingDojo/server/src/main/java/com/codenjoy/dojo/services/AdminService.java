@@ -268,8 +268,20 @@ public class AdminService {
         semifinal.clean(room);
     }
 
-    private void updateInactivitySettings(AdminSettings settings, String game, String room) {
-        updateInactivity(room, settings.getInactivity());
+    void updateInactivitySettings(AdminSettings settings, String game, String room) {
+        InactivitySettingsImpl updated = settings.getInactivity();
+
+        InactivitySettingsImpl actual = inactivitySettings(room);
+        boolean changed = actual
+                .update(updated)
+                .getInactivityParams().stream()
+                .anyMatch(parameter -> ((Parameter) parameter).changed());
+        actual.changesReacted();
+        if (changed) {
+            playerService.getAllInRoom(room).stream()
+                    .filter(not(Player::hasAi))
+                    .forEach(player -> player.setLastResponse(timeService.now()));
+        }
     }
 
     private void updateOtherSettings(AdminSettings settings, String game, String room) {
@@ -314,20 +326,6 @@ public class AdminService {
 
     private void saveAllPlayers(AdminSettings settings, String game, String room) {
         playerService.updateAll(settings.getPlayers());
-    }
-
-    void updateInactivity(String room, InactivitySettings updated) {
-        InactivitySettingsImpl actual = inactivitySettings(room);
-        boolean changed = actual
-                .update(updated)
-                .getInactivityParams().stream()
-                .anyMatch(parameter -> ((Parameter) parameter).changed());
-        actual.changesReacted();
-        if (changed) {
-            playerService.getAllInRoom(room).stream()
-                    .filter(not(Player::hasAi))
-                    .forEach(player -> player.setLastResponse(timeService.now()));
-        }
     }
 
     private InactivitySettingsImpl inactivitySettings(String room) {
