@@ -80,15 +80,6 @@ public class AdminController {
 
     // ----------------
 
-    @GetMapping("/player/{player}/ai/reload")
-    public String reloadAI(@PathVariable("player") String id,
-                           HttpServletRequest request) {
-        playerService.reloadAI(id);
-        return getAdmin(request);
-    }
-
-    // ----------------
-
     @PostMapping()
     public String saveSettings(AdminSettings settings,
                                BindingResult result,

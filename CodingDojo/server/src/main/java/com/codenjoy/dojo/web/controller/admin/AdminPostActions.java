@@ -75,6 +75,7 @@ public class AdminPostActions {
     public String removePlayersSave;
     public String removePlayerRegistration;
     public String gameOverPlayer;
+    public String loadAIForPlayer;
 
     @Autowired
     private MessageSource messages;
@@ -122,6 +123,7 @@ public class AdminPostActions {
         removePlayersSave = get("admin.post.removePlayersSave");
         removePlayerRegistration = get("admin.post.removePlayerRegistration");
         gameOverPlayer = get("admin.post.gameOverPlayer");
+        loadAIForPlayer = get("admin.post.loadAIForPlayer");
     }
 
     private String get(String key) {

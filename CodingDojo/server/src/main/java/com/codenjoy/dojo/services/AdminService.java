@@ -130,6 +130,7 @@ public class AdminService {
         map.put(actions.removePlayersSave, this::removePlayersSave);
         map.put(actions.removePlayerRegistration, this::removePlayerRegistration);
         map.put(actions.gameOverPlayer, this::gameOverPlayer);
+        map.put(actions.loadAIForPlayer, this::loadAIForPlayer);
     }
 
     private void deleteRoom(AdminSettings settings, String game, String room) {
@@ -390,6 +391,10 @@ public class AdminService {
 
     private void gameOverPlayer(AdminSettings settings, String game, String room) {
         playerService.remove(settings.getPlayer());
+    }
+
+    private void loadAIForPlayer(AdminSettings settings, String game, String room) {
+        playerService.reloadAI(settings.getPlayer());
     }
 
     private InactivitySettingsImpl inactivitySettings(String room) {

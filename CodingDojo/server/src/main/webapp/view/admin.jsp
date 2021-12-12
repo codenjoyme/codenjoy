@@ -1023,9 +1023,15 @@
                                 <td>Loaded</td>
                             </c:when>
                             <c:when test="${!player.active}">
-                                <td>LoadAI</td>
+                                <td>${data.actions.loadAIForPlayer}</td>
                             </c:when>
                             <c:otherwise>
+                                <td>
+                                    <input type="submit" name="action"
+                                           formaction="admin?player=${player.id}#players"
+                                           value="${data.actions.loadAIForPlayer}"/>
+                                </td>
+
                                 <td><a href="${ctx}/admin/player/${player.id}/ai/reload?room=${data.room}#players">LoadAI</a></td>
                             </c:otherwise>
                         </c:choose>
