@@ -58,6 +58,7 @@ public class AdminPostActions {
     public String saveRegistrationFormSettings;
     public String createDummyUsers;
     public String updateRoundsSettings;
+    public String updateSemifinalSettings;
 
     @Autowired
     private MessageSource messages;
@@ -88,6 +89,7 @@ public class AdminPostActions {
         saveRegistrationFormSettings = get("admin.post.saveRegistrationFormSettings");
         createDummyUsers = get("admin.post.createDummyUsers");
         updateRoundsSettings = get("admin.post.updateRoundsSettings");
+        updateSemifinalSettings = get("admin.post.updateSemifinalSettings");
     }
 
     private String get(String key) {

@@ -109,6 +109,7 @@ public class AdminService {
         map.put(actions.loadSaveForAll, this::loadSaveForAll);          
         map.put(actions.createDummyUsers, this::createDummyUsers);
         map.put(actions.updateRoundsSettings, this::updateRoundsSettings);
+        map.put(actions.updateSemifinalSettings, this::updateSemifinalSettings);
     }
 
     private void deleteRoom(AdminSettings settings, String game, String room) {
@@ -219,6 +220,11 @@ public class AdminService {
         roundSettings(room).update(settings.getRounds());
     }
 
+    private void updateSemifinalSettings(AdminSettings settings, String game, String room) {
+        semifinalSettings(room).update(settings.getSemifinal());
+        semifinal.clean(room);
+    }
+
     void updateInactivity(String room, InactivitySettings updated) {
         InactivitySettingsImpl actual = inactivitySettings(room);
         boolean changed = actual
@@ -246,16 +252,6 @@ public class AdminService {
 
         if (settings.getPlayers() != null) {
             playerService.updateAll(settings.getPlayers());
-        }
-
-        if (settings.getSemifinal() != null) {
-            try {
-                semifinalSettings(room)
-                        .update(settings.getSemifinal());
-                semifinal.clean(room);
-            } catch (Exception e) {
-                // do nothing
-            }
         }
 
         if (settings.getLevels() != null) {
