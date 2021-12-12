@@ -62,6 +62,7 @@ public class AdminPostActions {
     public String updateInactivitySettings;
     public String updateOtherSettings;
     public String saveLevelsMaps;
+    public String addNewLevelMap;
 
     @Autowired
     private MessageSource messages;
@@ -96,6 +97,7 @@ public class AdminPostActions {
         updateInactivitySettings = get("admin.post.updateInactivitySettings");
         updateOtherSettings = get("admin.post.updateOtherSettings");
         saveLevelsMaps = get("admin.post.saveLevelsMaps");
+        addNewLevelMap = get("admin.post.addNewLevelMap");
     }
 
     private String get(String key) {

@@ -730,7 +730,8 @@
                 </script>
                 <tr class="levelsButtons">
                     <td>
-                        <input type="button" id="addNewLevelMap" value="Add"/>
+                        <input type="button" id="addNewLevelMap"
+                               value="${data.actions.addNewLevelMap}"/>
                         <input type="submit" name="action"
                                value="${data.actions.saveLevelsMaps}"/>
                     </td>
