@@ -26,8 +26,6 @@ import com.codenjoy.dojo.services.ErrorTicketService;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jetty.server.Request;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.web.firewall.FirewalledRequest;
-import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -67,8 +65,7 @@ public class ErrorController implements org.springframework.boot.web.servlet.err
 
     @GetMapping(params = "message")
     public String error(@RequestParam("message") String message, HttpServletRequest request, ModelMap model) {
-        IllegalAccessException exception = new IllegalAccessException(message);
-        return error(exception, request, model);
+        return error(new IllegalArgumentException(message), request, model);
     }
 
     private String error(Exception exception, HttpServletRequest request, ModelMap model) {
