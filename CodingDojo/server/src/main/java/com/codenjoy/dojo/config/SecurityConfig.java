@@ -379,7 +379,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         protected void configure(HttpSecurity http) throws Exception {
             // @formatter:off
             securityHeaders(http, xFrameAllowedHosts)
-                        .antMatcher(AdminController.URI + "*")
+                        .antMatcher(AdminController.URI + "/**")
                             .authorizeRequests()
                                 .anyRequest()
                                     .hasRole("ADMIN")
