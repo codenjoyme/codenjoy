@@ -76,17 +76,15 @@ public class ErrorTicketService {
 
         copy("ticketNumber", info, result);
 
+        if (url.contains("/rest/")) {
+            shouldJsonResult(result);
+        } else {
+            shouldErrorPage(result);
+        }
         if (!debug.isWorking()) {
             result.addObject("message", ERROR_MESSAGE);
-
-            if (url.contains("/rest/")) {
-                shouldJsonResult(result);
-            } else {
-                shouldErrorPage(result);
-            }
             return result;
         }
-
 
         copy("message", info, result);
         copy("url", info, result);
@@ -94,16 +92,10 @@ public class ErrorTicketService {
 
         if (url.contains("/rest/")) {
             copy("stackTrace", info, result);
-
-            result.setView(new MappingJackson2JsonView(){{
-                setPrettyPrint(true);
-            }});
             return result;
         }
 
         result.addObject("stackTrace", prepareStackTrace(exception));
-
-        shouldErrorPage(result);
         return result;
     }
 
