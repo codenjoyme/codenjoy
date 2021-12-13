@@ -76,11 +76,14 @@ public class ErrorTicketService {
 
         set(result, "ticketNumber", info);
 
-        if (url.contains("/rest/")) {
+        boolean isJson = url.contains("/rest/");
+
+        if (isJson) {
             shouldJsonResult(result);
         } else {
             shouldErrorPage(result);
         }
+
         if (!debug.isWorking()) {
             result.addObject("message", ERROR_MESSAGE);
             return result;
@@ -90,7 +93,7 @@ public class ErrorTicketService {
         set(result, "url", info);
         set(result, "exception", info);
 
-        if (url.contains("/rest/")) {
+        if (isJson) {
             set(result, "stackTrace", info);
             return result;
         }
