@@ -23,8 +23,10 @@ package com.codenjoy.dojo.web.controller.admin;
  */
 
 
-import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.AdminService;
+import com.codenjoy.dojo.services.GameService;
+import com.codenjoy.dojo.services.Player;
+import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.security.GameAuthoritiesConstants;
 import com.codenjoy.dojo.services.security.ViewDelegationService;
 import com.codenjoy.dojo.web.controller.Validator;
@@ -43,29 +45,15 @@ import javax.servlet.http.HttpServletRequest;
 @Secured(GameAuthoritiesConstants.ROLE_ADMIN)
 @Slf4j
 @RequiredArgsConstructor
-// TODO move all business logic to the AdminService
 public class AdminController {
 
     public static final String URI = "/admin";
-
     public static final String CUSTOM_ADMIN_PAGE_KEY = "custom";
 
     private final PlayerService playerService;
-    private final SaveService saveService;
     private final GameService gameService;
-    private final Registration registration;
     private final ViewDelegationService viewDelegationService;
     private final AdminService adminService;
-
-    // TODO ROOM а этот метод вообще зачем?
-    @GetMapping(params = {"player", "data"})
-    public String loadDealFromSave(@RequestParam("player") String id,
-                                   @RequestParam("data") String save,
-                                   HttpServletRequest request)
-    {
-        saveService.load(id, game(request), room(request), save);
-        return "redirect:/board/player/" + id;
-    }
 
     // используется как rest для апдейта полей конкретного player на admin page
     @PostMapping("/user/info")
@@ -96,10 +84,6 @@ public class AdminController {
         return getAdmin(room);
     }
 
-    private String getAdmin(HttpServletRequest request) {
-        return getAdmin(room(request));
-    }
-
     private String getAdmin(String room) {
         if (room == null) {
             return getAdmin();
@@ -116,7 +100,7 @@ public class AdminController {
                            @RequestParam(value = "room", required = false) String room,
                            @RequestParam(value = "game", required = false) String game,
                            @RequestParam(value = CUSTOM_ADMIN_PAGE_KEY, required = false, defaultValue = "false")
-                               boolean gameSpecificAdminPage)
+                           boolean gameSpecificAdminPage)
     {
         // каждый из этих параметров может быть null, "", "null"
         room = Validator.isEmpty(room) ? null : room;
@@ -136,15 +120,4 @@ public class AdminController {
         model.addAttribute("data", data);
         return "admin";
     }
-
-    private String room(HttpServletRequest request) {
-        String result = request.getParameter("room");
-        return Validator.isEmpty(result) ? null : result;
-    }
-
-    private String game(HttpServletRequest request) {
-        String result = request.getParameter("game");
-        return Validator.isEmpty(result) ? null : result;
-    }
-
 }
