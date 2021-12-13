@@ -55,8 +55,8 @@ public class AdminController {
     private final ViewDelegationService viewDelegationService;
     private final AdminService adminService;
 
-    // используется как rest для апдейта полей конкретного player на admin page
-    @PostMapping("/user/info")
+    // используется как rest для обновления конкретного поля заданного player на admin page
+    @PostMapping("/player")
     public @ResponseBody String update(@RequestBody Player player) {
         try {
             playerService.update(player);
@@ -65,8 +65,6 @@ public class AdminController {
         }
         return "{}";
     }
-
-    // ----------------
 
     @PostMapping()
     public String saveSettings(AdminSettings settings,

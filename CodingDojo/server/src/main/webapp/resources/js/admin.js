@@ -120,7 +120,7 @@ pages.admin = function() {
     // ------------------------ save user details ----------------------
 
     var setupSaveUserDetails = function() {
-        var ajax = new AdminAjax(contextPath, 'admin/user/info');
+        var ajax = new AdminAjax(contextPath, 'admin/player');
         var PLAYER_ID = 'id';
 
         var elements = $('[id$=\\.' + PLAYER_ID + ']');
