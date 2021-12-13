@@ -128,8 +128,11 @@ span.pow {
     white-space: nowrap;
 }
 
+.admin-table #progress {
+    width:600px;
+}
+
 .admin-table input[type="text"] {
-    width:150px;
     height:24px;
 }
 
