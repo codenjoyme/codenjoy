@@ -40,9 +40,9 @@ public class GlobalExceptionHandler {
     private ErrorTicketService ticket;
 
     @ExceptionHandler(Exception.class)
-    public ModelAndView defaultErrorHandler(HttpServletRequest req, Exception e) {
-        String url = req.getRequestURL().toString();
+    public ModelAndView defaultErrorHandler(HttpServletRequest request, Exception exception) {
+        String url = request.getRequestURL().toString();
 
-        return ticket.get(url, e);
+        return ticket.get(url, exception);
     }
 }
