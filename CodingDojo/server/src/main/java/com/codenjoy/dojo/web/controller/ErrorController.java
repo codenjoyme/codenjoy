@@ -77,7 +77,7 @@ public class ErrorController implements org.springframework.boot.web.servlet.err
                     url, uri);
         }
 
-        ModelAndView view = ticket.get(url, exception);
+        ModelAndView view = ticket.get(url, request.getContentType(), exception);
         model.mergeAttributes(view.getModel());
 
         return view.getViewName();

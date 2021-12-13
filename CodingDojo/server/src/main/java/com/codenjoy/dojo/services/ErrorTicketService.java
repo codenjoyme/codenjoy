@@ -57,7 +57,7 @@ public class ErrorTicketService {
     private Map<String, Map<String, Object>> tickets = new ConcurrentHashMap<>();
     private Map<String, String> info = new ConcurrentSkipListMap<>();
 
-    public ModelAndView get(String url, Exception exception) {
+    public ModelAndView get(String url, String contentType, Exception exception) {
         String ticket = ticket();
 
         String message = exception.toString();
@@ -76,7 +76,8 @@ public class ErrorTicketService {
 
         set(result, "ticketNumber", info);
 
-        boolean isJson = url.contains("/rest/");
+        boolean isJson = url.contains("/rest/")
+                || (contentType != null && contentType.contains("application/json"));
 
         if (isJson) {
             shouldJsonResult(result);

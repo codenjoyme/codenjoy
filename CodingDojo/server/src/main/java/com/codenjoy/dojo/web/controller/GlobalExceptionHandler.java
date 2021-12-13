@@ -43,6 +43,6 @@ public class GlobalExceptionHandler {
     public ModelAndView defaultErrorHandler(HttpServletRequest request, Exception exception) {
         String url = request.getRequestURL().toString();
 
-        return ticket.get(url, exception);
+        return ticket.get(url, request.getContentType(), exception);
     }
 }
