@@ -398,11 +398,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                             .logoutSuccessHandler(logoutSuccessHandler)
                             .invalidateHttpSession(true)
                     .and()
-                        .exceptionHandling()
-                            .accessDeniedHandler((request, response, accessDeniedException) ->
-                                    response.sendRedirect(request.getContextPath()
-                                            + "/error?message=Page access is restricted"))
-                    .and()
                         .csrf();
             // @formatter:on
         }
