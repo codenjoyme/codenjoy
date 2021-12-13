@@ -49,18 +49,18 @@ public class ErrorController implements org.springframework.boot.web.servlet.err
     private ErrorTicketService ticket;
 
     @RequestMapping()
-    public String error(HttpServletRequest reqest, ModelMap model) {
-        Exception throwable = (Exception)reqest.getAttribute(JAVAX_SERVLET_ERROR_EXCEPTION);
+    public String error(HttpServletRequest request, ModelMap model) {
+        Exception throwable = (Exception)request.getAttribute(JAVAX_SERVLET_ERROR_EXCEPTION);
         if (throwable != null) {
-            return error(throwable, reqest, model);
+            return error(throwable, request, model);
         }
 
-        String message = (String) reqest.getAttribute(JAVAX_SERVLET_ERROR_MESSAGE);
+        String message = (String) request.getAttribute(JAVAX_SERVLET_ERROR_MESSAGE);
         if (!StringUtils.isEmpty(message)) {
-            return error(message, reqest, model);
+            return error(message, request, model);
         }
 
-        return error("Something wrong", reqest, model);
+        return error("Something wrong", request, model);
     }
 
     @GetMapping(params = "message")
@@ -73,8 +73,7 @@ public class ErrorController implements org.springframework.boot.web.servlet.err
 
         String uri = getOriginalUri(request);
         if (uri != null) {
-            url = String.format("%s [%s]",
-                    url, uri);
+            url = String.format("%s [%s]", url, uri);
         }
 
         ModelAndView view = ticket.get(url, request.getContentType(), exception);
