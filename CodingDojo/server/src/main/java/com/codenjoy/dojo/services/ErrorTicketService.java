@@ -60,7 +60,7 @@ public class ErrorTicketService {
     public ModelAndView get(String url, Exception exception) {
         String ticket = ticket();
 
-        String message = printStackTrace ? exception.toString() : exception.toString();
+        String message = exception.toString();
         log.error("[TICKET:URL] {}:{} {}", ticket, url, message);
         System.err.printf("[TICKET:URL] %s:%s %s%n", ticket, url, message);
 
