@@ -74,7 +74,7 @@ public class ErrorTicketService {
         ModelAndView result = new ModelAndView();
         result.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
 
-        set("ticketNumber", info, result);
+        set(result, "ticketNumber", info);
 
         if (url.contains("/rest/")) {
             shouldJsonResult(result);
@@ -86,12 +86,12 @@ public class ErrorTicketService {
             return result;
         }
 
-        set("message", info, result);
-        set("url", info, result);
-        set("exception", info, result);
+        set(result, "message", info);
+        set(result, "url", info);
+        set(result, "exception", info);
 
         if (url.contains("/rest/")) {
-            set("stackTrace", info, result);
+            set(result, "stackTrace", info);
             return result;
         }
 
@@ -99,8 +99,8 @@ public class ErrorTicketService {
         return result;
     }
 
-    private void set(String name, Map<String, Object> info, ModelAndView model) {
-        model.addObject(name, info.get(name));
+    private void set(ModelAndView result, String name, Map<String, Object> info) {
+        result.addObject(name, info.get(name));
     }
 
     public Map<String, Object> getDetails(String ticket, String url, Exception exception) {
