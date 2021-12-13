@@ -106,10 +106,25 @@ var getTickTime = function(time, readable) {
                                '.' + date.getMilliseconds()));
 }
 
+var setupCsrf = function() {
+    if (!!(setup.csrfToken = getSettings('csrfToken'))) {
+        setup.csrfParameterName = getSettings('csrfParameter');
+        setup.csrfHeaderName = getSettings('csrfHeader');
+        setup.csrfAjaxHeader = {};
+        setup.csrfAjaxHeader[setup.csrfHeaderName] = setup.csrfToken;
+    } else {
+        setup.csrfToken = null;
+        setup.csrfParameterName = null;
+        setup.csrfHeaderName = null;
+        setup.csrfAjaxHeader = null;
+    }
+}
+
 var pages = pages || {};
 
-$(document).ready(function () {
-    var page = getSettings('page');
+$(document).ready(function() {
+    setupCsrf();
 
+    var page = getSettings('page');
     pages[page]();
 });

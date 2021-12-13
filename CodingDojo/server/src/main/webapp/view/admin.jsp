@@ -44,7 +44,10 @@
          page="${page}"
          contextPath="${ctx}"
          game="${data.game}"
-         room="${data.room}"></div>
+         room="${data.room}"
+         csrfParameter="${_csrf.parameterName}"
+         csrfHeader="${_csrf.headerName}"
+         csrfToken="${_csrf.token}"></div>
 
     <%@include file="forkMe.jsp"%>
 
