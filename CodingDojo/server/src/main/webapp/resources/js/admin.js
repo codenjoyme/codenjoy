@@ -130,7 +130,7 @@ pages.admin = function() {
             var playerId = element.val();
             var prefix = '#players' + index + '\\.';
 
-            var setup = function(field) {
+            var init = function(field) {
                 var input = $(prefix + field);
                 input.on('input', function() {
                     if (!!input.data('button')) return;
@@ -153,15 +153,15 @@ pages.admin = function() {
                 });
             };
 
-            // setup(PLAYER_ID); // readonly
-            // setup('code');    // readonly
-            setup('readableName');
-            setup('email');
-            setup('room');
-            setup('teamId');
-            setup('score');
-            setup('callbackUrl');
-            setup('data');
+            // init(PLAYER_ID); // readonly
+            // init('code');    // readonly
+            init('readableName');
+            init('email');
+            init('room');
+            init('teamId');
+            init('score');
+            init('callbackUrl');
+            init('data');
         });
     }
 
