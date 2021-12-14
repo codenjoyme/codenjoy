@@ -42,10 +42,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.AbstractMap;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static com.codenjoy.dojo.services.multiplayer.MultiplayerType.MULTIPLE;
 import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
@@ -123,7 +120,6 @@ public class BoardController {
     }
 
     private void removeNotCustom(Map<String, String> parameters) {
-        // эти параметры не могут быть кастомными
         parameters.remove("player");
         parameters.remove("code");
         parameters.remove("only");
@@ -132,6 +128,10 @@ public class BoardController {
     }
 
     public static Map<String, String> queryToMap(String query) {
+        if (StringUtils.isEmpty(query)) {
+            return new HashMap<>();
+        }
+
         return Arrays.stream(query.split("&"))
                 .map(param -> {
                     String[] split = param.split("=");
@@ -144,9 +144,9 @@ public class BoardController {
     }
 
     @GetMapping("/rejoining/{game}/room/{room}")
-    public String rejoinGame(ModelMap model, @PathVariable("game") String game,
+    public String rejoinGame(ModelMap model, HttpServletRequest request,
+                             @PathVariable("game") String game,
                              @PathVariable("room") String room,
-                             HttpServletRequest request,
                              @AuthenticationPrincipal Registration.User user)
     {
         validator.checkGame(game, CANT_BE_NULL);

@@ -1114,6 +1114,8 @@ public class ValidatorTest {
         // TODO точно так ок?
         shouldOk(() -> validator.checkCustomQueryParameters(queryToMap("=")));
 
+        shouldOk(() -> validator.checkCustomQueryParameters(queryToMap(null)));
+
         shouldError("Custom query is invalid: [" +
                         "parameter 'asd' value is invalid: '', " +
                         "parameter 'zxc' value is invalid: '', " +
