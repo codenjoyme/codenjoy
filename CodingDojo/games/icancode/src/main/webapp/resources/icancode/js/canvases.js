@@ -37,7 +37,11 @@ const MODE_BEFUNGE = 'befunge';
 const MODE_CONTEST = 'contest';
 
 setup.setupSprites = function() {
-    setup.gameMode = getSettings(PARAM_GAME_MODE, '#query').toLowerCase();
+    var toLowerCase = function(param) {
+        return (!!param) ? param.toLowerCase() : param;
+    }
+
+    setup.gameMode = toLowerCase(getSettings(PARAM_GAME_MODE, '#query'));
     setup.onlyControls = getSettings('controlsOnly', '#query');
 
     if (setup.onlyControls) {
@@ -54,7 +58,7 @@ setup.setupSprites = function() {
 
     if (!setup.gameMode) {
         // check KEYS constants in register.js
-        setup.gameMode = localStorage.getItem(PARAM_GAME_MODE);
+        setup.gameMode = toLowerCase(localStorage.getItem(PARAM_GAME_MODE));
 
         // TODO почему-то сторится в сторадж строчка "undefined"
         if (setup.gameMode == 'undefined') {

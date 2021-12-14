@@ -51,20 +51,22 @@ if (typeof setup == 'undefined') {
     }
 }
 
-setup.setupSprites();
+setup.gameSetup = function() {
+    setup.setupSprites();
 
-setup.enableDonate = false;
-setup.enableJoystick = false;
-setup.enablePlayerInfo = false;
-setup.enablePlayerInfoLevel = false;
-setup.enableLeadersTable = false;
-setup.enableChat = false;
-setup.enableInfo = false;
-setup.enableHotkeys = true;
-setup.enableForkMe = false;
-setup.enableAdvertisement = false;
-setup.showBody = false;
-setup.debug = false;
+    setup.enableDonate = false;
+    setup.enableJoystick = false;
+    setup.enablePlayerInfo = false;
+    setup.enablePlayerInfoLevel = false;
+    setup.enableLeadersTable = false;
+    setup.enableChat = false;
+    setup.enableInfo = false;
+    setup.enableHotkeys = true;
+    setup.enableForkMe = false;
+    setup.enableAdvertisement = false;
+    setup.showBody = false;
+    setup.debug = false;
+}
 
 // ========================== leaderboard page ==========================
 
