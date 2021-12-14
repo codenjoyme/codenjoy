@@ -115,9 +115,20 @@ public class BoardController {
         String query = request.getQueryString();
         Map<String, String> parameters = queryToMap(query);
 
+        removeNotCustom(parameters);
+
         validator.checkCustomQueryParameters(parameters);
 
         model.addAttribute("query", parameters);
+    }
+
+    private void removeNotCustom(Map<String, String> parameters) {
+        // эти параметры не могут быть кастомными
+        parameters.remove("player");
+        parameters.remove("code");
+        parameters.remove("only");
+        parameters.remove("game");
+        parameters.remove("room");
     }
 
     public static Map<String, String> queryToMap(String query) {
