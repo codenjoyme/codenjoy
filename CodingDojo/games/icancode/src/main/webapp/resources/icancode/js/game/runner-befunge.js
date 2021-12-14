@@ -1255,12 +1255,12 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
         idMove = setInterval(frame, ballTick);
     };
 
-    var buildBoll = function() {
+    var buildBall = function() {
         var ball = '<div id="ball" class="ball hidden"><img src = "../../resources/icancode/sprite/befunge/ball.png"></div>';
         $("#cardSlots").append(ball);
     };
 
-    buildBoll();
+    buildBall();
 
     // -------------------------------------- board -----------------------------------
     var initBoard = function() {
