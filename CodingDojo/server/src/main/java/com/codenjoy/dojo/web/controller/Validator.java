@@ -81,7 +81,8 @@ public class Validator {
     public void checkPlayerId(String input) {
         boolean empty = isEmpty(input);
         if (empty || !id.matcher(input).matches()) {
-            throw new IllegalArgumentException(String.format("Player id is invalid: '%s'", input));
+            throw new IllegalArgumentException(String.format(
+                    "Player id is invalid: '%s'", input));
         }
     }
 
@@ -126,7 +127,8 @@ public class Validator {
 
     public void checkPlayerId(String input, boolean canBeNull) {
         if (!isPlayerId(input, canBeNull)) {
-            throw new IllegalArgumentException(String.format("Player id is invalid: '%s'", input));
+            throw new IllegalArgumentException(String.format(
+                    "Player id is invalid: '%s'", input));
         }
     }
 
@@ -140,7 +142,8 @@ public class Validator {
 
     public void checkEmail(String input, boolean canBeNull) {
         if (!isEmail(input, canBeNull)) {
-            throw new IllegalArgumentException(String.format("Player email is invalid: '%s'", input));
+            throw new IllegalArgumentException(String.format(
+                    "Player email is invalid: '%s'", input));
         }
     }
 
@@ -150,12 +153,14 @@ public class Validator {
 
     public void checkCode(String input, boolean canBeNull) {
         if (!isCode(input, canBeNull)) {
-            throw new IllegalArgumentException(String.format("Player code is invalid: '%s'", input));
+            throw new IllegalArgumentException(String.format(
+                    "Player code is invalid: '%s'", input));
         }
     }
 
     public static boolean isEmpty(String input) {
-        return StringUtils.isEmpty(input) || input.equalsIgnoreCase("null");
+        return StringUtils.isEmpty(input)
+                || input.equalsIgnoreCase("null");
     }
 
     public boolean isGameName(String input, boolean canBeNull) {
@@ -176,19 +181,22 @@ public class Validator {
 
     public void checkRoom(String input, boolean canBeNull) {
         if (!isRoomName(input, canBeNull)) {
-            throw new IllegalArgumentException(String.format("Room name is invalid: '%s'", input));
+            throw new IllegalArgumentException(String.format(
+                    "Room name is invalid: '%s'", input));
         }
     }
 
     public void checkGame(String input, boolean canBeNull) {
         if (!isGameName(input, canBeNull)) {
-            throw new IllegalArgumentException(String.format("Game name is invalid: '%s'", input));
+            throw new IllegalArgumentException(String.format(
+                    "Game name is invalid: '%s'", input));
         }
     }
 
     public void checkNotEmpty(String name, String input) {
         if (isEmpty(input)) {
-            throw new IllegalArgumentException(String.format("Parameter %s is empty: '%s'", name, input));
+            throw new IllegalArgumentException(String.format(
+                    "Parameter %s is empty: '%s'", name, input));
         }
     }
 
@@ -197,19 +205,27 @@ public class Validator {
         checkGame(input, CANT_BE_NULL);
 
         if (!gameService.exists(input)) {
-            throw new IllegalArgumentException("Game not found: " + input);
+            throw new IllegalArgumentException(
+                    "Game not found: " + input);
         }
     }
 
+    // TODO test me
+    public boolean isMd5(String input) {
+        return is(input, CANT_BE_NULL, md5);
+    }
+
     public void checkMD5(String input) {
-        if (input == null || !md5.matcher(input).matches()) {
-            throw new IllegalArgumentException(String.format("Hash is invalid: '%s'", input));
+        if (!isMd5(input)) {
+            throw new IllegalArgumentException(String.format(
+                    "Hash is invalid: '%s'", input));
         }
     }
 
     public void checkCommand(String input) {
         if (!PlayerCommand.isValid(input)) {
-            throw new IllegalArgumentException(String.format("Command is invalid: '%s'", input));
+            throw new IllegalArgumentException(String.format(
+                    "Command is invalid: '%s'", input));
         }
     }
 
@@ -218,14 +234,16 @@ public class Validator {
         checkCode(code, CANT_BE_NULL);
         String result = registration.checkUser(id, code);
         if (result == null) {
-            throw new IllegalArgumentException(String.format("Player code is invalid: '%s' for player: '%s'", code, id));
+            throw new IllegalArgumentException(String.format(
+                    "Player code is invalid: '%s' for player: '%s'", code, id));
         }
         return result;
     }
 
     public void checkNotNull(String name, Object input) {
         if (input == null) {
-            throw new IllegalArgumentException(String.format("Object '%s' is null", name));
+            throw new IllegalArgumentException(String.format(
+                    "Object '%s' is null", name));
         }
     }
 
@@ -234,7 +252,8 @@ public class Validator {
         checkPlayerId(id, CANT_BE_NULL);
 
         if (!isPlayerInRoom(id, room)) {
-            throw new IllegalArgumentException(String.format("Player '%s' is not in room '%s'", id, room));
+            throw new IllegalArgumentException(String.format(
+                    "Player '%s' is not in room '%s'", id, room));
         }
     }
 
