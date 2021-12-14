@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.security.RegistrationService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -41,11 +42,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.AbstractMap;
+import java.util.Arrays;
+import java.util.Map;
 import java.util.Optional;
 
 import static com.codenjoy.dojo.services.multiplayer.MultiplayerType.MULTIPLE;
 import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
 import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
+import static java.util.stream.Collectors.toMap;
 
 @Controller
 @RequestMapping(BoardController.URI)
@@ -62,13 +67,13 @@ public class BoardController {
     private final RoomService roomService;
 
     @GetMapping("/player/{player}")
-    public String boardPlayer(ModelMap model,
+    public String boardPlayer(ModelMap model, HttpServletRequest request,
                               @PathVariable("player") String id,
                               @RequestParam(name = "only", required = false) Boolean justBoard)
     {
         validator.checkPlayerId(id, CANT_BE_NULL);
 
-        return boardPlayer(model, id, null, justBoard);
+        return boardPlayer(model, request, id, null, justBoard);
     }
 
     @GetMapping(value = "/player/{player}", params = {"code", "remove"})
@@ -85,7 +90,7 @@ public class BoardController {
     }
 
     @GetMapping(value = "/player/{player}", params = "code")
-    public String boardPlayer(ModelMap model,
+    public String boardPlayer(ModelMap model, HttpServletRequest request,
                               @PathVariable("player") String id,
                               @RequestParam("code") String code,
                               @RequestParam(name = "only", required = false) Boolean justBoard)
@@ -99,11 +104,32 @@ public class BoardController {
             return "redirect:/register?id=" + id;
         }
 
-        populateBoardAttributes(model, onBehalfPlayerId, code, player, false);
+        populateBoardAttributes(model, request, onBehalfPlayerId, code, player, false);
 
         justBoard = justBoard != null && justBoard;
         model.addAttribute("justBoard", justBoard);
         return justBoard ? "board-only" : "board";
+    }
+
+    private void populateQueries(ModelMap model, HttpServletRequest request) {
+        String query = request.getQueryString();
+        Map<String, String> parameters = queryToMap(query);
+
+        validator.checkCustomQueryParameters(parameters);
+
+        model.addAttribute("query", parameters);
+    }
+
+    public static Map<String, String> queryToMap(String query) {
+        return Arrays.stream(query.split("&"))
+                .map(param -> {
+                    String[] split = param.split("=");
+                    return new AbstractMap.SimpleEntry<>(
+                            (split.length == 0) ? "" : split[0],
+                            (split.length != 2) ? "" : split[1]);
+                })
+                .filter(entry -> !StringUtils.isEmpty(entry.getKey()))
+                .collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     @GetMapping("/rejoining/{game}/room/{room}")
@@ -117,20 +143,33 @@ public class BoardController {
 
         Player player = playerService.get(user.getCode());
         if (player == NullPlayer.INSTANCE) {
-            return registrationService.connectRegisteredPlayer(user.getCode(), request, user.getId(), room, game);
+            return registrationService.connectRegisteredPlayer(user.getCode(),
+                    request, user.getId(), room, game);
         }
 
-        populateBoardAttributes(model, player.getId(), player.getCode(), player, false);
+        populateBoardAttributes(model, request, player.getId(),
+                player.getCode(), player, false);
+
         return "board";
     }
 
-    private void populateBoardAttributes(ModelMap model, String onBehalfPlayerId, String code, Player player, boolean allPlayersScreen) {
-        populateBoardAttributes(model, onBehalfPlayerId, code, player.getGame(), player.getRoom(), player.getGameOnly(), player.getId(),
-                player.getReadableName(), allPlayersScreen);
+    private void populateBoardAttributes(ModelMap model, HttpServletRequest request,
+                                         String onBehalfPlayerId, String code,
+                                         Player player, boolean allPlayersScreen)
+    {
+        populateBoardAttributes(model, request, onBehalfPlayerId, code,
+                player.getGame(), player.getRoom(), player.getGameOnly(),
+                player.getId(), player.getReadableName(), allPlayersScreen);
     }
 
-    private void populateBoardAttributes(ModelMap model, String onBehalfPlayerId, String code, String game, String room, String gameOnly,
-                                         String playerId, String readableName, boolean allPlayersScreen) {
+    private void populateBoardAttributes(ModelMap model, HttpServletRequest request,
+                                         String onBehalfPlayerId, String code,
+                                         String game, String room, String gameOnly,
+                                         String playerId, String readableName,
+                                         boolean allPlayersScreen)
+    {
+        populateQueries(model, request);
+
         model.addAttribute("code", code);
         model.addAttribute("game", game);
         model.addAttribute("room", room);
@@ -148,7 +187,8 @@ public class BoardController {
     }
 
     @GetMapping(value = "/log/player/{player}", params = {"game", "room"})
-    public String boardPlayerLog(ModelMap model, @PathVariable("player") String id,
+    public String boardPlayerLog(ModelMap model, HttpServletRequest request,
+                                 @PathVariable("player") String id,
                                  @RequestParam("game") String game,
                                  @RequestParam("room") String room)
     {
@@ -161,8 +201,10 @@ public class BoardController {
             return "redirect:/register?id=" + id;
         }
 
-        populateBoardAttributes(model, id, null, game, room, GameServiceImpl.removeNumbers(game),
+        populateBoardAttributes(model, request, id, null, game,
+                room, GameServiceImpl.removeNumbers(game),
                 id, user.get().getReadableName(), false);
+
         return "board-log";
     }
 
@@ -177,7 +219,7 @@ public class BoardController {
     }
 
     @GetMapping("/room/{room}")
-    public String boardAllRoomGames(ModelMap model,
+    public String boardAllRoomGames(ModelMap model, HttpServletRequest request,
                                 @PathVariable("room") String room,
                                 @RequestParam(value = "code", required = false) String code,
                                 @AuthenticationPrincipal Registration.User user)
@@ -207,13 +249,16 @@ public class BoardController {
             code = (code == null) ? user.getCode() : code;
         }
 
-        populateBoardAttributes(model, id, code,
+        populateBoardAttributes(model, request, id, code,
                 game, room, player.getGameOnly(), null, null, true);
+
         return "board";
     }
 
     @GetMapping(value = "/", params = "code")
-    public String boardAll(ModelMap model, @RequestParam("code") String code) {
+    public String boardAll(ModelMap model, HttpServletRequest request,
+                           @RequestParam("code") String code)
+    {
         validator.checkCode(code, CAN_BE_NULL);
 
         String id = registration.getIdByCode(code);
@@ -228,7 +273,7 @@ public class BoardController {
             return "redirect:/board/player/" + player.getId() + code(code);
         }
 
-        populateBoardAttributes(model, id, code, player, true);
+        populateBoardAttributes(model, request, id, code, player, true);
         return "board";
     }
 

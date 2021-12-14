@@ -30,7 +30,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
+
+import static java.util.stream.Collectors.toList;
 
 @Controller
 public class Validator {
@@ -50,6 +55,8 @@ public class Validator {
     private static final String READABLE_NAME_LAT = "^[A-Za-z]{1,50}$";
     private static final String READABLE_NAME_CYR = "^[А-Яа-яЁёҐґІіІіЄє]{1,50}$";
     private static final String NICK_NAME = "^[0-9A-Za-zА-Яа-яЁёҐґІіІіЄє ]{1,50}$";
+    private static final String CUSTOM_QUERY_PARAMETER_NAME = "[A-Za-z][A-Za-z0-9]{0,29}$";
+    private static final String CUSTOM_QUERY_PARAMETER_VALUE = "[A-Za-z0-9_.-]{0,30}$";
 
     @Autowired protected Registration registration;
     @Autowired protected ConfigProperties properties;
@@ -65,6 +72,8 @@ public class Validator {
     private Pattern room;
     private Pattern code;
     private Pattern md5;
+    private Pattern customQueryParameterName;
+    private Pattern customQueryParameterValue;
 
     public Validator() {
         email = Pattern.compile(EMAIL);
@@ -76,6 +85,8 @@ public class Validator {
         room = Pattern.compile(ROOM);
         code = Pattern.compile(CODE);
         md5 = Pattern.compile(MD5);
+        customQueryParameterName = Pattern.compile(CUSTOM_QUERY_PARAMETER_NAME);
+        customQueryParameterValue = Pattern.compile(CUSTOM_QUERY_PARAMETER_VALUE);
     }
 
     public void checkPlayerId(String input) {
@@ -210,16 +221,37 @@ public class Validator {
         }
     }
 
-    // TODO test me
-    public boolean isMd5(String input) {
+    public boolean isMD5(String input) {
         return is(input, CANT_BE_NULL, md5);
     }
 
     public void checkMD5(String input) {
-        if (!isMd5(input)) {
+        if (!isMD5(input)) {
             throw new IllegalArgumentException(String.format(
                     "Hash is invalid: '%s'", input));
         }
+    }
+
+    public void checkCustomQueryParameterName(String input) {
+        if (!isCustomQueryParameterName(input)) {
+            throw new IllegalArgumentException(String.format(
+                    "Custom query parameter name is invalid: '%s'", input));
+        }
+    }
+
+    public void checkCustomQueryParameterValue(String name, String input) {
+        if (!isCustomQueryParameterValue(input)) {
+            throw new IllegalArgumentException(String.format(
+                    "Custom query parameter '%s' value is invalid: '%s'", name, input));
+        }
+    }
+
+    public boolean isCustomQueryParameterName(String input) {
+        return is(input, CANT_BE_NULL, customQueryParameterName);
+    }
+
+    public boolean isCustomQueryParameterValue(String input) {
+        return is(input, CANT_BE_NULL, customQueryParameterValue);
     }
 
     public void checkCommand(String input) {
@@ -265,8 +297,30 @@ public class Validator {
         return player.getRoom().equals(room);
     }
 
-    // TODO test me
     public void checkUser(Registration.User user) {
         checkPlayerCode(user.getId(), user.getCode());
+    }
+
+    public void checkCustomQueryParameters(Map<String, String> parameters) {
+        List<String> messages = parameters.entrySet().stream()
+                .flatMap(entry ->
+                        new LinkedList<String>() {{
+                            try {
+                                checkCustomQueryParameterName(entry.getKey());
+                            } catch (IllegalArgumentException exception) {
+                                add(exception.getMessage());
+                            }
+                            try {
+                                checkCustomQueryParameterValue(entry.getKey(), entry.getValue());
+                            } catch (IllegalArgumentException exception) {
+                                add(exception.getMessage());
+                            }
+                        }}.stream())
+                .map(error -> error.replace("Custom query ", ""))
+                .collect(toList());
+        if (!messages.isEmpty()) {
+            throw new IllegalArgumentException(String.format(
+                    "Custom query is invalid: %s", messages));
+        }
     }
 }
