@@ -31,21 +31,16 @@ const PARAM_GAME_MODE = 'gameMode';
 const SPRITES_EKIDS = 'ekids';
 const SPRITES_ROBOT = 'robot';
 
-const MODE_JS = 'JavaScript';
-const MODE_EKIDS = 'eKids';
-const MODE_BEFUNGE = 'Befunge';
-const MODE_CONTEST = 'Contest';
+const MODE_JS = 'javascript';
+const MODE_EKIDS = 'ekids';
+const MODE_BEFUNGE = 'befunge';
+const MODE_CONTEST = 'contest';
 
 setup.setupSprites = function() {
-    var url = new URL(window.location.href);
+    setup.gameMode = getSettings(PARAM_GAME_MODE, '#query').toLowerCase();
+    setup.onlyControls = getSettings('controlsOnly', '#query');
 
-    if (url.searchParams.has(PARAM_GAME_MODE)) {
-        setup.gameMode = url.searchParams.get(PARAM_GAME_MODE);
-    }
-
-    var onlyControls = url.searchParams.has('controlsOnly')
-        && (url.searchParams.get('controlsOnly') == 'true');
-    if (onlyControls) {
+    if (setup.onlyControls) {
         setup.drawCanvases = false;
         setup.enableHeader = false;
         setup.enableFooter = false;
