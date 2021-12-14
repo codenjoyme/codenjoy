@@ -23,6 +23,7 @@
 pages = pages || {};
 
 pages.boardOnly = function() {
+    setup.enableChat = false;
     setup.enableDonate = false;
     setup.enableJoystick = false;
     setup.enableAlways = false;

@@ -32,6 +32,9 @@ pages.board = function() {
     setup.allPlayersScreen = getSettings('allPlayersScreen');
     setup.contextPath = getSettings('contextPath');
 
+    if (!!setup.setupGame) {
+        setup.setupGame();
+    }
     initBoardPage(setup, initBoardComponents);
     initHotkeys();
 }
@@ -138,15 +141,7 @@ function initBoardComponents(setup) {
         $(document.body).show();
     }
 
-    if (setup.allPlayersScreen) {
-        if (!!setup.onBoardAllPageLoad) {
-            setup.onBoardAllPageLoad();
-        }
-    } else {
-        if (!!setup.onBoardPageLoad) {
-            setup.onBoardPageLoad();
-        }
-    }
+    setup.onPageLoad(setup.allPlayersScreen)
 
     if (typeof setupMouseWheelZoom == 'function') {
         setupMouseWheelZoom();

@@ -20,32 +20,30 @@
  * #L%
  */
 
-var setup = setup || {};
-
-// так как спрайты icancode вылазят за сетку элемента,
-// то надо рисовать всегда все спрайты
-setup.isDrawOnlyChanges = false;
-
 const PARAM_GAME_MODE = 'gameMode';
 
 const SPRITES_EKIDS = 'ekids';
 const SPRITES_ROBOT = 'robot';
 
-const MODE_JS = 'JavaScript';
-const MODE_EKIDS = 'eKids';
-const MODE_BEFUNGE = 'Befunge';
-const MODE_CONTEST = 'Contest';
+const MODE_JS = 'javascript';
+const MODE_EKIDS = 'ekids';
+const MODE_BEFUNGE = 'befunge';
+const MODE_CONTEST = 'contest';
 
 setup.setupSprites = function() {
-    var url = new URL(window.location.href);
 
-    if (url.searchParams.has(PARAM_GAME_MODE)) {
-        setup.gameMode = url.searchParams.get(PARAM_GAME_MODE);
+    // так как спрайты icancode вылазят за сетку элемента,
+    // то надо рисовать всегда все спрайты
+    setup.isDrawOnlyChanges = false;
+
+    var toLowerCase = function (param) {
+        return (!!param) ? param.toLowerCase() : param;
     }
 
-    var onlyControls = url.searchParams.has('controlsOnly')
-        && (url.searchParams.get('controlsOnly') == 'true');
-    if (onlyControls) {
+    setup.gameMode = toLowerCase(getSettings(PARAM_GAME_MODE, '#query'));
+    setup.onlyControls = getSettings('controlsOnly', '#query');
+
+    if (setup.onlyControls) {
         setup.drawCanvases = false;
         setup.enableHeader = false;
         setup.enableFooter = false;
@@ -59,7 +57,7 @@ setup.setupSprites = function() {
 
     if (!setup.gameMode) {
         // check KEYS constants in register.js
-        setup.gameMode = localStorage.getItem(PARAM_GAME_MODE);
+        setup.gameMode = toLowerCase(localStorage.getItem(PARAM_GAME_MODE));
 
         // TODO почему-то сторится в сторадж строчка "undefined"
         if (setup.gameMode == 'undefined') {

@@ -39,6 +39,7 @@ public class BoardLog {
     private long time;
     private String playerId;
     private String game;
+    private String room;
     private Object score;
     private String board;
     private String message;
@@ -49,6 +50,7 @@ public class BoardLog {
             time = JDBCTimeUtils.getTimeLong(resultSet);
             playerId = resultSet.getString("player_id");
             game = resultSet.getString("game_type");
+            room = resultSet.getString("room_name");
             score = resultSet.getInt("score");
             board = resultSet.getString("board");
             message = resultSet.getString("message");

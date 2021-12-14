@@ -19,14 +19,5 @@
 -- <http://www.gnu.org/licenses/gpl-3.0.html>.
 -- #L%
 ---
-ALTER TABLE saves
-    ADD COLUMN team_id integer;
-	
-CREATE INDEX team_id_saves_index
-    ON saves USING btree
-    (team_id ASC NULLS LAST)
-    TABLESPACE pg_default;
-
-ALTER TABLE public.saves
-    ALTER COLUMN score
-        TYPE character varying(255);
+ALTER TABLE player_boards
+    ADD COLUMN room_name character varying(255);
