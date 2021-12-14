@@ -21,18 +21,67 @@
  */
 var setup = setup || {};
 
+/**
+ * Отображать ли поле донейта.
+ */
 setup.enableDonate = false;
+
+/**
+ * Включен ли джойстик по-умолчанию.
+ */
 setup.enableJoystick = false;
+
+// TODO понять что за настройка
 setup.enableAlways = false;
+
+/**
+ * Отображать ли имя игрока над бордой.
+ */
 setup.enablePlayerInfo = true;
+
+/**
+ * Отображать ли уровень игрока над бордой.
+ */
 setup.enablePlayerInfoLevel = true;
+
+/**
+ * Отображать ли таблицу с очкам участников.
+ */
 setup.enableLeadersTable = true;
+
+/**
+ * Отображать ли поле fork me from github.
+ */
 setup.enableForkMe = true;
+
+/**
+ * Отображать ли ссылку на правила игры.
+ */
 setup.enableInfo = true;
+
+/**
+ * Работают ли хоткеи для перехода между страничками (Ctrl-Alt-A, ...)
+ */
 setup.enableHotkeys = true;
+
+/**
+ * Отображать ли поле с рекламой над лидербордом.
+ */
 setup.enableAdvertisement = false;
+
+/**
+ * Отображать ли борду после загрузки всего контента
+ * или предоставить это самой игре, когда она будет готова.
+ */
 setup.showBody = true;
+
+/**
+ * Иногда случается так, что игра рисуется разными спрайтами -
+ * тут задается набор этих спрайтов.
+ */
 setup.sprites = null;
+
+// TODO понять что за настройка
 setup.heroInfo = null;
 
 /**
@@ -62,9 +111,25 @@ setup.isFillOrStrechBackground = true;
  * Печатать ли пришедшую борду с каждым тиком в консоль аль нет
  */
 setup.isPrintBoardToConsole = false;
+
+/**
+ * Стиль курсора мыши над областью борды.
+ */
 setup.canvasCursor = 'auto';
+
+/**
+ * Грузить ли данные с сервера необходимые для прорисовки борды.
+ */
 setup.loadBoardData = true;
+
+/**
+ * Прорисовывать ли борды.
+ */
 setup.drawCanvases = true;
+
+/**
+ * Включать ли чат.
+ */
 setup.enableChat = true;
 
 setup.setupGame = function() {
