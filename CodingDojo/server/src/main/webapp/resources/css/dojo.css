@@ -40,7 +40,8 @@ body {
     border-top: 0px !important;
 }
 
-#settings {
+#settings,
+#csrf {
     display: none;
 }
 

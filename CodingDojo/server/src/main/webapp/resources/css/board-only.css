@@ -20,7 +20,8 @@
  * #L%
  */
 
-#settings {
+#settings,
+#csrf {
     display: none;
 }
 
