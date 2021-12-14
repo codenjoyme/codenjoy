@@ -46,42 +46,59 @@
          game="${data.game}"
          room="${data.room}"></div>
 
+    <%@include file="csrf.jsp"%>
+
     <%@include file="forkMe.jsp"%>
 
     <div class="page-header">
         <h1>Admin page</h1>
     </div>
 
-    <table class="admin-table" id="gameVersion">
-        <tr>
-            <td>
-                <b>Room:</b> ${data.room}&nbsp;
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <a id="delete-room"
-                   href="${ctx}/admin/room/delete?room=${data.room}#gameVersion">Remove room</a>.
-            </td>
-            <td class="info">
-                You cannot delete the default game room. When you delete a room, <br>
-                all players and their saves will also be removed from it.
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <b>Game:</b> ${data.game}
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <b>Game version:</b>
-            </td>
-            <td style="width:500px;">
-                <textarea class="version small" cols="95">${data.gameVersion}</textarea>
-            </td>
-        </tr>
-    </table>
+    <form:form modelAttribute="data" action="admin#gameRoomStatus" method="POST">
+        <input type="hidden" name="game" value="${data.game}"/>
+        <input type="hidden" name="room" value="${data.room}"/>
+
+        <table class="admin-table" id="gameRoomStatus">
+            <tr>
+                <td>
+                    <b>Room: </b><span id="room">${data.room}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" name="action"
+                           value="${data.actions.deleteRoom}"/>
+                </td>
+                <td class="info">
+                    You cannot delete the default game room. When you delete a room, <br>
+                    all players and their saves will also be removed from it.
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="text" name="newRoom" value=""/><br>
+                    <input type="submit" name="action"
+                           value="${data.actions.createRoom}"/>
+                </td>
+                <td class="info">
+                    We will create a new empty room and show its settings.
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Game: </b><span id="game">${data.game}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Game version:</b>
+                </td>
+                <td style="width:500px;">
+                    <textarea class="version small" cols="95">${data.gameVersion}</textarea>
+                </td>
+            </tr>
+        </table>
+    </form:form>
 
     <table class="admin-table" id="statistic">
         <tr>
@@ -112,6 +129,9 @@
     </table>
 
     <form:form modelAttribute="data" action="admin#activeGames" method="POST">
+        <input type="hidden" name="game" value="${data.game}"/>
+        <input type="hidden" name="room" value="${data.room}"/>
+
         <table class="admin-table" id="activeGames">
             <tr>
                 <td colspan="3" style="width:300px;">
@@ -121,7 +141,7 @@
             <c:forEach items="${data.gamesRooms.all}" var="gameRooms" varStatus="status">
                 <tr game="${gameRooms.game}">
                     <td class="rightStep">
-                        <form:checkbox id="enable-games-${gameRooms.game}" path="games[${status.index}]"/>
+                        <form:checkbox id="enable-games-${gameRooms.game}" path="activeGames[${status.index}]"/>
                         <label class="check-label" for="enable-games-${gameRooms.game}"></label>
                         <span>${gameRooms.game}</span>
                     </td>
@@ -141,72 +161,95 @@
             </c:forEach>
             <tr>
                 <td>
-                    <input type="hidden" name="game" value="${data.game}"/>
-                    <input type="hidden" name="room" value="${data.room}"/>
-                    <input type="submit" value="Save"/>
+                    <input type="submit" name="action"
+                           value="${data.actions.saveActiveGames}"/>
                 </td>
             </tr>
         </table>
     </form:form>
 
-    <table class="admin-table" id="pauseGame">
-        <tr>
-            <td>
-                <c:choose>
-                    <c:when test="${data.active}">
-                        <b><spring:message key="game.active"/></b></br>
-                        <a href="${ctx}/admin/game/pause?room=${data.room}#pauseGame">Pause game</a>.
-                    </c:when>
-                    <c:otherwise>
-                        <b><spring:message key="game.suspended"/></b></br>
-                        <a href="${ctx}/admin/game/resume?room=${data.room}#pauseGame">Resume game</a>.
-                    </c:otherwise>
-                </c:choose>
-            </td>
-            <form:form modelAttribute="data" action="admin#pauseGame" method="POST">
-                <tr>
-                    <td><form:input path="timerPeriod"/></td>
-                </tr>
-                <tr>
-                    <td>
-                        <input type="hidden" name="game" value="${data.game}"/>
-                        <input type="hidden" name="room" value="${data.room}"/>
-                        <input type="submit" value="Set"/>
-                    </td>
-                </tr>
-            </form:form>
-        </tr>
-    </table>
+    <form:form modelAttribute="data" action="admin#pauseResumeGame" method="POST">
+        <input type="hidden" name="game" value="${data.game}"/>
+        <input type="hidden" name="room" value="${data.room}"/>
 
-    <table class="admin-table" id="recordGame">
-        <tr>
-            <td>
-                <c:choose>
-                    <c:when test="${data.recording}">
-                        <b>The recording is active</b></br>
-                        <a href="${ctx}/admin/recording/stop?room=${data.room}#recordGame">Stop recording</a>.
-                    </c:when>
-                    <c:otherwise>
-                        <b>The recording was suspended</b></br>
-                        <a href="${ctx}/admin/recording/start?room=${data.room}#recordGame">Start recording</a>.
-                    </c:otherwise>
-                </c:choose>
-            </td>
-        </tr>
-    </table>
+        <table class="admin-table" id="pauseResumeGame">
+            <tr>
+                <td>
+                    <c:choose>
+                        <c:when test="${data.active}">
+                            <b><spring:message key="game.active"/></b></br>
+                            <input type="submit" name="action"
+                                   value="${data.actions.pauseGame}"/>
+                        </c:when>
+                        <c:otherwise>
+                            <b><spring:message key="game.suspended"/></b></br>
+                            <input type="submit" name="action"
+                                   value="${data.actions.resumeGame}"/>
+                        </c:otherwise>
+                    </c:choose>
+                </td>
+            </tr>
+        </table>
+    </form:form>
+
+    <form:form modelAttribute="data" action="admin#setTimerPeriod" method="POST">
+        <input type="hidden" name="game" value="${data.game}"/>
+        <input type="hidden" name="room" value="${data.room}"/>
+
+        <table class="admin-table" id="setTimerPeriod">
+            <tr>
+                <td><form:input path="timerPeriod"/></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" name="action"
+                           value="${data.actions.setTimerPeriod}"/>
+                </td>
+            </tr>
+        </table>
+    </form:form>
+
+    <form:form modelAttribute="data" action="admin#recordGame" method="POST">
+        <input type="hidden" name="game" value="${data.game}"/>
+        <input type="hidden" name="room" value="${data.room}"/>
+
+        <table class="admin-table" id="recordGame">
+            <tr>
+                <td>
+                    <c:choose>
+                        <c:when test="${data.recording}">
+                            <b><spring:message key="recording.active"/></b></br>
+                            <input type="submit" name="action"
+                                   value="${data.actions.stopRecording}"/>
+                        </c:when>
+                        <c:otherwise>
+                            <b><spring:message key="recording.suspended"/></b></br>
+                            <input type="submit" name="action"
+                                   value="${data.actions.startRecording}"/>
+                        </c:otherwise>
+                    </c:choose>
+                </td>
+            </tr>
+        </table>
+    </form:form>
 
     <form:form modelAttribute="data" action="admin#debug" method="POST">
+        <input type="hidden" name="game" value="${data.game}"/>
+        <input type="hidden" name="room" value="${data.room}"/>
+
         <table class="admin-table" id="debug">
             <tr>
                 <td>
                     <c:choose>
                         <c:when test="${data.debugLog}">
-                            <b>The debug in progress</b></br>
-                            <a href="${ctx}/admin/debug/stop?room=${data.room}#debug">Stop debug</a>.
+                            <b><spring:message key="debug.active"/></b></br>
+                            <input type="submit" name="action"
+                                   value="${data.actions.stopDebug}"/>
                         </c:when>
                         <c:otherwise>
-                            <b>The debug was suspended</b></br>
-                            <a href="${ctx}/admin/debug/start?room=${data.room}#debug">Start debug</a>.
+                            <b><spring:message key="debug.suspended"/></b></br>
+                            <input type="submit" name="action"
+                                   value="${data.actions.startDebug}"/>
                         </c:otherwise>
                     </c:choose>
                 </td>
@@ -229,79 +272,127 @@
             </tr>
             <tr>
                 <td>
-                    <input type="hidden" name="game" value="${data.game}"/>
-                    <input type="hidden" name="room" value="${data.room}"/>
-                    <input type="submit" value="Update"/>
+                    <input type="submit" name="action"
+                           value="${data.actions.updateLoggers}"/>
                 </td>
             </tr>
         </table>
     </form:form>
 
-    <table class="admin-table" id="autoSave">
-        <tr>
-            <td>
-                <c:choose>
-                    <c:when test="${data.autoSave}">
-                        <b>The auto save in progress</b></br>
-                        <a href="${ctx}/admin/autoSave/stop?room=${data.room}#autoSave">Stop auto save</a>.
-                    </c:when>
-                    <c:otherwise>
-                        <b>The auto save was suspended</b></br>
-                        <a href="${ctx}/admin/autoSave/start?room=${data.room}#autoSave">Start auto save</a>.
-                    </c:otherwise>
-                </c:choose>
-            </td>
-        </tr>
-    </table>
+    <form:form modelAttribute="data" action="admin#autoSave" method="POST">
+        <input type="hidden" name="game" value="${data.game}"/>
+        <input type="hidden" name="room" value="${data.room}"/>
 
-    <table class="admin-table" id="closeRegistration">
-        <tr>
-            <td>
-                <c:choose>
-                    <c:when test="${data.opened}">
-                        <b><spring:message key="registration.active"/></b></br>
-                        <a href="${ctx}/admin/registration/stop?room=${data.room}#closeRegistration">Close registration</a>.
-                    </c:when>
-                    <c:otherwise>
-                        <b><spring:message key="registration.closed"/></b></br>
-                        <a href="${ctx}/admin/registration/start?room=${data.room}#closeRegistration">Open registration</a>.
-                    </c:otherwise>
-                </c:choose>
-            </td>
-        </tr>
-    </table>
+        <table class="admin-table" id="autoSave">
+            <tr>
+                <td>
+                    <c:choose>
+                        <c:when test="${data.autoSave}">
+                            <b><spring:message key="autoSave.active"/></b></br>
+                            <input type="submit" name="action"
+                                   value="${data.actions.stopAutoSave}"/>
+                        </c:when>
+                        <c:otherwise>
+                            <b><spring:message key="autoSave.suspended"/></b></br>
+                            <input type="submit" name="action"
+                                   value="${data.actions.startAutoSave}"/>
+                        </c:otherwise>
+                    </c:choose>
+                </td>
+            </tr>
+        </table>
+    </form:form>
 
-    <table class="admin-table" id="closeRoomRegistration">
-        <tr>
-            <td>
-                <c:choose>
-                    <c:when test="${data.roomOpened}">
-                        <b><spring:message key="registration.room.active"/></b></br>
-                        <a href="${ctx}/admin/room/registration/stop?room=${data.room}#closeRoomRegistration">Close room registration</a>.
-                    </c:when>
-                    <c:otherwise>
-                        <b><spring:message key="registration.room.closed"/></b></br>
-                        <a href="${ctx}/admin/room/registration/start?room=${data.room}#closeRoomRegistration">Open room registration</a>.
-                    </c:otherwise>
-                </c:choose>
-            </td>
-        </tr>
-    </table>
+    <form:form modelAttribute="data" action="admin#serverRegistration" method="POST">
+        <input type="hidden" name="game" value="${data.game}"/>
+        <input type="hidden" name="room" value="${data.room}"/>
 
-    <table class="admin-table" id="cleanGame">
-        <tr>
+        <table class="admin-table" id="serverRegistration">
+            <tr>
+                <td>
+                    <c:choose>
+                        <c:when test="${data.opened}">
+                            <b><spring:message key="registration.active"/></b></br>
+                            <input type="submit" name="action"
+                                   value="${data.actions.closeRegistration}"/>
+                        </c:when>
+                        <c:otherwise>
+                            <b><spring:message key="registration.suspended"/></b></br>
+                            <input type="submit" name="action"
+                                   value="${data.actions.openRegistration}"/>
+                        </c:otherwise>
+                    </c:choose>
+                </td>
+            </tr>
+        </table>
+    </form:form>
+
+    <form:form modelAttribute="data" action="admin#roomRegistration" method="POST">
+        <input type="hidden" name="game" value="${data.game}"/>
+        <input type="hidden" name="room" value="${data.room}"/>
+
+        <table class="admin-table" id="roomRegistration">
+            <tr>
+                <td>
+                    <c:choose>
+                        <c:when test="${data.roomOpened}">
+                            <b><spring:message key="registration.room.active"/></b></br>
+                            <input type="submit" name="action"
+                                   value="${data.actions.closeRoomRegistration}"/>
+                        </c:when>
+                        <c:otherwise>
+                            <b><spring:message key="registration.room.suspended"/></b></br>
+                            <input type="submit" name="action"
+                                   value="${data.actions.openRoomRegistration}"/>
+                        </c:otherwise>
+                    </c:choose>
+                </td>
+            </tr>
+        </table>
+    </form:form>
+
+    <form:form modelAttribute="data" action="admin#reloadRoom" method="POST">
+        <input type="hidden" name="game" value="${data.game}"/>
+        <input type="hidden" name="room" value="${data.room}"/>
+
+        <table class="admin-table" id="reloadRoom">
             <tr colspan="2">
                 <td><b>Clean / Reset</b></td>
+            <tr>
             </tr>
-            <td>
-                <a href="${ctx}/admin/game/scores/cleanAll?room=${data.room}#cleanGame">Clean all scores</a>. </br>
-                <a href="${ctx}/admin/game/board/reloadAll?room=${data.room}#cleanGame">Reload all rooms</a>. Not working for !disposable rooms. </br>
-                <a href="${ctx}/admin/player/reloadAll?room=${data.room}#cleanGame">Reload all players</a>. Through saves: saveAll -> removeAll -> loadAll
-            </td>
-        </tr>
-    </table>
+                <td>
+                    <input type="submit" name="action"
+                           value="${data.actions.cleanAllScores}"/>
+                </td>
+                <td class="info">
+                    Clean all players scores. For some games, the field may also be updated.
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" name="action"
+                           value="${data.actions.reloadAllRooms}"/>
+                </td>
+                <td class="info">
+                    Not working for !disposable rooms.
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" name="action"
+                           value="${data.actions.reloadAllPlayers}"/>
+                </td>
+                <td class="info">
+                    Reload occurs through saves: saveAll -> removeAll -> loadAll.
+                </td>
+            </tr>
+        </table>
+    </form:form>
 
     <form:form modelAttribute="data" action="admin#loadSaveForAll" method="POST">
+        <input type="hidden" name="game" value="${data.game}"/>
+        <input type="hidden" name="room" value="${data.room}"/>
+
         <table class="admin-table" id="loadSaveForAll">
             <tr>
                 <td><b>Load save (progress) for all</b></td>
@@ -311,15 +402,14 @@
             </tr>
             <tr>
                 <td>
-                    <input type="hidden" name="game" value="${data.game}"/>
-                    <input type="hidden" name="room" value="${data.room}"/>
-                    <input type="submit" value="Apply for all"/>
+                    <input type="submit" name="action"
+                           value="${data.actions.loadSaveForAll}"/>
                 </td>
             </tr>
         </table>
     </form:form>
 
-    <table class="admin-table" id="cleanGame">
+    <table class="admin-table" id="registrationSettings">
         <tr>
             <td><b>Registration settings</b></td>
         </tr>
@@ -377,31 +467,32 @@
         </tr>
         <tr>
             <td>
-                <button id="registration-save-button" class="button save">Save settings</button>
+                <button id="registration-save-button" class="button save">
+                    ${data.actions.saveRegistrationFormSettings}</button>
             </td>
         </tr>
     </table>
 
-    <form:form modelAttribute="data" action="admin#createNewUsers" method="POST">
-        <table class="admin-table" id="createNewUsers">
+    <form:form modelAttribute="data" action="admin#createDummyUsers" method="POST">
+        <input type="hidden" name="game" value="${data.game}"/>
+        <input type="hidden" name="room" value="${data.room}"/>
+
+        <table class="admin-table" id="createDummyUsers">
             <tr colspan="2">
                 <td><b>Create new users</b></td>
             </tr>
             <tr>
                 <td>NameMask</td>
                 <td>Count</td>
-                <td>RoomName</td>
             </tr>
             <tr>
                 <td><form:input path="generateNameMask"/></td>
                 <td><form:input path="generateCount"/></td>
-                <td><form:input path="generateRoom"/></td>
             </tr>
             <tr>
                 <td>
-                    <input type="hidden" name="game" value="${data.game}"/>
-                    <input type="hidden" name="room" value="${data.room}"/>
-                    <input type="submit" value="Create"/>
+                    <input type="submit" name="action"
+                           value="${data.actions.createDummyUsers}"/>
                 </td>
             </tr>
         </table>
@@ -409,6 +500,9 @@
 
     <c:if test="${not empty data.rounds.parameters}">
         <form:form modelAttribute="data" action="admin#rounds" method="POST">
+            <input type="hidden" name="game" value="${data.game}"/>
+            <input type="hidden" name="room" value="${data.room}"/>
+
             <table class="admin-table" id="rounds">
                 <tr colspan="2">
                     <td><b>Rounds settings</b></td>
@@ -447,9 +541,8 @@
                 </tr>
                 <tr>
                     <td>
-                        <input type="hidden" name="game" value="${data.game}"/>
-                        <input type="hidden" name="room" value="${data.room}"/>
-                        <input type="submit" value="Save"/>
+                        <input type="submit" name="action"
+                               value="${data.actions.updateRoundsSettings}"/>
                     </td>
                 </tr>
             </table>
@@ -458,6 +551,9 @@
 
     <c:if test="${not empty data.semifinal.parameters}">
         <form:form modelAttribute="data" action="admin#semifinal" method="POST">
+            <input type="hidden" name="game" value="${data.game}"/>
+            <input type="hidden" name="room" value="${data.room}"/>
+
             <table class="admin-table" id="semifinal">
                 <tr colspan="2">
                     <td><b>Semifinal settings</b></td>
@@ -496,9 +592,8 @@
                 </tr>
                 <tr>
                     <td>
-                        <input type="hidden" name="game" value="${data.game}"/>
-                        <input type="hidden" name="room" value="${data.room}"/>
-                        <input type="submit" value="Save"/>
+                        <input type="submit" name="action"
+                               value="${data.actions.updateSemifinalSettings}"/>
                     </td>
                 </tr>
             </table>
@@ -507,6 +602,9 @@
 
     <c:if test="${not empty data.inactivity.parameters}">
         <form:form modelAttribute="data" action="admin#inactivity" method="POST">
+            <input type="hidden" name="game" value="${data.game}"/>
+            <input type="hidden" name="room" value="${data.room}"/>
+
             <table class="admin-table" id="inactivity">
                 <tr colspan="2">
                     <td><b>Inactivity settings</b></td>
@@ -521,9 +619,8 @@
                 </tr>
                 <tr>
                     <td>
-                        <input type="hidden" name="game" value="${data.game}"/>
-                        <input type="hidden" name="room" value="${data.room}"/>
-                        <input type="submit" value="Save"/>
+                        <input type="submit" name="action"
+                               value="${data.actions.updateInactivitySettings}"/>
                     </td>
                 </tr>
             </table>
@@ -532,6 +629,9 @@
 
     <c:if test="${not empty data.other}">
         <form:form modelAttribute="data" action="admin#gameSettings" method="POST">
+            <input type="hidden" name="game" value="${data.game}"/>
+            <input type="hidden" name="room" value="${data.room}"/>
+
             <table class="admin-table" id="gameSettings">
                 <tr colspan="2">
                     <td><b>Game settings</b></td>
@@ -561,9 +661,8 @@
                 </c:forEach>
                 <tr>
                     <td>
-                        <input type="hidden" name="game" value="${data.game}"/>
-                        <input type="hidden" name="room" value="${data.room}"/>
-                        <input type="submit" value="Save"/>
+                        <input type="submit" name="action"
+                               value="${data.actions.updateOtherSettings}"/>
                     </td>
                 </tr>
             </table>
@@ -572,6 +671,9 @@
 
     <c:if test="${not empty data.levels.parameters}">
         <form:form modelAttribute="data" action="admin#levels" method="POST">
+            <input type="hidden" name="game" value="${data.game}"/>
+            <input type="hidden" name="room" value="${data.room}"/>
+
             <table class="admin-table" id="levels">
                 <tr colspan="2">
                     <td><b>Game levels settings</b></td>
@@ -629,10 +731,12 @@
                 </script>
                 <tr class="levelsButtons">
                     <td>
-                        <input type="hidden" name="game" value="${data.game}"/>
-                        <input type="hidden" name="room" value="${data.room}"/>
-                        <input type="button" id="addNewLevelMap" value="Add"/>
-                        <input type="submit" value="Save"/>
+                        <input type="submit" name="action"
+                               value="${data.actions.saveLevelsMaps}"/>
+                    </td>
+                    <td>
+                        <input type="button" id="addNewLevelMap"
+                               value="${data.actions.addNewLevelMap}"/>
                     </td>
                 </tr>
             </table>
@@ -640,8 +744,11 @@
     </c:if>
 
     <c:if test="${not empty data.players || savedGames != null}">
-        <form:form modelAttribute="data" action="admin#savePlayersGame" method="POST">
-            <table class="admin-table" id="savePlayersGame">
+        <form:form modelAttribute="data" action="admin#players" method="POST">
+            <input type="hidden" name="game" value="${data.game}"/>
+            <input type="hidden" name="room" value="${data.room}"/>
+
+            <table class="admin-table" id="players">
                 <tr colspan="4">
                     <td><b>Registered Players</b></td>
                 </tr>
@@ -658,26 +765,32 @@
                     <td class="header">Joystick&nbsp;&nbsp;</td>
                     <td class="header">GameName&nbsp;&nbsp;</td>
                     <td>
-                        <a href="${ctx}/admin/player/saveAll?room=${data.room}#savePlayersGame">SaveAll</a>&nbsp;&nbsp;
+                        <input type="submit" name="action"
+                               value="${data.actions.saveAllPlayers}"/>
                     </td>
                     <td>
-                        <a href="${ctx}/admin/player/loadAll?room=${data.room}#savePlayersGame">LoadAll</a>&nbsp;&nbsp;
+                        <input type="submit" name="action"
+                               value="${data.actions.loadAllPlayers}"/>
                     </td>
                     <td>
-                        <a href="${ctx}/admin/player/save/removeAll?room=${data.room}#savePlayersGame">RemoveSaveAll</a>&nbsp;&nbsp;
+                        <input type="submit" name="action"
+                               value="${data.actions.removeAllPlayersSaves}"/>
                     </td>
                     <td>
-                        <a href="${ctx}/admin/player/registration/removeAll?room=${data.room}#savePlayersGame">RemoveRegAll</a>&nbsp;&nbsp;
+                        <input type="submit" name="action"
+                               value="${data.actions.removeAllPlayersRegistrations}"/>
                     </td>
                     <td>
-                        <a href="${ctx}/admin/player/gameOverAll?room=${data.room}#savePlayersGame">GameOverAll</a>&nbsp;&nbsp;
+                        <input type="submit" name="action"
+                               value="${data.actions.gameOverAllPlayers}"/>
                     </td>
                     <td>
                         <a href="${ctx}/board/room/${data.room}">ViewGameAll</a>&nbsp;&nbsp;
                     </td>
                     <td class="header">PlayerLogAll</td>
                     <td>
-                        <a href="${ctx}/admin/player/ai/reloadAll?room=${data.room}#savePlayersGame">LoadAIAll</a>&nbsp;&nbsp;
+                        <input type="submit" name="action"
+                               value="${data.actions.loadAIsForAllPlayers}"/>
                     </td>
                     <td class="header">Save data&nbsp;&nbsp;</td>
                 </tr>
@@ -690,150 +803,256 @@
                             <tr style="" player="${player.email}">
                         </c:otherwise>
                     </c:choose>
+
                         <c:choose>
                             <c:when test="${player.active}">
-                                <td><form:input class="input-id"       path="players[${status.index}].id"   readonly="true" index="${status.index}"/></td>
-                                <td><form:input class="input-code"     path="players[${status.index}].code" readonly="true"/></td>
-                                <td><form:input class="input-readable" path="players[${status.index}].readableName"/></td>
-                                <td><form:input class="input-email"    path="players[${status.index}].email"/></td>
-                                <td><form:input class="input-room"     path="players[${status.index}].room"/></td>
-                                <td><form:input class="input-team"     path="players[${status.index}].teamId"/></td>
-                                <td><form:input class="input-score"    path="players[${status.index}].score"/></td>
-                                <td><form:input class="input-callback" path="players[${status.index}].callbackUrl"/></td>
-                                <td>&nbsp;<span class="input-ticks-inactive">${player.ticksInactive}</span>&nbsp;</td>
-                                <c:choose>
-                                    <c:when test="${player.code != null}">
-                                        <td class="joystick">
-                                            <span class="a" href="${ctx}/rest/joystick/player/${player.id}/do/up#savePlayersGame">U</span>
-                                            <span class="a" href="${ctx}/rest/joystick/player/${player.id}/do/down#savePlayersGame">D</span>
-                                            <span class="a" href="${ctx}/rest/joystick/player/${player.id}/do/left#savePlayersGame">L</span>
-                                            <span class="a" href="${ctx}/rest/joystick/player/${player.id}/do/right#savePlayersGame">R</span>
-                                            <span class="a" href="${ctx}/rest/joystick/player/${player.id}/do/act#savePlayersGame">A</span>
-                                        </td>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <td>UDLRA</td>
-                                    </c:otherwise>
-                                </c:choose>
-                                <td><a href="${ctx}/board/room/${data.room}">${data.room}</a></td>
-                                <td><a href="${ctx}/admin/player/${player.id}/save?room=${data.room}#savePlayersGame">Save</a></td>
-                                <c:choose>
-                                    <c:when test="${player.saved}">
-                                        <td><a href="${ctx}/admin/player/${player.id}/load?room=${data.room}#savePlayersGame">Load</a></td>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <td>Load</td>
-                                    </c:otherwise>
-                                </c:choose>
-                                <c:choose>
-                                    <c:when test="${player.saved}">
-                                        <td><a href="${ctx}/admin/player/${player.id}/save/remove?room=${data.room}#savePlayersGame">RemoveSave</a></td>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <td>RemoveSave</td>
-                                    </c:otherwise>
-                                </c:choose>
-                                <c:choose>
-                                    <c:when test="${player.code != null}">
-                                        <td><a href="${ctx}/admin/player/${player.id}/registration/remove?room=${data.room}#savePlayersGame">RemoveReg</a></td>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <td>RemoveReg</td>
-                                    </c:otherwise>
-                                </c:choose>
-                                <td><a href="${ctx}/admin/player/${player.id}/gameOver?room=${data.room}#savePlayersGame">GameOver</a></td>
-                                <td><a href="${ctx}/board/player/${player.id}?code=${player.code}">ViewGame</a></td>
-                                <c:choose>
-                                    <c:when test="${player.code != null}">
-                                        <td><a href="${ctx}/board/log/player/${player.id}?code=${player.code}&game=${data.game}&room=${data.room}">PlayerLog</a></td>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <td>PlayerLog</td>
-                                    </c:otherwise>
-                                </c:choose>
-                                <c:choose>
-                                    <c:when test="${player.aiPlayer}">
-                                        <td>Loaded</td>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <td><a href="${ctx}/admin/player/${player.id}/ai/reload?room=${data.room}#savePlayersGame">LoadAI</a></td>
-                                    </c:otherwise>
-                                </c:choose>
-                                <c:choose>
-                                    <c:when test="${player.data == null}">
-                                        <td></td>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <td><form:input class="player-save" path="players[${status.index}].data"/></td>
-                                    </c:otherwise>
-                                </c:choose>
+                                <td><form:input class="input-id"
+                                                path="players[${status.index}].id"
+                                                readonly="true"
+                                                index="${status.index}"/></td>
                             </c:when>
-
                             <c:otherwise>
-                                <td><input type="text" readonly="true" class="input-id"       value="${player.id}"/></td>
-                                <td><input type="text" readonly="true" class="input-code"     value="${player.code}"/></td>
-                                <td><input type="text" readonly="true" class="input-readable" value="${player.readableName}"/></td>
-                                <td><input type="text" readonly="true" class="input-email"    value="${player.email}"/></td>
-                                <td><input type="text" readonly="true" class="input-room"     value="${player.room}"/></td>
-                                <td><input type="text" readonly="true" class="input-team"     value="${player.teamId}"/></td>
-                                <td><input type="text" readonly="true" class="input-score"    value="${player.score}"/></td>
-                                <td><input type="text" readonly="true" class="input-callback" value="${player.callbackUrl}"/></td>
+                                <td><input type="text"
+                                           readonly="true"
+                                           class="input-id"
+                                           value="${player.id}"/></td>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <c:choose>
+                            <c:when test="${player.active}">
+                                <td><form:input class="input-code"
+                                                path="players[${status.index}].code"
+                                                readonly="true"/></td>
+                            </c:when>
+                            <c:otherwise>
+                                <td><input type="text"
+                                           readonly="true"
+                                           class="input-code"
+                                           value="${player.code}"/></td>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <c:choose>
+                            <c:when test="${player.active}">
+                                <td><form:input class="input-readable"
+                                                path="players[${status.index}].readableName"/></td>
+                            </c:when>
+                            <c:otherwise>
+                                <td><input type="text"
+                                           readonly="true"
+                                           class="input-readable"
+                                           value="${player.readableName}"/></td>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <c:choose>
+                            <c:when test="${player.active}">
+                                <td><form:input class="input-email"
+                                                path="players[${status.index}].email"/></td>
+                            </c:when>
+                            <c:otherwise>
+                                <td><input type="text"
+                                           readonly="true"
+                                           class="input-email"
+                                           value="${player.email}"/></td>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <c:choose>
+                            <c:when test="${player.active}">
+                                <td><form:input class="input-room"
+                                                path="players[${status.index}].room"/></td>
+                            </c:when>
+                            <c:otherwise>
+                                <td><input type="text"
+                                           readonly="true"
+                                           class="input-room"
+                                           value="${player.room}"/></td>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <c:choose>
+                            <c:when test="${player.active}">
+                                <td><form:input class="input-team"
+                                                path="players[${status.index}].teamId"/></td>
+                            </c:when>
+                            <c:otherwise>
+                                <td><input type="text"
+                                           readonly="true"
+                                           class="input-team"
+                                           value="${player.teamId}"/></td>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <c:choose>
+                            <c:when test="${player.active}">
+                                <td><form:input class="input-score"
+                                                path="players[${status.index}].score"/></td>
+                            </c:when>
+                            <c:otherwise>
+                                <td><input type="text"
+                                           readonly="true"
+                                           class="input-score"
+                                           value="${player.score}"/></td>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <c:choose>
+                            <c:when test="${player.active}">
+                                <td><form:input class="input-callback"
+                                                path="players[${status.index}].callbackUrl"/></td>
+                            </c:when>
+                            <c:otherwise>
+                                <td><input type="text"
+                                           readonly="true"
+                                           class="input-callback"
+                                           value="${player.callbackUrl}"/></td>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <c:choose>
+                            <c:when test="${player.active}">
+                                <td>&nbsp;<span class="input-ticks-inactive">${player.ticksInactive}</span>&nbsp;</td>
+                            </c:when>
+                            <c:otherwise>
                                 <td>&nbsp;<span class="input-ticks-inactive"></span>&nbsp;</td>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <c:choose>
+                            <c:when test="${player.code != null && player.active}">
+                                <td class="joystick">
+                                    <span class="a" href="${ctx}/rest/joystick/player/${player.id}/do/up#players">U</span>
+                                    <span class="a" href="${ctx}/rest/joystick/player/${player.id}/do/down#players">D</span>
+                                    <span class="a" href="${ctx}/rest/joystick/player/${player.id}/do/left#players">L</span>
+                                    <span class="a" href="${ctx}/rest/joystick/player/${player.id}/do/right#players">R</span>
+                                    <span class="a" href="${ctx}/rest/joystick/player/${player.id}/do/act#players">A</span>
+                                </td>
+                            </c:when>
+                            <c:otherwise>
                                 <td>UDLRA</td>
-                                <td><a href="${ctx}/board/room/${data.room}">${data.room}</a></td>
-                                <td>Save</td>
-                                <c:choose>
-                                    <c:when test="${player.saved}">
-                                        <td><a href="${ctx}/admin/player/${player.id}/load?room=${data.room}#savePlayersGame">Load</a></td>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <td>Load</td>
-                                    </c:otherwise>
-                                </c:choose>
-                                <c:choose>
-                                    <c:when test="${player.saved}">
-                                        <td><a href="${ctx}/admin/player/${player.id}/save/remove?room=${data.room}#savePlayersGame">RemoveSave</a></td>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <td>RemoveSave</td>
-                                    </c:otherwise>
-                                </c:choose>
-                                <c:choose>
-                                    <c:when test="${player.code != null}">
-                                        <td><a href="${ctx}/admin/player/${player.id}/registration/remove?room=${data.room}#savePlayersGame">RemoveReg</a></td>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <td>RemoveReg</td>
-                                    </c:otherwise>
-                                </c:choose>
-                                <td>GameOver</td>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <td><a href="${ctx}/board/room/${data.room}">${data.room}</a></td>
+
+                        <c:choose>
+                            <c:when test="${player.active}">
+                                <td>
+                                    <input type="submit" name="action"
+                                           formaction="admin?player=${player.id}#players"
+                                           value="${data.actions.savePlayer}"/>
+                                </td>
+                            </c:when>
+                            <c:otherwise>
+                                <td>${data.actions.savePlayer}</td>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <c:choose>
+                            <c:when test="${player.saved}">
+                                <td>
+                                    <input type="submit" name="action"
+                                           formaction="admin?player=${player.id}#players"
+                                           value="${data.actions.loadPlayer}"/>
+                                </td>
+                            </c:when>
+                            <c:otherwise>
+                                <td>${data.actions.loadPlayer}</td>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <c:choose>
+                            <c:when test="${player.saved}">
+                                <td>
+                                    <input type="submit" name="action"
+                                           formaction="admin?player=${player.id}#players"
+                                           value="${data.actions.removePlayersSave}"/>
+                                </td>
+                            </c:when>
+                            <c:otherwise>
+                                <td>${data.actions.removePlayersSave}</td>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <c:choose>
+                            <c:when test="${player.code != null}">
+                                <td>
+                                    <input type="submit" name="action"
+                                           formaction="admin?player=${player.id}#players"
+                                           value="${data.actions.removePlayerRegistration}"/>
+                                </td>
+                            </c:when>
+                            <c:otherwise>
+                                <td>${data.actions.removePlayerRegistration}</td>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <c:choose>
+                            <c:when test="${player.active}">
+                                <td>
+                                    <input type="submit" name="action"
+                                           formaction="admin?player=${player.id}#players"
+                                           value="${data.actions.gameOverPlayer}"/>
+                                </td>
+                            </c:when>
+                            <c:otherwise>
+                                <td>${data.actions.gameOverPlayer}</td>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <c:choose>
+                            <c:when test="${player.active}">
+                                <td><a href="${ctx}/board/player/${player.id}?code=${player.code}">ViewGame</a></td>
+                            </c:when>
+                            <c:otherwise>
                                 <td>ViewGame</td>
-                                <c:choose>
-                                    <c:when test="${player.code != null}">
-                                        <td><a href="${ctx}/board/log/player/${player.id}?code=${player.code}&game=${data.game}&room=${data.room}">PlayerLog</a></td>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <td>PlayerLog</td>
-                                    </c:otherwise>
-                                </c:choose>
-                                <td>LoadAI</td>
-                                <c:choose>
-                                    <c:when test="${player.data == null}">
-                                        <td></td>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <td><form:input class="player-save" path="players[${status.index}].data"/></td>
-                                    </c:otherwise>
-                                </c:choose>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <c:choose>
+                            <c:when test="${player.code != null}">
+                                <td><a href="${ctx}/board/log/player/${player.id}?code=${player.code}&game=${data.game}&room=${data.room}">PlayerLog</a></td>
+                            </c:when>
+                            <c:otherwise>
+                                <td>PlayerLog</td>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <c:choose>
+                            <c:when test="${player.aiPlayer}">
+                                <td>Loaded</td>
+                            </c:when>
+                            <c:when test="${!player.active}">
+                                <td>${data.actions.loadAIForPlayer}</td>
+                            </c:when>
+                            <c:otherwise>
+                                <td>
+                                    <input type="submit" name="action"
+                                           formaction="admin?player=${player.id}#players"
+                                           value="${data.actions.loadAIForPlayer}"/>
+                                </td>
+
+                                <td><a href="${ctx}/admin/player/${player.id}/ai/reload?room=${data.room}#players">LoadAI</a></td>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <c:choose>
+                            <c:when test="${player.data == null}">
+                                <td></td>
+                            </c:when>
+                            <c:otherwise>
+                                <td><form:input class="player-save"
+                                                path="players[${status.index}].data"/></td>
                             </c:otherwise>
                         </c:choose>
                     </tr>
                 </c:forEach>
                 <tr>
                     <td>
-                        <input type="hidden" name="game" value="${data.game}"/>
-                        <input type="hidden" name="room" value="${data.room}"/>
-                        <input type="submit" value="Save all"/>
+                        <input type="submit" name="action"
+                               value="${data.actions.updateAllPlayers}"/>
                     </td>
                 </tr>
             </table>

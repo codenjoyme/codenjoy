@@ -245,7 +245,8 @@ function initRegistration(waitApprove, contextPath) {
         }
 
         var select = $(selector).find('select');
-        if (!!value) {
+        var hasOption = !!value && select.find('option[value="' + value + '"]').length != 0;
+        if (hasOption) {
             select.val(value);
         }
 

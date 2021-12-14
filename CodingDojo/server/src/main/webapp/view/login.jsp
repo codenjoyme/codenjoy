@@ -88,12 +88,12 @@ License along with this program.  If not, see
                 </c:if>
                 <c:if test="${param.closed}">
                     <div id="error-message" class="error-message">
-                        <spring:message key="registration.room.closed" />
+                        <spring:message key="registration.room.suspended" />
                     </div>
                 </c:if>
                 <c:if test="${!opened}">
                     <div id="error-message" class="error-message">
-                        <spring:message key="registration.closed" />
+                        <spring:message key="registration.suspended" />
                     </div>
                 </c:if>
                 <c:if test="${opened || adminLogin}">

@@ -2,7 +2,7 @@
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2021 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -20,38 +20,4 @@
  * #L%
  */
 
-#settings,
-#csrf {
-    display: none;
-}
-
-.score-info {
-    color:yellow;
-    text-shadow: 6px 6px 10px black, 4px 4px 4px red;
-    font-size:90px;
-    display:none;
-    line-height:0.8;
-}
-
-.width-calculator {
-    position: absolute;
-    visibility: hidden;
-    height: auto;
-    width: auto;
-    white-space:nowrap;
-}
-
-.player-canvas table {
-    width:100%;
-}
-
-body {
-    margin: -4px;
-    padding: 0px;
-    background-color: #263852 !important;
-    overflow: hidden;
-}
-
-canvas {
-    width: 100%;
-}
+var doNothing = true;

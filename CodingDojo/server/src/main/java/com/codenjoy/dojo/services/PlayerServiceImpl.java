@@ -701,7 +701,8 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public boolean isRegistrationOpened() {
-        return config.isRegistrationOpened();
+        return config.isRegistrationOpened()
+                && roomService.isOpened();
     }
 
     @Override

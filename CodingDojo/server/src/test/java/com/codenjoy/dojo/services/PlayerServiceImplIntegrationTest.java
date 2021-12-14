@@ -156,9 +156,10 @@ public class PlayerServiceImplIntegrationTest {
                 inv -> getOrCreateGameType(inv.getArgument(0))
         );
 
-        // по умолчанию все команаты будут активными и открытыми для регистрации
+        // по умолчанию все комнаты будут активными и открытыми для регистрации
         when(gameService.exists(anyString())).thenReturn(true);
         when(roomService.isOpened(anyString())).thenReturn(true);
+        when(roomService.isOpened()).thenReturn(true);
 
         // первый плеер зарегался (у него сейвов нет)
         when(saver.loadGame(anyString())).thenReturn(PlayerSave.NULL);

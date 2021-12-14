@@ -47,6 +47,10 @@ public class RoomService {
                 .orElse(false);
     }
 
+    /**
+     * @param room Проверяемая комната.
+     * @return Открыта ли эта комната для регистрации?
+     */
     public boolean isOpened(String room) {
         if (!exists(room)) {
             // комната которой не существует должна быть открыта для регистрации
@@ -55,6 +59,14 @@ public class RoomService {
         }
 
         return rooms.get(room).isOpened();
+    }
+
+    /**
+     * @return Есть ли хоть одна открытая комната для регистрации?
+     */
+    public boolean isOpened() {
+        return rooms.values().stream()
+                .anyMatch(RoomState::isOpened);
     }
 
     public boolean exists(String room) {
@@ -76,6 +88,11 @@ public class RoomService {
                 .ifPresent(state -> state.setActive(value));
     }
 
+    /**
+     * Открывает/закрывает комнату для регистрации.
+     * @param room Исходная комната.
+     * @param value true, если комната будет открыта для регистрации.
+     */
     public void setOpened(String room, boolean value) {
         state(room)
                 .ifPresent(state -> state.setOpened(value));
@@ -131,7 +148,7 @@ public class RoomService {
      * @return Возвращает все комнаты конкретной игры
      * независимо от того открыта ли регистрация для комнат или нет.
      */
-    public List<String> gameRooms(String game) { // TODO #4FS тут проверить
+    public List<String> gameRooms(String game) {
         return rooms.values().stream()
                 .filter(state -> state.getGame().equals(game))
                 .map(RoomState::getRoom)
@@ -139,22 +156,22 @@ public class RoomService {
     }
 
     /**
-     * @return Возвращает все игры и их комнаты
+     * @return Возвращает все игры и их комнаты.
      */
     public GamesRooms gamesRooms() {
         return gamesRooms(false);
     }
 
     /**
-     * @return Возвращает открытые для регистрации игры и их комнаты
+     * @return Возвращает открытые для регистрации игры и их комнаты.
      */
     public GamesRooms openedGamesRooms() {
         return gamesRooms(true);
     }
 
     /**
-     * @param onlyOpened true если нужны только открытые для регистрации игры
-     * @return Возвращает открытые (или все) для регистрации игры и их комнаты
+     * @param onlyOpened true если нужны только открытые для регистрации игры.
+     * @return Возвращает открытые (или все) для регистрации игры и их комнаты.
      */
     private GamesRooms gamesRooms(boolean onlyOpened) {
         return new GamesRooms(rooms.values().stream()
@@ -188,18 +205,26 @@ public class RoomService {
                 .orElse(-1);
     }
 
-    public void setOpenedGames(List<String> games) { // TODO #4FS тут проверить
-        rooms.values().stream()
-                .forEach(roomState -> {
-                    boolean opened = games.contains(roomState.getGame());
-                    roomState.setOpened(opened);
-                });
+    /**
+     * Открывает регистрацию для комнат заданного списка игр.
+     * @param games Список игр, для комнат которых регистрация будет открыта.
+     */
+    public void setOpenedGames(List<String> games) {
+        rooms.values().forEach(roomState -> {
+            boolean opened = games.contains(roomState.getGame());
+            roomState.setOpened(opened);
+        });
     }
 
-    public List<String> openedGames() { // TODO #4FS тут проверить
+    /**
+     * @return Список игр у которых есть хоть одна комната с открытой регистрацией.
+     */
+    public List<String> openedGames() {
         return rooms.values().stream()
                 .filter(RoomState::isOpened)
-                .map(RoomState::getRoom)
+                .map(RoomState::getGame)
+                .distinct()
+                .sorted()
                 .collect(toList());
     }
 

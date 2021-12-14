@@ -88,7 +88,7 @@ License along with this program.  If not, see
             <div class="inputs">
                 <c:if test="${!opened}">
                     <div id="error-message" class="error-message">
-                        <spring:message key="registration.closed" />
+                        <spring:message key="registration.suspended" />
                     </div>
                 </c:if>
                 <c:if test="${opened}">

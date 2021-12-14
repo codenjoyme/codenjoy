@@ -22,8 +22,7 @@ package com.codenjoy.dojo.services.security;
  * #L%
  */
 
-import com.codenjoy.dojo.web.controller.AdminController;
-import lombok.NoArgsConstructor;
+import com.codenjoy.dojo.web.controller.admin.AdminController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;

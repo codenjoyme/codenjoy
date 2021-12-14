@@ -32,14 +32,12 @@ import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
 @RequiredArgsConstructor
-public class BoardPage {
+public class BoardPage extends PageObject {
 
     // selectors
     public static final String URL = "/board/player/<PLAYER_ID>?code=<CODE>";
 
     // page objects
-    private final Page page;
-    private final WebDriverWrapper web;
     private final Leaderboard leaderboard;
 
     public void open() {

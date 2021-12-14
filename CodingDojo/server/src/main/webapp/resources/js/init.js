@@ -71,8 +71,9 @@ setup['debugger'] = function() {
     debugger;
 }
 
-var getSettings = function(name) {
-    var value = $('#settings').attr(name);
+var getSettings = function(name, group) {
+    group = (!group) ? '#settings' : group;
+    var value = $(group).attr(name);
 
     if (typeof(value) === 'undefined') {
         return null
@@ -106,10 +107,25 @@ var getTickTime = function(time, readable) {
                                '.' + date.getMilliseconds()));
 }
 
+var setupCsrf = function() {
+    if (!!(setup.csrfToken = getSettings('token', '#csrf'))) {
+        setup.csrfParameterName = getSettings('parameter', '#csrf');
+        setup.csrfHeaderName = getSettings('header', '#csrf');
+        setup.csrfAjaxHeader = {};
+        setup.csrfAjaxHeader[setup.csrfHeaderName] = setup.csrfToken;
+    } else {
+        setup.csrfToken = null;
+        setup.csrfParameterName = null;
+        setup.csrfHeaderName = null;
+        setup.csrfAjaxHeader = null;
+    }
+}
+
 var pages = pages || {};
 
-$(document).ready(function () {
-    var page = getSettings('page');
+$(document).ready(function() {
+    setupCsrf();
 
+    var page = getSettings('page');
     pages[page]();
 });
