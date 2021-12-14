@@ -1256,7 +1256,7 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
     };
 
     var buildBoll = function() {
-        var ball = '<div id="ball" class="ball hidden"><img src = "../../resources/icancode/../sprite/icancode/befunge/ball.png"></div>';
+        var ball = '<div id="ball" class="ball hidden"><img src = "../../resources/icancode/sprite/befunge/ball.png"></div>';
         $("#cardSlots").append(ball);
     };
 
