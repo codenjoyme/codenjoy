@@ -74,7 +74,9 @@ var initLoginLogoutLink = function() {
     }
 }
 
-setup.onBoardAllPageLoad = function(showProgress) {
+// ========================== user page ==========================
+
+var leaderBoard = function(showProgress) {
     initLayout(setup.game, 'leaderboard.html', setup.contextPath,
         null,
         [],
@@ -83,6 +85,21 @@ setup.onBoardAllPageLoad = function(showProgress) {
             initHelpLink();
             initAdditionalLink();
             initLoginLogoutLink();
+        });
+}
+
+var playerBoard = function() {
+    initLayout(setup.game, 'board.html', setup.contextPath,
+        null,
+        [],
+        function() {
+            if (this.hasOwnProperty('boardPageLoad')) {
+                boardPageLoad();
+                initLeaderboardLink();
+                initHelpLink();
+                initAdditionalLink();
+                initLoginLogoutLink();
+            }
         });
 }
 
@@ -122,16 +139,6 @@ if (typeof setup == 'undefined') {
 
 var controller;
 
-const PARAM_GAME_MODE = 'gameMode';
-
-const SPRITES_EKIDS = 'ekids';
-const SPRITES_ROBOT = 'robot';
-
-const MODE_JS = 'javascript';
-const MODE_EKIDS = 'ekids';
-const MODE_BEFUNGE = 'befunge';
-const MODE_CONTEST = 'contest';
-
 setup.setupGame = function() {
     setup.enableDonate = false;
     setup.enableJoystick = false;
@@ -145,92 +152,18 @@ setup.setupGame = function() {
     setup.enableAdvertisement = false;
     setup.showBody = false;
     setup.debug = false;
+}
 
-    // ==================== gameMode / sprites / controls ========================
-
-    // так как спрайты icancode вылазят за сетку элемента,
-    // то надо рисовать всегда все спрайты
-    setup.isDrawOnlyChanges = false;
-
-    var toLowerCase = function(param) {
-        return (!!param) ? param.toLowerCase() : param;
-    }
-
-    setup.gameMode = toLowerCase(getSettings(PARAM_GAME_MODE, '#query'));
-    setup.onlyControls = getSettings('controlsOnly', '#query');
-
-    if (setup.onlyControls) {
-        setup.drawCanvases = false;
-        setup.enableHeader = false;
-        setup.enableFooter = false;
-        if (!setup.gameMode) { // TODO удалить if после изменения линков на dojorena
-            setup.gameMode = MODE_JS;
-        }
+setup.onPageLoad = function(allPlayers) {
+    if (allPlayers) {
+        leaderBoard(false);
+    } else if (setup.onlyLeaderBoard) {
+        leaderBoard(true);
     } else {
-        setup.enableHeader = true;
-        setup.enableFooter = true;
-    }
-
-    if (!setup.gameMode) {
-        // check KEYS constants in register.js
-        setup.gameMode = toLowerCase(localStorage.getItem(PARAM_GAME_MODE));
-
-        // TODO почему-то сторится в сторадж строчка "undefined"
-        if (setup.gameMode == 'undefined') {
-            localStorage.removeItem(PARAM_GAME_MODE);
-            setup.gameMode = null;
-        }
-    }
-
-    // TODO это тут надо потому что join на main page и
-    //      форма регистрации иногда отпускает без указания мода
-    if (!setup.gameMode) {
-        setup.gameMode = MODE_JS;
-    }
-
-    if (setup.gameMode == MODE_JS) {
-        setup.enableBefunge = false;
-        setup.sprites = SPRITES_ROBOT;
-    } else if (setup.gameMode == MODE_EKIDS) {
-        setup.enableBefunge = true;
-        setup.sprites = SPRITES_EKIDS;
-    } else if (setup.gameMode == MODE_BEFUNGE) {
-        setup.enableBefunge = true;
-        setup.sprites = SPRITES_ROBOT;
-    } else if (setup.gameMode == MODE_CONTEST) {
-        setup.enableBefunge = false;
-        setup.sprites = SPRITES_ROBOT;
-        setup.onlyLeaderBoard = true;
-    } else {
-        throw new Error("Unknown iCanCode mode: " + setup.gameMode);
-    }
-    setup.isDrawByOrder = true;
-
-    // ========================== user page ==========================
-
-    if (setup.onlyLeaderBoard) {
-        setup.onBoardPageLoad = function() {
-            var showProgress = true;
-            setup.onBoardAllPageLoad(showProgress);
-        }
-    } else {
-        setup.onBoardPageLoad = function() {
-            initLayout(setup.game, 'board.html', setup.contextPath,
-                null,
-                [],
-                function() {
-                    if (this.hasOwnProperty('boardPageLoad')) {
-                        boardPageLoad();
-                        initLeaderboardLink();
-                        initHelpLink();
-                        initAdditionalLink();
-                        initLoginLogoutLink();
-                    }
-                });
-        }
+        playerBoard();
     }
 }
 
 if (setup.demo) {
-    setup.onBoardPageLoad();
+    setup.onPageLoad(false);
 }

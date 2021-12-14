@@ -34,6 +34,7 @@ setup.enableAdvertisement = false;
 setup.showBody = true;
 setup.sprites = null;
 setup.heroInfo = null;
+
 /**
  * На канве будут прорисовываться только измененные
  * (между двумя тиками) спрайты, что сильно улучшит
@@ -42,6 +43,7 @@ setup.heroInfo = null;
  * (больше 30 штук) больших по размеру (от 50x50) борд.
  */
 setup.isDrawOnlyChanges = true;
+
 /**
  * true - если спрайты будут рисоваться по типам
  * в порядке, указанном в Elements. Иначе спрайты
@@ -49,11 +51,13 @@ setup.isDrawOnlyChanges = true;
  * от их типа (слева направо, сверху вниз)
  */
 setup.isDrawByOrder = false;
+
 /**
  * true если background и fog мы размножаем по канве,
  * false если растягиваем.
  */
 setup.isFillOrStrechBackground = true;
+
 /**
  * Печатать ли пришедшую борду с каждым тиком в консоль аль нет
  */
@@ -62,11 +66,30 @@ setup.canvasCursor = 'auto';
 setup.loadBoardData = true;
 setup.drawCanvases = true;
 setup.enableChat = true;
+
 setup.setupGame = function() {
-    // override this method if you want to do something before board page loading
+    // override this method if you want to do
+    // something before board page loading
 }
+
 setup.setupSprites = function() {
-    // override this method if you want to customize sprites before draw
+    // override this method if you want to customize
+    // sprites after loading data from server
+}
+
+setup.onPageLoad = function(allPlayers) {
+    // override this method if you want to customize
+    // onBoardAllPageLoad/onBoardPageLoad methods
+
+    if (allPlayers) {
+        if (!!setup.onBoardAllPageLoad) {
+            setup.onBoardAllPageLoad();
+        }
+    } else {
+        if (!!setup.onBoardPageLoad) {
+            setup.onBoardPageLoad();
+        }
+    }
 }
 
 setup.debug = false;

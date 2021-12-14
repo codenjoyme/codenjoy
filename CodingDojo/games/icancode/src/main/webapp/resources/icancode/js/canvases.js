@@ -20,4 +20,73 @@
  * #L%
  */
 
-// do nothing
+const PARAM_GAME_MODE = 'gameMode';
+
+const SPRITES_EKIDS = 'ekids';
+const SPRITES_ROBOT = 'robot';
+
+const MODE_JS = 'javascript';
+const MODE_EKIDS = 'ekids';
+const MODE_BEFUNGE = 'befunge';
+const MODE_CONTEST = 'contest';
+
+setup.setupSprites = function() {
+
+    // так как спрайты icancode вылазят за сетку элемента,
+    // то надо рисовать всегда все спрайты
+    setup.isDrawOnlyChanges = false;
+
+    var toLowerCase = function (param) {
+        return (!!param) ? param.toLowerCase() : param;
+    }
+
+    setup.gameMode = toLowerCase(getSettings(PARAM_GAME_MODE, '#query'));
+    setup.onlyControls = getSettings('controlsOnly', '#query');
+
+    if (setup.onlyControls) {
+        setup.drawCanvases = false;
+        setup.enableHeader = false;
+        setup.enableFooter = false;
+        if (!setup.gameMode) { // TODO удалить if после изменения линков на dojorena
+            setup.gameMode = MODE_JS;
+        }
+    } else {
+        setup.enableHeader = true;
+        setup.enableFooter = true;
+    }
+
+    if (!setup.gameMode) {
+        // check KEYS constants in register.js
+        setup.gameMode = toLowerCase(localStorage.getItem(PARAM_GAME_MODE));
+
+        // TODO почему-то сторится в сторадж строчка "undefined"
+        if (setup.gameMode == 'undefined') {
+            localStorage.removeItem(PARAM_GAME_MODE);
+            setup.gameMode = null;
+        }
+    }
+
+    // TODO это тут надо потому что join на main page и
+    //      форма регистрации иногда отпускает без указания мода
+    if (!setup.gameMode) {
+        setup.gameMode = MODE_JS;
+    }
+
+    if (setup.gameMode == MODE_JS) {
+        setup.enableBefunge = false;
+        setup.sprites = SPRITES_ROBOT;
+    } else if (setup.gameMode == MODE_EKIDS) {
+        setup.enableBefunge = true;
+        setup.sprites = SPRITES_EKIDS;
+    } else if (setup.gameMode == MODE_BEFUNGE) {
+        setup.enableBefunge = true;
+        setup.sprites = SPRITES_ROBOT;
+    } else if (setup.gameMode == MODE_CONTEST) {
+        setup.enableBefunge = false;
+        setup.sprites = SPRITES_ROBOT;
+        setup.onlyLeaderBoard = true;
+    } else {
+        throw new Error("Unknown iCanCode mode: " + setup.gameMode);
+    }
+    setup.isDrawByOrder = true;
+}
