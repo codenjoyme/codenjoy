@@ -32,8 +32,8 @@ pages.board = function() {
     setup.allPlayersScreen = getSettings('allPlayersScreen');
     setup.contextPath = getSettings('contextPath');
 
-    if (!!setup.gameSetup) {
-        setup.gameSetup();
+    if (!!setup.setupGame) {
+        setup.setupGame();
     }
     initBoardPage(setup, initBoardComponents);
     initHotkeys();

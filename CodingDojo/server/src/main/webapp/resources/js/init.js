@@ -62,6 +62,9 @@ setup.canvasCursor = 'auto';
 setup.loadBoardData = true;
 setup.drawCanvases = true;
 setup.enableChat = true;
+setup.setupGame = function() {
+    // override this method if you want to do something before board page loading
+}
 setup.setupSprites = function() {
     // override this method if you want to customize sprites before draw
 }
