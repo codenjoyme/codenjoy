@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.services.jdbc;
+package com.codenjoy.dojo.web.controller.exception;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2018 - 2021 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,12 +22,8 @@ package com.codenjoy.dojo.services.jdbc;
  * #L%
  */
 
-
-import com.codenjoy.dojo.web.controller.exception.UserRegistrationException;
-
-import java.sql.Connection;
-
-@FunctionalInterface
-public interface For<T> {
-    T run(Connection connection) throws UserRegistrationException;
+public class UserRegistrationException extends Exception{
+    public UserRegistrationException(String message) {
+        super(message);
+    }
 }

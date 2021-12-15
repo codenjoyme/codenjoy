@@ -34,21 +34,27 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Collection;
 
 @Controller
 @RequestMapping(RegistrationController.URI)
 @AllArgsConstructor
 public class RegistrationController {
 
-    private static final String ADMIN = "/admin";
     public static final String URI = "/register";
 
+    private static final String ADMIN = "/admin";
+    private static final String LOGIN_PAGE = "redirect:/login";
+
     private PlayerService playerService;
-    private RoomsAliaser rooms;
     private Registration registration;
     private RegistrationValidator registrationValidator;
     private RegistrationService registrationService;
@@ -80,25 +86,57 @@ public class RegistrationController {
         return registrationService.openRegistrationForm(request, model, id, email, fullName, name, github, slackId, true);
     }
 
+    @PostMapping()
+    public String registerByName(@Valid Player player, BindingResult result, HttpServletRequest request, Model model) {
+        if (noValidationErrors(result) && hasUniqueGithubUsername(player.getGitHubUsername())) {
+
+            if (player.getId() == null) {
+                player.setId(Hash.getRandomId());
+            }
+
+            boolean successfulRegistration = registerPlayer(player.getId(), player.getEmail(), player.getFullName(), player.getReadableName(),
+                    player.getPassword(), player.getData(), GameAuthorities.USER.roles(), player.getGitHubUsername(), player.getSlackEmail());
+
+            if (successfulRegistration) {
+                return LOGIN_PAGE;
+            }
+
+            return redirectToRegistrationForm(request, model, player, null, player.getEmail(),
+                    player.getFullName(), player.getReadableName(), player.getGitHubUsername(), player.getSlackEmail());
+        }
+
+        return redirectToRegistrationForm(request, model, player, null, player.getEmail(),
+                player.getFullName(), player.getReadableName(), player.getGitHubUsername(), player.getSlackEmail());
+    }
+
+    private boolean registerPlayer(String id, String email, String fullName, String readableName,
+                                   String password, String data, Collection<String> roles, String gitHubUsername, String slackEmail) {
+        registration.register(id, email, fullName, readableName, password, data, roles, gitHubUsername, slackEmail);
+        return registration.cacheContainsGithubUsername(gitHubUsername);
+    }
+
+    private boolean hasUniqueGithubUsername(String gitHubUsername) {
+        return registration.checkCacheIfUniqueGithubUsername(gitHubUsername);
+    }
+
+    private boolean noValidationErrors(BindingResult result) {
+        return !result.hasErrors();
+    }
+
+    private String redirectToRegistrationForm(HttpServletRequest request, Model model, Player player,
+                                              String id,
+                                              String email,
+                                              String fullName,
+                                              String name,
+                                              String github,
+                                              String slackEmail) {
+        populateCommonRegistrationModel(model, false);
+        player.dropPassword();
+        return registrationService.openRegistrationForm(request, model, id, email, fullName, name, github, slackEmail);
+    }
+
     private void populateCommonRegistrationModel(Model model, boolean isAdminLogin) {
         model.addAttribute("adminLogin", isAdminLogin);
         model.addAttribute("opened", playerService.isRegistrationOpened());
-    }
-
-    @PostMapping()
-    public String registerByName(@Valid Player player, BindingResult result, HttpServletRequest request, Model model) {
-        if (result.hasErrors()) {
-            populateCommonRegistrationModel(model, false);
-            player.dropPassword();
-            return registrationService.openRegistrationForm(request, model, null, player.getEmail(), player.getFullName(), player.getReadableName(), player.getGitHubUsername(), player.getSlackEmail());
-        }
-
-
-        if (player.getId() == null) {
-            player.setId(Hash.getRandomId());
-        }
-        registration.register(player.getId(), player.getEmail(), player.getFullName(), player.getReadableName(), player.getPassword(), player.getData(), GameAuthorities.USER.roles(), player.getGitHubUsername(), player.getSlackEmail());
-
-        return "redirect:/login";//registrationService.register(player, room, result, request, model);
     }
 }
