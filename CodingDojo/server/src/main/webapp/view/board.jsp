@@ -52,11 +52,20 @@
         <div id="donate" style="display:none;">
             <input type="button" id="want-donate" value="Помочь проекту..."/>
         </div>
-        <%@include file="canvases.jsp"%>
-        <%@include file="leaderboard.jsp"%>
+        <br>
+        <div class="separator">
+            <%@include file="leaderstable.jsp"%>
+            <div style = "flex:0 0 37%;">
+                <label> !</label>
+            </div>
+            <%@include file="leaderboard.jsp"%>
+        </div>
         <%@include file="advertisement.jsp"%>
         <%@include file="donate.jsp"%>
         <%@include file="widgets.jsp"%>
+        <div hidden>
+            <%@include file="canvases.jsp"%>
+        </div>
     </div>
 </body>
 </html>

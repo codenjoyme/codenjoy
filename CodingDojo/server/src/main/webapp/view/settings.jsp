@@ -43,18 +43,18 @@
 </style>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
-<br><br>
-    <div>
-        <label style="width:80%" for="email">
-            <font size="3">Receive email notifications.</font>
-        </label>
+    <div class="querySubscription">
         <form id="form" name="form" action="${ctx}/board/feedback" method="POST">
-            <table>
+            <caption style="padding: 10px;"> <font class="white-text" size="3">Settings for notifications.</font> </caption>
+            <table class= "add-border">
+                <th class="white-text add-border" style="width:15%">Email</th>
+                <th class="white-text add-border" style="width:15%">Slack</th>
+                <th class="white-text add-border" style="width:70%">Event Description</th>
                 <c:forEach items="${subscribed}" var="currentSubscription">
-                    <tr>
+                    <tr class= "add-border">
                       <c:choose>
                         <c:when test="${currentSubscription.emailSubscription}">
-                            <td>
+                            <td class="white-text">
                                 <input type="checkbox"
                                  id="email${currentSubscription.query.id}"
                                   name="email${currentSubscription.query.id}"
@@ -64,7 +64,7 @@
                             </td>
                         </c:when>
                         <c:otherwise>
-                            <td>
+                            <td class="white-text add-border">
                                 <input type="checkbox"
                                  id="email${currentSubscription.query.id}"
                                   name="email${currentSubscription.query.id}"
@@ -75,7 +75,7 @@
                       </c:choose>
                       <c:choose>
                         <c:when test="${currentSubscription.slackSubscription}">
-                            <td>
+                            <td class="white-text add-border">
                                 <input type="checkbox"
                                  id="slackEmail${currentSubscription.query.id}"
                                   name="slackEmail${currentSubscription.query.id}"
@@ -84,7 +84,7 @@
                             </td>
                         </c:when>
                         <c:otherwise>
-                            <td>
+                            <td class="white-text add-border">
                             <c:choose>
                                 <c:when test="${isSlackSubscribed}">
                                     <input type="checkbox"
@@ -104,22 +104,25 @@
                             </td>
                         </c:otherwise>
                       </c:choose>
-                      <td><c:out value="${currentSubscription.query.id}."/></td>
-                      <td><c:out value="${currentSubscription.query.description}"/></td>
+                      <td class="white-text add-border">
+                        <c:out value="${currentSubscription.query.id}."/>
+                        <c:out value="${currentSubscription.query.description}"/>
+                      </td>
                     </tr>
                 </c:forEach>
+                <textarea id="playerId" name="playerId" hidden>"${playerId}"</textarea>
+                <textarea id="game" name="game" hidden>"${game}"</textarea>
+                <textarea id="code" name="code" hidden>"${code}"</textarea>
+                <tr class= "add-border">
+                    <td colspan="3">
+                        <a style="align = left" onclick="pop()"><font size="3">Submit</font></a>
+                        <span id="myPopup" hidden></br>
+                            <p class="white-text">Give us your feedback: </p>
+                            <textarea id="feedback" name="feedback" for="form" style="color: black !important;resize:none;width:100%;" required></textarea>
+                            <button class="btn-submit" style="color: black !important;" id="submit-button" for="form" type="submit">Submit</button>
+                        </span>
+                    </td>
+                </tr>
             </table>
-            <textarea id="playerId" name="playerId" hidden>"${playerId}"</textarea>
-            <textarea id="game" name="game" hidden>"${game}"</textarea>
-            <textarea id="code" name="code" hidden>"${code}"</textarea>
-
-            <a onclick="pop()"><font size="20px">Submit</font></a>
-            <div class="popup">
-                <span class="popuptext" id="myPopup">
-                    Give us your feedback:
-                    <textarea id="feedback" name="feedback" for="form" style="resize:none;width:100%;" required></textarea>
-                    <button class="btn-submit" id="submit-button" for="form" type="submit">Submit</button>
-                </span>
-            </div>
         </form>
 </div>

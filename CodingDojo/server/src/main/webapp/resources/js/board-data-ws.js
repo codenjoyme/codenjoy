@@ -37,7 +37,7 @@ function initBoards(players, allPlayersScreen, game, playerId, contextPath){
 
     var socket = null;
     var reconnectOnError = function() {
-        $('body').css('background-color', 'bisque');
+//        $('body').css('background-color', 'bisque');
 
         setTimeout(function(){
             connectToServer();
@@ -63,7 +63,7 @@ function initBoards(players, allPlayersScreen, game, playerId, contextPath){
         socket.onmessage = function(message) {
             var data = JSON.parse(message.data);
 
-            $('body').css('background-color', 'white');
+//            $('body').css('background-color', 'white');
 
             $('body').trigger('board-updated', data);
 
