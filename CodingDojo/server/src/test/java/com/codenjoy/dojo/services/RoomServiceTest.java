@@ -28,17 +28,20 @@ import com.codenjoy.dojo.services.room.GamesRooms;
 import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.room.RoomState;
 import com.codenjoy.dojo.services.settings.Settings;
+import com.codenjoy.dojo.utils.smart.SmartAssert;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.IntStream;
 
 import static com.codenjoy.dojo.client.Utils.split;
 import static com.codenjoy.dojo.services.mocks.FirstGameSettings.Keys.PARAMETER1;
+import static com.codenjoy.dojo.utils.smart.SmartAssert.assertEquals;
+import static com.codenjoy.dojo.utils.smart.SmartAssert.assertNotEquals;
 import static java.util.stream.Collectors.toList;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 import static org.mockito.Mockito.mock;
 
 public class RoomServiceTest {
@@ -53,6 +56,11 @@ public class RoomServiceTest {
         service = new RoomService();
         game1 = new FirstGameType();
         game2 = new SecondGameType();
+    }
+
+    @After
+    public void after() {
+        SmartAssert.checkResult();
     }
 
     @Test
@@ -435,6 +443,159 @@ public class RoomServiceTest {
         assertEquals("first", service.game("room2"));
         assertEquals("second", service.game("room3"));
         assertEquals("second", service.game("room4"));
+    }
+
+    @Test
+    public void shouldGameRooms() {
+        // given
+        service.create("room1", game1);
+        service.create("room2", game1);
+        service.create("room3", game2);
+        service.create("room4", game2);
+
+        // when then
+        assertEquals("[room1, room2]",
+                service.gameRooms("first").toString());
+
+        assertEquals("[room3, room4]",
+                service.gameRooms("second").toString());
+
+        assertEquals("[]",
+                service.gameRooms("third").toString());
+    }
+
+    @Test
+    public void shouldOpenedGames_closeByGame() {
+        // given
+        service.create("room1", game1);
+        service.create("room2", game1);
+        service.create("room3", game2);
+        service.create("room4", game2);
+
+        // then
+        assertEquals("[first, second]", service.openedGames().toString());
+
+        assertEquals(true, service.isOpened());
+
+        assertEquals(true, service.isOpened("room1"));
+        assertEquals(true, service.isOpened("room2"));
+        assertEquals(true, service.isOpened("room3"));
+        assertEquals(true, service.isOpened("room4"));
+
+        // when then
+        service.setOpenedGames(Arrays.asList("second"));
+
+        assertEquals("[second]", service.openedGames().toString());
+
+        assertEquals(true, service.isOpened());
+
+        assertEquals(false, service.isOpened("room1"));
+        assertEquals(false, service.isOpened("room2"));
+        assertEquals(true, service.isOpened("room3"));
+        assertEquals(true, service.isOpened("room4"));
+
+        // when then
+        service.setOpenedGames(Arrays.asList("second", "first"));
+
+        assertEquals("[first, second]", service.openedGames().toString());
+
+        assertEquals(true, service.isOpened());
+
+        assertEquals(true, service.isOpened("room1"));
+        assertEquals(true, service.isOpened("room2"));
+        assertEquals(true, service.isOpened("room3"));
+        assertEquals(true, service.isOpened("room4"));
+
+        // when then
+        service.setOpenedGames(Arrays.asList("first"));
+
+        assertEquals("[first]", service.openedGames().toString());
+
+        assertEquals(true, service.isOpened());
+
+        assertEquals(true, service.isOpened("room1"));
+        assertEquals(true, service.isOpened("room2"));
+        assertEquals(false, service.isOpened("room3"));
+        assertEquals(false, service.isOpened("room4"));
+
+        // when then
+        service.setOpenedGames(Arrays.asList());
+
+        assertEquals("[]", service.openedGames().toString());
+
+        assertEquals(false, service.isOpened());
+
+        assertEquals(false, service.isOpened("room1"));
+        assertEquals(false, service.isOpened("room2"));
+        assertEquals(false, service.isOpened("room3"));
+        assertEquals(false, service.isOpened("room4"));
+    }
+
+    @Test
+    public void shouldOpenedGames_closeByRoom() {
+        // given
+        service.create("room1", game1);
+        service.create("room2", game1);
+        service.create("room3", game2);
+        service.create("room4", game2);
+
+        // then
+        assertEquals("[first, second]", service.openedGames().toString());
+
+        assertEquals(true, service.isOpened());
+
+        assertEquals(true, service.isOpened("room1"));
+        assertEquals(true, service.isOpened("room2"));
+        assertEquals(true, service.isOpened("room3"));
+        assertEquals(true, service.isOpened("room4"));
+
+        // when then
+        service.setOpened("room1", false);
+
+        assertEquals("[first, second]", service.openedGames().toString());
+
+        assertEquals(true, service.isOpened());
+
+        assertEquals(false, service.isOpened("room1"));
+        assertEquals(true, service.isOpened("room2"));
+        assertEquals(true, service.isOpened("room3"));
+        assertEquals(true, service.isOpened("room4"));
+
+        // when then
+        service.setOpened("room2", false);
+
+        assertEquals("[second]", service.openedGames().toString());
+
+        assertEquals(true, service.isOpened());
+
+        assertEquals(false, service.isOpened("room1"));
+        assertEquals(false, service.isOpened("room2"));
+        assertEquals(true, service.isOpened("room3"));
+        assertEquals(true, service.isOpened("room4"));
+
+        // when then
+        service.setOpened("room4", false);
+
+        assertEquals("[second]", service.openedGames().toString());
+
+        assertEquals(true, service.isOpened());
+
+        assertEquals(false, service.isOpened("room1"));
+        assertEquals(false, service.isOpened("room2"));
+        assertEquals(true, service.isOpened("room3"));
+        assertEquals(false, service.isOpened("room4"));
+
+        // when then
+        service.setOpened("room3", false);
+
+        assertEquals("[]", service.openedGames().toString());
+
+        assertEquals(false, service.isOpened());
+
+        assertEquals(false, service.isOpened("room1"));
+        assertEquals(false, service.isOpened("room2"));
+        assertEquals(false, service.isOpened("room3"));
+        assertEquals(false, service.isOpened("room4"));
     }
 
     @Test

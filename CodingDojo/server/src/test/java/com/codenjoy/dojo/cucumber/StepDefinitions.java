@@ -53,6 +53,7 @@ public class StepDefinitions {
         registration.close();
         clients.close();
         storage.close();
+        error.close();
     }
 
     @After
@@ -167,8 +168,8 @@ public class StepDefinitions {
                 country, techSkills, company, experience);
     }
 
-    @When("Try open Admin page")
-    public void tryOpenAdminPage() {
+    @Given("Open Admin page")
+    public void openAdminPage() {
         admin.open();
     }
 
@@ -190,7 +191,7 @@ public class StepDefinitions {
         error.assertOnPage();
         error.assertTicketNumber();
         error.assertErrorMessage(message);
-        error.clear();
+        error.close();
     }
 
     @Then("We are on page with url {string}")
@@ -221,25 +222,51 @@ public class StepDefinitions {
         assertAdminPageOpened(AdminPage.URL + "first");
     }
 
+    // ------------
+
     @Then("Registration is active")
     public void assertRegistrationIsActive() {
-        admin.assertRegistrationActive(true);
+        admin.serverRegistration().assertOpened();
     }
 
     @Then("Registration was closed")
     public void assertRegistrationWasClosed() {
-        admin.assertRegistrationActive(false);
+        admin.serverRegistration().assertClosed();
     }
 
     @When("Click Close registration")
     public void clickCloseRegistration() {
-        admin.registrationChangeActiveLink().click();
+        admin.serverRegistration().close();
     }
 
     @When("Click Open registration")
     public void clickOpenRegistration() {
-        clickCloseRegistration();
+        admin.serverRegistration().open();
     }
+
+    // ------------
+
+    @Then("Room registration is active")
+    public void assertRoomRegistrationIsActive() {
+        admin.roomRegistration().assertOpened();
+    }
+
+    @Then("Room registration was closed")
+    public void assertRoomRegistrationWasClosed() {
+        admin.roomRegistration().assertClosed();
+    }
+
+    @When("Click Close room registration")
+    public void clickCloseRoomRegistration() {
+        admin.roomRegistration().close();
+    }
+
+    @When("Click Open room registration")
+    public void clickOpenRoomRegistration() {
+        admin.roomRegistration().open();
+    }
+
+    // ------------
 
     @When("Open registration page")
     public void openRegistrationPage() {
@@ -256,25 +283,95 @@ public class StepDefinitions {
         login.assertFormHidden();
     }
 
+    // ------------
+
     @Then("Game is resumed")
     public void assertGameIsResumed() {
-        admin.assertGameIsActive(true);
+        admin.pauseResume().assertActive();
     }
 
     @When("Click Pause game")
     public void clickPauseGame() {
-        admin.pauseResumeGameLink().click();
+        admin.pauseResume().pauseGame();
     }
 
     @Then("Game is paused")
     public void assertGameIsPaused() {
-        admin.assertGameIsActive(false);
+        admin.pauseResume().assertPaused();
     }
 
     @When("Click Resume game")
     public void clickResumeGame() {
-        clickPauseGame();
+        admin.pauseResume().resumeGame();
     }
+
+    // ------------
+
+    @When("Click Start game recording")
+    public void clickStartGameRecording() {
+        admin.gameRecording().start();
+    }
+
+    @Then("Game recording is started")
+    public void assertGameRecordingIsStarted() {
+        admin.gameRecording().assertStarted();
+    }
+
+    @When("Click Stop game recording")
+    public void clickStopGameRecording() {
+        admin.gameRecording().stop();
+    }
+
+    @Then("Game recording is suspended")
+    public void assertGameRecordingIsSuspended() {
+        admin.gameRecording().assertSuspended();
+    }
+
+    // ------------
+
+    @When("Click Start debug")
+    public void clickStartDebug() {
+        admin.debug().start();
+    }
+
+    @Then("Debug is started")
+    public void assertDebugIsStarted() {
+        admin.debug().assertStarted();
+    }
+
+    @When("Click Stop debug")
+    public void clickStopDebug() {
+        admin.debug().stop();
+    }
+
+    @Then("Debug is suspended")
+    public void assertDebugIsSuspended() {
+        admin.debug().assertSuspended();
+    }
+
+    // ------------
+
+    @When("Click Start auto save")
+    public void clickStartAutoSsave() {
+        admin.autoSave().start();
+    }
+
+    @Then("Auto save is started")
+    public void assertAutoSaveIsStarted() {
+        admin.autoSave().assertStarted();
+    }
+
+    @When("Click Stop auto save")
+    public void clickStopAutoSave() {
+        admin.autoSave().stop();
+    }
+
+    @Then("Auto save is suspended")
+    public void assertAutoSaveIsSuspended() {
+        admin.autoSave().assertSuspended();
+    }
+
+    // ------------
 
     @When("Select game room {string}")
     public void selectGameRoom(String room) {
@@ -282,8 +379,19 @@ public class StepDefinitions {
     }
 
     @Then("Check game is {string} and room is {string}")
-    public void assertGameIs(String game, String room) {
+    public void assertGame(String game, String room) {
         admin.assertGameAndRoom(game, room);
+    }
+
+    @Then("Check game is {string} and room is {string} on the information panel")
+    public void assertGameAndRoom(String game, String room) {
+        admin.gameRoomStatus().assertRoom(room);
+        admin.gameRoomStatus().assertGame(game);
+    }
+
+    @Then("Game version is {string}")
+    public void assertGameVersion(String version) {
+        admin.gameRoomStatus().assertGameVersion(version);
     }
 
     @Then("Websocket client {string} connected successfully to the {string}")
@@ -317,6 +425,13 @@ public class StepDefinitions {
         page.open(url);
     }
 
+    @Then("There is list of rooms {string} on the login and register form")
+    public void thereIsListOfRoomsOnLoginAndRegisterForm(String rooms) {
+        thereIsListOfRoomsOnLoginForm(rooms);
+        login.clickRegister();
+        thereIsListOfRoomsOnRegisterForm(rooms);
+    }
+
     @Then("There is list of rooms {string} on the login form")
     public void thereIsListOfRoomsOnLoginForm(String rooms) {
         login.assertRoomsAvailable(rooms);
@@ -332,11 +447,6 @@ public class StepDefinitions {
         admin.assertRoomsAvailable(rooms);
     }
 
-    @When("Create new room {string} for game {string}")
-    public void createNewRoomForGame(String room, String game) {
-        admin.createNewRoomForGame(room, game);
-    }
-
     @Then("There are players {string} on the leaderboard")
     public void thereArePlayersOnLeaderboard(String players) {
         board.leaderboard().waitUntilNotEmpty();
@@ -350,7 +460,7 @@ public class StepDefinitions {
 
     @When("Click LoadAll players")
     public void clickLoadAllPlayers() {
-        admin.clickLoadAll();
+        admin.players().loadAllPlayers();
         clients.refreshAllRunnersSessions();
     }
 
@@ -413,7 +523,7 @@ public class StepDefinitions {
 
     @When("Save page url as {string}")
     public void savePageUrlAs(String key) {
-        storage.save(key, page.url());
+        storage.save(key, page.url(false));
     }
 
     @When("Click AllBoards on Leaderboard")
@@ -445,5 +555,30 @@ public class StepDefinitions {
     @When("Add new map")
     public void addNewMap() {
         admin.levels().add();
+    }
+
+    @Then("Timer period is {int}")
+    public void timerPeriodIs(int mills) {
+        admin.timerPeriod().checkIs(mills);
+    }
+
+    @When("Update timer period to {int}")
+    public void updateTimerPeriodTo(int mills) {
+        admin.timerPeriod().update(mills);
+    }
+
+    @When("Click Set timer period button")
+    public void clickSetTimerPeriodButton() {
+        admin.timerPeriod().save();
+    }
+
+    @When("Create new room {string}")
+    public void createNewRoom(String room) {
+        admin.gameRoomStatus().createNew(room);
+    }
+
+    @When("Remove room")
+    public void removeRoom() {
+        admin.gameRoomStatus().removeRoom();
     }
 }

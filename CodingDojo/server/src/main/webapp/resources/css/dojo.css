@@ -40,7 +40,9 @@ body {
     border-top: 0px !important;
 }
 
-#settings {
+#settings,
+#query,
+#csrf {
     display: none;
 }
 
@@ -92,6 +94,7 @@ label.error {
     line-height: 10px;
 }
 
+.admin-table .info,
 .admin-table .info td {
     padding: 10px;
 }
@@ -127,8 +130,11 @@ span.pow {
     white-space: nowrap;
 }
 
+.admin-table #progress {
+    width:600px;
+}
+
 .admin-table input[type="text"] {
-    width:150px;
     height:24px;
 }
 
@@ -352,6 +358,7 @@ span.pow {
 
 canvas {
     border: 1px solid;
+    width: 100%;
 }
 
 /* rule page */

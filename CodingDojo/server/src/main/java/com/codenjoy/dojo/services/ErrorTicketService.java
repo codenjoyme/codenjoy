@@ -57,10 +57,10 @@ public class ErrorTicketService {
     private Map<String, Map<String, Object>> tickets = new ConcurrentHashMap<>();
     private Map<String, String> info = new ConcurrentSkipListMap<>();
 
-    public ModelAndView get(String url, Exception exception) {
+    public ModelAndView get(String url, String contentType, Exception exception) {
         String ticket = ticket();
 
-        String message = printStackTrace ? exception.toString() : exception.toString();
+        String message = exception.toString();
         log.error("[TICKET:URL] {}:{} {}", ticket, url, message);
         System.err.printf("[TICKET:URL] %s:%s %s%n", ticket, url, message);
 
@@ -74,41 +74,37 @@ public class ErrorTicketService {
         ModelAndView result = new ModelAndView();
         result.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
 
-        copy("ticketNumber", info, result);
+        set(result, "ticketNumber", info);
+
+        boolean isJson = url.contains("/rest/")
+                || (contentType != null && contentType.contains("application/json"));
+
+        if (isJson) {
+            shouldJsonResult(result);
+        } else {
+            shouldErrorPage(result);
+        }
 
         if (!debug.isWorking()) {
             result.addObject("message", ERROR_MESSAGE);
-
-            if (url.contains("/rest/")) {
-                shouldJsonResult(result);
-            } else {
-                shouldErrorPage(result);
-            }
             return result;
         }
 
+        set(result, "message", info);
+        set(result, "url", info);
+        set(result, "exception", info);
 
-        copy("message", info, result);
-        copy("url", info, result);
-        copy("exception", info, result);
-
-        if (url.contains("/rest/")) {
-            copy("stackTrace", info, result);
-
-            result.setView(new MappingJackson2JsonView(){{
-                setPrettyPrint(true);
-            }});
+        if (isJson) {
+            set(result, "stackTrace", info);
             return result;
         }
 
         result.addObject("stackTrace", prepareStackTrace(exception));
-
-        shouldErrorPage(result);
         return result;
     }
 
-    private void copy(String name, Map<String, Object> info, ModelAndView model) {
-        model.addObject(name, info.get(name));
+    private void set(ModelAndView result, String name, Map<String, Object> info) {
+        result.addObject(name, info.get(name));
     }
 
     public Map<String, Object> getDetails(String ticket, String url, Exception exception) {

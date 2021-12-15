@@ -22,8 +22,7 @@ package com.codenjoy.dojo.cucumber.page.admin;
  * #L%
  */
 
-import com.codenjoy.dojo.cucumber.page.Page;
-import com.codenjoy.dojo.cucumber.page.WebDriverWrapper;
+import com.codenjoy.dojo.cucumber.page.PageObject;
 import com.google.common.collect.ImmutableMap;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
@@ -41,19 +40,14 @@ import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
 @RequiredArgsConstructor
-public class Inactivity {
+public class Inactivity extends PageObject {
 
     // selectors
     public static final By KICK_ENABLED = xpath("//input[@name='inactivity.kickEnabled']");
     public static final By TIMEOUT_INPUT = xpath("//input[@name='inactivity.inactivityTimeout']");
-    public static final By SAVE_BUTTON = xpath("//table[@id='inactivity']//input[@value='Save']");
-
+    public static final Function<String, By> SAVE_BUTTON = name -> xpath("//table[@id='inactivity']//input[@value='%s']", name);
     public static final By PLAYER_INACTIVE_TICKS = xpath("//span[@class='input-ticks-inactive']");
     public static final Function<String, By> PLAYER_INACTIVE_TICK = email -> xpath("//tr[@player='%s']//span[@class='input-ticks-inactive']", email);
-
-    // page objects
-    private final Page page;
-    private final WebDriverWrapper web;
 
     public List<WebElement> playersInactiveTicks() {
         return web.elementsBy(PLAYER_INACTIVE_TICKS);
@@ -80,7 +74,7 @@ public class Inactivity {
     }
 
     public void submit() {
-        web.elementBy(SAVE_BUTTON).click();
+        web.elementBy(SAVE_BUTTON.apply(actions.updateInactivitySettings)).click();
     }
 
     @Override

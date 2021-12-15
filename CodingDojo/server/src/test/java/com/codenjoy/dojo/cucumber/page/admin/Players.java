@@ -22,9 +22,7 @@ package com.codenjoy.dojo.cucumber.page.admin;
  * #L%
  */
 
-import com.codenjoy.dojo.cucumber.page.Page;
-import com.codenjoy.dojo.cucumber.page.Server;
-import com.codenjoy.dojo.cucumber.page.WebDriverWrapper;
+import com.codenjoy.dojo.cucumber.page.PageObject;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -40,21 +38,15 @@ import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
 @RequiredArgsConstructor
-public class Players {
+public class Players extends PageObject {
 
     // selectors
-    public static final By ALL_PLAYERS = xpath("//table[@id='savePlayersGame']");
+    public static final By ALL_PLAYERS = xpath("//table[@id='players']");
     public static final BiFunction<String, String, By> FOUND_PLAYER_BY = (key, value) -> xpath(".//input[@class='%s'][@value='%s']/../..", key, value);
     public static final Function<String, By> UPDATE_PLAYER_FIELD = key -> xpath(".//input[@class='%s']", key);
     public static final By BOARD_LINK = xpath(".//td[17]/a"); // TODO to use attribute in the td instead of index
     public static final By SAVE = xpath("./../button");
-
-    public static final By LOAD_ALL_LINK = xpath("//a[text() = 'LoadAll']");
-
-    // page objects
-    private final Page page;
-    private final WebDriverWrapper web;
-    private final Server server;
+    public static final Function<String, By> LOAD_ALL_BUTTON = name -> xpath("//table[@id='players']//input[@value='%s']", name);
 
     public String playerBoardLink(String selectorKey, String selectorValue) {
         WebElement player = player(selectorKey, selectorValue);
@@ -76,8 +68,12 @@ public class Players {
         save.click();
     }
 
-    public WebElement loadAllLink() {
-        return web.elementBy(LOAD_ALL_LINK);
+    private WebElement loadAllButton() {
+        return web.elementBy(LOAD_ALL_BUTTON.apply(actions.loadAllPlayers));
+    }
+
+    public void loadAllPlayers() {
+        loadAllButton().click();
     }
 
 }

@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.web.controller;
+package com.codenjoy.dojo.web.controller.admin;
 
 /*-
  * #%L
@@ -42,20 +42,23 @@ import java.util.Map;
 public class AdminSettings {
 
     private List<PlayerInfo> players;
-    private List<Object> games;  // // TODO #4FS тут boolean
+    private List<Object> activeGames;
 
     // used to get data from jsp
+    private String action; // submit button value
+    
     private List<Object> otherValues;
     private List<Object> levelsValues;
     private List<Object> levelsKeys;
     private List<Object> levelsNewKeys;
 
     private String loggersLevels;
+    private String player;
     private String game;
     private String room;
+    private String newRoom;
     private String generateNameMask;
     private Integer generateCount;
-    private String generateRoom;
     private Integer timerPeriod;
     private String progress;
     private Integer semifinalTick;
@@ -76,5 +79,6 @@ public class AdminSettings {
     private LevelsSettingsImpl levels;
     private List<Parameter> other;
     private StatisticService statistic;
+    private AdminPostActions actions;
 
 }

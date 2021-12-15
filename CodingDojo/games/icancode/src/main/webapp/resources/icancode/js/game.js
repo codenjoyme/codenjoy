@@ -19,6 +19,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
 // ========================== for debugging ==========================
 
 function compileProgram(code) {
@@ -38,40 +39,13 @@ function runProgram(program, robot) {
     }
 }
 
-// ========================== game setup ==========================
-
-if (typeof setup == 'undefined') {
-    setup = {};
-    setup.demo = true;
-    setup.code = 123;
-    setup.playerId = 'userId';
-    setup.readableName = 'Stiven Pupkin';
-    initLayout = function(setup, html, context, transformations, scripts, onLoad) {
-        onLoad();
-    }
-}
-
-setup.setupSprites();
-
-setup.enableDonate = false;
-setup.enableJoystick = false;
-setup.enablePlayerInfo = false;
-setup.enablePlayerInfoLevel = false;
-setup.enableLeadersTable = false;
-setup.enableChat = false;
-setup.enableInfo = false;
-setup.enableHotkeys = true;
-setup.enableForkMe = false;
-setup.enableAdvertisement = false;
-setup.showBody = false;
-setup.debug = false;
-
 // ========================== leaderboard page ==========================
 
 var initLeaderboardLink = function() {
     var room = getSettings('room')
     $('#leaderboard-link').attr('href', setup.contextPath + '/board/room/' + room);
 }
+
 var initHelpLink = function() {
     if (setup.gameMode == MODE_EKIDS) {
         $('#help-link').hide();
@@ -80,12 +54,14 @@ var initHelpLink = function() {
     var pageName = setup.gameMode.split(' ').join('-').toLowerCase();
     $('#help-link').attr('href', setup.contextPath + '/resources/icancode/landing-' + pageName + '.html')
 }
+
 var initAdditionalLink = function() {
     if (setup.onlyLeaderBoard) {
         $('#additional-link').attr('href', setup.contextPath + '/resources/icancode/user/clients.zip')
         $('#additional-link').text('Get client')
     }
 }
+
 var initLoginLogoutLink = function() {
     if (!!setup.code) {
         var link = setup.contextPath + '/process_logout';
@@ -98,7 +74,9 @@ var initLoginLogoutLink = function() {
     }
 }
 
-setup.onBoardAllPageLoad = function(showProgress) {
+// ========================== user page ==========================
+
+var leaderBoard = function(showProgress) {
     initLayout(setup.game, 'leaderboard.html', setup.contextPath,
         null,
         [],
@@ -107,6 +85,21 @@ setup.onBoardAllPageLoad = function(showProgress) {
             initHelpLink();
             initAdditionalLink();
             initLoginLogoutLink();
+        });
+}
+
+var playerBoard = function() {
+    initLayout(setup.game, 'board.html', setup.contextPath,
+        null,
+        [],
+        function() {
+            if (this.hasOwnProperty('boardPageLoad')) {
+                boardPageLoad();
+                initLeaderboardLink();
+                initHelpLink();
+                initAdditionalLink();
+                initLoginLogoutLink();
+            }
         });
 }
 
@@ -131,32 +124,46 @@ setup.drawBoard = function(drawer) {
     drawer.drawFog();
 }
 
-// ========================== user page ==========================
+// ========================== game setup ==========================
+
+if (typeof setup == 'undefined') {
+    setup = {};
+    setup.demo = true;
+    setup.code = 123;
+    setup.playerId = 'userId';
+    setup.readableName = 'Stiven Pupkin';
+    initLayout = function(setup, html, context, transformations, scripts, onLoad) {
+        onLoad();
+    }
+}
 
 var controller;
 
-if (setup.onlyLeaderBoard) {
-    setup.onBoardPageLoad = function() {
-        var showProgress = true;
-        setup.onBoardAllPageLoad(showProgress);
-    }
-} else {
-    setup.onBoardPageLoad = function() {
-        initLayout(setup.game, 'board.html', setup.contextPath,
-            null,
-            [],
-            function() {
-                if (this.hasOwnProperty('boardPageLoad')) {
-                    boardPageLoad();
-                    initLeaderboardLink();
-                    initHelpLink();
-                    initAdditionalLink();
-                    initLoginLogoutLink();
-                }
-            });
+setup.setupGame = function() {
+    setup.enableDonate = false;
+    setup.enableJoystick = false;
+    setup.enablePlayerInfo = false;
+    setup.enablePlayerInfoLevel = false;
+    setup.enableLeadersTable = false;
+    setup.enableChat = false;
+    setup.enableInfo = false;
+    setup.enableHotkeys = true;
+    setup.enableForkMe = false;
+    setup.enableAdvertisement = false;
+    setup.showBody = false;
+    setup.debug = false;
+}
+
+setup.onPageLoad = function(allPlayers) {
+    if (allPlayers) {
+        leaderBoard(false);
+    } else if (setup.onlyLeaderBoard) {
+        leaderBoard(true);
+    } else {
+        playerBoard();
     }
 }
 
 if (setup.demo) {
-    setup.onBoardPageLoad();
+    setup.onPageLoad(false);
 }

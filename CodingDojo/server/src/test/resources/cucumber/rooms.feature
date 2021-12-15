@@ -3,20 +3,17 @@ Feature: Rooms
 
 Scenario: The user can choose which room to play in when registering and logging in after the admin has created this room
   Given Open login page
-  Then There is list of rooms '[first, sample, second, third]' on the login form
-  When Press register button
-  Then There is list of rooms '[first, sample, second, third]' on the register form
+  Then There is list of rooms '[first, sample, second, third]' on the login and register form
 
   Given Login to Admin page
-  When Create new room 'first2' for game 'first'
+  Then Check game is 'first' and room is 'first'
+  When Create new room 'first2'
   Then There is list of rooms '[first, first2, sample, second, third]' on the admin page
 
   Given Open login page
-  Then There is list of rooms '[first, first2, sample, second, third]' on the login form
-  When Press register button
-  Then There is list of rooms '[first, first2, sample, second, third]' on the register form
+  Then There is list of rooms '[first, first2, sample, second, third]' on the login and register form
 
-  Given Login to Admin page
+  Given Open Admin page
   Then There are players in rooms '{first=0, first2=0, sample=0, second=0, third=0}' on the admin page
   When Click logout
 

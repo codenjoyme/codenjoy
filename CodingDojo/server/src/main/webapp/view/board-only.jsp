@@ -46,6 +46,8 @@
          code="${code}"
          allPlayersScreen="${allPlayersScreen}"></div>
 
+    <%@include file="query-settings.jsp"%>
+
     <div id="board_page">
         <%@include file="canvases.jsp"%>
     </div>

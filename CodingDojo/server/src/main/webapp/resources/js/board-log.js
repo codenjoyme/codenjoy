@@ -93,12 +93,8 @@ var lastTick = null;
 function initLogs(game, boardSize, alphabet, playerId) {
 
     function getTickFromUrl(){
-        let url = new URL(window.location.href);
-        if (url.searchParams.has('tick')) {
-            return url.searchParams.get('tick');
-        } else {
-            return 0;
-        }
+        var tick = getSettings('tick', '#query');
+        return (!!tick) ? tick : 0;
     }
 
     function updateUrl(key, value) {

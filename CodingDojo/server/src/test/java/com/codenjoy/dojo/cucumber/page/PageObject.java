@@ -1,8 +1,10 @@
+package com.codenjoy.dojo.cucumber.page;
+
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2018 - 2021 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -20,4 +22,28 @@
  * #L%
  */
 
-var doNothing = true;
+import com.codenjoy.dojo.web.controller.admin.AdminPostActions;
+import org.springframework.beans.factory.annotation.Autowired;
+
+public abstract class PageObject {
+
+    // application services
+    @Autowired
+    protected AdminPostActions actions;
+
+    // page objects
+    @Autowired
+    protected Page page;
+
+    @Autowired
+    protected WebDriverWrapper web;
+
+    @Autowired
+    protected Server server;
+
+    @Autowired
+    protected Storage storage;
+
+    @Autowired
+    protected WebsocketClients clients;
+}

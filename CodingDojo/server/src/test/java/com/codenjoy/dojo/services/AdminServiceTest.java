@@ -34,6 +34,7 @@ import com.codenjoy.dojo.services.mocks.FirstInactivityGameType;
 import com.codenjoy.dojo.services.mocks.SecondSemifinalGameType;
 import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.utils.smart.SmartAssert;
+import com.codenjoy.dojo.web.controller.admin.AdminSettings;
 import io.cucumber.java.Before;
 import org.junit.After;
 import org.junit.Test;
@@ -104,10 +105,7 @@ public class AdminServiceTest {
                 "[Inactivity] Inactivity timeout ticks=300]");
 
         // when
-        service.updateInactivity("room",
-                new InactivitySettingsImpl()
-                        .setInactivityTimeout(123)
-                        .setKickEnabled(true));
+        service.updateInactivitySettings(inactivity(123, true), "first", "room");
 
         // then
         assertSettings("First[Parameter 1=15, \n" +
@@ -147,14 +145,22 @@ public class AdminServiceTest {
                 allFieldChat());
 
         // when
-        service.updateInactivity("room1",
-                new InactivitySettingsImpl()
-                        .setInactivityTimeout(123)
-                        .setKickEnabled(true));
+        service.updateInactivitySettings(inactivity(123, true), "first", "room1");
 
         // then
         assertPlayersLastResponse(players.getAll(),
                 "[player1: 9000], [player2: 10000], [player3: 5000], [player4: 7000]");
+    }
+
+    private AdminSettings inactivity(int timeout, boolean kick) {
+        return new AdminSettings() {
+            @Override
+            public InactivitySettingsImpl getInactivity() {
+                return (InactivitySettingsImpl) new InactivitySettingsImpl()
+                        .setInactivityTimeout(timeout)
+                        .setKickEnabled(kick);
+            }
+        };
     }
 
     private String allFieldChat() {

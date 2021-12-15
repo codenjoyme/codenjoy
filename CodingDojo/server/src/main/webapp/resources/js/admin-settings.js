@@ -30,6 +30,7 @@ var AdminAjax = function(contextPath, url) {
             data: null,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
+            headers: setup.csrfAjaxHeader,
             success: onSuccess,
             error: function (error) {
                 console.log(error.responseText);
@@ -47,6 +48,7 @@ var AdminAjax = function(contextPath, url) {
             data: JSON.stringify(info),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
+            headers: setup.csrfAjaxHeader,
             success: onSuccess,
             error: function (error) {
                 console.log(error.responseText);

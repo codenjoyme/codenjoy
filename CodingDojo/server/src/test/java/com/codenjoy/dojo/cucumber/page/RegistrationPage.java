@@ -40,7 +40,7 @@ import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
 @RequiredArgsConstructor
-public class RegistrationPage implements Closeable {
+public class RegistrationPage extends PageObject implements Closeable  {
 
     // selectors
     public static final String SUBMIT_BUTTON = "#submit-button";
@@ -55,10 +55,6 @@ public class RegistrationPage implements Closeable {
     public static final String GAME_SELECT = "#game select";
     public static final String ROOM_SELECT = "#room select";
     public static final String ERROR_MESSAGE = "#error-message";
-
-    // page objects
-    private final Page page;
-    private final WebDriverWrapper web;
 
     // application services
     private final Helpers with;

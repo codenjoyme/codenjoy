@@ -27,16 +27,17 @@ import com.codenjoy.dojo.services.GameService;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.utils.smart.SmartAssert;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.concurrent.Callable;
-
+import static com.codenjoy.dojo.utils.smart.SmartAssert.assertEquals;
+import static com.codenjoy.dojo.web.controller.BoardController.queryToMap;
 import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
 import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
 import static junit.framework.TestCase.fail;
-import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -58,6 +59,12 @@ public class ValidatorTest {
             ValidatorTest.this.gameService = this.gameService = mock(GameService.class);
             ValidatorTest.this.playerService = this.playerService = mock(PlayerService.class);
         }};
+    }
+
+    @After
+    public void after() {
+        SmartAssert.checkResult();
+
     }
 
     @Test
@@ -129,33 +136,34 @@ public class ValidatorTest {
 
     @Test
     public void validateIsEmail() {
-        assertFalse(validator.isEmail(null, CANT_BE_NULL));
+        
+        assertEquals(false, validator.isEmail(null, CANT_BE_NULL));
 
-        assertTrue(validator.isEmail(null, CAN_BE_NULL));
+        assertEquals(true, validator.isEmail(null, CAN_BE_NULL));
 
-        assertFalse(validator.isEmail("null", CANT_BE_NULL));
+        assertEquals(false, validator.isEmail("null", CANT_BE_NULL));
 
-        assertTrue(validator.isEmail("null", CAN_BE_NULL));
+        assertEquals(true, validator.isEmail("null", CAN_BE_NULL));
 
-        assertFalse(validator.isEmail("", CANT_BE_NULL));
+        assertEquals(false, validator.isEmail("", CANT_BE_NULL));
 
-        assertTrue(validator.isEmail("", CAN_BE_NULL));
+        assertEquals(true, validator.isEmail("", CAN_BE_NULL));
 
-        assertFalse(validator.isEmail("NuLL", CANT_BE_NULL));
+        assertEquals(false, validator.isEmail("NuLL", CANT_BE_NULL));
 
-        assertTrue(validator.isEmail("NuLL", CAN_BE_NULL));
+        assertEquals(true, validator.isEmail("NuLL", CAN_BE_NULL));
 
-        assertFalse(validator.isEmail("NULL", CANT_BE_NULL));
+        assertEquals(false, validator.isEmail("NULL", CANT_BE_NULL));
 
-        assertTrue(validator.isEmail("NULL", CAN_BE_NULL));
+        assertEquals(true, validator.isEmail("NULL", CAN_BE_NULL));
 
-        assertFalse(validator.isEmail("*F(@DF^@(&@DF(@^", CANT_BE_NULL));
+        assertEquals(false, validator.isEmail("*F(@DF^@(&@DF(@^", CANT_BE_NULL));
 
-        assertFalse(validator.isEmail("too large aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", CANT_BE_NULL));
+        assertEquals(false, validator.isEmail("too large aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", CANT_BE_NULL));
 
-        assertTrue(validator.isEmail("qwe@asd.com", CANT_BE_NULL));
+        assertEquals(true, validator.isEmail("qwe@asd.com", CANT_BE_NULL));
 
-        assertFalse(validator.isEmail("someId", CANT_BE_NULL));
+        assertEquals(false, validator.isEmail("someId", CANT_BE_NULL));
     }
 
     @Test
@@ -206,78 +214,61 @@ public class ValidatorTest {
 
     @Test
     public void validateIsGameName() {
-        assertFalse("Game name is invalid: 'null'",
-                validator.isGameName(null, CANT_BE_NULL));
+        assertEquals(false, validator.isGameName(null, CANT_BE_NULL));
 
-        assertTrue(validator.isGameName(null, CAN_BE_NULL));
+        assertEquals(true, validator.isGameName(null, CAN_BE_NULL));
 
-        assertFalse("Game name is invalid: ''",
-                validator.isGameName("", CANT_BE_NULL));
+        assertEquals(false, validator.isGameName("", CANT_BE_NULL));
 
-        assertTrue(validator.isGameName("", CAN_BE_NULL));
+        assertEquals(true, validator.isGameName("", CAN_BE_NULL));
 
-        assertFalse("Game name is invalid: 'NuLL'",
-                validator.isGameName("NuLL", CANT_BE_NULL));
+        assertEquals(false, validator.isGameName("NuLL", CANT_BE_NULL));
 
-        assertTrue(validator.isGameName("NuLL", CAN_BE_NULL));
+        assertEquals(true, validator.isGameName("NuLL", CAN_BE_NULL));
 
-        assertFalse("Game name is invalid: 'null'",
-                validator.isGameName("null", CANT_BE_NULL));
+        assertEquals(false, validator.isGameName("null", CANT_BE_NULL));
 
-        assertTrue(validator.isGameName("null", CAN_BE_NULL));
+        assertEquals(true, validator.isGameName("null", CAN_BE_NULL));
 
-        assertFalse("Game name is invalid: 'NULL'",
-                validator.isGameName("NULL", CANT_BE_NULL));
+        assertEquals(false, validator.isGameName("NULL", CANT_BE_NULL));
 
-        assertTrue(validator.isGameName("NULL", CAN_BE_NULL));
+        assertEquals(true, validator.isGameName("NULL", CAN_BE_NULL));
 
-        assertFalse("Game name is invalid: '*F(@DF^@(&@DF(@^'",
-                validator.isGameName("*F(@DF^@(&@DF(@^", CANT_BE_NULL));
+        assertEquals(false, validator.isGameName("*F(@DF^@(&@DF(@^", CANT_BE_NULL));
 
-        assertFalse("Game name is invalid: 'too large aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'",
-                validator.isGameName("too large aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", CANT_BE_NULL));
+        assertEquals(false, validator.isGameName("too large aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", CANT_BE_NULL));
 
-        assertFalse("Game name is invalid: '-game'",
-                validator.isGameName("-game", CANT_BE_NULL));
+        assertEquals(false, validator.isGameName("-game", CANT_BE_NULL));
 
-        assertFalse("Game name is invalid: 'game-'",
-                validator.isGameName("game-", CANT_BE_NULL));
+        assertEquals(false, validator.isGameName("game-", CANT_BE_NULL));
 
-        assertTrue(validator.isGameName("a-game", CANT_BE_NULL));
+        assertEquals(true, validator.isGameName("a-game", CANT_BE_NULL));
 
-        assertFalse("Game name is invalid: '_game'",
-                validator.isGameName("_game", CANT_BE_NULL));
+        assertEquals(false, validator.isGameName("_game", CANT_BE_NULL));
 
-        assertFalse("Game name is invalid: 'game_'",
-                validator.isGameName("game_", CANT_BE_NULL));
+        assertEquals(false, validator.isGameName("game_", CANT_BE_NULL));
 
-        assertTrue(validator.isGameName("a_game", CANT_BE_NULL));
+        assertEquals(true, validator.isGameName("a_game", CANT_BE_NULL));
 
-        assertFalse("Game name is invalid: '.game'",
-                validator.isGameName(".game", CANT_BE_NULL));
+        assertEquals(false, validator.isGameName(".game", CANT_BE_NULL));
 
-        assertFalse("Game name is invalid: 'game.'",
-                validator.isGameName("game.", CANT_BE_NULL));
+        assertEquals(false, validator.isGameName("game.", CANT_BE_NULL));
 
-        assertTrue(validator.isGameName("a.game", CANT_BE_NULL));
+        assertEquals(true, validator.isGameName("a.game", CANT_BE_NULL));
 
-        assertFalse("Game name is invalid: '1'",
-                validator.isGameName("1", CANT_BE_NULL));
+        assertEquals(false, validator.isGameName("1", CANT_BE_NULL));
 
-        assertTrue(validator.isGameName("a1", CANT_BE_NULL));
+        assertEquals(true, validator.isGameName("a1", CANT_BE_NULL));
 
-        assertTrue(validator.isGameName("a1", CANT_BE_NULL));
+        assertEquals(true, validator.isGameName("a1", CANT_BE_NULL));
 
-        assertFalse("Game name is invalid: '0'",
-                validator.isGameName("0", CAN_BE_NULL));
+        assertEquals(false, validator.isGameName("0", CAN_BE_NULL));
 
-        assertFalse("Game name is invalid: '434589345613405760956134056340596345903465'",
-                validator.isGameName("434589345613405760956134056340596345903465", CANT_BE_NULL));
+        assertEquals(false, validator.isGameName("434589345613405760956134056340596345903465", CANT_BE_NULL));
 
-        assertTrue(validator.isGameName("someGame", CANT_BE_NULL));
+        assertEquals(true, validator.isGameName("someGame", CANT_BE_NULL));
 
-        assertFalse("Game name is invalid: 'some@email.com'",
-                validator.isGameName("some@email.com", CANT_BE_NULL));
+        assertEquals(false, validator.isGameName("some@email.com", CANT_BE_NULL));
     }
 
     @Test
@@ -433,7 +424,7 @@ public class ValidatorTest {
     }
 
     @Test
-    public void validateCheckMd5() {
+    public void validateCheckMD5() {
         shouldError("Hash is invalid: 'null'",
                 () -> validator.checkMD5(null));
 
@@ -477,6 +468,280 @@ public class ValidatorTest {
 
         shouldError("Hash is invalid: 'some@email.com'",
                 () -> validator.checkMD5("some@email.com"));
+    }
+
+    @Test
+    public void validateCheckCustomQueryParameterName() {
+        shouldError("Custom query parameter name is invalid: 'null'",
+                () -> validator.checkCustomQueryParameterName(null));
+
+        shouldError("Custom query parameter name is invalid: ''",
+                () -> validator.checkCustomQueryParameterName(""));
+
+        shouldError("Custom query parameter name is invalid: 'NuLL'",
+                () -> validator.checkCustomQueryParameterName("NuLL"));
+
+        shouldError("Custom query parameter name is invalid: 'null'",
+                () -> validator.checkCustomQueryParameterName("null"));
+
+        shouldError("Custom query parameter name is invalid: 'NULL'",
+                () -> validator.checkCustomQueryParameterName("NULL"));
+
+        shouldError("Custom query parameter name is invalid: '*F(@DF^@(&@DF(@^'",
+                () -> validator.checkCustomQueryParameterName("*F(@DF^@(&@DF(@^"));
+
+        shouldError("Custom query parameter name is invalid: 'toolargeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'",
+                () -> validator.checkCustomQueryParameterName("toolargeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
+
+        shouldError("Custom query parameter name is invalid: '1'",
+                () -> validator.checkCustomQueryParameterName("1"));
+
+        shouldError("Custom query parameter name is invalid: '0'",
+                () -> validator.checkCustomQueryParameterName("0"));
+
+        shouldOk(() -> validator.checkCustomQueryParameterName("name"));
+
+        shouldOk(() -> validator.checkCustomQueryParameterName("Name"));
+
+        shouldOk(() -> validator.checkCustomQueryParameterName("NAME"));
+
+        shouldOk(() -> validator.checkCustomQueryParameterName("name12"));
+
+        shouldOk(() -> validator.checkCustomQueryParameterName("na12me"));
+
+        shouldError("Custom query parameter name is invalid: '12name'",
+                () -> validator.checkCustomQueryParameterName("12name"));
+
+        shouldError("Custom query parameter name is invalid: '.name'",
+                () -> validator.checkCustomQueryParameterName(".name"));
+
+        shouldError("Custom query parameter name is invalid: '_name'",
+                () -> validator.checkCustomQueryParameterName("_name"));
+
+        shouldError("Custom query parameter name is invalid: '-name'",
+                () -> validator.checkCustomQueryParameterName("-name"));
+
+        shouldError("Custom query parameter name is invalid: 'name-'",
+                () -> validator.checkCustomQueryParameterName("name-"));
+
+        shouldError("Custom query parameter name is invalid: 'name_'",
+                () -> validator.checkCustomQueryParameterName("name_"));
+
+        shouldError("Custom query parameter name is invalid: 'name.'",
+                () -> validator.checkCustomQueryParameterName("name."));
+
+        shouldError("Custom query parameter name is invalid: 'n-ame'",
+                () -> validator.checkCustomQueryParameterName("n-ame"));
+
+        shouldError("Custom query parameter name is invalid: 'n_ame'",
+                () -> validator.checkCustomQueryParameterName("n_ame"));
+
+        shouldError("Custom query parameter name is invalid: 'n.ame'",
+                () -> validator.checkCustomQueryParameterName("n.ame"));
+
+        shouldError("Custom query parameter name is invalid: 'some@email.com'",
+                () -> validator.checkCustomQueryParameterName("some@email.com"));
+    }
+
+    @Test
+    public void validateCheckCustomQueryParameterValue() {
+        shouldError("Custom query parameter 'key' value is invalid: 'null'",
+                () -> validator.checkCustomQueryParameterValue("key", null));
+
+        shouldError("Custom query parameter 'key' value is invalid: ''",
+                () -> validator.checkCustomQueryParameterValue("key", ""));
+
+        shouldError("Custom query parameter 'key' value is invalid: 'NuLL'",
+                () -> validator.checkCustomQueryParameterValue("key", "NuLL"));
+
+        shouldError("Custom query parameter 'key' value is invalid: 'null'",
+                () -> validator.checkCustomQueryParameterValue("key", "null"));
+
+        shouldError("Custom query parameter 'key' value is invalid: 'NULL'",
+                () -> validator.checkCustomQueryParameterValue("key", "NULL"));
+
+        shouldError("Custom query parameter 'key' value is invalid: '*F(@DF^@(&@DF(@^'",
+                () -> validator.checkCustomQueryParameterValue("key", "*F(@DF^@(&@DF(@^"));
+
+        shouldError("Custom query parameter 'key' value is invalid: 'toolargeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'",
+                () -> validator.checkCustomQueryParameterValue("key", "toolargeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
+
+        shouldOk(() -> validator.checkCustomQueryParameterValue("key", "1"));
+
+        shouldOk(() -> validator.checkCustomQueryParameterValue("key", "0"));
+
+        shouldOk(() -> validator.checkCustomQueryParameterValue("key", "name"));
+
+        shouldOk(() -> validator.checkCustomQueryParameterValue("key", "Name"));
+
+        shouldOk(() -> validator.checkCustomQueryParameterValue("key", "NAME"));
+
+        shouldOk(() -> validator.checkCustomQueryParameterValue("key", "name12"));
+
+        shouldOk(() -> validator.checkCustomQueryParameterValue("key", "na12me"));
+
+        shouldOk(() -> validator.checkCustomQueryParameterValue("key", "12name"));
+
+        shouldOk(() -> validator.checkCustomQueryParameterValue("key", ".name"));
+
+        shouldOk(() -> validator.checkCustomQueryParameterValue("key", "_name"));
+
+        shouldOk(() -> validator.checkCustomQueryParameterValue("key", "-name"));
+
+        shouldOk(() -> validator.checkCustomQueryParameterValue("key", "name-"));
+
+        shouldOk(() -> validator.checkCustomQueryParameterValue("key", "name_"));
+
+        shouldOk(() -> validator.checkCustomQueryParameterValue("key", "name."));
+
+        shouldOk(() -> validator.checkCustomQueryParameterValue("key", "n-ame"));
+
+        shouldOk(() -> validator.checkCustomQueryParameterValue("key", "n_ame"));
+
+        shouldOk(() -> validator.checkCustomQueryParameterValue("key", "n.ame"));
+
+        shouldError("Custom query parameter 'key' value is invalid: 'some@email.com'",
+                () -> validator.checkCustomQueryParameterValue("key", "some@email.com"));
+    }
+
+
+    @Test
+    public void validateIsCustomQueryParameterName() {
+        assertEquals(false, validator.isCustomQueryParameterName(null));
+
+        assertEquals(false, validator.isCustomQueryParameterName(""));
+
+        assertEquals(false, validator.isCustomQueryParameterName("NuLL"));
+
+        assertEquals(false, validator.isCustomQueryParameterName("null"));
+
+        assertEquals(false, validator.isCustomQueryParameterName("NULL"));
+
+        assertEquals(false, validator.isCustomQueryParameterName("*F(@DF^@(&@DF(@^"));
+
+        assertEquals(false, validator.isCustomQueryParameterName("toolargeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
+
+        assertEquals(false, validator.isCustomQueryParameterName("1"));
+
+        assertEquals(false, validator.isCustomQueryParameterName("0"));
+
+        assertEquals(true, validator.isCustomQueryParameterName("name"));
+
+        assertEquals(true, validator.isCustomQueryParameterName("Name"));
+
+        assertEquals(true, validator.isCustomQueryParameterName("NAME"));
+
+        assertEquals(true, validator.isCustomQueryParameterName("name12"));
+
+        assertEquals(true, validator.isCustomQueryParameterName("na12me"));
+
+        assertEquals(false, validator.isCustomQueryParameterName("12name"));
+
+        assertEquals(false, validator.isCustomQueryParameterName(".name"));
+
+        assertEquals(false, validator.isCustomQueryParameterName("_name"));
+
+        assertEquals(false, validator.isCustomQueryParameterName("-name"));
+
+        assertEquals(false, validator.isCustomQueryParameterName("name-"));
+
+        assertEquals(false, validator.isCustomQueryParameterName("name_"));
+
+        assertEquals(false, validator.isCustomQueryParameterName("name."));
+
+        assertEquals(false, validator.isCustomQueryParameterName("n-ame"));
+
+        assertEquals(false, validator.isCustomQueryParameterName("n_ame"));
+
+        assertEquals(false, validator.isCustomQueryParameterName("n.ame"));
+
+        assertEquals(false, validator.isCustomQueryParameterName("some@email.com"));
+    }
+
+    @Test
+    public void validateIsCustomQueryParameterValue() {
+        assertEquals(false, validator.isCustomQueryParameterValue(null));
+
+        assertEquals(false, validator.isCustomQueryParameterValue(""));
+
+        assertEquals(false, validator.isCustomQueryParameterValue("NuLL"));
+
+        assertEquals(false, validator.isCustomQueryParameterValue("null"));
+
+        assertEquals(false, validator.isCustomQueryParameterValue("NULL"));
+
+        assertEquals(false, validator.isCustomQueryParameterValue("*F(@DF^@(&@DF(@^"));
+
+        assertEquals(false, validator.isCustomQueryParameterValue("toolargeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
+
+        assertEquals(true, validator.isCustomQueryParameterValue("1"));
+
+        assertEquals(true, validator.isCustomQueryParameterValue("0"));
+
+        assertEquals(true, validator.isCustomQueryParameterValue("name"));
+
+        assertEquals(true, validator.isCustomQueryParameterValue("Name"));
+
+        assertEquals(true, validator.isCustomQueryParameterValue("NAME"));
+
+        assertEquals(true, validator.isCustomQueryParameterValue("name12"));
+
+        assertEquals(true, validator.isCustomQueryParameterValue("na12me"));
+
+        assertEquals(true, validator.isCustomQueryParameterValue("12name"));
+
+        assertEquals(true, validator.isCustomQueryParameterValue(".name"));
+
+        assertEquals(true, validator.isCustomQueryParameterValue("_name"));
+
+        assertEquals(true, validator.isCustomQueryParameterValue("-name"));
+
+        assertEquals(true, validator.isCustomQueryParameterValue("name-"));
+
+        assertEquals(true, validator.isCustomQueryParameterValue("name_"));
+
+        assertEquals(true, validator.isCustomQueryParameterValue("name."));
+
+        assertEquals(true, validator.isCustomQueryParameterValue("n-ame"));
+
+        assertEquals(true, validator.isCustomQueryParameterValue("n_ame"));
+
+        assertEquals(true, validator.isCustomQueryParameterValue("n.ame"));
+
+        assertEquals(false, validator.isCustomQueryParameterValue("some@email.com"));
+    }
+
+    @Test
+    public void validateIsMD5() {
+        assertEquals(false, validator.isMD5(null));
+
+        assertEquals(false, validator.isMD5(""));
+
+        assertEquals(false, validator.isMD5("NuLL"));
+
+        assertEquals(false, validator.isMD5("null"));
+
+        assertEquals(false, validator.isMD5("NULL"));
+
+        assertEquals(false, validator.isMD5("*F(@DF^@(&@DF(@^"));
+
+        assertEquals(false, validator.isMD5("too large aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
+
+        assertEquals(false, validator.isMD5("3-13dc7cb57f02b9c7c066b9e34b6fe72"));
+
+        assertEquals(false, validator.isMD5("3_13dc7cb57f02b9c7c066b9e34b6fe72"));
+
+        assertEquals(false, validator.isMD5("3.13dc7cb57f02b9c7c066b9e34b6fe72"));
+
+        assertEquals(false, validator.isMD5("1"));
+
+        assertEquals(false, validator.isMD5("0"));
+
+        assertEquals(false, validator.isMD5("434589345613405760956134056340596345903465"));
+
+        assertEquals(true, validator.isMD5("313dc7cb57f02b9c7c066b9e34b6fe72"));
+
+        assertEquals(false, validator.isMD5("some@email.com"));
     }
 
     @Test
@@ -639,124 +904,106 @@ public class ValidatorTest {
 
     @Test
     public void validateIsReadablePlayerName() {
-        assertTrue(validator.isReadableName("Стивен Пупкин"));
+        assertEquals(true, validator.isReadableName("Стивен Пупкин"));
 
-        assertTrue(validator.isReadableName("Oleksandr Baglay"));
+        assertEquals(true, validator.isReadableName("Oleksandr Baglay"));
 
-        assertTrue(validator.isReadableName("Stiven Pupkin"));
+        assertEquals(true, validator.isReadableName("Stiven Pupkin"));
 
-        assertTrue(validator.isReadableName("стивен пупкин"));
+        assertEquals(true, validator.isReadableName("стивен пупкин"));
 
-        assertTrue(validator.isReadableName("stiven pupkin"));
+        assertEquals(true, validator.isReadableName("stiven pupkin"));
 
-        assertTrue(validator.isReadableName("ABCDEFGHIJKLMNOPQRSTUVQXYZ abcdefghijklmnopqrstuvqxyz"));
+        assertEquals(true, validator.isReadableName("ABCDEFGHIJKLMNOPQRSTUVQXYZ abcdefghijklmnopqrstuvqxyz"));
 
-        assertTrue(validator.isReadableName("abcdefghijklmnopqrstuvqxyz ABCDEFGHIJKLMNOPQRSTUVQXYZ"));
+        assertEquals(true, validator.isReadableName("abcdefghijklmnopqrstuvqxyz ABCDEFGHIJKLMNOPQRSTUVQXYZ"));
 
-        assertTrue(validator.isReadableName("абвгдеёжзийклмо НПРСТУФХЧЦЬЫЪЭЮЯ"));
+        assertEquals(true, validator.isReadableName("абвгдеёжзийклмо НПРСТУФХЧЦЬЫЪЭЮЯ"));
 
-        assertTrue(validator.isReadableName("нпрстуфхчцьыъэюя АБВГДЕЁЖЗИЙКЛМО"));
+        assertEquals(true, validator.isReadableName("нпрстуфхчцьыъэюя АБВГДЕЁЖЗИЙКЛМО"));
 
-        assertTrue(validator.isReadableName("АБВГДЕЁЖЗИЙКЛМО нпрстуфхчцьыъэюя"));
+        assertEquals(true, validator.isReadableName("АБВГДЕЁЖЗИЙКЛМО нпрстуфхчцьыъэюя"));
 
-        assertTrue(validator.isReadableName("НПРСТУФХЧЦЬЫЪЭЮЯ абвгдеёжзийклмо"));
+        assertEquals(true, validator.isReadableName("НПРСТУФХЧЦЬЫЪЭЮЯ абвгдеёжзийклмо"));
 
-        assertTrue(validator.isReadableName("ҐґІіІіЄє ҐґІіІіЄє"));
+        assertEquals(true, validator.isReadableName("ҐґІіІіЄє ҐґІіІіЄє"));
 
-        assertFalse("Player name is invalid (should be 'Name Surname'): 'Стивен'",
-                validator.isReadableName("Стивен"));
+        assertEquals(false, validator.isReadableName("Стивен"));
 
-        assertFalse("Player name is invalid (should be 'Name Surname'): 'Я Д'Артаньян'",
-                validator.isReadableName("Я Д'Артаньян"));
+        assertEquals(false, validator.isReadableName("Я Д'Артаньян"));
 
-        assertFalse("Player name is invalid (should be 'Name Surname'): 'Дефис-нельзя'",
-                validator.isReadableName("Дефис-нельзя"));
+        assertEquals(false, validator.isReadableName("Дефис-нельзя"));
 
-        assertFalse("Player name is invalid (should be 'Name Surname'): 'Двапробела  нельзя'",
-                validator.isReadableName("Двапробела  нельзя"));
+        assertEquals(false, validator.isReadableName("Двапробела  нельзя"));
 
-        assertFalse("Player name is invalid (should be 'Name Surname'): 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaa'",
-                validator.isReadableName("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaa"));
+        assertEquals(false, validator.isReadableName("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaa"));
 
-        assertFalse("Player name is invalid (should be 'Name Surname'): 'email#&*^#gmail%#&^*com'",
-                validator.isReadableName("email#&*^#gmail%#&^*com"));
+        assertEquals(false, validator.isReadableName("email#&*^#gmail%#&^*com"));
 
-        assertFalse("Player name is invalid (should be 'Name Surname'): 'null'",
-                validator.isReadableName(null));
+        assertEquals(false, validator.isReadableName(null));
 
-        assertFalse("Player name is invalid (should be 'Name Surname'): 'NuLL'",
-                validator.isReadableName("NuLL"));
+        assertEquals(false, validator.isReadableName("NuLL"));
 
-        assertFalse("Player name is invalid (should be 'Name Surname'): ''",
-                validator.isReadableName(""));
+        assertEquals(false, validator.isReadableName(""));
 
-        assertFalse("Player name is invalid (should be 'Name Surname'): 'null'",
-                validator.isReadableName(null));
+        assertEquals(false, validator.isReadableName(null));
     }
 
     @Test
     public void validateIsNickName() {
-        assertTrue(validator.isNickName("Стивен Пупкин"));
+        assertEquals(true, validator.isNickName("Стивен Пупкин"));
 
-        assertTrue(validator.isNickName("Oleksandr Baglay"));
+        assertEquals(true, validator.isNickName("Oleksandr Baglay"));
 
-        assertTrue(validator.isNickName("Stiven Pupkin"));
+        assertEquals(true, validator.isNickName("Stiven Pupkin"));
 
-        assertTrue(validator.isNickName("FuTuRamA"));
+        assertEquals(true, validator.isNickName("FuTuRamA"));
 
-        assertTrue(validator.isNickName("BLIvl evLVe cyuw7 82fx"));
+        assertEquals(true, validator.isNickName("BLIvl evLVe cyuw7 82fx"));
 
-        assertTrue(validator.isNickName("123 444 56 7890 2231"));
+        assertEquals(true, validator.isNickName("123 444 56 7890 2231"));
 
-        assertTrue(validator.isNickName("стивен пупкин"));
+        assertEquals(true, validator.isNickName("стивен пупкин"));
 
-        assertTrue(validator.isNickName("stiven pupkin"));
+        assertEquals(true, validator.isNickName("stiven pupkin"));
 
-        assertTrue(validator.isNickName("ABCDEFGHIJKLMNOP abcdefghijklmnop"));
+        assertEquals(true, validator.isNickName("ABCDEFGHIJKLMNOP abcdefghijklmnop"));
 
-        assertTrue(validator.isNickName("QRSTUVQXYZ qrstuvqxyz"));
+        assertEquals(true, validator.isNickName("QRSTUVQXYZ qrstuvqxyz"));
 
-        assertTrue(validator.isNickName("qrstuvqxyz QRSTUVQXYZ"));
+        assertEquals(true, validator.isNickName("qrstuvqxyz QRSTUVQXYZ"));
 
-        assertTrue(validator.isNickName("abcdefghijklmnop ABCDEFGHIJKLMNOP"));
+        assertEquals(true, validator.isNickName("abcdefghijklmnop ABCDEFGHIJKLMNOP"));
 
-        assertTrue(validator.isNickName("абвгдеёжзийклмо НПРСТУФХЧЦЬЫЪЭЮЯ"));
+        assertEquals(true, validator.isNickName("абвгдеёжзийклмо НПРСТУФХЧЦЬЫЪЭЮЯ"));
 
-        assertTrue(validator.isNickName("нпрстуфхчцьыъэюя АБВГДЕЁЖЗИЙКЛМО"));
+        assertEquals(true, validator.isNickName("нпрстуфхчцьыъэюя АБВГДЕЁЖЗИЙКЛМО"));
 
-        assertTrue(validator.isNickName("АБВГДЕЁЖЗИЙКЛМО нпрстуфхчцьыъэюя"));
+        assertEquals(true, validator.isNickName("АБВГДЕЁЖЗИЙКЛМО нпрстуфхчцьыъэюя"));
 
-        assertTrue(validator.isNickName("НПРСТУФХЧЦЬЫЪЭЮЯ абвгдеёжзийклмо"));
+        assertEquals(true, validator.isNickName("НПРСТУФХЧЦЬЫЪЭЮЯ абвгдеёжзийклмо"));
 
-        assertTrue(validator.isNickName("ҐґІіІіЄє ҐґІіІіЄє"));
+        assertEquals(true, validator.isNickName("ҐґІіІіЄє ҐґІіІіЄє"));
 
-        assertTrue(validator.isNickName("Стивен"));
+        assertEquals(true, validator.isNickName("Стивен"));
 
-        assertFalse("Player name is invalid (should be 'Name Surname' or 'niCKnAMe'): 'Я Д'Артаньян'",
-                validator.isNickName("Я Д'Артаньян"));
+        assertEquals(false, validator.isNickName("Я Д'Артаньян"));
 
-        assertFalse("Player name is invalid (should be 'Name Surname' or 'niCKnAMe'): 'Дефис-нельзя'",
-                validator.isNickName("Дефис-нельзя"));
+        assertEquals(false, validator.isNickName("Дефис-нельзя"));
 
-        assertTrue(validator.isNickName("Двапробела  нельзя"));
+        assertEquals(true, validator.isNickName("Двапробела  нельзя"));
 
-        assertFalse("Player name is invalid (should be 'Name Surname' or 'niCKnAMe'): 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaa'",
-                validator.isNickName("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaa"));
+        assertEquals(false, validator.isNickName("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaa"));
 
-        assertFalse("Player name is invalid (should be 'Name Surname' or 'niCKnAMe'): 'email#&*^#gmail%#&^*com'",
-                validator.isNickName("email#&*^#gmail%#&^*com"));
+        assertEquals(false, validator.isNickName("email#&*^#gmail%#&^*com"));
 
-        assertFalse("Player name is invalid (should be 'Name Surname' or 'niCKnAMe'): 'null'",
-                validator.isNickName(null));
+        assertEquals(false, validator.isNickName(null));
 
-        assertFalse("Player name is invalid (should be 'Name Surname' or 'niCKnAMe'): 'NuLL'",
-                validator.isNickName("NuLL"));
+        assertEquals(false, validator.isNickName("NuLL"));
 
-        assertFalse("Player name is invalid (should be 'Name Surname' or 'niCKnAMe'): ''",
-                validator.isNickName(""));
+        assertEquals(false, validator.isNickName(""));
 
-        assertFalse("Player name is invalid (should be 'Name Surname' or 'niCKnAMe'): 'null'",
-                validator.isNickName(null));
+        assertEquals(false, validator.isNickName(null));
     }
 
     private void shouldOk(Runnable toRun) {
@@ -769,22 +1016,10 @@ public class ValidatorTest {
                 toRun.run();
             }
             if (StringUtils.isNotEmpty(expected)) {
-                fail();
+                fail("Expected exception");
             }
-        } catch (Exception e) {
-            assertEquals(expected, e.getMessage());
-        }
-    }
-
-    private void shouldReturn(String expected, Callable toRun) {
-        try {
-            Object result = null;
-            if (toRun != null) {
-                result = toRun.call();
-            }
-            assertEquals(expected, result);
-        } catch (Exception e) {
-            assertEquals(expected, e.getMessage());
+        } catch (Exception exception) {
+            assertEquals(expected, exception.getMessage());
         }
     }
 
@@ -863,5 +1098,69 @@ public class ValidatorTest {
                 .thenReturn(new Player(id){{
                     setRoom(room);
                 }});
+    }
+
+    @Test
+    public void validateCheckCustomQueryParameters() {
+        shouldError("Custom query is invalid: [parameter name is invalid: 'q$we']",
+                () -> validator.checkCustomQueryParameters(queryToMap("q$we=1")));
+
+        shouldError("Custom query is invalid: [parameter 'qwe' value is invalid: '']",
+                () -> validator.checkCustomQueryParameters(queryToMap("qwe=")));
+
+        shouldError("Custom query is invalid: [parameter 'qwe' value is invalid: '']",
+                () -> validator.checkCustomQueryParameters(queryToMap("qwe=&&")));
+
+        // TODO точно так ок?
+        shouldOk(() -> validator.checkCustomQueryParameters(queryToMap("=")));
+
+        shouldOk(() -> validator.checkCustomQueryParameters(queryToMap(null)));
+
+        shouldError("Custom query is invalid: [" +
+                        "parameter 'asd' value is invalid: '', " +
+                        "parameter 'zxc' value is invalid: '', " +
+                        "parameter 'qwe' value is invalid: '']",
+                () -> validator.checkCustomQueryParameters(queryToMap("qwe=&asd=&zxc=")));
+
+        shouldOk(() -> validator.checkCustomQueryParameters(queryToMap("qwe=1")));
+    }
+
+    @Test
+    public void validateCheckUser() {
+        when(registration.checkUser(anyString(), anyString())).thenAnswer(inv -> inv.getArgument(0));
+
+        shouldError("Player id is invalid: 'email@gmail.com'",
+                () -> validator.checkUser(user("email@gmail.com", "12345678901234567890")));
+
+        shouldOk(() -> validator.checkUser(user("validPlayerId", "12345678901234567890")));
+
+        shouldError("Player id is invalid: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@aaa.aaa'",
+                () -> validator.checkUser(user("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@aaa.aaa", "12345678901234567890")));
+
+        shouldError("Player id is invalid: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'",
+                () -> validator.checkUser(user("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "12345678901234567890")));
+
+        shouldError("Player code is invalid: '000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000'",
+                () -> validator.checkUser(user("codePlayerId", "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")));
+
+        shouldError("Player id is invalid: 'email#&*^#gmail%#&^*com'",
+                () -> validator.checkUser(user("email#&*^#gmail%#&^*com", "12345678901234567890")));
+
+        shouldError("Player code is invalid: '12dehgfsgfsdlfidfj90'",
+                () -> validator.checkUser(user("validPlayerId", "12dehgfsgfsdlfidfj90")));
+
+        shouldError("Player id is invalid: 'null'",
+                () -> validator.checkUser(user(null, "12345678901234567890")));
+
+        shouldError("Player code is invalid: 'null'",
+                () -> validator.checkUser(user("validPlayerId", null)));
+
+    }
+
+    private Registration.User user(String id, String code) {
+        return new Registration.User(){{
+            setId(id);
+            setCode(code);
+        }};
     }
 }

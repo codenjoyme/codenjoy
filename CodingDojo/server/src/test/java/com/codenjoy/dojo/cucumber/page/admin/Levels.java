@@ -22,8 +22,7 @@ package com.codenjoy.dojo.cucumber.page.admin;
  * #L%
  */
 
-import com.codenjoy.dojo.cucumber.page.Page;
-import com.codenjoy.dojo.cucumber.page.WebDriverWrapper;
+import com.codenjoy.dojo.cucumber.page.PageObject;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.util.Lists;
@@ -49,19 +48,15 @@ import static java.util.stream.Collectors.toList;
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
 @RequiredArgsConstructor
-public class Levels {
+public class Levels extends PageObject {
 
     // selectors
     public static final String LEVELS = "//table[@id='levels']";
     public static final BiFunction<String, String, By> MAP = (index, with) -> xpath(LEVELS + "//tr[@index%s]//*[@with='%s']", index, with);
     public static final Function<Integer, By> MAP_KEY = index -> MAP.apply(format("='%s'", index), "key");
     public static final Function<Integer, By> MAP_VALUE = index -> MAP.apply(format("='%s'", index), "value");
-    public static final By SAVE_BUTTON = xpath(LEVELS + "//input[@value='Save']");
-    public static final By ADD_BUTTON = xpath(LEVELS + "//input[@value='Add']");
-
-    // page objects
-    private final Page page;
-    private final WebDriverWrapper web;
+    public static final Function<String, By> SAVE_BUTTON = name -> xpath(LEVELS + "//input[@value='%s']", name);
+    public static final Function<String, By> ADD_BUTTON = name -> xpath(LEVELS + "//input[@value='%s']", name);
 
     public String mapKey(int index) {
         return web.text(MAP_KEY.apply(index));
@@ -115,10 +110,10 @@ public class Levels {
     }
 
     public void save() {
-        web.elementBy(SAVE_BUTTON).click();
+        web.elementBy(SAVE_BUTTON.apply(actions.saveLevelsMaps)).click();
     }
 
     public void add() {
-        web.elementBy(ADD_BUTTON).click();
+        web.elementBy(ADD_BUTTON.apply(actions.addNewLevelMap)).click();
     }
 }
