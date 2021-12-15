@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.ConfigProperties;
 import com.codenjoy.dojo.services.ContextPathGetter;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory;
+import com.codenjoy.dojo.web.controller.GithubUsernamesCache;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -86,7 +87,7 @@ public class RegistrationTest {
                             public String getContext() {
                                 return "context";
                             }
-                        }), "admin", "admin", new BCryptPasswordEncoder(), properties, false);
+                        }), "admin", "admin", new BCryptPasswordEncoder(), properties, false, new GithubUsernamesCache());
     }
 
     @After
