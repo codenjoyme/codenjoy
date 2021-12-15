@@ -23,8 +23,10 @@ package com.codenjoy.dojo.services.grpc;
  */
 
 
+import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.dao.SubscriptionSaver;
+import com.codenjoy.dojo.services.playerdata.QuerySubscription;
 import com.dojo.notifications.Query;
 import com.dojo.notifications.QueryRequest;
 import com.dojo.notifications.QueryResponse;
@@ -57,16 +59,27 @@ public class QueryClient {
         return response.getQueryList();
     }
 
-    public void subscribeToNewQueries(String userId, List<Query> allActiveQueries, List<String> userQueryIds, String game) {
-        String slackEmail = registration.getSlackEmailById(userId);
+    public void subscribeToNewQueries(Player player, List<Query> allActiveQueries, List<Integer> userQueryIds, String game) {
+        String slackEmail = registration.getSlackEmailById(player.getId());
         allActiveQueries.stream()
-                .filter(query -> !userQueryIds.contains(String.valueOf(query.getId())))
-                .forEach(query -> subscriptionSaver.saveSubscription(userId, query.getId(), true, !(slackEmail.equals("")), game));
+                .filter(query -> !userQueryIds.contains(query.getId()))
+                .forEach(query -> {
+                    subscriptionSaver.saveSubscription(player.getId(), query.getId(), true, !(slackEmail.equals("")), game);
+                    player.putSubscriptionForGame(game, new QuerySubscription(query, true, !(slackEmail.equals(""))));
+                });
 
     }
 
-    public void removeOldQueries(String userId, List<Query> allActiveQueries, List<String> userQueryIds, String game) {
-        List<String> allActiveIds = allActiveQueries.stream().map(query -> String.valueOf(query.getId())).collect(Collectors.toList());
-        userQueryIds.stream().filter(s -> !allActiveIds.contains(s)).forEach(query -> subscriptionSaver.tryDeleteSubscription(userId, String.valueOf(query), game));
+    public void removeOldQueries(Player player, List<Query> allActiveQueries, List<Integer> userQueryIds, String game) {
+        List<Integer> allActiveIds = allActiveQueries.stream()
+                .map(Query::getId)
+                .collect(Collectors.toList());
+
+        userQueryIds.stream()
+                .filter(s -> !allActiveIds.contains(s))
+                .forEach(query -> {
+                    subscriptionSaver.tryDeleteSubscription(player.getId(), String.valueOf(query), game);
+                    player.removeSubscriptionForGame(game, query);
+                });
     }
 }

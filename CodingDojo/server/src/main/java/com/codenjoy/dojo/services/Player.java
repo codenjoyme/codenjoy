@@ -26,12 +26,20 @@ package com.codenjoy.dojo.services;
 import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
+import com.codenjoy.dojo.services.playerdata.QuerySubscription;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
+import com.dojo.notifications.Query;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.codenjoy.dojo.services.GameServiceImpl.removeNumbers;
 
@@ -63,6 +71,7 @@ public class Player implements ScreenRecipient, Closeable {
     private String gitHubUsername;
     private String slackEmail;
     private String repositoryUrl;
+    private Map<String, List<QuerySubscription>> subscriptionsForGame;
 
     public Player(String id) {
         this.id = id;
@@ -74,6 +83,37 @@ public class Player implements ScreenRecipient, Closeable {
         this.gameType = gameType;
         this.scores = scores;
         this.info = info;
+        subscriptionsForGame = new HashMap<>();
+    }
+
+    public List<QuerySubscription> getSubscriptionsForGame(String game) {
+        subscriptionsForGame.computeIfAbsent(game, k -> new ArrayList<>());
+        return subscriptionsForGame.get(game);
+    }
+
+    public List<Integer> getSubscriptionIdsForGame(String game) {
+        subscriptionsForGame.computeIfAbsent(game, k -> new ArrayList<>());
+        return subscriptionsForGame.get(game).stream()
+                .map(qs -> qs.getQuery().getId())
+                .collect(Collectors.toList());
+    }
+
+    public void removeSubscriptionForGame(String game, int queryId) {
+        QuerySubscription qs = subscriptionsForGame.get(game).stream()
+                .filter(q -> queryId == q.getQuery().getId()).findFirst().get();
+        subscriptionsForGame.get(game).remove(qs);
+    }
+
+    public void putSubscriptionForGame(String game, QuerySubscription subscription) {
+        if (!subscriptionsForGame.containsKey(game)) {
+            subscriptionsForGame.put(game, new ArrayList<>());
+        }
+        subscriptionsForGame.get(game).add(subscription);
+    }
+
+    public void updateSubscription(String game, Query query, boolean email, boolean slack) {
+        removeSubscriptionForGame(game, query.getId());
+        putSubscriptionForGame(game, new QuerySubscription(query, email, slack));
     }
 
     @Override
