@@ -358,6 +358,7 @@ span.pow {
 
 canvas {
     border: 1px solid;
+    width: 100%;
 }
 
 /* rule page */
