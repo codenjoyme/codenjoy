@@ -40,7 +40,6 @@
 <body>
     <div id="settings" page="${page}" contextPath="${ctx}" game="${game}" room="${room}"></div>
 
-    <%@include file="forkMe.jsp"%>
 
     <div class="page-header">
         <h1>Admin page</h1>
