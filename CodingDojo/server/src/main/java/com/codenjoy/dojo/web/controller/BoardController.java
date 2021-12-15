@@ -26,6 +26,7 @@ package com.codenjoy.dojo.web.controller;
 import com.codenjoy.dojo.services.ConfigProperties;
 import com.codenjoy.dojo.services.GameServiceImpl;
 import com.codenjoy.dojo.services.GameType;
+import com.codenjoy.dojo.services.BoardService;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.dao.FeedbackSaver;
@@ -52,7 +53,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
 import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
@@ -78,6 +78,7 @@ public class BoardController {
     public static final String IS_SLACK_SUBSCRIBED = "isSlackSubscribed";
     public static final String REPOSITORY_URL = "repositoryURL";
     public static final String FEEDBACK = "feedback";
+    public static final String LEADERBOARD = "leaderboard";
 
     private final PlayerService playerService;
     private final Registration registration;
@@ -88,6 +89,7 @@ public class BoardController {
     private final FeedbackSaver feedbackSaver;
     private final SubscriptionSaver subscriptionSaver;
     private final QueryClient queryClient;
+    private final BoardService leaderboardService;
 
     @GetMapping("/player/{player}")
     public String boardPlayer(ModelMap model,
@@ -126,7 +128,7 @@ public class BoardController {
             return "redirect:/register?id=" + id;
         }
 
-        setUpQueries(player.getId(), game);
+        setUpQueries(player, game);
 
         populateBoardAttributes(model, code, player, false);
 
@@ -173,11 +175,12 @@ public class BoardController {
 
     private void populateBoardAttributes(ModelMap model, String code, Player player, boolean allPlayersScreen) {
         populateBoardAttributes(model, code, player.getGame(), player.getRoom(), player.getGameOnly(), player.getId(),
-                player.getReadableName(), player.getGitHubUsername(), allPlayersScreen);
+                player.getReadableName(), player.getGitHubUsername(), player.getSubscriptionsForGame(player.getGame()), allPlayersScreen);
     }
 
     private void populateBoardAttributes(ModelMap model, String code, String game, String room, String gameOnly,
-                                         String playerId, String readableName, String github, boolean allPlayersScreen) {
+                                         String playerId, String readableName, String github,
+                                         List<QuerySubscription> subscriptionForGame, boolean allPlayersScreen) {
         model.addAttribute(CODE, code);
         model.addAttribute(GAME, game);
         model.addAttribute(ROOM, room);
@@ -189,9 +192,10 @@ public class BoardController {
         model.addAttribute(GITHUB, github);
         model.addAttribute(ALL_PLAYERS_SCREEN, allPlayersScreen); // TODO так клиенту припрутся все доски и даже не из его игры, надо фиксить dojo transport
         model.addAttribute(PLAYER_SCORE_CLEANUP_ENABLED, properties.isPlayerScoreCleanupEnabled());
-        model.addAttribute(SUBSCRIBED, getQueriesForGame(playerId, game));
+        model.addAttribute(SUBSCRIBED, subscriptionForGame);
         model.addAttribute(IS_SLACK_SUBSCRIBED, !registration.getSlackEmailById(playerId).equals(""));
         model.addAttribute(REPOSITORY_URL, playerGameSaver.getRepositoryByPlayerIdForGame(playerId, game));
+        model.addAttribute(LEADERBOARD, leaderboardService.getPlayersForGame(game));
     }
 
     @GetMapping(value = "/log/player/{player}", params = {"game", "room"})
@@ -255,7 +259,7 @@ public class BoardController {
             code = user.getCode();
         }
 
-        populateBoardAttributes(model, code, game, room, player.getGameOnly(), null, null, null, true);
+        populateBoardAttributes(model, code, game, room, player.getGameOnly(), null, null, null, null, true);
         return "board";
     }
 
@@ -292,12 +296,13 @@ public class BoardController {
         String playerId = request.getParameter(PLAYER_ID).replace("\"", "");
         String game = request.getParameter(GAME).replace("\"", "");
         String feedbackText = request.getParameter(FEEDBACK);
-
+        Player player = playerService.get(playerId);
         if (!feedbackText.equals("")) {
             List<Query> queries = queryClient.getQueriesForContest(game);
-            for(Query q : queries){
+            for (Query q : queries) {
                 subscriptionSaver.updateEmailSubscription(playerId, String.valueOf(q.getId()), getCheckBoxValue(q.getId(), "email", request), game);
                 subscriptionSaver.updateSlackSubscription(playerId, String.valueOf(q.getId()), getCheckBoxValue(q.getId(), "slackEmail", request), game);
+                player.updateSubscription(game, q, getCheckBoxValue(q.getId(), "email", request), getCheckBoxValue(q.getId(), "slackEmail", request));
             }
             feedbackSaver.saveFeedback(playerId, game, feedbackText);
         }
@@ -310,26 +315,15 @@ public class BoardController {
         return (code != null) ? "?code=" + code : "";
     }
 
-    private List<QuerySubscription> getQueriesForGame(String playerId, String game) {
-        List<Query> queries = queryClient.getQueriesForContest(game);
-
-        return queries.stream()
-                .map(query -> new QuerySubscription(query,
-                        subscriptionSaver.getEmailValueForQuery(playerId, String.valueOf(query.getId()), game),
-                        subscriptionSaver.getSlackValueForQuery(playerId, String.valueOf(query.getId()), game)))
-                .collect(Collectors.toList());
-
-    }
-
     private boolean getCheckBoxValue(int queryId, String forWhichCheckBox, HttpServletRequest request) {
         return Boolean.parseBoolean(request.getParameter(forWhichCheckBox + queryId));
     }
 
-    private void setUpQueries(String userId, String game) {
+    private void setUpQueries(Player player, String game) {
         List<Query> allActiveQueries = queryClient.getQueriesForContest(game);
-        List<String> userQueryIds = subscriptionSaver.getUserQueriesForContest(userId, game);
+        List<Integer> userQueryIds = player.getSubscriptionIdsForGame(game);
 
-        queryClient.subscribeToNewQueries(userId, allActiveQueries, userQueryIds, game);
-        queryClient.removeOldQueries(userId, allActiveQueries, userQueryIds, game);
+        queryClient.subscribeToNewQueries(player, allActiveQueries, userQueryIds, game);
+        queryClient.removeOldQueries(player, allActiveQueries, userQueryIds, game);
     }
 }

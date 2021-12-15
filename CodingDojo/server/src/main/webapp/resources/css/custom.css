@@ -127,6 +127,11 @@ body{
     list-style-type: none;
 }
 
+.overflow{
+    Overflow-y:scroll;
+    height: 200px;
+}
+
 .inner-table{
     line-height: 1.15;
     -webkit-text-size-adjust: 100%;
@@ -143,7 +148,7 @@ body{
     overflow: hidden;
 }
 
-.leaderboard-board{
+.board-board{
     line-height: 1.15;
     -webkit-text-size-adjust: 100%;
     font-size: 62.5%;
@@ -491,4 +496,9 @@ body{
     justify-content: inherit;
     font-size: 1.6rem;
     text-transform: none;
+}
+
+.count:before {
+  counter-increment: section;
+  content: counter(section);
 }

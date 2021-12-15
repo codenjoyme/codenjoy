@@ -56,7 +56,15 @@
         <div class="separator">
             <%@include file="leaderstable.jsp"%>
             <div style = "flex:0 0 37%;">
-                <label> !</label>
+                <label style="text-align:center;"> Hello ${readableName}! <br>This is a competition for a ${game} position at EPAM. <br>
+                        The people within the top 10 go forward to a technical interview. <br>
+                         In order to climb the leaderboard you will have to do some tasks. <br> <br>
+                          We have provided you with a
+                            <a href="${repositoryURL}"> github repository </a>
+                            where you will find what tasks you have to complete and you will have to
+                            submit them in the provided repository.<br><br>
+                            We wish you good luck and may the best coders win!
+                </label>
             </div>
             <%@include file="leaderboard.jsp"%>
         </div>
