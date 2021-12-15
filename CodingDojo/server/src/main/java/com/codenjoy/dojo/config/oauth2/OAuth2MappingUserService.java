@@ -33,10 +33,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-/**
- * @author Igor Petrov
- * Created at 5/15/2019
- */
 @Component
 @RequiredArgsConstructor
 @OAuth2Profile
