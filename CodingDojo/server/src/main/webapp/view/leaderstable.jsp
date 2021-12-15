@@ -23,37 +23,46 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 
-<table id="table-logs" class="table table-striped leaderboard-table">
-    <thead>
-        <th width="5%">
-            <c:choose>
-                <c:when test="${code != null}">
-                    <a href="${ctx}/board/game/${game}?code=${code}">#</a>
-                </c:when>
-                <c:otherwise>
-                    <a href="${ctx}/board/game/${game}">#</a>
-                </c:otherwise>
-            </c:choose>
-        </th>
-        <th width="55%">
-            <div class="score-header">
-                Player
-                <sec:authorize access="isAuthenticated()">
-                    <c:if test="${playerScoreCleanupEnabled}">
-                        <span class="pow">
-                            <a href="#" onclick="cleanPlayerScores()">clear score</a>
-                        </span>
-                    </c:if>
-                </sec:authorize>
-            </div>
-        </th>
-        <th width="25%" class="center">Score</th>
-    </thead>
-    <tbody id="table-logs-body">
-    <!--
-        <td>1</td>
-        <td><a href="${ctx}/board/player/email?code=code">name</a></td>
-        <td class="center">score</td>
-    -->
-    </tbody>
-</table>
+<div class="leader-board" style="flex:0 0 33%;">
+    <div class="leaderboard-board">
+        <div class="leader-board-label">
+            <h3> Leaderboard </h3>
+        </div>
+        <div class="div-table">
+                <table id="table-logs" class="table table-striped leaderboard-table">
+                <thead>
+                    <th width="5%">
+                        <c:choose>
+                            <c:when test="${code != null}">
+                                <a href="${ctx}/board/game/${game}?code=${code}">#</a>
+                            </c:when>
+                            <c:otherwise>
+                                <a href="${ctx}/board/game/${game}">#</a>
+                            </c:otherwise>
+                        </c:choose>
+                    </th>
+                    <th width="55%">
+                        <div class="score-header">
+                            Player
+                            <sec:authorize access="isAuthenticated()">
+                                <c:if test="${playerScoreCleanupEnabled}">
+                                    <span class="pow">
+                                        <a href="#" onclick="cleanPlayerScores()">clear score</a>
+                                    </span>
+                                </c:if>
+                            </sec:authorize>
+                        </div>
+                    </th>
+                    <th width="25%" class="center">Score</th>
+                </thead>
+                <tbody id="table-logs-body">
+                <!--
+                    <td>1</td>
+                    <td><a href="${ctx}/board/player/email?code=code">name</a></td>
+                    <td class="center">score</td>
+                -->
+                </tbody>
+                </table>
+        </div>
+    </div>
+</div>

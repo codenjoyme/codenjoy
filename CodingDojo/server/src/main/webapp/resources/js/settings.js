@@ -31,7 +31,7 @@ function subOrUnSub() {
 
 function pop() {
     var popup = document.getElementById('myPopup');
-    popup.classList.toggle('show');
+    popup.hidden = false;
 }
 
 function changeValue(name) {

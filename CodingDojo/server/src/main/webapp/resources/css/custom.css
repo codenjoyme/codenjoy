@@ -19,3 +19,476 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
+ html {
+    -webkit-locale: "en";
+    height: 100%;
+    font-size: 62.5%;
+    line-height: 1.15;
+    margin: 0;
+    padding: 0;
+    -webkit-text-size-adjust: 100%;
+    font-family: var(--font-family);
+    --swiper-theme-color: #007aff;
+    --swiper-navigation-size: 44px;
+    --font-family: 'Source Sans Pro', sans-serif;
+ }
+
+body{
+    padding-right: 0px !important;
+    background-color: #252934;
+    overflow-y: scroll;
+}
+
+.default{
+    line-height: 1.15;
+    margin: 0;
+    padding: 0;
+    -webkit-text-size-adjust: 100%;
+    font-family: var(--font-family);
+    --swiper-theme-color: #007aff;
+    --swiper-navigation-size: 44px;
+    --font-family: 'Source Sans Pro', sans-serif;
+}
+
+.header-bar{
+    font-size: 62.5%;
+    box-sizing: border-box;
+    padding: 2.05rem 0px;
+    background: rgb(48, 54, 68);
+}
+
+.separator{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.leader-board{
+    line-height: 1.15;
+    -webkit-text-size-adjust: 100%;
+    font-size: 62.5%;
+    font-family: var(--font-family);
+    --swiper-theme-color: #007aff;
+    --swiper-navigation-size: 44px;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex: 0 0 25%;
+    flex-direction: column;
+    background-color: rgb(48, 54, 68);
+}
+
+.leader-board-label{
+    line-height: 1.15;
+    -webkit-text-size-adjust: 100%;
+    font-size: 62.5%;
+    font-family: var(--font-family);
+    --swiper-theme-color: #007aff;
+    --swiper-navigation-size: 44px;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 1.6rem 1.4rem;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+}
+
+.label-text{
+    line-height: 1.15;
+    -webkit-text-size-adjust: 100%;
+    font-family: var(--font-family);
+    --swiper-theme-color: #007aff;
+    --swiper-navigation-size: 44px;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0px;
+    font-size: 1.6rem;
+    font-weight: normal;
+    color: rgb(255, 255, 255);
+}
+
+.div-table{
+    line-height: 1.15;
+    -webkit-text-size-adjust: 100%;
+    font-size: 62.5%;
+    font-family: var(--font-family);
+    --swiper-theme-color: #007aff;
+    --swiper-navigation-size: 44px;
+    box-sizing: border-box;
+    margin: 0;
+    height: 100%;
+    padding: 0px;
+    counter-reset: item 0;
+    list-style-type: none;
+}
+
+.inner-table{
+    line-height: 1.15;
+    -webkit-text-size-adjust: 100%;
+    font-size: 62.5%;
+    font-family: var(--font-family);
+    --swiper-theme-color: #007aff;
+    --swiper-navigation-size: 44px;
+    list-style-type: none;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    inset: 0px 10px 0px 0px;
+    overflow: hidden;
+}
+
+.leaderboard-board{
+    line-height: 1.15;
+    -webkit-text-size-adjust: 100%;
+    font-size: 62.5%;
+    font-family: var(--font-family);
+    --swiper-theme-color: #007aff;
+    --swiper-navigation-size: 44px;
+    list-style-type: none;
+    margin: 0;
+    box-sizing: border-box;
+    padding: 0.05px;
+    min-height: 100%;
+    min-width: 100%;
+}
+
+.settings{
+    display: flex;
+    flex: 0 0 25%;
+    flex-direction: column;
+    background-color: rgb(48, 54, 68);
+}
+
+.header-container{
+    font-size: 62.5%;
+    box-sizing: border-box;
+    max-width: 100%;
+    padding-right: 1.5rem;
+    padding-left: 1.5rem;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    margin: 0px auto;
+    width: 100%;
+}
+
+.logo-link{
+    box-sizing: border-box;
+    background-color: transparent;
+    font-size: 1.6rem;
+    color: rgb(255, 255, 255);
+    text-decoration: none;
+}
+
+.logo-div{
+    font-size: 1.6rem;
+    color: rgb(255, 255, 255);
+    box-sizing: border-box;
+    width: 20rem;
+    height: 3.3rem;
+    background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTQuOTIgMzIiIGZpbGw9IiNGRkYiPgogIDxwYXRoIGQ9Ik00IDNoMy41VjBoLTdMNCAzek05IDBoOHYzSDl6TTkgMjloOHYzSDl6TTI3IDI5aDh2M2gtOHpNMTMuNSA4aDE3djNoLTE3ek0xOC41IDBoN3YzaC03ek0yNyAwaDh2M2gtOHpNNDAgM2gtMy41VjBoN0w0MCAzek0zLjUgOGg0djNoLTR6TTM2LjUgOGg0djNoLTR6TTkgM2gzdjI2SDl6TTMyIDNoM3YyNmgtM3pNMTM3IDIwLjk4di0xNGg1LjlxMi4yMiAwIDMuOTQuODggMS43Mi44OCAyLjY3IDIuNDcuOTUgMS41OS45NSAzLjY1IDAgMi4wNi0uOTUgMy42NS0uOTUgMS41OS0yLjY3IDIuNDctMS43Mi44OC0zLjk0Ljg4SDEzN3ptMi0xLjc0aDMuNzhxMS43IDAgMi45OS0uNjYgMS4yOS0uNjYgMS45OS0xLjg1dC43LTIuNzVxMC0xLjU2LS43LTIuNzV0LTEuOTktMS44NXEtMS4yOS0uNjYtMi45OS0uNjZIMTM5djEwLjUyem0yMS4xNCAxLjlxLTIuMTIgMC0zLjgyLS45My0xLjctLjkzLTIuNjctMi41Ny0uOTctMS42NC0uOTctMy42NiAwLTIuMDIuOTctMy42Ni45Ny0xLjY0IDIuNjctMi41NyAxLjctLjkzIDMuODItLjkzIDIuMSAwIDMuOC45MyAxLjcuOTMgMi42NiAyLjU2Ljk2IDEuNjMuOTYgMy42N3QtLjk2IDMuNjdxLS45NiAxLjYzLTIuNjYgMi41Ni0xLjcuOTMtMy44Ljkzem0wLTEuNzhxMS41NCAwIDIuNzctLjd0MS45NC0xLjkzcS43MS0xLjIzLjcxLTIuNzV0LS43MS0yLjc1cS0uNzEtMS4yMy0xLjk0LTEuOTN0LTIuNzctLjdxLTEuNTQgMC0yLjc5Ljd0LTEuOTYgMS45M3EtLjcxIDEuMjMtLjcxIDIuNzV0LjcxIDIuNzVxLjcxIDEuMjMgMS45NiAxLjkzdDIuNzkuN3ptMTIuMjggMS43OHEtMS4yNiAwLTIuMzQtLjUzLTEuMDgtLjUzLTEuNzQtMS40OWwxLjE2LTEuMzZxMS4xNiAxLjY2IDIuOTIgMS42NiAxLjE4IDAgMS43OS0uNzIuNjEtLjcyLjYxLTIuMTJWOC43MmgtNS4wNlY2Ljk4aDcuMDR2OS41cTAgMi4zMi0xLjExIDMuNDktMS4xMSAxLjE3LTMuMjcgMS4xN3ptMTUuMDggMHEtMi4xMiAwLTMuODItLjkzLTEuNy0uOTMtMi42Ny0yLjU3LS45Ny0xLjY0LS45Ny0zLjY2IDAtMi4wMi45Ny0zLjY2Ljk3LTEuNjQgMi42Ny0yLjU3IDEuNy0uOTMgMy44Mi0uOTMgMi4xIDAgMy44LjkzIDEuNy45MyAyLjY2IDIuNTYuOTYgMS42My45NiAzLjY3dC0uOTYgMy42N3EtLjk2IDEuNjMtMi42NiAyLjU2LTEuNy45My0zLjguOTN6bTAtMS43OHExLjU0IDAgMi43Ny0uN3QxLjk0LTEuOTNxLjcxLTEuMjMuNzEtMi43NXQtLjcxLTIuNzVxLS43MS0xLjIzLTEuOTQtMS45M3QtMi43Ny0uN3EtMS41NCAwLTIuNzkuN3QtMS45NiAxLjkzcS0uNzEgMS4yMy0uNzEgMi43NXQuNzEgMi43NXEuNzEgMS4yMyAxLjk2IDEuOTN0Mi43OS43ek02Mi4zNiAyMS4xNHEtMi4xIDAtMy43OS0uOTN0LTIuNjUtMi41NnEtLjk2LTEuNjMtLjk2LTMuNjd0Ljk2LTMuNjdxLjk2LTEuNjMgMi42Ni0yLjU2IDEuNy0uOTMgMy44LS45MyAxLjY0IDAgMyAuNTVUNjcuNyA5bC0xLjMgMS4yNlE2NC44MiA4LjYgNjIuNDYgOC42cS0xLjU2IDAtMi44Mi43LTEuMjYuNy0xLjk3IDEuOTN0LS43MSAyLjc1cTAgMS41Mi43MSAyLjc1dDEuOTcgMS45M3ExLjI2LjcgMi44Mi43IDIuMzQgMCAzLjk0LTEuNjhsMS4zIDEuMjZxLS45NiAxLjA4LTIuMzMgMS42NC0xLjM3LjU2LTMuMDEuNTZ6bTEyLjMyLS4wNHEtMS41OCAwLTIuODQtLjctMS4yNi0uNy0xLjk3LTEuOTN0LS43MS0yLjc5cTAtMS41Ni43MS0yLjc5dDEuOTctMS45MnExLjI2LS42OSAyLjg0LS42OSAxLjU4IDAgMi44My42OXQxLjk2IDEuOTJxLjcxIDEuMjMuNzEgMi43OXQtLjcxIDIuNzlxLS43MSAxLjIzLTEuOTYgMS45M3QtMi44My43em0wLTEuNjhxMS4wMiAwIDEuODMtLjQ3dDEuMjctMS4zMnEuNDYtLjg1LjQ2LTEuOTV0LS40Ni0xLjk1cS0uNDYtLjg1LTEuMjctMS4zMS0uODEtLjQ2LTEuODMtLjQ2dC0xLjgzLjQ2cS0uODEuNDYtMS4yOCAxLjMxLS40Ny44NS0uNDcgMS45NXQuNDcgMS45NXEuNDcuODUgMS4yOCAxLjMyLjgxLjQ3IDEuODMuNDd6TTkxLjIyIDYuMTRoMS45MnYxNC44NEg5MS4zVjE5LjNxLS42NC44OC0xLjYyIDEuMzQtLjk4LjQ2LTIuMTYuNDYtMS41NCAwLTIuNzYtLjY4LTEuMjItLjY4LTEuOTEtMS45MXQtLjY5LTIuODNxMC0xLjYuNjktMi44Mi42OS0xLjIyIDEuOTEtMS45IDEuMjItLjY4IDIuNzYtLjY4IDEuMTQgMCAyLjEuNDMuOTYuNDMgMS42IDEuMjdWNi4xNHptLTMuNTQgMTMuMjhxMSAwIDEuODItLjQ3LjgyLS40NyAxLjI4LTEuMzIuNDYtLjg1LjQ2LTEuOTV0LS40Ni0xLjk1cS0uNDYtLjg1LTEuMjgtMS4zMS0uODItLjQ2LTEuODItLjQ2LTEuMDIgMC0xLjgzLjQ2dC0xLjI4IDEuMzFxLS40Ny44NS0uNDcgMS45NXQuNDcgMS45NXEuNDcuODUgMS4yOCAxLjMyLjgxLjQ3IDEuODMuNDd6bTkuNCAxLjU2di0xMC42SDk5djEwLjZoLTEuOTJ6bS45Ni0xMi42NHEtLjU2IDAtLjkzLS4zNnQtLjM3LS44OHEwLS41Mi4zNy0uODl0LjkzLS4zN3EuNTYgMCAuOTMuMzV0LjM3Ljg3cTAgLjU0LS4zNy45MXQtLjkzLjM3em0xMC41OCAxLjk0cTIuMDIgMCAzLjIxIDEuMTd0MS4xOSAzLjQzdjYuMWgtMS45MlYxNS4xcTAtMS41NC0uNzQtMi4zMi0uNzQtLjc4LTIuMTItLjc4LTEuNTYgMC0yLjQ2LjkxLS45LjkxLS45IDIuNjF2NS40NmgtMS45MnYtMTAuNmgxLjg0djEuNnEuNTgtLjgyIDEuNTctMS4yNi45OS0uNDQgMi4yNS0uNDR6bTE2LjY0LjFoMS44MnY5LjE2cTAgMi43OC0xLjM4IDQuMTEtMS4zOCAxLjMzLTQuMTIgMS4zMy0xLjUgMC0yLjg2LS40MS0xLjM2LS40MS0yLjItMS4xN2wuOTItMS40OHEuNzQuNjQgMS44MyAxLjAxdDIuMjUuMzdxMS44NiAwIDIuNzUtLjg4Ljg5LS44OC44OS0yLjY4di0uODRxLS42OC44Mi0xLjY3IDEuMjMtLjk5LjQxLTIuMTUuNDEtMS41MiAwLTIuNzUtLjY1dC0xLjkzLTEuODJxLS43LTEuMTctLjctMi42N3QuNy0yLjY3cS43LTEuMTcgMS45My0xLjgxIDEuMjMtLjY0IDIuNzUtLjY0IDEuMiAwIDIuMjMuNDR0MS42OSAxLjN2LTEuNjR6bS0zLjcgOC40OHExLjA0IDAgMS44Ny0uNDQuODMtLjQ0IDEuMy0xLjIzLjQ3LS43OS40Ny0xLjc5IDAtMS41NC0xLjAyLTIuNDktMS4wMi0uOTUtMi42Mi0uOTUtMS42MiAwLTIuNjQuOTV0LTEuMDIgMi40OXEwIDEgLjQ3IDEuNzl0MS4zIDEuMjNxLjgzLjQ0IDEuODkuNDR6Ii8+Cjwvc3ZnPg==") no-repeat;
+    cursor: pointer;
+}
+
+.navigation-bar-elements{
+    font-size: 62.5%;
+    box-sizing: border-box;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
+    -webkit-box-align: center;
+    align-items: center;
+}
+
+.elements{
+    font-size: 62.5%;
+    box-sizing: border-box;
+    display: flex;
+    flex-flow: row;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+}
+
+.logout-outline{
+    font-size: 62.5%;
+    box-sizing: border-box;
+    position: relative;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+}
+
+.logout-button{
+    box-sizing: border-box;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    width: max-content;
+    min-width: 13.6rem;
+    height: 4rem;
+    margin: 0px 0px 0px 1.5rem;
+    background-color: transparent;
+    border-radius: 2rem;
+    border: 0.1rem solid white;
+    color: rgb(255, 255, 255);
+    text-decoration: none;
+    font-size: 1.6rem;
+    cursor: pointer;
+    outline: none;
+}
+
+.hmUASz{
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    height: 100%;
+    margin: 0px auto;
+}
+
+.header-buttons{
+    box-sizing: border-box;
+    background-color: transparent;
+    color: rgb(255, 255, 255);
+    text-decoration: none;
+    font-size: 1.6rem;
+    line-height: 2rem;
+    margin: 0px 0.75rem;
+}
+
+#leaderboard .leaderboard-board {
+    display: flex;
+    flex: 0 0 25%;
+    flex-direction: column;
+    background-color: rgb(48, 54, 68);
+}
+
+.querySubscription{
+    display: flex;
+    flex: 0 0 25%;
+    flex-direction: column;
+    background-color: rgb(48, 54, 68);
+}
+
+.page-footer{
+    font-size: 62.5%;
+    box-sizing: border-box;
+    padding: 1rem 0px;
+    background-color: rgb(48, 50, 64);
+    position: relative;
+}
+
+.footer-container{
+    font-size: 62.5%;
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0px auto;
+    padding-right: 1.5rem;
+    padding-left: 1.5rem;
+    max-width: 123rem;
+}
+
+.footer-elements{
+    font-size: 62.5%;
+    box-sizing: border-box;
+    display: flex;
+    flex-flow: row nowrap;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    -webkit-box-align: center;
+    align-items: center;
+}
+
+.copyrights{
+    font-size: 62.5%;
+    box-sizing: border-box;
+}
+
+.copyrights-lines{
+    box-sizing: border-box;
+    display: flex;
+    margin-bottom: 0.5rem;
+    color: rgb(190, 188, 187);
+    font-size: 1.4rem;
+    line-height: 1.8rem;
+}
+
+.epm-logo{
+    color: rgb(190, 188, 187);
+    font-size: 1.4rem;
+    line-height: 1.8rem;
+    box-sizing: border-box;
+    border-style: none;
+    display: inline-block;
+    margin: 0px 1rem;
+    user-select: none;
+}
+
+.buttons-list{
+    font-size: 62.5%;
+    box-sizing: border-box;
+    display: flex;
+    flex-flow: row nowrap;
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+}
+
+.button-specification{
+    font-size: 62.5%;
+    list-style: none;
+    box-sizing: border-box;
+    margin-right: 3rem;
+}
+
+.button-link{
+    list-style: none;
+    box-sizing: border-box;
+    background-color: transparent;
+    color: rgb(255, 255, 255);
+    font-size: 1.6rem;
+    letter-spacing: 0px;
+    line-height: 2rem;
+    text-decoration: none;
+}
+
+.white-text{
+    align-items: center;
+    color: rgb(255, 255, 255);
+}
+
+.add-border{
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+.all-games-section{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 2rem 0px;
+    background-color: rgb(37, 41, 52);
+}
+
+.section-label-container{
+    box-sizing: border-box;
+    padding: 0;
+    width: 100%;
+    margin: 0px auto;
+    padding-right: 1.5rem;
+    padding-left: 1.5rem;
+    max-width: 123rem;
+}
+
+.section-paragraph{
+    color: rgb(212, 212, 212);
+    font-size: 2rem;
+    line-height: 2.5rem;
+    padding: 2.4rem 0px 1.6rem;
+}
+
+.game-choice{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -1.5rem;
+    margin-left: -1.5rem;
+}
+
+.single-game{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    padding-right: 1.5rem;
+    padding-left: 1.5rem;
+    margin-bottom: 3rem;
+    flex: 0 0 33.3333%;
+}
+
+.sprite-and-name{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 0.6rem;
+    background: rgb(48, 54, 68);
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0.2rem 1.6rem 0px;
+    cursor: pointer;
+    transition: all 0.2s ease 0s;
+    outline: none;
+}
+
+.join{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    background-color: transparent;
+    text-decoration: none;
+}
+
+.game-sprite{
+    cursor: pointer;
+    box-sizing: border-box;
+    margin: 0;
+    width: 100%;
+    height: 15.1rem;
+    display: flex;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    padding: 0.8rem;
+    border-radius: 0.6rem 0.6rem 0px 0px;
+    background: linear-gradient(rgba(27, 30, 38, 0.79) 0%, rgba(13, 13, 13, 0) 100%) 0% 0% / cover;
+}
+
+.game-info{
+    cursor: pointer;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 1.6rem 1.6rem 1.4rem;
+}
+
+.game-name{
+    padding: 0px 0px 0.8rem;
+    font-size: 2rem;
+    color: rgb(255, 255, 255);
+}
+
+.game-language{
+    display: flex;
+    position: relative;
+    z-index: 2;
+    flex-wrap: wrap;
+    color: rgb(0, 132, 234);
+    font-size: 1.4rem;
+}
+
+.repository{
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    font-weight: 500;
+    line-height: 1.75;
+    letter-spacing: 0.02857em;
+    font-family: inherit;
+    width: 100%;
+    display: inherit;
+    align-items: inherit;
+    justify-content: inherit;
+    font-size: 1.6rem;
+    text-transform: none;
+}

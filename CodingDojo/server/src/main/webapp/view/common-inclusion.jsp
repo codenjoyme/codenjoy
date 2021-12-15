@@ -28,6 +28,7 @@
 
 <head>
     <link href="${ctx}/resources/favicon.ico" rel="icon">
+    <link href="${ctx}/resources/css/all.css" rel="stylesheet">
     <link href="${ctx}/resources/css/custom.css" rel="stylesheet">
 
     <c:choose>
@@ -41,16 +42,34 @@
     </c:choose>
 </head>
 
-<!-- TODO to remove games from here -->
-<c:if test="${!justBoard && page != 'register' && gameOnly != 'icancode' && gameOnly != 'expansion'}" >
-    <sec:authorize access="isAuthenticated()">
-        <body>
-            <a href="${ctx}/process_logout" class="logout-link">Logout</a>
-        </body>
-    </sec:authorize>
-    <sec:authorize access="!isAuthenticated()">
-        <body>
-            <a href="${ctx}/login?game=${gameOnly}" class="logout-link">Login</a>
-        </body>
-    </sec:authorize>
-</c:if>
+    <header class="header-bar">
+        <div class="header-container">
+            <div class="default elements">
+                <a href="#" title="Home" class="default logo-link">
+                    <div class="default logo-div"></div>
+                </a>
+                <nav class="default navigation-bar-elements">
+                    <a class="default header-buttons" href="/events">Events</a>
+                    <a aria-current="page" class="default header-buttons active" href="${ctx}/">Games</a>
+                    <a class="default header-buttons" href="/organizer">Organizer</a>
+                    <a class="default header-buttons" href="/manuals">Manuals</a>
+                    <a class="default header-buttons" href="/about-us">About Us</a>
+                </nav>
+            </div>
+            <div class="default logout-outline">
+                <!-- TODO to remove games from here -->
+                <c:if test="${!justBoard && page != 'register' && gameOnly != 'icancode' && gameOnly != 'expansion'}" >
+                    <sec:authorize access="isAuthenticated()">
+                        <body>
+                            <a href="${ctx}/process_logout" class="default logout-button">Logout</a>
+                        </body>
+                    </sec:authorize>
+                    <sec:authorize access="!isAuthenticated()">
+                        <body>
+                            <a href="${ctx}/login?game=${gameOnly}" class="default logout-button">Login</a>
+                        </body>
+                    </sec:authorize>
+                </c:if>
+            </div>
+        </div>
+    </header>
