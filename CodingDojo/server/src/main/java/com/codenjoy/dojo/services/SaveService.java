@@ -28,18 +28,34 @@ import java.util.List;
 public interface SaveService {
 
     long updateAll();
+
     long updateAll(String room);
+
     long update(String id);
+
     boolean load(String id);
+
     void load(String id, String game, String room, String save, String repositoryUrl);
+
     void loadAll(String room);
+
     long save(String id);
+
     long save(Player player);
+
     List<PlayerInfo> getSaves();
+
     long saveAll();
+
     long saveAll(String room);
+
     void loadAll();
+
     void removeSave(String id);
+
+    void removeSaveForGame(String id, String game);
+
     void removeAllSaves();
+
     void removeAllSaves(String room);
 }

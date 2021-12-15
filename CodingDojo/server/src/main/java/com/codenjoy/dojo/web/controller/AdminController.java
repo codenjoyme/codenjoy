@@ -76,20 +76,22 @@ public class AdminController {
     private final ViewDelegationService viewDelegationService;
     private final Semifinal semifinal;
     private final RoomService roomService;
+    private final BoardService leaderboardService;
 
 
     // TODO ROOM а этот метод вообще зачем?
     @GetMapping(params = {"player", "data"})
     public String loadPlayerGameFromSave(@RequestParam("player") String id,
                                          @RequestParam("data") String save,
-                                         HttpServletRequest request)
-    {
-        saveService.load(id, getGameName(request), getGameRoom(request), save,REPOSITORY_URL);
+                                         HttpServletRequest request) {
+        saveService.load(id, getGameName(request), getGameRoom(request), save, REPOSITORY_URL);
         return "redirect:/board/player/" + id;
     }
+
     // используется как rest для апдейта полей конкретного player на admin page
     @PostMapping("/user/info")
-    public @ResponseBody String update(@RequestBody Player player) {
+    public @ResponseBody
+    String update(@RequestBody Player player) {
         try {
             playerService.update(player);
         } catch (Exception e) {
@@ -102,8 +104,7 @@ public class AdminController {
 
     @GetMapping("/player/{player}/save")
     public String savePlayerGame(@PathVariable("player") String id,
-                                 HttpServletRequest request)
-    {
+                                 HttpServletRequest request) {
         saveService.update(id);
         return getAdmin(request);
     }
@@ -119,8 +120,7 @@ public class AdminController {
 
     @GetMapping("/player/{player}/load")
     public String loadPlayerGame(@PathVariable("player") String id,
-                                 HttpServletRequest request)
-    {
+                                 HttpServletRequest request) {
         saveService.load(id);
         return getAdmin(request);
     }
@@ -157,8 +157,7 @@ public class AdminController {
 
     @GetMapping("/player/{player}/gameOver")
     public String removePlayer(@PathVariable("player") String id,
-                               HttpServletRequest request)
-    {
+                               HttpServletRequest request) {
         playerService.remove(id);
         return getAdmin(request);
     }
@@ -172,11 +171,13 @@ public class AdminController {
 
     // ----------------
 
-    @GetMapping("/player/{player}/save/remove")
+    @GetMapping("/player/{player}/{game}/save/remove")
     public String cleanPlayerScoreAndRemovePlayerSave(@PathVariable("player") String id,
+                                                      @PathVariable("game") String game,
                                                       HttpServletRequest request) {
         playerService.cleanScores(id);
-        saveService.removeSave(id);
+        saveService.removeSaveForGame(id, game);
+        leaderboardService.removePlayerFromGame(registration.getNameById(id), game);
         return getAdmin(request);
     }
 
@@ -191,8 +192,7 @@ public class AdminController {
 
     @GetMapping("/player/{player}/registration/remove")
     public String removePlayerRegistration(@PathVariable("player") String id,
-                                           HttpServletRequest request)
-    {
+                                           HttpServletRequest request) {
         registration.remove(id);
         return getAdmin(request);
     }
@@ -307,8 +307,7 @@ public class AdminController {
     @PostMapping()
     public String saveSettings(AdminSettings settings,
                                BindingResult result,
-                               HttpServletRequest request)
-    {
+                               HttpServletRequest request) {
         if (!result.hasErrors()) {
             // do nothing
         }
@@ -341,7 +340,7 @@ public class AdminController {
         }
 
         if (settings.getGames() != null) {
-            List<Parameter> games = (List)settings.getGames();
+            List<Parameter> games = (List) settings.getGames();
             setEnable(games);
         }
 
@@ -410,7 +409,7 @@ public class AdminController {
 
             created++;
             String code = register(id);
-            playerService.register(id, game, room, "127.0.0.1","repository","slackEmail");
+            playerService.register(id, game, room, "127.0.0.1", "repository", "slackEmail");
         }
     }
 
@@ -418,7 +417,7 @@ public class AdminController {
         if (registration.registered(id)) {
             return registration.login(id, id);
         } else {
-            return registration.register(id, id, id, id, id, "", GameAuthorities.USER.roles(),id,id).getCode();
+            return registration.register(id, id, id, id, id, "", GameAuthorities.USER.roles(), id, id).getCode();
         }
     }
 
@@ -453,8 +452,7 @@ public class AdminController {
                            @RequestParam(value = "room", required = false) String room,
                            @RequestParam(value = "game", required = false) String game,
                            @RequestParam(value = CUSTOM_ADMIN_PAGE_KEY, required = false, defaultValue = "false")
-                               Boolean gameSpecificAdminPage)
-    {
+                                   Boolean gameSpecificAdminPage) {
         // каждый из этих параметров может быть null, "", "null"
         room = Validator.isEmpty(room) ? null : room;
         game = Validator.isEmpty(game) ? null : game;
@@ -540,9 +538,9 @@ public class AdminController {
 
         Set<String> enabled = rooms.game();
         List<Object> games = gameService.getGames()
-                                .stream()
-                                .map(name -> enabled.contains(name))
-                                .collect(toList());
+                .stream()
+                .map(name -> enabled.contains(name))
+                .collect(toList());
         settings.setGames(games);
         return settings;
     }
