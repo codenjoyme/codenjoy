@@ -58,6 +58,8 @@ var Games = module.exports = {
                 return Element = SnakeElement;
             } else if (this.gameName == 'snakebattle') {
                 return Element = SnakeBattleElement;
+            } else if (this.gameName == 'verland') {
+                return Element = VerlandElement;
             }
         } else if (name == 'board') {
             // case node
@@ -85,6 +87,8 @@ var Games = module.exports = {
                 return Board = SnakeBoard;
             } else if (this.gameName == 'snakebattle') {
                 return Board = SnakeBattleBoard;
+            } else if (this.gameName == 'verland') {
+                return Board = VerlandBoard;
             }
         } else if (name == 'direction') {
             // case node
@@ -112,6 +116,8 @@ var Games = module.exports = {
                 return Direction = SnakeDirection();
             } else if (this.gameName == 'snakebattle') {
                 return Direction = SnakeBattleDirection();
+            } else if (this.gameName == 'verland') {
+                return Direction = VerlandDirection();
             }
         } else if (name == 'test') {
             // case node
@@ -139,6 +145,8 @@ var Games = module.exports = {
                 return Test = SnakeTest;
             } else if (this.gameName == 'snakebattle') {
                 return Test = SnakeBattleTest;
+            } else if (this.gameName == 'verland') {
+                return Test = VerlandTest;
             }
         }
     }
