@@ -171,13 +171,14 @@ public class AdminController {
 
     // ----------------
 
-    @GetMapping("/player/{player}/{game}/save/remove")
+    @GetMapping("/player/{player}/{name}/{game}/save/remove")
     public String cleanPlayerScoreAndRemovePlayerSave(@PathVariable("player") String id,
+                                                      @PathVariable("name") String name,
                                                       @PathVariable("game") String game,
                                                       HttpServletRequest request) {
+        leaderboardService.removePlayerFromGame(name, game);
         playerService.cleanScores(id);
         saveService.removeSaveForGame(id, game);
-        leaderboardService.removePlayerFromGame(registration.getNameById(id), game);
         return getAdmin(request);
     }
 
