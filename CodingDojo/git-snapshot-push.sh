@@ -27,5 +27,5 @@ eval_echo "mv .gitignore .gitignore_"
 
 eval_echo "cd .."
 
-echo Press any key to continue
+echo Press Enter to continue
 read
