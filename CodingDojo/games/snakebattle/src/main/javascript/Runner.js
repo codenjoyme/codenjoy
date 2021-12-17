@@ -422,7 +422,7 @@ var Board = function (board) {
 
     // TODO:BATTLE исправить метод на аналогичный для snakebattle
     var getBlasts = function () {
-        return findAll(Element.BOOM);
+        return findAll(Element.BLAST);
     };
 
     // TODO:BATTLE исправить метод на аналогичный для snakebattle
