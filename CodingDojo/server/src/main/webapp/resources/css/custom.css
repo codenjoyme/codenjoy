@@ -129,7 +129,7 @@ body{
 
 .overflow{
     Overflow-y:scroll;
-    height: 200px;
+    height: 360px;
 }
 
 .inner-table{
@@ -142,10 +142,15 @@ body{
     list-style-type: none;
     box-sizing: border-box;
     margin: 0;
-    padding: 0;
-    position: absolute;
-    inset: 0px 10px 0px 0px;
-    overflow: hidden;
+    padding: 1.6rem 1.4rem;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    border-top: 1px solid rgb(37, 41, 52);
+    -webkit-box-pack: start;
+    justify-content: flex-start;
+    transition: all 0.2s ease 0s;
+    cursor: pointer;
 }
 
 .board-board{
@@ -252,16 +257,6 @@ body{
     font-size: 1.6rem;
     cursor: pointer;
     outline: none;
-}
-
-.hmUASz{
-    display: flex;
-    -webkit-box-align: center;
-    align-items: center;
-    -webkit-box-pack: justify;
-    justify-content: space-between;
-    height: 100%;
-    margin: 0px auto;
 }
 
 .header-buttons{
@@ -496,9 +491,4 @@ body{
     justify-content: inherit;
     font-size: 1.6rem;
     text-transform: none;
-}
-
-.count:before {
-  counter-increment: section;
-  content: counter(section);
 }
