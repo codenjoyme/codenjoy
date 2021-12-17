@@ -23,59 +23,89 @@ package com.codenjoy.dojo.services;
  */
 
 import com.codenjoy.dojo.services.dao.PlayerGameSaver;
+import com.codenjoy.dojo.services.dao.Registration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Component
 public class BoardService {
 
     private final PlayerGameSaver playerGameSaver;
+    private final Registration registration;
 
-    private final Map<String, Map<String, Integer>> leaderboards;
+    private final Map<String, Map<String, Integer>> leaderboardsCache;
 
     @Autowired
-    public BoardService(PlayerGameSaver playerGameSaver) {
+    public BoardService(PlayerGameSaver playerGameSaver, Registration registration) {
         this.playerGameSaver = playerGameSaver;
-        leaderboards = new ConcurrentHashMap<>();
+        this.registration = registration;
+        leaderboardsCache = new ConcurrentHashMap<>();
     }
 
     public void savePlayerForGame(Player player) {
         String playerName = player.getReadableName();
         String game = player.getGame();
-        if (!leaderboards.containsKey(game)) {
-            leaderboards.put(game, new TreeMap<>());
+
+        if (!leaderboardsCache.containsKey(game)) {
+            leaderboardsCache.put(game, new TreeMap<>());
         }
-        leaderboards.get(game).put(playerName, (int) player.getScore());
-        leaderboards.replace(game, sortPlayersByScore(game));
+        leaderboardsCache.get(game).put(playerName, (int) player.getScore());
+        leaderboardsCache.replace(game, sortPlayersByScore(game));
     }
 
     public void updateLeaderboardScore(String name, String game, long score) {
-        leaderboards.get(game).replace(name, (int) score);
-        leaderboards.replace(game, sortPlayersByScore(game));
+        leaderboardsCache.get(game).replace(name, (int) score);
+        leaderboardsCache.replace(game, sortPlayersByScore(game));
     }
 
-    public Map<String, Integer> getPlayersForGame(String game) {
-        if (leaderboards.get(game) == null) {
-            leaderboards.put(game, playerGameSaver.getPlayersForGame(game));
+    public Map<Integer, Map.Entry<String, Integer>> getPlayersForGame(String game) {
+        if (leaderboardsCache.get(game) == null) {
+            leaderboardsCache.put(game, getUserNamesById(game));
         }
-        return sortPlayersByScore(game);
+        return sortPlayersByScoreAndCountThem(game);
     }
 
     public void removePlayerFromGame(String name, String game) {
-        leaderboards.get(game).remove(name);
+        leaderboardsCache.get(game).remove(name);
     }
 
 
     private Map<String, Integer> sortPlayersByScore(String game) {
-        return leaderboards.get(game).entrySet().stream()
+        return leaderboardsCache.get(game).entrySet().stream()
                 .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+    }
+
+    private Map<Integer, Map.Entry<String, Integer>> sortPlayersByScoreAndCountThem(String game) {
+        Map<Integer, Map.Entry<String, Integer>> numeratedLeaderboard = new HashMap<>();
+
+        AtomicInteger counter = new AtomicInteger(1);
+        leaderboardsCache.get(game).entrySet().stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .forEach(entry -> numeratedLeaderboard.put(counter.getAndIncrement(), entry));
+
+        return numeratedLeaderboard;
+    }
+
+    private Map<String, Integer> getUserNamesById(String game) {
+        Map<String, Integer> leaderboard = playerGameSaver.getPlayerIdAndScoresForGame(game);
+        List<Registration.User> allUsers = registration.getUsers();
+
+        Map<String, Integer> usersForUi = new HashMap<>();
+        allUsers.stream()
+                .filter(user -> leaderboard.containsKey(user.getId()))
+                .forEach(user -> usersForUi.put(user.getReadableName(), leaderboard.get(user.getId())));
+
+        return usersForUi;
     }
 }

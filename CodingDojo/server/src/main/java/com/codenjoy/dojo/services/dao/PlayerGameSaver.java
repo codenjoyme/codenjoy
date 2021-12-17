@@ -243,7 +243,7 @@ public class PlayerGameSaver implements GameSaver {
         );
     }
 
-    public Map<String, Integer> getPlayersForGame(String game) {
+    public Map<String, Integer> getPlayerIdAndScoresForGame(String game) {
         return pool.select("SELECT player_id, score FROM saves " +
                         "WHERE game_name = ? ",
                 new Object[]{game},
