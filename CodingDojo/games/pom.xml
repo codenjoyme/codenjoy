@@ -30,24 +30,14 @@
 
         <!-- Maven -->
         <maven-compiler.version>3.8.1</maven-compiler.version>
-        <maven-clean-plugin.version>3.0.0</maven-clean-plugin.version>
         <maven-resources.version>3.2.0</maven-resources.version>
-        <maven-antrun.version>3.0.0</maven-antrun.version>
         <maven-license.version>2.0.0</maven-license.version>
         <maven-source-plugin.version>3.2.0</maven-source-plugin.version>
         <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
         <maven-buildnumber-plugin.version>1.4</maven-buildnumber-plugin.version>
         <maven-scm-jgit.version>1.11.2</maven-scm-jgit.version>
         <maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
-        <maven-dependency-plugin.version>3.1.2</maven-dependency-plugin.version>
         <maven-markdown-page-generator.version>2.3.1-codenjoy</maven-markdown-page-generator.version>
-
-        <user.resources>src/main/webapp/resources/${module.name}/user</user.resources>
-        <client.sources.file>clients.zip</client.sources.file>
-        <client.sources>${user.resources}/${client.sources.file}</client.sources>
-        <dojo.package>java/com/codenjoy/dojo</dojo.package>
-        <java.client.file>resources/user/java-client.zip</java.client.file>
-        <java.client>${project.build.directory}/java-client</java.client>
     </properties>
 
     <repositories>
@@ -351,22 +341,6 @@
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-clean-plugin</artifactId>
-                    <version>${maven-clean-plugin.version}</version>
-                    <configuration>
-                        <filesets>
-                            <fileset>
-                                <directory>${user.resources}</directory>
-                                <includes>
-                                    <include>**/${client.sources.file}</include>
-                                </includes>
-                                <followSymlinks>false</followSymlinks>
-                            </fileset>
-                        </filesets>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
                     <version>${maven-jar-plugin.version}</version>
                     <configuration>
@@ -374,94 +348,6 @@
                             <exclude>**/logback.xml</exclude>
                         </excludes>
                     </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-dependency-plugin</artifactId>
-                    <version>${maven-dependency-plugin.version}</version>
-                    <executions>
-                        <execution>
-                            <id>unpack</id>
-                            <phase>generate-sources</phase>
-                            <goals>
-                                <goal>unpack</goal>
-                            </goals>
-                            <configuration>
-                                <artifactItems>
-                                    <artifactItem>
-                                        <groupId>${project.groupId}</groupId>
-                                        <artifactId>client-java</artifactId>
-                                        <version>${project.version}</version>
-                                        <type>jar</type>
-                                        <outputDirectory>${java.client}</outputDirectory>
-                                        <overWrite>true</overWrite>
-                                        <includes>${java.client.file}</includes>
-                                    </artifactItem>
-                                </artifactItems>
-                            </configuration>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-antrun-plugin</artifactId>
-                    <version>${maven-antrun.version}</version>
-                    <executions>
-                        <execution>
-                            <phase>prepare-package</phase>
-                            <goals>
-                                <goal>run</goal>
-                            </goals>
-                            <configuration>
-                                <target>
-                                    <unzip src="${java.client}/${java.client.file}"
-                                           dest="${java.client}"/>
-
-                                    <zip destfile="${client.sources}"
-                                         basedir="${java.client}"
-                                         includes="
-                                               src/main/${dojo.package}/client/**,
-                                               src/main/${dojo.package}/games/${module.name}/**,
-                                               src/main/${dojo.package}/services/**,
-                                               src/main/${dojo.package}/*.java,
-                                               src/main/java/org/json/*.java,
-                                               src/test/${dojo.package}/client/**,
-                                               src/test/${dojo.package}/games/${module.name}/**,
-                                               src/test/${dojo.package}/services/**,
-                                               src/test/${dojo.package}/*.java,
-                                               README.*,
-                                               mvnw,
-                                               mvnw.cmd,
-                                               src/license/**,
-                                               pom.xml"
-                                         update="true"/>
-
-                                    <zip destfile="${client.sources}"
-                                         basedir="."
-                                         includes="src/main/**"
-                                         excludes="src/main/java/**,
-                                                src/main/webapp/**,
-                                                src/main/resources/**,
-                                                **/target/**"
-                                         update="true"/>
-
-                                    <!-- используется для отключения DEBUG информации в STDOUT java клиентов -->
-                                    <!-- TODO ??? если logback.xml уже есть в игре, то не добавлять пустой (пример expansion) -->
-                                    <echo file="./target/stuff/logback.xml" append="false">
-                                        <![CDATA[
-                                            <configuration></configuration>
-                                        ]]>
-                                    </echo>
-                                    <zip destfile="${client.sources}" update="true">
-                                        <zipfileset dir="./target/stuff/" prefix="src/main/resources"/>
-                                    </zip>
-
-                                    <copy file="${client.sources}"
-                                          todir="target/classes/resources/${module.name}/user"/>
-                                </target>
-                            </configuration>
-                        </execution>
-                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>

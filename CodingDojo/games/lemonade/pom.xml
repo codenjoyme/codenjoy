@@ -15,12 +15,6 @@
     <properties>
         <module.name>lemonade</module.name>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-        <client.csharp-sources>${user.resources}/${module.name}-csharp-client.zip</client.csharp-sources>
-        <client.javascript-sources>${user.resources}/${module.name}-javascript-client.zip</client.javascript-sources>
-        <client.python-sources>${user.resources}/${module.name}-python-client.zip</client.python-sources>
-
-        <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
     </properties>
 
     <repositories>
@@ -95,15 +89,7 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
