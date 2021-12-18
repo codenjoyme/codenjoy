@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd ..
+
 export ROOT=$PWD
 
 if [ "$GAMES_TO_RUN" == "" ] ; then

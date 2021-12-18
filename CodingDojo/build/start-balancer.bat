@@ -1,3 +1,5 @@
+cd ..
+
 set ROOT=%CD%
 
 java -jar %ROOT%\balancer\target\codenjoy-balancer.war ^
