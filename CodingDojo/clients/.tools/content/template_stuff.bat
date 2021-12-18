@@ -22,7 +22,7 @@ call run :init_colors
     goto :eof          
 
 :settings
-    if "%INSTALL_LOCALLY%"=="true" ( set GOPATH=)
+    if "%INSTALL_LOCALLY%"=="true" ( set LANG_HOME=)
 
     if "%LANG_HOME%"==""    ( set NO_LANG=true)
     if "%NO_LANG%"=="true"  ( set LANG_HOME=%ROOT%\.lang)
@@ -50,12 +50,12 @@ call run :init_colors
     call run :eval_echo ‘%LANG% build‘
     goto :eof
 
-:test    
+:test
     call run :eval_echo ‘%LANG% test‘
     goto :eof
 
 :run
-    rem Please use ‘for external quotes and “for internal“‘ 
-    rem We will replace them all with "classic quotes" 
+    rem Please use ‘for external quotes and “for internal“‘
+    rem We will replace them all with "classic quotes"
     call run :eval_echo ‘%LANG% run main.lang “%GAME_TO_RUN%“ “%SERVER_URL%“‘
     goto :eof

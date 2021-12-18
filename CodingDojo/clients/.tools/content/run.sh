@@ -33,7 +33,7 @@ eval_echo() {
 }
 
 ask() {
-    ask_message $CL_QUESTION "Press any key to continue"
+    ask_message $CL_QUESTION "Press Enter to continue"
 }
 
 ASK_RESULT=""
@@ -55,16 +55,20 @@ read_env() {
         if [[ ! $entry == \#* ]]
         then
             export $entry
-            BUILD_ARGS+=" --build-arg $entry"
-            color $CL_INFO "$entry"          
+            # don't add LANGUAGE env variable to the BUILD_ARGS
+            if [[ ! "$entry" == *"LANGUAGE"* ]]; then
+                BUILD_ARGS+=" --build-arg $entry"
+            fi
+            color $CL_INFO "$entry"
         fi
     done
 }
 
 color $CL_HEADER "Setup variables..."
 echo
-    eval_echo "ROOT=$PWD"
+    eval_echo "ROOT=$PWD/.."
     read_env
+    color $CL_INFO "BUILD_ARGS=$BUILD_ARGS"
 
 color $CL_HEADER "Installing docker..."
 echo
@@ -100,7 +104,7 @@ echo
 
 color $CL_HEADER "Building client..."
 echo
-    eval_echo "DOCKER_BUILDKIT=1 docker build -t client-server -f Dockerfile ./ $BUILD_ARGS"
+    eval_echo "DOCKER_BUILDKIT=1 docker build -t client-server -f $ROOT/Dockerfile $ROOT/ $BUILD_ARGS"
 
 color $CL_HEADER "Starting client..."
 echo

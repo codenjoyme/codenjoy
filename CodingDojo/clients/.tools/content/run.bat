@@ -34,7 +34,6 @@
 
 :restart
     set OPTION=
-    SET BUILD_ARGS=
     goto :start
 
 :init_colors 
@@ -87,15 +86,17 @@
 
 :read_env
     echo Reading enviromnent from .env file
-    for /f "tokens=*" %%i in ('type .env') do call :process_env "%%i"
+    for /f "tokens=*" %%i in ('type %ROOT%\.env') do call :process_env "%%i"
     set BUILD_ARGS=%BUILD_ARGS:~1%
+    call :color "%CL_INFO%" "BUILD_ARGS=%BUILD_ARGS%"
     goto :eof
-    
+
 :process_env
     set line=%~1%
     set %line%
     for /f "tokens=1* delims==" %%a in ("%line%") do set v=%%b
-    set BUILD_ARGS=%BUILD_ARGS% %v%
+    rem don't add LANGUAGE env variable to the BUILD_ARGS
+    if "%line:LANGUAGE=%"=="%line%" ( set BUILD_ARGS=%BUILD_ARGS% %v%)
     call :color "%CL_INFO%" "%line%"
     goto :eof
 
@@ -107,7 +108,7 @@
     goto :eof
 
 :ask
-    call :color "%CL_QUESTION%" "Press any key to continue"
+    call :color "%CL_QUESTION%" "Press Enter to continue"
     pause >nul
     goto :eof
 
@@ -124,29 +125,27 @@
     goto :eof
 
 :install
-    call :eval_echo "cd %ROOT%"
     call :eval_echo "set DEST=%~1"
     call :eval_echo "set URL=%~2"
     call :eval_echo "set FOLDER=%~3"
-    IF EXIST %TOOLS%\%DEST%.zip (
+    if exist %TOOLS%\%DEST%.zip (
         call :eval_echo "del /Q %TOOLS%\%DEST%.zip"
     )
     call :download_file "%URL%" "%TOOLS%\%DEST%.zip"
     call :eval_echo "rd /S /Q %TOOLS%\..\.%DEST%"
     if "%FOLDER%"=="" (
         call :eval_echo "%ARCH% x -y -o%TOOLS%\..\.%DEST% %TOOLS%\%DEST%.zip"
-    ) ELSE (
+    ) else (
         call :eval_echo "%ARCH% x -y -o%TOOLS%\.. %TOOLS%\%DEST%.zip"
         call :eval_echo "timeout 2"
         call :eval_echo "rename %TOOLS%\..\%FOLDER% .%DEST%"
     )
-    call :eval_echo "cd %ROOT%"
     goto :eof
 
 :settings
     call :color "%CL_HEADER%" "Setup variables..."
+    set ROOT=%CD%\..
     call :read_env
-    set ROOT=%CD%
     if "%SKIP_TESTS%"==""  ( set SKIP_TESTS=true)
     set CODE_PAGE=65001
     chcp %CODE_PAGE%
@@ -160,7 +159,7 @@
 :download
     call :color "%CL_HEADER%" "Installing..."
     if     "%INSTALL_LOCALLY%"=="true" call stuff :install
-    if NOT "%INSTALL_LOCALLY%"=="true" call :color "%CL_INFO%" "The environment installed on the system is used"
+    if not "%INSTALL_LOCALLY%"=="true" call :color "%CL_INFO%" "The environment installed on the system is used"
     call stuff :version
     goto :eof
 

@@ -48,13 +48,13 @@ You have to install the `engine` and `client-java` dependencies.
 Watch out: its version may be updated, so you will have
 to update it and your game's source code. 
 
-- open the `CodingDojo/games/engine` folder
+- open the `CodingDojo/games/engine/build` folder
 - run `intsall.sh` or `intsall.bat` 
 - make sure installation is successful - the dependency should be
 installed under `C:\Users\<UserName>\.m2\repository\com\codenjoy\engine`
 
 Then
-- open the `CodingDojo/clients/java` folder
+- open the `CodingDojo/clients/java/build` folder
 - run `intsall.sh` or `intsall.bat`
 - make sure installation is successful - the dependency should be
   installed under `C:\Users\<UserName>\.m2\repository\com\codenjoy\client-java`

@@ -34,7 +34,7 @@ call run :init_colors
     if "%NO_MAVEN%"=="true" ( set MAVEN_USER_HOME=%MAVEN_HOME%)
     if "%NO_MAVEN%"=="true" ( set MAVEN_OPTS=-Dmaven.repo.local=%MAVEN_HOME%\repository)
 
-    set MVNW=%ROOT%\mvnw
+    set MVNW=%ROOT%\mvnw -f %ROOT%\pom.xml
     set MVNW_VERBOSE=false
     set JAVA=%JAVA_HOME%\bin\java
 

@@ -10,17 +10,18 @@ eval_echo() {
 
 install_all() {
    from=content/$1
-   eval_echo "cp $from ../cpp/"
-   eval_echo "cp $from ../csharp/"
-   eval_echo "cp $from ../go/"
-   eval_echo "cp $from ../java/"
-   eval_echo "cp $from ../java-script/"
-   eval_echo "cp $from ../kotlin/"
-   eval_echo "cp $from ../php/"
-   eval_echo "cp $from ../pseudo/"
-   eval_echo "cp $from ../python/"
-   eval_echo "cp $from ../ruby/"
-   eval_echo "cp $from ../scala/"
+   to=$2
+   eval_echo "cp $from ../cpp/$to"
+   eval_echo "cp $from ../csharp/$to"
+   eval_echo "cp $from ../go/$to"
+   eval_echo "cp $from ../java/$to"
+   eval_echo "cp $from ../java-script/$to"
+   eval_echo "cp $from ../kotlin/$to"
+   eval_echo "cp $from ../php/$to"
+   eval_echo "cp $from ../pseudo/$to"
+   eval_echo "cp $from ../python/$to"
+   eval_echo "cp $from ../ruby/$to"
+   eval_echo "cp $from ../scala/$to"
 }
 
 install_jvm() {
@@ -32,10 +33,10 @@ install_jvm() {
    eval_echo "cp $from ../scala/$to"
 }
 
-eval_echo "install_all 'run.bat'"
-eval_echo "install_all 'run.sh'"
-eval_echo "install_all '.env'"
-eval_echo "install_jvm 'jvm_stuff.bat' 'stuff.bat'"
+eval_echo "install_all 'run.bat' 'build/run.bat'"
+eval_echo "install_all 'run.sh' 'build/run.sh'"
+eval_echo "install_all '.env' '.env'"
+eval_echo "install_jvm 'jvm_stuff.bat' 'build/stuff.bat'"
 
 echo Press Enter to continue
 read
