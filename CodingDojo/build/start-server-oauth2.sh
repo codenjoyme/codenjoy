@@ -1,3 +1,5 @@
+cd ..
+
 export ROOT=$PWD
 
 if [ "$CLIENT_ID" == "" ] ; then

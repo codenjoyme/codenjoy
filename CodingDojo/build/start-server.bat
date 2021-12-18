@@ -1,3 +1,5 @@
+cd ..
+
 set ROOT=%CD%
 
 java -jar %ROOT%\server\target\codenjoy-contest.war ^

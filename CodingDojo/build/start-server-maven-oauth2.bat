@@ -1,3 +1,5 @@
+cd ..
+
 set ROOT=%CD%
 
 IF "%CLIENT_ID%"=="" (
