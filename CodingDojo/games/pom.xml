@@ -40,6 +40,7 @@
         <maven-scm-jgit.version>1.11.2</maven-scm-jgit.version>
         <maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
         <maven-dependency-plugin.version>3.1.2</maven-dependency-plugin.version>
+        <maven-markdown-page-generator.version>2.3.1-codenjoy</maven-markdown-page-generator.version>
 
         <user.resources>src/main/webapp/resources/${module.name}/user</user.resources>
         <client.sources.file>clients.zip</client.sources.file>
@@ -47,7 +48,6 @@
         <dojo.package>java/com/codenjoy/dojo</dojo.package>
         <java.client.file>resources/user/java-client.zip</java.client.file>
         <java.client>${project.build.directory}/java-client</java.client>
-        <markdown-page-generator.version>2.3.1-codenjoy</markdown-page-generator.version>
     </properties>
 
     <repositories>
@@ -493,7 +493,7 @@
                 <plugin>
                     <groupId>com.ruleoftech</groupId>
                     <artifactId>markdown-page-generator-plugin</artifactId>
-                    <version>${markdown-page-generator.version}</version>
+                    <version>${maven-markdown-page-generator.version}</version>
                     <configuration>
                         <transformRelativeMarkdownLinks>true</transformRelativeMarkdownLinks>
 
