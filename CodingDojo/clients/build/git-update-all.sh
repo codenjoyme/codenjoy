@@ -8,6 +8,7 @@ eval_echo() {
     eval $command
 }
 
+eval_echo "cd .."
 eval_echo "git submodule foreach git pull origin master"
 eval_echo "git add ."
 eval_echo "git commit -m'New release'"
