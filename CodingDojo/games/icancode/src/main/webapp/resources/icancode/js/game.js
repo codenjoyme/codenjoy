@@ -57,7 +57,7 @@ var initHelpLink = function() {
 
 var initAdditionalLink = function() {
     if (setup.onlyLeaderBoard) {
-        $('#additional-link').attr('href', setup.contextPath + '/resources/icancode/user/clients.zip')
+        $('#additional-link').attr('href', 'https://github.com/codenjoyme/codenjoy-clients.git')
         $('#additional-link').text('Get client')
     }
 }
