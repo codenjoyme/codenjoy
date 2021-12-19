@@ -156,6 +156,7 @@ if "%STUFF%"=="" set STUFF=%CD%\stuff
     set ARCH=%TOOLS%\7z\7za.exe
     rem Set to true if you want to ignore platform installation on the system
     if "%INSTALL_LOCALLY%"==""     ( set INSTALL_LOCALLY=true)
+    call :eval_echo "cd %ROOT%"
     call %STUFF% :settings
     goto :eof
 
@@ -163,21 +164,26 @@ if "%STUFF%"=="" set STUFF=%CD%\stuff
     call :color "%CL_HEADER%" "Installing..."
     if     "%INSTALL_LOCALLY%"=="true" call %STUFF% :install
     if not "%INSTALL_LOCALLY%"=="true" call :color "%CL_INFO%" "The environment installed on the system is used"
+    call :eval_echo "cd %ROOT%"
     call %STUFF% :version
     goto :eof
 
 :build
     call :color "%CL_HEADER%" "Building..."
+    call :eval_echo "cd %ROOT%"
     call %STUFF% :version
+    call :eval_echo "cd %ROOT%"
     call %STUFF% :build
     goto :eof
 
 :test
     call :color "%CL_HEADER%" "Testing..."
+    call :eval_echo "cd %ROOT%"
     call %STUFF% :test
     goto :eof
 
 :run
     call :color "%CL_HEADER%" "Running..."
+    call :eval_echo "cd %ROOT%"
     call %STUFF% :run
     goto :eof
