@@ -24,9 +24,5 @@ pages = pages || {};
 pages.help = function() {
     setup.contextPath = getSettings('contextPath');
 
-    $('#games').change(function () {
-        window.location.href = 'https://github.com/codenjoyme/codenjoy-clients.git';
-    });
-
     initHotkeys();
 }
