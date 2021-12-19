@@ -65,10 +65,10 @@ call %RUN% :init_colors
     goto :eof
 
 :build
-    rem install jar to maven local repo
+    call %RUN% :color ‘%CL_HEADER%‘ ‘Install jar to maven local repo...‘
     call %RUN% :eval_echo ‘%MVNW% clean install -DskipTests=%SKIP_TESTS%‘
 
-    rem create executable jar
+    call %RUN% :color ‘%CL_HEADER%‘ ‘Сreate executable jar...‘
     call %RUN% :eval_echo ‘%MVNW% compile assembly:single -Pjar-with-dependencies -DskipTests=%SKIP_TESTS%‘
 
     call %RUN% :eval_echo ‘copy %ROOT%\target\client-exec.jar %ROOT%\‘

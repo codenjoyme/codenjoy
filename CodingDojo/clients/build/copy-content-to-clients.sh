@@ -35,7 +35,7 @@ install_jvm() {
 
 eval_echo "install_all 'run.bat' 'build/run.bat'"
 eval_echo "install_all 'run.sh' 'build/run.sh'"
-eval_echo "install_all '.env' '.env'"
+# eval_echo "install_all '.env' '.env'"
 eval_echo "install_jvm 'jvm_stuff.bat' 'build/stuff.bat'"
 
 echo Press Enter to continue
