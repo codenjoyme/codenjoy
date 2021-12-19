@@ -1,5 +1,8 @@
 @echo off
 
+if "%RUN%"=="" set RUN=%CD%\run
+if "%STUFF%"=="" set STUFF=%CD%\stuff
+
 :check_run_mode
     if "%*"=="" (       
         call :run_executable 
@@ -21,7 +24,7 @@
     goto :eof      
 
 :init
-    call :init_colors    
+    call :init_colors
     call :settings    
     set OPTION=%1
 
@@ -68,7 +71,7 @@
     call set command=%%input:“="%%
     call :color "%CL_COMMAND%" "%input%"
     call %command% > %TOOLS%\out
-	for /f "tokens=*" %%s in (%TOOLS%\out) do (
+    for /f "tokens=*" %%s in (%TOOLS%\out) do (
         call :color "%CL_INFO%" "%%s"
     )
     del /Q %TOOLS%\out
@@ -153,28 +156,28 @@
     set ARCH=%TOOLS%\7z\7za.exe
     rem Set to true if you want to ignore platform installation on the system
     if "%INSTALL_LOCALLY%"==""     ( set INSTALL_LOCALLY=true)
-    call stuff :settings
+    call %STUFF% :settings
     goto :eof
 
 :download
     call :color "%CL_HEADER%" "Installing..."
-    if     "%INSTALL_LOCALLY%"=="true" call stuff :install
+    if     "%INSTALL_LOCALLY%"=="true" call %STUFF% :install
     if not "%INSTALL_LOCALLY%"=="true" call :color "%CL_INFO%" "The environment installed on the system is used"
-    call stuff :version
+    call %STUFF% :version
     goto :eof
 
 :build
-    call :color "%CL_HEADER%" "Building client..."
-    call stuff :version
-    call stuff :build
+    call :color "%CL_HEADER%" "Building..."
+    call %STUFF% :version
+    call %STUFF% :build
     goto :eof
 
 :test
-    call :color "%CL_HEADER%" "Starting tests..."
-    call stuff :test
+    call :color "%CL_HEADER%" "Testing..."
+    call %STUFF% :test
     goto :eof
 
 :run
-    call :color "%CL_HEADER%" "Running client..."
-    call stuff :run
+    call :color "%CL_HEADER%" "Running..."
+    call %STUFF% :run
     goto :eof
