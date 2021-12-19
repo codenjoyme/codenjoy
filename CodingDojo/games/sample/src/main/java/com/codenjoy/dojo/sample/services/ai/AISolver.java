@@ -59,10 +59,8 @@ public class AISolver implements Solver<Board> {
         return new DeikstraFindWay.Possible() {
             @Override
             public boolean possible(Point pt) {
-                int x = pt.getX();
-                int y = pt.getY();
-                if (board.isBarrierAt(x, y)) return false;
-                if (board.isBombAt(x, y)) return false;
+                if (board.isBarrierAt(pt)) return false;
+                if (board.isBombAt(pt)) return false;
                 return true;
             }
         };
