@@ -55,6 +55,12 @@
             Setup project according to instruction in README.md for
             the selected programming language.
         </li>
+        <li>
+            [Optional] For Java
+            <a href="${ctx}/resources/user/engine-libs.zip">these dependencies</a>
+            may be useful if there is no internet.
+            Unzip content and run setup.bat or setup.sh inside.
+        </li>
         <li>Read game instructions:
             <ul>
                 <c:forEach items="${games}" var="item">
