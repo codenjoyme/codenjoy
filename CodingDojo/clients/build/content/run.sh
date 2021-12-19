@@ -48,18 +48,21 @@ sep() {
     color $CL_COMMAND "---------------------------------------------------------------------------------------"
 }
 
+export_entry() {
+    entry=$1
+    export $entry
+    # don't add LANGUAGE env variable to the BUILD_ARGS
+    if [[ ! "$entry" == *"LANGUAGE"* ]]; then
+        BUILD_ARGS=$(echo "$BUILD_ARGS --build-arg $entry")
+    fi
+    color $CL_INFO "$entry"
+}
+
 BUILD_ARGS=""
 read_env() {
-    for entry in $(cat $ROOT/.env)
-    do
-        if [[ ! $entry == \#* ]]
-        then
-            export $entry
-            # don't add LANGUAGE env variable to the BUILD_ARGS
-            if [[ ! "$entry" == *"LANGUAGE"* ]]; then
-                BUILD_ARGS+=" --build-arg $entry"
-            fi
-            color $CL_INFO "$entry"
+    for entry in $(cat $ROOT/.env); do
+        if [[ ! $entry == \#* ]]; then
+            export_entry $entry
         fi
     done
 }
