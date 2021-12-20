@@ -258,7 +258,7 @@ Here the `<GAMENAME>` is game name that you try to build.
 Parameter `<CONNECTION_URL>` is optional - you can override connection URL hardcoded inside YourSolver class 
 ```
 java -jar ./target/<GAMENAME>-engine-exec.jar "http://codenjoy.com:80/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=1234567890123456789"
-```
+``` 
 
 Run game engine in a simple mode
 --------------
@@ -268,7 +268,7 @@ server were up. This is useful during game development.
 
 To do this, the game must be able to implement it. 
 For example MollyMage game contains a 
-[startup class Main](https://github.com/codenjoyme/codenjoy/blob/master/CodingDojo/games/mollymage/src/main/java/com/codenjoy/dojo/Main.java)
+[startup class Main](https://github.com/codenjoyme/codenjoy/blob/master/CodingDojo/games/mollymage/src/main/java/com/codenjoy/dojomollymage/runner/Main.java)
 in which the game starts. If your game has the same 
 file, you can run the command:
 ```
@@ -279,7 +279,12 @@ location of the `.git` directory. You can also use
 `-Pjar-local,noGit` to skip git-info phase.
 
 After assembly, a file `<GAMENAME>-engine.jar` will 
-appear in `target` so you can run it:
+appear in `target`.
+
+Another way to do this - just call `CodingDojo/build/build-game-jar-local.sh`
+then enter game name and copy jar from `CodingDojo/build/out` folder.
+
+So you can run this jar:
 - for windows
 ```
 java -jar -Dhost=127.0.0.1 -Dport=8080 -Dtimeout=1000 -DlogDisable=false -Dlog="output.txt" -DlogTime=true -DshowPlayers="2,3" -Drandom="random-soul-string" -DwaitFor=2 -Dsettings="{'boardSize':11, 'potionPower':7} <GAMENAME>-engine.jar"

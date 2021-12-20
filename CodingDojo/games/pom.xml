@@ -131,7 +131,7 @@
                             <archive>
                                 <manifest>
                                     <addClasspath>false</addClasspath>
-                                    <mainClass>com.codenjoy.dojo.Main</mainClass>
+                                    <mainClass>com.codenjoy.dojo.${module.name}.runner.Main</mainClass>
                                 </manifest>
                             </archive>
                             <descriptors>
