@@ -8,6 +8,28 @@ eval_echo() {
     eval $command
 }
 
+check_machine() {
+    unameOut="$(uname -s)"
+    case "${unameOut}" in
+        Linux*)     machine=Linux;;
+        Darwin*)    machine=Mac;;
+        CYGWIN*)    machine=Cygwin;;
+        MINGW*)     machine=MinGw;;
+        *)          machine="UNKNOWN:${unameOut}"
+    esac
+    echo ${machine}
+}
+
+show_branch_on_git() {
+    url=https://github.com/codenjoyme/codenjoy/tree/$BRANCH
+	machine=$(check_machine)
+    if [[ "$machine" == "Mac" || "$machine" == "Linux" ]]; then
+        eval_echo "open $url"
+    else
+        eval_echo "explorer $url"
+    fi
+}
+
 eval_echo "cd .."
 
 eval_echo "`ssh-agent -s`"
@@ -26,6 +48,8 @@ eval_echo "git checkout -B $BRANCH"
 eval_echo "git push origin $BRANCH"
 eval_echo "git checkout develop"
 eval_echo "git branch -D $BRANCH"
+
+eval_echo "show_branch_on_git"
 
 echo Press Enter to continue
 read
