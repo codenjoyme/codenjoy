@@ -21,7 +21,7 @@ check_machine() {
 }
 
 show_branch_on_git() {
-  url=https://github.com/codenjoyme/codenjoy/compare/develop%2E%2E%2E$BRANCH?expand=1
+  url=https://github.com/codenjoyme/codenjoy/compare/develop%2E%2E%2E$BRANCH
 	machine=$(check_machine)
     if [[ "$machine" == "Mac" || "$machine" == "Linux" ]]; then
         eval_echo "open $url"
