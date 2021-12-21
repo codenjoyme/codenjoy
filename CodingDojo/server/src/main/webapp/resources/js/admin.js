@@ -120,48 +120,67 @@ pages.admin = function() {
     // ------------------------ save user details ----------------------
 
     var setupSaveUserDetails = function() {
-        var ajax = new AdminAjax(contextPath, 'admin/user/info');
+        var ajax = new AdminAjax(contextPath, 'admin/player');
         var PLAYER_ID = 'id';
 
+        // связанные input выглядят так
+        //
+        // <input id="players0.id" name="players[0].id" index="0"
+        //        class="input-id" readonly="readonly" type="text"
+        //        value="some-id">
+        //
+        // <input id="players0.readableName" name="players[0].readableName"
+        //        class="input-readable" type="text"
+        //        value="Some Name">
+        //
+        // прежде всего проходимся по всем input содержащим player id
         var elements = $('[id$=\\.' + PLAYER_ID + ']');
         elements.each(function(index, obj) {
             var element = $(obj);
+            // получаем тем самым index
             var index = element.attr('index');
+            // player id
             var playerId = element.val();
+            // и префикс для других полей
             var prefix = '#players' + index + '\\.';
 
-            var setup = function(field) {
+            // затем настраиваем обработчик, который нарисует
+            // кнопку при изменении значения поля,
+            // нажатие на которую отправил ajax post запрос
+            var init = function(field) {
                 var input = $(prefix + field);
                 input.on('input', function() {
+                    // если кнопка уже есть
                     if (!!input.data('button')) return;
+                    // иначе рисуем ее
                     var test = $('<button type="button">Save</button>').click(function () {
+                        // а при нажатии построим json с данными
                         var data = {};
                         data[PLAYER_ID] = playerId;
                         data['game'] = setup.game;
                         data[field] = input.val();
                         ajax.save(data,
                             function() {
+                                // удаляем кнопку
                                 input.data('button', null);
                                 test.remove();
-                            },
-                            function(e) {
-                                alert('error: ' + e);
                             });
                     });
                     input.after(test);
+                    // так мы запоминаем к чему присоединена кнопка
                     input.data('button', test);
                 });
             };
 
-            // setup(PLAYER_ID); // readonly
-            // setup('code');    // readonly
-            setup('readableName');
-            setup('email');
-            setup('room');
-            setup('teamId');
-            setup('score');
-            setup('callbackUrl');
-            setup('data');
+            // init(PLAYER_ID); // readonly
+            // init('code');    // readonly
+            init('readableName');
+            init('email');
+            init('room');
+            init('teamId');
+            init('score');
+            init('callbackUrl');
+            init('data');
         });
     }
 

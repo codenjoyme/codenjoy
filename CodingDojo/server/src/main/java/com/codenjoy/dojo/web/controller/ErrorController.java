@@ -26,10 +26,7 @@ import com.codenjoy.dojo.services.ErrorTicketService;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jetty.server.Request;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.web.firewall.FirewalledRequest;
-import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -51,39 +48,36 @@ public class ErrorController implements org.springframework.boot.web.servlet.err
     private ErrorTicketService ticket;
 
     @RequestMapping()
-    public String error(HttpServletRequest reqest, ModelMap model) {
-        Exception throwable = (Exception)reqest.getAttribute(JAVAX_SERVLET_ERROR_EXCEPTION);
+    public ModelAndView error(HttpServletRequest request) {
+        Exception throwable = (Exception)request.getAttribute(JAVAX_SERVLET_ERROR_EXCEPTION);
         if (throwable != null) {
-            return error(throwable, reqest, model);
+            return error(throwable, request);
         }
 
-        String message = (String) reqest.getAttribute(JAVAX_SERVLET_ERROR_MESSAGE);
+        String message = (String) request.getAttribute(JAVAX_SERVLET_ERROR_MESSAGE);
         if (!StringUtils.isEmpty(message)) {
-            return error(message, reqest, model);
+            return error(message, request);
         }
 
-        return error("Something wrong", reqest, model);
+        return error("Something wrong", request);
     }
 
     @GetMapping(params = "message")
-    public String error(@RequestParam("message") String message, HttpServletRequest request, ModelMap model) {
-        IllegalAccessException exception = new IllegalAccessException(message);
-        return error(exception, request, model);
+    public ModelAndView error(@RequestParam("message") String message, HttpServletRequest request) {
+        return error(new IllegalArgumentException(message), request);
     }
 
-    private String error(Exception exception, HttpServletRequest request, ModelMap model) {
+    private ModelAndView error(Exception exception, HttpServletRequest request) {
         String url = request.getRequestURL().toString();
 
         String uri = getOriginalUri(request);
         if (uri != null) {
-            url = String.format("%s [%s]",
-                    url, uri);
+            url = String.format("%s [%s]", url, uri);
         }
 
-        ModelAndView view = ticket.get(url, exception);
-        model.mergeAttributes(view.getModel());
+        ModelAndView view = ticket.get(url, request.getContentType(), exception);
 
-        return view.getViewName();
+        return view;
     }
 
     private String getOriginalUri(HttpServletRequest httpRequest) {

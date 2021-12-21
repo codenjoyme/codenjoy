@@ -24,11 +24,5 @@ pages = pages || {};
 pages.help = function() {
     setup.contextPath = getSettings('contextPath');
 
-    $('#games').change(function () {
-        var game = $('#games').val();
-        if (game == '') return;
-        window.location.href = setup.contextPath + '/resources/' + game + '/user/clients.zip';
-    });
-
     initHotkeys();
 }

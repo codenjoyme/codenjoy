@@ -149,8 +149,8 @@ public class RestBoardController {
 
     // TODO test me
     @GetMapping("/player/{player}/log/{time}")
-    public List<BoardLog> changeLevel(@PathVariable("player") String id,
-                                            @PathVariable("time") Long time)
+    public List<BoardLog> getBoardLog(@PathVariable("player") String id,
+                                      @PathVariable("time") Long time)
     {
         validator.checkPlayerId(id, CANT_BE_NULL);
 
@@ -162,7 +162,8 @@ public class RestBoardController {
             time = actionLogger.getLastTime(id);
         }
 
-        List<BoardLog> result = actionLogger.getBoardLogsFor(id, time, 100);
+        String room = playerService.get(id).getRoom();
+        List<BoardLog> result = actionLogger.getBoardLogsFor(id, room, time, 100);
 
         if (result.isEmpty()) {
             return Arrays.asList();

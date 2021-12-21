@@ -19,11 +19,11 @@
 -- <http://www.gnu.org/licenses/gpl-3.0.html>.
 -- #L%
 ---
-ALTER TABLE public.saves
+ALTER TABLE saves
     ADD COLUMN team_id integer;
 	
 CREATE INDEX team_id_saves_index
-    ON public.saves USING btree
+    ON saves USING btree
     (team_id ASC NULLS LAST)
     TABLESPACE pg_default;
 

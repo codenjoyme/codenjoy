@@ -43,13 +43,13 @@ public class CrudConnectionThreadPool extends ConnectionThreadPool {
     }
 
     public void createIndex(String table, boolean unique, boolean cluster, String... columns) {
-        String indexNamePart = Arrays.stream(columns).collect(Collectors.joining("_"));
+        String indexNamePart = String.join("_", columns);
         String indexName = String.format("%s_%s_index", indexNamePart, table);
-        String columnsSubquery = Arrays.stream(columns).collect(Collectors.joining(", "));
+        String columnsSubQuery = String.join(", ", columns);
         update(String.format("CREATE %s INDEX IF NOT EXISTS %s ON %s (%s);",
                 unique?"UNIQUE":"",
                 indexName,
-                table, columnsSubquery));
+                table, columnsSubQuery));
 
         if (cluster) {
             createCluster(table, indexName);
@@ -74,7 +74,7 @@ public class CrudConnectionThreadPool extends ConnectionThreadPool {
                 ResultSet resultSet = stmt.executeQuery();
                 return mapper.mapFor(resultSet);
             } catch (SQLException e) {
-                log.info("[SQL] Select query: {} with {}",
+                log.warn("[SQL] Select query: {} with {}",
                         query, Arrays.toString(parameters));
                 throw new RuntimeException(String.format("Error when select '%s': %s", query, e));
             }
@@ -101,7 +101,7 @@ public class CrudConnectionThreadPool extends ConnectionThreadPool {
                 }
                 return stmt.executeUpdate();
             } catch (SQLException e) {
-                log.info("[SQL] Update query: {} with {}",
+                log.warn("[SQL] Update query: {} with {}",
                         query, Arrays.toString(parameters));
                 throw new RuntimeException(String.format("Error when update '%s': %s", query, e));
             }
@@ -122,7 +122,7 @@ public class CrudConnectionThreadPool extends ConnectionThreadPool {
                 }
                 return stmt.executeBatch();
             } catch (SQLException e) {
-                log.info("[SQL] Batch update query: {} with {}",
+                log.warn("[SQL] Batch update query: {} with {}",
                         query, parameters);
                 throw new RuntimeException(String.format("Error when update '%s': %s", query, e));
             }
@@ -161,7 +161,7 @@ public class CrudConnectionThreadPool extends ConnectionThreadPool {
                 }
                 connection.commit();
             } catch (SQLException e) {
-                log.info("[SQL] Batch queries in transaction: {} with {}",
+                log.warn("[SQL] Batch queries in transaction: {} with {}",
                         queries,
                         parameters.stream()
                                 .map(Arrays::toString)
@@ -172,7 +172,7 @@ public class CrudConnectionThreadPool extends ConnectionThreadPool {
                     // т.к. конекшены шерятся между потоками, то надо возвращать как было в любом случае
                     connection.setAutoCommit(true);
                 } catch (SQLException e2) {
-                    throw new RuntimeException(String.format("Error when update '%s': %s", queries, e2));
+                    log.warn("[SQL] Error when connection set autoCommit true", e2);
                 }
             }
             return result;

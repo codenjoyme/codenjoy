@@ -51,6 +51,8 @@
          code="${code}"
          allPlayersScreen="${allPlayersScreen}"></div>
 
+    <%@include file="query-settings.jsp"%>
+
     <%@include file="forkMe.jsp"%>
 
     <div id="board_page">

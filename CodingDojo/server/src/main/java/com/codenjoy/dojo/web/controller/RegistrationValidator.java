@@ -68,87 +68,111 @@ public class RegistrationValidator implements Validator {
 
         Player player = (Player) target;
 
-        // TODO #4FS тут проверить
+
         String room = player.getRoom();
-        if (!validator.isRoomName(room, CANT_BE_NULL)) {
-            errors.rejectValue("room", "registration.room.invalid", new Object[]{ room }, null);
+        if (!validRoom(room)) {
+            errors.rejectValue("room",
+                    "registration.room.invalid",
+                    new Object[]{ room }, null);
         }
 
         String game = roomService.game(room);
-        if (!validator.isGameName(game, CANT_BE_NULL)) {
-            errors.rejectValue("game", "registration.game.invalid", new Object[]{ game }, null);
+        if (!validGame(game)) {
+            errors.rejectValue("game",
+                    "registration.game.invalid",
+                    new Object[]{ game }, null);
         }
 
         if (!playerService.isRegistrationOpened(room)) {
             if (playerService.isRegistrationOpened()) {
-                errors.rejectValue("email", "registration.room.closed");
+                errors.rejectValue("email",
+                        "registration.room.suspended");
             } else {
-                errors.rejectValue("email", "registration.closed");
+                errors.rejectValue("email",
+                        "registration.suspended");
             }
         }
 
         String name = player.getReadableName();
 
-        if (!validateNicknameStructure(name)) {
-            errors.rejectValue("readableName", "registration.nickname.invalid", new Object[]{ name }, null);
+        if (!validReadableName(name)) {
+            errors.rejectValue("readableName",
+                    "registration.nickname.invalid",
+                    new Object[]{ name }, null);
         }
 
-        if (!checkNameUniqueness(name)) {
-            errors.rejectValue("readableName", "registration.nickname.alreadyUsed", new Object[]{ name }, null);
+        if (!uniqueReadableName(name)) {
+            errors.rejectValue("readableName",
+                    "registration.nickname.alreadyUsed",
+                    new Object[]{ name }, null);
         }
 
         String email = player.getEmail();
-        if (!validateEmailStructure(email)) {
-            errors.rejectValue("email", "registration.email.invalid", new Object[]{ email }, null);
+        if (!validEmail(email)) {
+            errors.rejectValue("email",
+                    "registration.email.invalid",
+                    new Object[]{ email }, null);
         }
 
-        if (!checkEmailUniqueness(email)) {
-            errors.rejectValue("email", "registration.email.alreadyUsed");
+        if (!uniqueEmail(email)) {
+            errors.rejectValue("email",
+                    "registration.email.alreadyUsed");
         }
 
         String password = player.getPassword();
 
-        if (!checkPasswordNotEmpty(password)) {
-            errors.rejectValue("password", "registration.password.empty");
+        if (!enteredPassword(password)) {
+            errors.rejectValue("password",
+                    "registration.password.empty");
         }
 
-        if (!checkPasswordLength(password)) {
-            errors.rejectValue("password", "registration.password.length", new Object[] { minPasswordLen }, null);
+        if (!longPassword(password)) {
+            errors.rejectValue("password",
+                    "registration.password.length",
+                    new Object[] { minPasswordLen }, null);
         }
 
-        if (!checkPasswordConfirmation(password, player.getPasswordConfirmation())) {
-            errors.rejectValue("passwordConfirmation", "registration.password.invalidConfirmation");
+        if (!passwordEqualToConfirmation(password, player.getPasswordConfirmation())) {
+            errors.rejectValue("passwordConfirmation",
+                    "registration.password.invalidConfirmation");
         }
     }
 
-    private boolean checkPasswordConfirmation(String password, String passwordConfirmation) {
+    private boolean validRoom(String room) {
+        return validator.isRoomName(room, CANT_BE_NULL);
+    }
+
+    private boolean validGame(String game) {
+        return validator.isGameName(game, CANT_BE_NULL);
+    }
+
+    private boolean passwordEqualToConfirmation(String password, String passwordConfirmation) {
         return password.equals(passwordConfirmation);
     }
 
-    private boolean checkPasswordLength(String password) {
+    private boolean longPassword(String password) {
         return password.length() >= minPasswordLen;
     }
 
-    private boolean checkEmailUniqueness(String email) {
+    private boolean uniqueEmail(String email) {
         boolean emailIsUsed = registration.emailIsUsed(email);
         String idByEmail = registration.getIdByEmail(email);
         return StringUtils.isEmpty(idByEmail) && !emailIsUsed;
     }
 
-    private boolean checkPasswordNotEmpty(String password) {
+    private boolean enteredPassword(String password) {
         return StringUtils.hasText(password);
     }
 
-
-    private boolean checkNameUniqueness(String name) {
+    private boolean uniqueReadableName(String name) {
         return !registration.nameIsUsed(name);
     }
 
-    private boolean validateEmailStructure(String email) {
+    private boolean validEmail(String email) {
         return validator.isEmail(email, CANT_BE_NULL);
     }
 
-    private boolean validateNicknameStructure(String name) {
+    private boolean validReadableName(String name) {
         if (nicknameAllowed) {
             return validator.isNickName(name);
         } else {

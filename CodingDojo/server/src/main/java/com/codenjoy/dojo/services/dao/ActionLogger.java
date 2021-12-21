@@ -62,6 +62,7 @@ public class ActionLogger extends Suspendable {
                     "time varchar(255), " +
                     "player_id varchar(255), " +
                     "game_type varchar(255), " +
+                    "room_name varchar(255), " +
                     "score varchar(255), " +
                     "command varchar(255), " +
                     "message varchar(255), " +
@@ -82,17 +83,18 @@ public class ActionLogger extends Suspendable {
     public void saveToDB() {
         List<BoardLog> list = getCached();
         pool.batchUpdate("INSERT INTO player_boards " +
-                "(time, player_id, game_type, score, command, message, board) " +
-                "VALUES (?,?,?,?,?,?,?);",
+                "(time, player_id, game_type, room_name, score, command, message, board) " +
+                "VALUES (?,?,?,?,?,?,?,?);",
                 list,
                 (stmt, log) -> {
                     stmt.setString(1, JDBCTimeUtils.toString(new Date(log.getTime())));
                     stmt.setString(2, log.getPlayerId());
                     stmt.setString(3, log.getGame());
-                    stmt.setString(4, log.getScore().toString());
-                    stmt.setString(5, log.getCommand());
-                    stmt.setString(6, log.getMessage());
-                    stmt.setString(7, log.getBoard());
+                    stmt.setString(4, log.getRoom());
+                    stmt.setString(5, log.getScore().toString());
+                    stmt.setString(6, log.getCommand());
+                    stmt.setString(7, log.getMessage());
+                    stmt.setString(8, log.getBoard());
                     return true;
                 });
     }
@@ -115,6 +117,7 @@ public class ActionLogger extends Suspendable {
             cache.add(new BoardLog(time,
                     player.getId(),
                     player.getGame(),
+                    player.getRoom(),
                     player.getScore(),
                     deal.getGame().getBoardAsString().toString(),
                     player.getInfo().getAllMessages(),
@@ -139,11 +142,11 @@ public class ActionLogger extends Suspendable {
 
     public List<BoardLog> getAll() {
         return pool.select("SELECT * FROM player_boards;",
-                rs -> getBoardLogs(rs));
+                this::getBoardLogs);
     }
 
     private LinkedList<BoardLog> getBoardLogs(ResultSet rs) throws SQLException {
-        return new LinkedList<BoardLog>(){{
+        return new LinkedList<>(){{
                 while (rs.next()) {
                     add(new BoardLog(rs));
                 }
@@ -160,19 +163,20 @@ public class ActionLogger extends Suspendable {
      * Метод возвращает count записей вокруг текущего времени time для заданного player id.
      * Итого вернется count записей до отметки time, запись равная time и count записей после отметки time.
      * @param id player id
+     * @param room важно так же указывать в какой комнате мы хотим получить логи
      * @param time отметка времени информация о записях вокруг которой нам интересна
      * @param count количество записей выбираемых из базы до и после отметки time
      * @return все сохраненные записи
      */
-    public List<BoardLog> getBoardLogsFor(String id, long time, int count) {
+    public List<BoardLog> getBoardLogsFor(String id, String room, long time, int count) {
         return pool.select(
-                    "SELECT * FROM (SELECT * FROM player_boards WHERE player_id = ? AND time <= ? ORDER BY time DESC LIMIT ?) AS before_and_equals" +
+                    "SELECT * FROM (SELECT * FROM player_boards WHERE player_id = ? AND room_name = ? AND time <= ? ORDER BY time DESC LIMIT ?) AS before_and_equals" +
                     " UNION " +
-                    "SELECT * FROM (SELECT * FROM player_boards WHERE player_id = ? AND time > ? ORDER BY time ASC LIMIT ?) AS after;",
+                    "SELECT * FROM (SELECT * FROM player_boards WHERE player_id = ? AND room_name = ? AND time > ? ORDER BY time ASC LIMIT ?) AS after;",
                 new Object[]{
-                    id, JDBCTimeUtils.toString(new java.util.Date(time)), count + 1,
-                    id, JDBCTimeUtils.toString(new java.util.Date(time)), count
+                    id, room, JDBCTimeUtils.toString(new java.util.Date(time)), count + 1,
+                    id, room, JDBCTimeUtils.toString(new java.util.Date(time)), count
                 },
-                rs -> getBoardLogs(rs));
+                this::getBoardLogs);
     }
 }

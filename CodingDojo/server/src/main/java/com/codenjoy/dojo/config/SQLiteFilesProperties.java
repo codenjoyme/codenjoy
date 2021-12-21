@@ -26,10 +26,6 @@ import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-/**
- * @author Igor Petrov
- * Created at 3/6/2019
- */
 @Data
 @ConfigurationProperties("database")
 @SQLiteProfile

@@ -24,7 +24,7 @@ package com.codenjoy.dojo.services.security;
 
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.room.RoomService;
-import com.codenjoy.dojo.web.controller.AdminController;
+import com.codenjoy.dojo.web.controller.admin.AdminController;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;

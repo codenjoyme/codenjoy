@@ -22,8 +22,8 @@
 
 -- CREATE PRIMARY KEYS
 -- TODO continue with PK - надо как-то сделать чтобы INSERT работал как апдейт, если появляются дубликаты, с другой стороны чего они появляются?
-DELETE FROM public.player_boards;
-ALTER TABLE public.player_boards ADD PRIMARY KEY (time, player_name);
+DELETE FROM player_boards;
+ALTER TABLE player_boards ADD PRIMARY KEY (time, player_name);
 
-DELETE FROM public.saves;
-ALTER TABLE public.saves ADD PRIMARY KEY (time, name);
+DELETE FROM saves;
+ALTER TABLE saves ADD PRIMARY KEY (time, name);
