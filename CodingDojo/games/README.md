@@ -12,16 +12,18 @@ Set up a development environment
 --------------
 All you need to develop a game is jdk8, maven3, git, and IDE Idea.
 
-- install a git client locally, for example, [tortoise git](https://code.google.com/p/tortoisegit/)
+- install a git client locally, for example, [git-scm](https://git-scm.com/downloads)
 - create an account on [github](http://github.com) or [bitbucket](http://bitbucket.org)
 - make a fork (or copy the sample project) from
 [the current repository](https://github.com/codenjoyme/codenjoy-game)
 - pull the project to your computer
-- install [maven3](https://maven.apache.org/download.cgi) (download the archive and unzip it to `c:\java`)
-- add the `M2_HOME` environment variable that points to the root of `c:\java\apache-maven-3.x.x`
+- install [maven3](https://maven.apache.org/download.cgi) (download 
+  the archive and unzip it to `c:\java`)
+- add the `M2_HOME` environment variable that points to the root 
+  of `c:\java\apache-maven-3.x.x`
 - add the `;%M2_HOME%\bin` string at the end of the `Path` variable
-- install jdk8, if necessary (also to the folder `c:\java`)
-- add the `JAVA_HOME` environment variable that points to the root of `c:\java\jdk1.8.x_xx`
+- install jdk11, if necessary (also to the folder `c:\java`)
+- add the `JAVA_HOME` environment variable that points to the root of `c:\java\jdk11`
 - add the `;%JAVA_HOME%\bin` string at the end of the Path variable
 - check by running cmd.exe with the `mvn -version` command.
 If installation is successful, you will see the command output the version of
@@ -30,42 +32,50 @@ aven and java, rather than "command not found"
 C:\Users\user>mvn -version
 Apache Maven 3.x.x
 Maven home: C:\java\apache-maven-3.x.x
-Java version: 1.8.x_x, vendor: Oracle Corporation
-Java home: C:\java\jdk1.8.x_xx\jre
+Java version: 11, vendor: Oracle Corporation
+Java home: C:\java\jdk11
 Default locale: xxxxx, platform encoding: xxxxxxx
 OS name: "xxxxxxxxxx", version: "xxx", arch: "xxxxx", family: "xxxxxxx"
 C:\Users\user>
 ```
-- download and install [IntelliJ IDEA Community version](https://www.jetbrains.com/idea/download/)
-- install [Lombok plugin](https://plugins.jetbrains.com/plugin/6317-lombok) for idea
+- download and install [IntelliJ IDEA](https://www.jetbrains.com/idea/download/)
+- install [Lombok plugin](https://plugins.jetbrains.com/plugin/6317-lombok) for Idea
 
-Install the codenjoy engine
+Install the codenjoy engine & java clients
 --------------
 
-You have to install the `engine` dependency located in the `engine` folder.
+You have to install the `engine` and `client-java` dependencies.
 Watch out: its version may be updated, so you will have
-to update it and your game's source code. To do this:
+to update it and your game's source code. 
 
-- open the `CodingDojo/games/engine` folder
-- run `setup.bat`
+- open the `CodingDojo/games/engine/build` folder
+- run `intsall.sh` or `intsall.bat` 
 - make sure installation is successful - the dependency should be
 installed under `C:\Users\<UserName>\.m2\repository\com\codenjoy\engine`
+
+Then
+- open the `CodingDojo/clients/java/build` folder
+- run `intsall.sh` or `intsall.bat`
+- make sure installation is successful - the dependency should be
+  installed under `C:\Users\<UserName>\.m2\repository\com\codenjoy\client-java`
 
 Develop a game
 --------------
 
-Invent/recall a game that might interest others, does not involve following complicated rules,
-and people played it in childhood.
+Invent/recall a game that might interest others, does not involve 
+following complicated rules, and people played it in childhood.
 
 The game might have the same rules as the original,
-or might provide some variation. For example, you can turn a two-player game, such as the battleship,
-into a multiplayer game. Make sure the gamer will enjoy writing the AI algorithm
+or might provide some variation. For example, you can turn a 
+two-player game, such as the battleship, into a multiplayer 
+game. Make sure the gamer will enjoy writing the AI algorithm 
 (the challenges should be reasonably tough).
 
-Do not hesitate to [contact us](http://codenjoy.com/portal/?page_id=51)
+Do not hesitate to [contact us](http://codenjoy.com/?page_id=51)
 If stumped, get in touch and we'll help you.
 
-Then proceed to writing a model of the game you selected. The following section contains the required how-to.
+Then proceed to writing a model of the game you selected. The following 
+section contains the required how-to.
 
 Here is an example (in russian) of how a 'reversi'
 model was written: [part1](https://www.youtube.com/watch?v=W17BKHU9H-Y),
@@ -78,9 +88,9 @@ Unit testing coverage is expected. It'd be still better to write the code
 following TDD, and if you don't know how
 [watch this video (in russian)](https://vimeo.com/54862036).
 
-And then [email us](mailto:apofig@gmail.com). We'll arrange for code review if necessary.
-And once the model is ready, we'll integrate it to our framework, and
-help your arrange your first Codenjoy event.
+And then [email us](mailto:apofig@gmail.com). We'll arrange for code 
+review if necessary. And once the model is ready, we'll integrate 
+it to our framework, and help your arrange your first Codenjoy event.
 
 Here is the repository [https://github.com/codenjoyme/codenjoy-game](https://github.com/codenjoyme/codenjoy-game).
 You should find out how to fork a project, how to commit in git.
@@ -88,40 +98,42 @@ You should find out how to fork a project, how to commit in git.
 Sample
 --------------
 
-Project [Sample](https://github.com/codenjoyme/codenjoy-game/tree/master/sample) is a sample of a one-board game with all requisite artefacts. Learn how a project operates.
+Project [Sample](https://github.com/codenjoyme/codenjoy-game/tree/master/sample) 
+is a sample of a one-board game with all requisite artefacts. 
+Learn how a project operates.
 
 - import the `sample` project as `maven project` to Idea
 - run all tests; as they progress, you should observe the green bar
-- get [sample/src/test/java/com/codenjoy/dojo/sample/model/SampleTest.java](https://github.com/codenjoyme/codenjoy-game/blob/master/sample/src/test/java/com/codenjoy/dojo/sample/model/SampleTest.java)
+- get [sample/src/test/java/com/codenjoy/dojo/sample/model/GameTest.java](https://github.com/codenjoyme/codenjoy-game/blob/master/sample/src/test/java/com/codenjoy/dojo/sample/model/GameTest.java)
 and see how tests for games are written.
 - get [sample/src/main/java/com/codenjoy/dojo/sample](https://github.com/codenjoyme/codenjoy-game/blob/master/sample/src/main/java/com/codenjoy/dojo/sample)
 and see what are the minimum code requirements for a new game.
-- the package here [sample/src/main/java/com/codenjoy/dojo/sample/client](https://github.com/codenjoyme/codenjoy-game/blob/master/sample/src/main/java/com/codenjoy/dojo/sample/client)
+- the package here [clients/java/src/main/java/com/codenjoy/dojo/games/sample](https://github.com/codenjoyme/codenjoy-java-client/tree/master/src/main/java/com/codenjoy/dojo/games/sample)
 has client code, with a part of it to be sent to the player as a game template
-- the package [sample/src/main/java/com/codenjoy/dojo/sample/client/ai](https://github.com/codenjoyme/codenjoy-game/blob/master/sample/src/main/java/com/codenjoy/dojo/sample/client/ai)
+- the package [sample/src/main/java/com/codenjoy/dojo/sample/services/ai](https://github.com/codenjoyme/codenjoy-game/blob/master/sample/src/main/java/com/codenjoy/dojo/sample/services/ai)
 has your AI algorithm that will automatically connect to the player and play with him or her.
 - all the rest is the game engine.
 - before you can implement your new game, take some time to familiarize
 yourself with the main interfaces and framework classes. All of them are
 located in the dependency engine. You should be interested in these:
-  * [engine/src/main/java/com/codenjoy/dojo/services/Game.java](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/games/engine/src/main/java/com/codenjoy/dojo/services/Game.java)
-  * [engine/src/main/java/com/codenjoy/dojo/services/Joystick.java](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/games/engine/src/main/java/com/codenjoy/dojo/services/Joystick.java)
-  * [engine/src/main/java/com/codenjoy/dojo/services/Printer.java](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/games/engine/src/main/java/com/codenjoy/dojo/services/printer/Printer.java)
-  * [engine/src/main/java/com/codenjoy/dojo/services/GameType.java](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/games/engine/src/main/java/com/codenjoy/dojo/services/GameType.java)
-  * [engine/src/main/java/com/codenjoy/dojo/services/multiplayer/GameField.java](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/games/engine/src/main/java/com/codenjoy/dojo/services/multiplayer/GameField.java)
-  * [engine/src/main/java/com/codenjoy/dojo/services/multiplayer/GamePlayer.java](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/games/engine/src/main/java/com/codenjoy/dojo/services/multiplayer/GamePlayer.java)
-  * [engine/src/main/java/com/codenjoy/dojo/services/Tickable.java](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/games/engine/src/main/java/com/codenjoy/dojo/services/Tickable.java)
-  * [engine/src/main/java/com/codenjoy/dojo/services/PlayerScores.java](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/games/engine/src/main/java/com/codenjoy/dojo/services/PlayerScores.java)
-  * [engine/src/main/java/com/codenjoy/dojo/services/Point.java](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/games/engine/src/main/java/com/codenjoy/dojo/services/Point.java)
-  * [engine/src/main/java/com/codenjoy/dojo/services/GamePrinter.java](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/games/engine/src/main/java/com/codenjoy/dojo/services/GamePrinter.java)
-  * [engine/src/main/java/com/codenjoy/dojo/services/EventListener.java](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/games/engine/src/main/java/com/codenjoy/dojo/services/EventListener.java)
-  * [engine/src/main/java/com/codenjoy/dojo/services/Dice.java](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/games/engine/src/main/java/com/codenjoy/dojo/services/Dice.java)
-  * [engine/src/main/java/com/codenjoy/dojo/services/State.java](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/games/engine/src/main/java/com/codenjoy/dojo/services/State.java)
-  * [engine/src/main/java/com/codenjoy/dojo/services/Direction.java](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/games/engine/src/main/java/com/codenjoy/dojo/services/Direction.java)
-  * [engine/src/main/java/com/codenjoy/dojo/services/settings/Settings.java](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/games/engine/src/main/java/com/codenjoy/dojo/services/settings/Settings.java)
-  * [engine/src/main/java/com/codenjoy/dojo/client/AbstractBoard.java](https://github.com/codenjoyme/codenjoy/blob/master/CodingDojo/games/engine/src/main/java/com/codenjoy/dojo/client/AbstractBoard.java)
-  * [engine/src/main/java/com/codenjoy/dojo/client/Solver.java](https://github.com/codenjoyme/codenjoy/blob/master/CodingDojo/games/engine/src/main/java/com/codenjoy/dojo/client/Solver.java)
-  * [engine/src/main/java/com/codenjoy/dojo/client/ClientBoard.java](https://github.com/codenjoyme/codenjoy/blob/master/CodingDojo/games/engine/src/main/java/com/codenjoy/dojo/client/ClientBoard.java)
+  * [engine/src/main/java/com/codenjoy/dojo/services/Game.java](https://github.com/codenjoyme/codenjoy-engine/tree/master/src/main/java/com/codenjoy/dojo/services/Game.java)
+  * [engine/src/main/java/com/codenjoy/dojo/services/Joystick.java](https://github.com/codenjoyme/codenjoy-engine/tree/master/src/main/java/com/codenjoy/dojo/services/Joystick.java)
+  * [engine/src/main/java/com/codenjoy/dojo/services/Printer.java](https://github.com/codenjoyme/codenjoy-engine/tree/master/src/main/java/com/codenjoy/dojo/services/printer/Printer.java)
+  * [engine/src/main/java/com/codenjoy/dojo/services/GameType.java](https://github.com/codenjoyme/codenjoy-engine/tree/master/src/main/java/com/codenjoy/dojo/services/GameType.java)
+  * [engine/src/main/java/com/codenjoy/dojo/services/multiplayer/GameField.java](https://github.com/codenjoyme/codenjoy-engine/tree/master/src/main/java/com/codenjoy/dojo/services/multiplayer/GameField.java)
+  * [engine/src/main/java/com/codenjoy/dojo/services/multiplayer/GamePlayer.java](https://github.com/codenjoyme/codenjoy-engine/tree/master/src/main/java/com/codenjoy/dojo/services/multiplayer/GamePlayer.java)
+  * [engine/src/main/java/com/codenjoy/dojo/services/Tickable.java](https://github.com/codenjoyme/codenjoy-engine/tree/master/src/main/java/com/codenjoy/dojo/services/Tickable.java)
+  * [engine/src/main/java/com/codenjoy/dojo/services/PlayerScores.java](https://github.com/codenjoyme/codenjoy-engine/tree/master/src/main/java/com/codenjoy/dojo/services/PlayerScores.java)
+  * [engine/src/main/java/com/codenjoy/dojo/services/EventListener.java](https://github.com/codenjoyme/codenjoy-engine/tree/master/src/main/java/com/codenjoy/dojo/services/EventListener.java)
+  * [engine/src/main/java/com/codenjoy/dojo/services/settings/Settings.java](https://github.com/codenjoyme/codenjoy-engine/tree/master/src/main/java/com/codenjoy/dojo/services/settings/Settings.java)
+  * [engine/src/main/java/com/codenjoy/dojo/services/printer/GamePrinter.java](https://github.com/codenjoyme/codenjoy-engine/blob/master/src/main/java/com/codenjoy/dojo/services/printer/GamePrinter.java)
+  * [engine/src/main/java/com/codenjoy/dojo/services/State.java](https://github.com/codenjoyme/codenjoy-engine/blob/master/src/main/java/com/codenjoy/dojo/services/State.java)
+  * [clients/java/src/main/java/com/codenjoy/dojo/services/Dice.java](https://github.com/codenjoyme/codenjoy-java-client/blob/master/src/main/java/com/codenjoy/dojo/services/Dice.java)
+  * [clients/java/src/main/java/com/codenjoy/dojo/services/Point.java](https://github.com/codenjoyme/codenjoy-java-client/blob/master/src/main/java/com/codenjoy/dojo/services/Point.java)
+  * [clients/java/src/main/java/com/codenjoy/dojo/services/Direction.java](https://github.com/codenjoyme/codenjoy-java-client/blob/master/src/main/java/com/codenjoy/dojo/services/Direction.java)
+  * [clients/java/src/main/java/com/codenjoy/dojo/client/AbstractBoard.java](https://github.com/codenjoyme/codenjoy-java-client/blob/master/src/main/java/com/codenjoy/dojo/client/AbstractBoard.java)
+  * [clients/java/src/main/java/com/codenjoy/dojo/client/Solver.java](https://github.com/codenjoyme/codenjoy-java-client/blob/master/src/main/java/com/codenjoy/dojo/client/Solver.java)
+  * [clients/java/src/main/java/com/codenjoy/dojo/client/ClientBoard.java](https://github.com/codenjoyme/codenjoy-java-client/blob/master/src/main/java/com/codenjoy/dojo/client/ClientBoard.java)
 - all of these are basic interfaces/classes that you use to integrate
 the new game into the main framework (like inserting a cartridge into a Dendy console).
 - explore their description in java docs for the interfaces and classes
@@ -139,25 +151,19 @@ scratch - just base it off the `sample` project.
 can trust it. That's why you should develop the game using TDD.
 If this is an unfamiliar concept,
 [we recommend this book by Ken Beck](http://www.ozon.ru/context/detail/id/1501671/).
-- maven will automatically assemble the game source for the client
-in a zip file, as shown here
-[sample-clients.zip](http://codenjoy.com/codenjoy-contest/resources/sample/user/clients.zip)
-Note that the `pom.xml` file has a `maven-antrun-plugin` section,
-[where ant assembles](https://github.com/codenjoyme/codenjoy-game/blob/master/pom.xml#L223) this zip. It includes the pom.xml file, the `Elements`
-class from the model package, and everything from the `client` package
-except the `ai` package.
 - write a manual for the game, see an example here:
-  * for Russian [sample/src/main/webapp/resources/help/sample.html](https://github.com/codenjoyme/codenjoy-game/blob/master/sample/src/main/webapp/resources/help/sample.html)
-  * for English [sample/src/main/webapp/resources/help/sample-en.html](https://github.com/codenjoyme/codenjoy-game/blob/master/sample/src/main/webapp/resources/help/sample-en.html)
+  * for Russian [sample/src/main/webapp/resources/sample/help/index.md](https://github.com/codenjoyme/codenjoy-game/blob/master/sample/src/main/webapp/resources/sample/help/index.md)
+  * for English [sample/src/main/webapp/resources/sample/help/index-en.md](https://github.com/codenjoyme/codenjoy-game/blob/master/sample/src/main/webapp/resources/sample/help/index-en.md)
 - draw sprites - square-like pictures that will serve as the basis for
 rendering the game in the browser. Normally, they are freely available on the net.
-Png files with sprites can be found in the folder [sample/src/main/webapp/resources/sprite/sample/](https://github.com/codenjoyme/codenjoy-game/blob/master/sample/src/main/webapp/resources/sprite/sample).
+Png files with sprites can be found in the folder [sample/src/main/webapp/resources/sample/sprite/](https://github.com/codenjoyme/codenjoy-game/tree/master/sample/src/main/webapp/resources/sample/sprite).
 Important! Sprite names are not random, they should be associated with enum fields
-[sample/src/main/java/com/codenjoy/dojo/sample/model/Elements.java](https://github.com/codenjoyme/codenjoy-game/blob/master/sample/src/main/java/com/codenjoy/dojo/sample/model/Elements.java).
+[clients/java/src/main/java/com/codenjoy/dojo/games/sample/Element.java](https://github.com/codenjoyme/codenjoy-java-client/blob/master/src/main/java/com/codenjoy/dojo/games/sample/Element.java).
 All names should be lowercase
 - then implement your bot by analogy with
-[sample/src/main/java/com/codenjoy/dojo/sample/client/ai/AISolver.java](https://github.com/codenjoyme/codenjoy-game/blob/master/sample/src/main/java/com/codenjoy/dojo/sample/client/ai/AISolver.java)
-- run DryRunGame class to see how your game works. You can check your bot also.
+[sample/src/main/java/com/codenjoy/dojo/sample/services/ai/AISolver.java](https://github.com/codenjoyme/codenjoy-game/blob/master/sample/src/main/java/com/codenjoy/dojo/sample/services/ai/AISolver.java)
+- run [sample/src/main/java/com/codenjoy/dojo/sample/DryRunGame.java](https://github.com/codenjoyme/codenjoy-game/blob/master/sample/src/main/java/com/codenjoy/dojo/sample/DryRunGame.java) 
+  class to see how your game works. You can check your bot also.
 ```
 public class DryRunGame {
     public static void main(String[] args) {
@@ -174,12 +180,12 @@ public class DryRunGame {
 - assemble a jar file by running the `mvn package` command in the sample folder root
 - the jar file will be `sample\target\sample-engine.jar`
 - email it to us at [apofig@gmail.com](mailto:apofig@gmail.com) with the `New game for codenjoy` subject
-- than we will make a code review and you can improve the game
+- then we will make a code review and you can improve the game
 - Thanks!
 
 Merge your game into codenjoy master
 ------------------------------------
-- renname `sample` folder to `your-game`
+- rename `sample` folder to `your-game`
 - remove everything except `your-game` folder
 - commit this changes
 - push it to GitHub
@@ -187,7 +193,7 @@ Merge your game into codenjoy master
 - `git clone https://github.com/codenjoyme/codenjoy.git`
 - `cd codenjoy`
 - `git subtree add --prefix=CodingDojo/games2 https://github.com/yourgithub/your-game.git master`
-- renname `CodingDojo/games2` to `CodingDojo/games` with accept merging of two folders
+- rename `CodingDojo/games2` to `CodingDojo/games` with accept merging of two folders
 - `git add CodingDojo/games2`
 - `git add CodingDojo/games/your-game`
 - in the `CodingDojo/server/pom.xml` file, add new profile according to
@@ -252,7 +258,7 @@ Here the `<GAMENAME>` is game name that you try to build.
 Parameter `<CONNECTION_URL>` is optional - you can override connection URL hardcoded inside YourSolver class 
 ```
 java -jar ./target/<GAMENAME>-engine-exec.jar "http://codenjoy.com:80/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=1234567890123456789"
-```
+``` 
 
 Run game engine in a simple mode
 --------------
@@ -262,7 +268,7 @@ server were up. This is useful during game development.
 
 To do this, the game must be able to implement it. 
 For example MollyMage game contains a 
-[startup class Main](https://github.com/codenjoyme/codenjoy/blob/master/CodingDojo/games/mollymage/src/main/java/com/codenjoy/dojo/Main.java)
+[startup class Main](https://github.com/codenjoyme/codenjoy/blob/master/CodingDojo/games/mollymage/src/main/java/com/codenjoy/dojomollymage/runner/Main.java)
 in which the game starts. If your game has the same 
 file, you can run the command:
 ```
@@ -273,7 +279,12 @@ location of the `.git` directory. You can also use
 `-Pjar-local,noGit` to skip git-info phase.
 
 After assembly, a file `<GAMENAME>-engine.jar` will 
-appear in `target` so you can run it:
+appear in `target`.
+
+Another way to do this - just call `CodingDojo/build/build-game-jar-local.sh`
+then enter game name and copy jar from `CodingDojo/build/out` folder.
+
+So you can run this jar:
 - for windows
 ```
 java -jar -Dhost=127.0.0.1 -Dport=8080 -Dtimeout=1000 -DlogDisable=false -Dlog="output.txt" -DlogTime=true -DshowPlayers="2,3" -Drandom="random-soul-string" -DwaitFor=2 -Dsettings="{'boardSize':11, 'potionPower':7} <GAMENAME>-engine.jar"

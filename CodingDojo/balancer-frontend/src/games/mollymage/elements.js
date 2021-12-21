@@ -1,5 +1,5 @@
 // vendor
-import React, { Component } from 'react';
+import React from 'react';
 
 // proj
 // import potion from './images/sprite/potion.png';
@@ -15,7 +15,7 @@ import potion_timer_3 from './images/sprite/potion_timer_3.png';
 import potion_timer_4 from './images/sprite/potion_timer_4.png';
 import potion_timer_5 from './images/sprite/potion_timer_5.png';
 import hero from './images/sprite/hero.png';
-import boom from './images/sprite/boom.png';
+import blast from './images/sprite/blast.png';
 import dead_hero from './images/sprite/dead_hero.png';
 import dead_ghost from './images/sprite/dead_ghost.png';
 import treasure_box from './images/sprite/treasure_box.png';
@@ -25,9 +25,7 @@ import none from './images/sprite/none.png';
 import other_potion_hero from './images/sprite/other_potion_hero.png';
 import other_hero from './images/sprite/other_hero.png';
 import other_dead_hero from './images/sprite/other_dead_hero.png';
-import enemy_potion_hero from './images/sprite/enemy_potion_hero.png';
 import enemy_hero from './images/sprite/enemy_hero.png';
-import enemy_dead_hero from './images/sprite/enemy_dead_hero.png';
 import wall from './images/sprite/wall.png';
 
 //own
@@ -111,8 +109,8 @@ export default [
         description: `Це зілля вибухне через 1 тік.`
     },
     {
-        image:       boom,
-        title:       `BOOM ('҉')`,
+        image:       blast,
+        title:       `BLAST ('҉')`,
         description: `Бам! Це те, як зілля вибухає. При цьому
 все, що може бути зруйновано – зруйнується разом із вашою Моллі,
 якщо заздалегідь не заховатися.`

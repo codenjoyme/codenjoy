@@ -33,10 +33,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-/**
- * @author Igor Petrov
- * Created at 3/6/2019
- */
 @Configuration
 @PostgreSQLProfile
 public class PostgresDBConfig {

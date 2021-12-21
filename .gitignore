@@ -6,6 +6,7 @@
 **/obj
 **/Gemfile.lock
 /CodingDojo/external
+/CodingDojo/build/out/
 /CodingDojo/**/external
 /CodingDojo/repo
 /CodingDojo/repo/**
