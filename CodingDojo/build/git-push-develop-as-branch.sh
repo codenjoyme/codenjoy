@@ -8,6 +8,11 @@ eval_echo() {
     eval $command
 }
 
+color() {
+    message=$1
+    echo "[93m$message[0m"
+}
+
 check_machine() {
     unameOut="$(uname -s)"
     case "${unameOut}" in
@@ -35,10 +40,16 @@ eval_echo "cd .."
 eval_echo "`ssh-agent -s`"
 eval_echo "ssh-add ~/.ssh/*_rsa"
 
-echo Please enter branch name
+eval_echo "CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)"
+
+color "Please enter branch name or press Enter for current branch '$CURRENT_BRANCH'"
 read BRANCH
 
-echo Do we need to commit submudules: y/n?
+if [[ "$BRANCH" == "" ]]; then
+    eval_echo "BRANCH=$CURRENT_BRANCH"
+fi
+
+color "Do we need to commit submudules: y/n?"
 read submodule_commit
 if [[ "$submodule_commit" == "y" ]]; then
 	eval_echo "git submodule foreach git push origin master"
@@ -46,10 +57,13 @@ fi
 
 eval_echo "git checkout -B $BRANCH"
 eval_echo "git push origin $BRANCH"
-eval_echo "git checkout develop"
-eval_echo "git branch -D $BRANCH"
+
+if [[ "$BRANCH" != "$CURRENT_BRANCH" ]]; then
+    eval_echo "git checkout develop"
+    eval_echo "git branch -D $BRANCH"
+fi
 
 eval_echo "show_branch_on_git"
 
-echo Press Enter to continue
+color "Press Enter to continue"
 read
