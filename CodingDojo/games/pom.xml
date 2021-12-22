@@ -327,125 +327,6 @@
                     </dependencies>
                 </plugin>
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>${maven-compiler.version}</version>
-                    <executions>
-                        <execution>
-                            <!-- Плагин отвечает за компиляцию
-                                 классов -->
-                            <id>[##6]-compile-java</id>
-                            <goals>
-                                <goal>compile</goal>
-                            </goals>
-                            <phase>compile</phase>
-                        </execution>
-                        <execution>
-                            <id>default-compile</id>
-                            <phase>none</phase>
-                        </execution>
-                    </executions>
-                    <configuration>
-                        <encoding>utf8</encoding>
-                        <source>${java.version}</source>
-                        <target>${java.version}</target>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <executions>
-                        <execution>
-                            <!-- Плагин отвечает за тестирование.
-                                 В данном случае позволяет исключать тесты
-                                 во время mvn билда c ключем -Dmaven.test.excludes -->
-                            <id>[##7]-test-java</id>
-                            <goals>
-                                <goal>test</goal>
-                            </goals>
-                            <phase>test</phase>
-                        </execution>
-                        <execution>
-                            <id>default-test</id>
-                            <phase>none</phase>
-                        </execution>
-                    </executions>
-                    <configuration>
-                        <excludes>${maven.test.excludes}</excludes>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-source-plugin</artifactId>
-                    <version>${maven-source-plugin.version}</version>
-                    <executions>
-                        <execution>
-                            <!-- Плагин добавляет jar с сырцами engine
-                                 в target -->
-                            <id>[##8]-attach-engine-sources</id>
-                            <goals>
-                                <goal>jar</goal>
-                            </goals>
-                            <phase>prepare-package</phase>
-                        </execution>
-                        <execution>
-                            <id>default-jar</id>
-                            <phase>none</phase>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-resources-plugin</artifactId>
-                    <version>${maven-resources.version}</version>
-                    <executions>
-                        <execution>
-                            <!-- Плагин отвечает за копирование
-                                 ресурсов -->
-                            <id>[##5]-copy-resources</id>
-                            <goals>
-                                <goal>resources</goal>
-                            </goals>
-                            <phase>generate-resources</phase>
-                        </execution>
-                        <execution>
-                            <id>default-resources</id>
-                            <phase>none</phase>
-                        </execution>
-                    </executions>
-                    <configuration>
-                        <encoding>utf8</encoding>
-                        <nonFilteredFileExtensions>
-                            <nonFilteredFileExtension>zip</nonFilteredFileExtension>
-                        </nonFilteredFileExtensions>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-jar-plugin</artifactId>
-                    <version>${maven-jar-plugin.version}</version>
-                    <executions>
-                        <execution>
-                            <id>default-jar</id>
-                            <phase>none</phase>
-                        </execution>
-                        <execution>
-                            <!-- Плагин отвечает за сборку jar
-                                 файла -->
-                            <id>[##9]-make-jar</id>
-                            <goals>
-                                <goal>jar</goal>
-                            </goals>
-                            <phase>prepare-package</phase>
-                        </execution>
-                    </executions>
-                    <configuration>
-                        <excludes>
-                            <exclude>**/logback.xml</exclude>
-                        </excludes>
-                    </configuration>
-                </plugin>
-                <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>license-maven-plugin</artifactId>
                     <version>${maven-license.version}</version>
@@ -502,13 +383,65 @@
                     </configuration>
                 </plugin>
                 <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>${maven-resources.version}</version>
+                    <executions>
+                        <execution>
+                            <!-- Плагин отвечает за копирование
+                                 ресурсов -->
+                            <id>[##5]-copy-resources</id>
+                            <goals>
+                                <goal>resources</goal>
+                            </goals>
+                            <phase>generate-resources</phase>
+                        </execution>
+                        <execution>
+                            <id>default-resources</id>
+                            <phase>none</phase>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <encoding>utf8</encoding>
+                        <nonFilteredFileExtensions>
+                            <nonFilteredFileExtension>zip</nonFilteredFileExtension>
+                        </nonFilteredFileExtensions>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven-compiler.version}</version>
+                    <executions>
+                        <execution>
+                            <!-- Плагин отвечает за компиляцию
+                                 классов -->
+                            <id>[##6]-compile-java</id>
+                            <goals>
+                                <goal>compile</goal>
+                            </goals>
+                            <phase>compile</phase>
+                        </execution>
+                        <execution>
+                            <id>default-compile</id>
+                            <phase>none</phase>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <encoding>utf8</encoding>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                    </configuration>
+                </plugin>
+                <plugin>
                     <groupId>org.pitest</groupId>
                     <artifactId>pitest-maven</artifactId>
                     <version>${pitest.version}</version>
                     <executions>
                         <execution>
-                            <!-- Плагин отвечает за мутационное тестирование -->
-                            <id>[##7m]-mutation-testing</id>
+                            <!-- Плагин отвечает за мутационное тестирование.
+                                 Включается для игр ключом -Pmutation -->
+                            <id>[##7]-mutation-testing</id>
                             <goals>
                                 <goal>mutationCoverage</goal>
                             </goals>
@@ -527,6 +460,74 @@
                             <excludedTestClass>**Performance*Test</excludedTestClass>
                         </excludedTestClasses>
                         <reportsDirectory>${project.basedir}/pitest/</reportsDirectory>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <!-- Плагин отвечает за тестирование.
+                                 В данном случае позволяет исключать тесты
+                                 во время mvn билда c ключом -Dmaven.test.excludes -->
+                            <id>[##8]-java-testing</id>
+                            <goals>
+                                <goal>test</goal>
+                            </goals>
+                            <phase>test</phase>
+                        </execution>
+                        <execution>
+                            <id>default-test</id>
+                            <phase>none</phase>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <excludes>${maven.test.excludes}</excludes>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>${maven-source-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <!-- Плагин добавляет jar с сырцами engine
+                                 в target -->
+                            <id>[##9]-attach-engine-sources</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                            <phase>prepare-package</phase>
+                        </execution>
+                        <execution>
+                            <id>default-jar</id>
+                            <phase>none</phase>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>${maven-jar-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <!-- Плагин отвечает за сборку jar
+                                 файла -->
+                            <id>[##10]-make-jar</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                            <phase>prepare-package</phase>
+                        </execution>
+                        <execution>
+                            <id>default-jar</id>
+                            <phase>none</phase>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <excludes>
+                            <exclude>**/logback.xml</exclude>
+                        </excludes>
                     </configuration>
                 </plugin>
             </plugins>
