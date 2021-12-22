@@ -36,15 +36,15 @@ public class ScoresTest {
     private GameSettings settings;
 
     public void lose() {
-        scores.event(Events.LOSE);
+        scores.event(Event.LOSE);
     }
 
     public void win() {
-        scores.event(Events.WIN);
+        scores.event(Event.WIN);
     }
 
     public void winRound() {
-        scores.event(Events.WIN_ROUND);
+        scores.event(Event.WIN_ROUND);
     }
 
     @Before
@@ -69,7 +69,7 @@ public class ScoresTest {
 
         assertEquals(140
                 + 4 * settings.integer(WIN_SCORE)
-                - 1 * settings.integer(LOSE_PENALTY)
+                + 1 * settings.integer(LOSE_PENALTY)
                 + 2 * settings.integer(WIN_ROUND_SCORE),
                 scores.getScore());
     }

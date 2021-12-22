@@ -24,9 +24,15 @@ package com.codenjoy.dojo.sample.services;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.AbstractScores;
 import com.codenjoy.dojo.services.settings.Settings;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 
-import static com.codenjoy.dojo.sample.services.Events.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
+
+import static com.codenjoy.dojo.sample.services.Event.*;
 import static com.codenjoy.dojo.sample.services.GameSettings.Keys.*;
 
 /**
@@ -34,50 +40,28 @@ import static com.codenjoy.dojo.sample.services.GameSettings.Keys.*;
  * Обычно хочется, чтобы константы очков не были захардкоджены,
  * потому используй объект {@link Settings} для их хранения.
  */
-public class Scores implements PlayerScores {
+public class Scores extends AbstractScores<Void> {
 
-    private volatile int score;
-    private final GameSettings settings;
-
-    public Scores(int startScore, GameSettings settings) {
-        this.score = startScore;
-        this.settings = settings;
+    public Scores(int score, SettingsReader settings) {
+        super(score, settings);
     }
 
     @Override
-    public int clear() {
-        return score = 0;
+    protected Map<Object, Function<Void, Integer>> eventToScore() {
+        return map(settings);
     }
 
-    @Override
-    public Integer getScore() {
-        return score;
+    public static HashMap<Object, Function<Void, Integer>> map(SettingsReader settings) {
+        return new HashMap<>(){{
+            put(Event.WIN,
+                    value -> settings.integer(WIN_SCORE));
+
+            put(Event.WIN_ROUND,
+                    value -> settings.integer(WIN_ROUND_SCORE));
+
+            put(Event.LOSE,
+                    value -> settings.integer(LOSE_PENALTY));
+        }};
     }
 
-    @Override
-    public void event(Object event) {
-        score += scoreFor(settings, event);
-        score = Math.max(0, score);
-    }
-
-    public static int scoreFor(GameSettings settings, Object event) {
-        if (WIN.equals(event)) {
-            return settings.integer(WIN_SCORE);
-        }
-
-        if (WIN_ROUND.equals(event)) {
-            return settings.integer(WIN_ROUND_SCORE);
-        }
-
-        if (LOSE.equals(event)) {
-            return - settings.integer(LOSE_PENALTY);
-        }
-
-        return 0;
-    }
-
-    @Override
-    public void update(Object score) {
-        this.score = Integer.parseInt(score.toString());
-    }
 }
