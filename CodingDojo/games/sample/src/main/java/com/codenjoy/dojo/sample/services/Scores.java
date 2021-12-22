@@ -25,6 +25,7 @@ package com.codenjoy.dojo.sample.services;
 
 import com.codenjoy.dojo.services.event.ScoresMap;
 import com.codenjoy.dojo.services.settings.Settings;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import static com.codenjoy.dojo.sample.services.GameSettings.Keys.*;
 
@@ -35,7 +36,9 @@ import static com.codenjoy.dojo.sample.services.GameSettings.Keys.*;
  */
 public class Scores extends ScoresMap<Integer> {
 
-    public Scores(GameSettings settings) {
+    public Scores(SettingsReader settings) {
+        super(settings);
+
         put(Event.WIN,
                 value -> settings.integer(WIN_SCORE));
 
