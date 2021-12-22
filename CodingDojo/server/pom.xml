@@ -987,10 +987,17 @@
                 <version>${maven-buildnumber-plugin.version}</version>
                 <executions>
                     <execution>
-                        <phase>validate</phase>
+                        <!-- Плагин добавляет git hash текущего коммита
+                             из которого делается сборка -->
+                        <id>[##1]-generate-git-commit-hash</id>
                         <goals>
                             <goal>create</goal>
                         </goals>
+                        <phase>validate</phase>
+                    </execution>
+                    <execution>
+                        <id>default</id>
+                        <phase>none</phase>
                     </execution>
                 </executions>
                 <configuration>
@@ -1019,9 +1026,22 @@
                 </dependencies>
             </plugin>
             <plugin>
-                <!-- make war runnable with main class -->
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <!-- make war runnable with main class -->
+                        <id>[##9]-make-executable-war</id>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                        <phase>package</phase>
+                    </execution>
+                    <execution>
+                        <id>repackage</id>
+                        <phase>none</phase>
+                    </execution>
+                </executions>
                 <configuration>
                     <!-- true - eсли хочу запускать так же и 'sh codenjoy-contest.war'
                          false - если только как 'java -jar codenjoy-contest.war' -->
@@ -1034,7 +1054,12 @@
                 <version>${maven-minify-plugin.version}</version>
                 <executions>
                     <execution>
-                        <id>css-minify</id>
+                        <id>[##3]-css-minify</id>
+                        <goals>
+                            <goal>minify</goal>
+                        </goals>
+                        <!-- TODO узнать что за фаза по умолчанию
+                            <phase>validate</phase> -->
                         <configuration>
                             <cssSourceDir>resources/css</cssSourceDir>
                             <cssSourceFiles>
@@ -1045,12 +1070,14 @@
                             <cssFinalFile>all.css</cssFinalFile>
                             <webappTargetDir>${project.build.outputDirectory}</webappTargetDir>
                         </configuration>
+                    </execution>
+                    <execution>
+                        <id>[##4]-board-only-css-minify</id>
                         <goals>
                             <goal>minify</goal>
                         </goals>
-                    </execution>
-                    <execution>
-                        <id>board-only-css-minify</id>
+                        <!-- TODO узнать что за фаза по умолчанию
+                            <phase>validate</phase> -->
                         <configuration>
                             <cssSourceDir>resources/css</cssSourceDir>
                             <cssSourceFiles>
@@ -1059,12 +1086,14 @@
                             <cssFinalFile>all-board-only.css</cssFinalFile>
                             <webappTargetDir>${project.build.outputDirectory}</webappTargetDir>
                         </configuration>
+                    </execution>
+                    <execution>
+                        <id>[##5]-script-minify</id>
                         <goals>
                             <goal>minify</goal>
                         </goals>
-                    </execution>
-                    <execution>
-                        <id>script-minify</id>
+                        <!-- TODO узнать что за фаза по умолчанию
+                            <phase>validate</phase> -->
                         <configuration>
                             <jsSourceDir>resources/js</jsSourceDir>
                             <jsSourceFiles>
@@ -1115,9 +1144,6 @@
                             <!--<webappSourceDir>${basedir}/src/main/webapp/resources/js</webappSourceDir>-->
                             <webappTargetDir>${project.build.outputDirectory}</webappTargetDir>
                         </configuration>
-                        <goals>
-                            <goal>minify</goal>
-                        </goals>
                     </execution>
                 </executions>
             </plugin>
@@ -1125,6 +1151,21 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven-compiler-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <!-- Плагин отвечает за компиляцию
+                             классов -->
+                        <id>[##6]-compile-java</id>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <phase>compile</phase>
+                    </execution>
+                    <execution>
+                        <id>default-compile</id>
+                        <phase>none</phase>
+                    </execution>
+                </executions>
                 <configuration>
                     <encoding>utf8</encoding>
                     <source>${java.version}</source>
@@ -1134,6 +1175,22 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <!-- Плагин отвечает за тестирование.
+                             В данном случае позволяет исключать тесты
+                             во время mvn билда c ключом -Dmaven.test.excludes -->
+                        <id>[##7]-java-testing</id>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <phase>test</phase>
+                    </execution>
+                    <execution>
+                        <id>default-test</id>
+                        <phase>none</phase>
+                    </execution>
+                </executions>
                 <configuration>
                     <excludes>${maven.test.excludes}</excludes>
                 </configuration>
@@ -1144,10 +1201,17 @@
                 <version>${maven-source-plugin.version}</version>
                 <executions>
                     <execution>
-                        <id>attach-sources</id>
+                        <!-- Плагин добавляет jar с сырцами engine
+                             в target -->
+                        <id>[##8]-attach-engine-sources</id>
                         <goals>
                             <goal>jar</goal>
                         </goals>
+                        <phase>prepare-package</phase>
+                    </execution>
+                    <execution>
+                        <id>default-jar</id>
+                        <phase>none</phase>
                     </execution>
                 </executions>
             </plugin>
@@ -1155,6 +1219,17 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>license-maven-plugin</artifactId>
                 <version>${maven-license-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <!-- Плагин добавляет во все source файлы
+                             header лицензии -->
+                        <id>[##2]-add-license-headers</id>
+                        <goals>
+                            <goal>update-file-header</goal>
+                        </goals>
+                        <phase>process-sources</phase>
+                    </execution>
+                </executions>
                 <configuration>
                     <licenseName>gpl_v3</licenseName>
                     <licenseResolver>${project.baseUri}/src/license</licenseResolver>
@@ -1165,15 +1240,6 @@
                     <canUpdateDescription>false</canUpdateDescription>
                     <canUpdateLicense>false</canUpdateLicense>
                 </configuration>
-                <executions>
-                    <execution>
-                        <id>first</id>
-                        <goals>
-                            <goal>update-file-header</goal>
-                        </goals>
-                        <phase>process-sources</phase>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
