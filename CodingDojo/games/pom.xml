@@ -33,6 +33,7 @@
         <maven-resources.version>3.2.0</maven-resources.version>
         <maven-license.version>2.0.0</maven-license.version>
         <maven-source-plugin.version>3.2.0</maven-source-plugin.version>
+        <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
         <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
         <maven-buildnumber-plugin.version>1.4</maven-buildnumber-plugin.version>
         <maven-scm-jgit.version>1.11.2</maven-scm-jgit.version>
@@ -262,15 +263,42 @@
         <pluginManagement>
             <plugins>
                 <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>${maven-clean-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <!-- Плагин отвечает за очистку папки
+                                 target перед сборкой -->
+                            <id>[##1]-clean-target</id>
+                            <phase>clean</phase>
+                            <goals>
+                                <goal>clean</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>default-clean</id>
+                            <phase>none</phase>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>buildnumber-maven-plugin</artifactId>
                     <version>${maven-buildnumber-plugin.version}</version>
                     <executions>
                         <execution>
+                            <!-- Плагин добавляет git hash текущего коммита
+                                 из которого делается сборка -->
+                            <id>[##2]-generate-git-commit-hash</id>
                             <phase>validate</phase>
                             <goals>
                                 <goal>create</goal>
                             </goals>
+                        </execution>
+                        <execution>
+                            <id>default</id>
+                            <phase>none</phase>
                         </execution>
                     </executions>
                     <configuration>
@@ -302,6 +330,21 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>${maven-compiler.version}</version>
+                    <executions>
+                        <execution>
+                            <!-- Плагин отвечает за компиляцию
+                                 классов -->
+                            <id>[##6]-compile-java</id>
+                            <goals>
+                                <goal>compile</goal>
+                            </goals>
+                            <phase>compile</phase>
+                        </execution>
+                        <execution>
+                            <id>default-compile</id>
+                            <phase>none</phase>
+                        </execution>
+                    </executions>
                     <configuration>
                         <encoding>utf8</encoding>
                         <source>${java.version}</source>
@@ -311,6 +354,22 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <!-- Плагин отвечает за тестирование.
+                                 В данном случае позволяет исключать тесты
+                                 во время mvn билда c ключем -Dmaven.test.excludes -->
+                            <id>[##7]-test-java</id>
+                            <goals>
+                                <goal>test</goal>
+                            </goals>
+                            <phase>test</phase>
+                        </execution>
+                        <execution>
+                            <id>default-test</id>
+                            <phase>none</phase>
+                        </execution>
+                    </executions>
                     <configuration>
                         <excludes>${maven.test.excludes}</excludes>
                     </configuration>
@@ -321,10 +380,17 @@
                     <version>${maven-source-plugin.version}</version>
                     <executions>
                         <execution>
-                            <id>attach-sources</id>
+                            <!-- Плагин добавляет jar с сырцами engine
+                                 в target -->
+                            <id>[##8]-attach-engine-sources</id>
                             <goals>
                                 <goal>jar</goal>
                             </goals>
+                            <phase>prepare-package</phase>
+                        </execution>
+                        <execution>
+                            <id>default-jar</id>
+                            <phase>none</phase>
                         </execution>
                     </executions>
                 </plugin>
@@ -332,6 +398,21 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
                     <version>${maven-resources.version}</version>
+                    <executions>
+                        <execution>
+                            <!-- Плагин отвечает за копирование
+                                 ресурсов -->
+                            <id>[##5]-copy-resources</id>
+                            <goals>
+                                <goal>resources</goal>
+                            </goals>
+                            <phase>generate-resources</phase>
+                        </execution>
+                        <execution>
+                            <id>default-resources</id>
+                            <phase>none</phase>
+                        </execution>
+                    </executions>
                     <configuration>
                         <encoding>utf8</encoding>
                         <nonFilteredFileExtensions>
@@ -343,6 +424,21 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
                     <version>${maven-jar-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>default-jar</id>
+                            <phase>none</phase>
+                        </execution>
+                        <execution>
+                            <!-- Плагин отвечает за сборку jar
+                                 файла -->
+                            <id>[##9]-make-jar</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                            <phase>prepare-package</phase>
+                        </execution>
+                    </executions>
                     <configuration>
                         <excludes>
                             <exclude>**/logback.xml</exclude>
@@ -353,6 +449,17 @@
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>license-maven-plugin</artifactId>
                     <version>${maven-license.version}</version>
+                    <executions>
+                        <execution>
+                            <!-- Плагин добавляет во все source файлы
+                                 header лицензии -->
+                            <id>[##3]-add-license-headers</id>
+                            <goals>
+                                <goal>update-file-header</goal>
+                            </goals>
+                            <phase>process-sources</phase>
+                        </execution>
+                    </executions>
                     <configuration>
                         <licenseName>gpl_v3</licenseName>
                         <licenseResolver>${project.baseUri}/src/license</licenseResolver>
@@ -366,20 +473,21 @@
                             <exclude>**/*.json</exclude>
                         </excludes>
                     </configuration>
-                    <executions>
-                        <execution>
-                            <id>first</id>
-                            <goals>
-                                <goal>update-file-header</goal>
-                            </goals>
-                            <phase>process-sources</phase>
-                        </execution>
-                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>com.ruleoftech</groupId>
                     <artifactId>markdown-page-generator-plugin</artifactId>
                     <version>${maven-markdown-page-generator.version}</version>
+                    <executions>
+                        <execution>
+                            <!-- Плагин превращает markdown в html -->
+                            <id>[##4]-convert-markdown-to-html</id>
+                            <goals>
+                                <goal>generate</goal>
+                            </goals>
+                            <phase>process-sources</phase>
+                        </execution>
+                    </executions>
                     <configuration>
                         <transformRelativeMarkdownLinks>true</transformRelativeMarkdownLinks>
 
@@ -392,19 +500,21 @@
                         <headerHtmlFile>${basedir}/src/main/webapp/resources/${module.name}/help/header.html</headerHtmlFile>
                         <footerHtmlFile>${basedir}/src/main/webapp/resources/${module.name}/help/footer.html</footerHtmlFile>
                     </configuration>
-                    <executions>
-                        <execution>
-                            <phase>process-resources</phase>
-                            <goals>
-                                <goal>generate</goal>
-                            </goals>
-                        </execution>
-                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.pitest</groupId>
                     <artifactId>pitest-maven</artifactId>
                     <version>${pitest.version}</version>
+                    <executions>
+                        <execution>
+                            <!-- Плагин отвечает за мутационное тестирование -->
+                            <id>[##7m]-mutation-testing</id>
+                            <goals>
+                                <goal>mutationCoverage</goal>
+                            </goals>
+                            <phase>test</phase>
+                        </execution>
+                    </executions>
                     <configuration>
                         <targetClasses>
                             <param>com.codenjoy.dojo.${module.name}.*</param>
@@ -418,15 +528,6 @@
                         </excludedTestClasses>
                         <reportsDirectory>${project.basedir}/pitest/</reportsDirectory>
                     </configuration>
-                    <executions>
-                        <execution>
-                            <id>pitest</id>
-                            <goals>
-                                <goal>mutationCoverage</goal>
-                            </goals>
-                            <phase>test</phase>
-                        </execution>
-                    </executions>
                 </plugin>
             </plugins>
         </pluginManagement>
