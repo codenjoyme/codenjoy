@@ -1026,26 +1026,29 @@
                 </dependencies>
             </plugin>
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>${maven-license-plugin.version}</version>
                 <executions>
                     <execution>
-                        <!-- make war runnable with main class -->
-                        <id>[##9]-make-executable-war</id>
+                        <!-- Плагин добавляет во все source файлы
+                             header лицензии -->
+                        <id>[##2]-add-license-headers</id>
                         <goals>
-                            <goal>repackage</goal>
+                            <goal>update-file-header</goal>
                         </goals>
-                        <phase>package</phase>
-                    </execution>
-                    <execution>
-                        <id>repackage</id>
-                        <phase>none</phase>
+                        <phase>process-sources</phase>
                     </execution>
                 </executions>
                 <configuration>
-                    <!-- true - eсли хочу запускать так же и 'sh codenjoy-contest.war'
-                         false - если только как 'java -jar codenjoy-contest.war' -->
-                    <executable>false</executable>
+                    <licenseName>gpl_v3</licenseName>
+                    <licenseResolver>${project.baseUri}/src/license</licenseResolver>
+                    <organizationName>Codenjoy</organizationName>
+                    <projectName>Codenjoy - it's a dojo-like platform from developers to developers.</projectName>
+                    <inceptionYear>2018</inceptionYear>
+                    <canUpdateCopyright>false</canUpdateCopyright>
+                    <canUpdateDescription>false</canUpdateDescription>
+                    <canUpdateLicense>false</canUpdateLicense>
                 </configuration>
             </plugin>
             <plugin>
@@ -1216,29 +1219,26 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>license-maven-plugin</artifactId>
-                <version>${maven-license-plugin.version}</version>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <!-- Плагин добавляет во все source файлы
-                             header лицензии -->
-                        <id>[##2]-add-license-headers</id>
+                        <!-- make war runnable with main class -->
+                        <id>[##9]-make-executable-war</id>
                         <goals>
-                            <goal>update-file-header</goal>
+                            <goal>repackage</goal>
                         </goals>
-                        <phase>process-sources</phase>
+                        <phase>package</phase>
+                    </execution>
+                    <execution>
+                        <id>repackage</id>
+                        <phase>none</phase>
                     </execution>
                 </executions>
                 <configuration>
-                    <licenseName>gpl_v3</licenseName>
-                    <licenseResolver>${project.baseUri}/src/license</licenseResolver>
-                    <organizationName>Codenjoy</organizationName>
-                    <projectName>Codenjoy - it's a dojo-like platform from developers to developers.</projectName>
-                    <inceptionYear>2018</inceptionYear>
-                    <canUpdateCopyright>false</canUpdateCopyright>
-                    <canUpdateDescription>false</canUpdateDescription>
-                    <canUpdateLicense>false</canUpdateLicense>
+                    <!-- true - eсли хочу запускать так же и 'sh codenjoy-contest.war'
+                         false - если только как 'java -jar codenjoy-contest.war' -->
+                    <executable>false</executable>
                 </configuration>
             </plugin>
         </plugins>
