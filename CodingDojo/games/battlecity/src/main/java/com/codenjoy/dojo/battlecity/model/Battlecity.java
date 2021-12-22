@@ -24,7 +24,7 @@ package com.codenjoy.dojo.battlecity.model;
 
 
 import com.codenjoy.dojo.battlecity.model.items.*;
-import com.codenjoy.dojo.battlecity.services.Events;
+import com.codenjoy.dojo.battlecity.services.Event;
 import com.codenjoy.dojo.battlecity.services.GameSettings;
 import com.codenjoy.dojo.services.BoardUtils;
 import com.codenjoy.dojo.services.Dice;
@@ -63,7 +63,7 @@ public class Battlecity extends RoundField<Player> implements Field {
     private GameSettings settings;
 
     public Battlecity(int size, Dice dice, GameSettings settings) {
-        super(Events.START_ROUND, Events.WIN_ROUND, Events.KILL_YOUR_TANK, settings);
+        super(Event.START_ROUND, Event.WIN_ROUND, Event.KILL_YOUR_TANK, settings);
         this.size = size;
         this.dice = dice;
         this.settings = settings;
@@ -272,10 +272,10 @@ public class Battlecity extends RoundField<Player> implements Field {
 
         if (killer != null) {
             if (ais.contains(diedTank)) {
-                killer.event(Events.KILL_OTHER_AI_TANK);
+                killer.event(Event.KILL_OTHER_AI_TANK);
             } else {
                 killer.killHero();
-                killer.event(Events.KILL_OTHER_HERO_TANK.apply(killer.score()));
+                killer.event(Event.KILL_OTHER_HERO_TANK.apply(killer.score()));
             }
         }
     }

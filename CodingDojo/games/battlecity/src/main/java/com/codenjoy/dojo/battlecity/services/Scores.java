@@ -22,60 +22,23 @@ package com.codenjoy.dojo.battlecity.services;
  * #L%
  */
 
-import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.ScoresMap;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.*;
 
-public class Scores implements PlayerScores {
+public class Scores extends ScoresMap<Integer> {
 
-    private volatile int score;
-    private GameSettings settings;
+    public Scores(SettingsReader settings) {
+        super(settings);
 
-    public Scores(int startScore, GameSettings settings) {
-        score = startScore;
-        this.settings = settings;
-    }
+        put(Event.Type.KILL_YOUR_TANK,
+                value -> settings.integer(KILL_YOUR_TANK_PENALTY));
 
-    @Override
-    public int clear() {
-        return score = 0;
-    }
+        put(Event.Type.KILL_OTHER_HERO_TANK,
+                value -> value * settings.integer(KILL_OTHER_HERO_TANK_SCORE));
 
-    @Override
-    public Integer getScore() {
-        return score;
-    }
-
-    @Override
-    public void event(Object event) {
-        score += scoreFor(settings, event);
-        score = Math.max(0, score);
-    }
-
-    public static int scoreFor(GameSettings settings, Object object) {
-        if (!(object instanceof Events)) {
-            return 0;
-        }
-        Events event = (Events)object;
-
-        if (event.isKillYourTank()) {
-            return - settings.integer(KILL_YOUR_TANK_PENALTY);
-        }
-
-        // TODO тут множится количество очков от убийств, надо отключатор в сеттинги выделить
-        if (event.isKillOtherHeroTank()) {
-            return settings.integer(KILL_OTHER_HERO_TANK_SCORE) * event.getAmount();
-        }
-
-        if (event.isKillOtherAITank()) {
-            return settings.integer(KILL_OTHER_AI_TANK_SCORE);
-        }
-
-        return 0;
-    }
-
-    @Override
-    public void update(Object score) {
-        this.score = Integer.valueOf(score.toString());
+        put(Event.Type.KILL_OTHER_AI_TANK,
+                value -> settings.integer(KILL_OTHER_AI_TANK_SCORE));
     }
 }

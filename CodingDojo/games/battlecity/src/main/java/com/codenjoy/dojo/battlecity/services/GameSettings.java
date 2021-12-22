@@ -124,7 +124,7 @@ public class GameSettings extends SettingsImpl
         integer(CHANCE_VISIBILITY, 20);
         integer(CHANCE_NO_SLIDING, 20);
 
-        integer(KILL_YOUR_TANK_PENALTY, 0);
+        integer(KILL_YOUR_TANK_PENALTY, -0);
         integer(KILL_OTHER_HERO_TANK_SCORE, 50);
         integer(KILL_OTHER_AI_TANK_SCORE, 25);
 
