@@ -23,45 +23,26 @@ package com.codenjoy.dojo.sample.services;
  */
 
 
-import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.event.AbstractScores;
+import com.codenjoy.dojo.services.event.ScoresMap;
 import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.settings.SettingsReader;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
-
-import static com.codenjoy.dojo.sample.services.Event.*;
 import static com.codenjoy.dojo.sample.services.GameSettings.Keys.*;
 
 /**
- * Класс, который умеет подсчитывать очки за те или иные действия.
+ * Класс помогает подсчитывать очки за те или иные действия.
  * Обычно хочется, чтобы константы очков не были захардкоджены,
  * потому используй объект {@link Settings} для их хранения.
  */
-public class Scores extends AbstractScores<Void> {
+public class Scores extends ScoresMap<Integer> {
 
-    public Scores(int score, SettingsReader settings) {
-        super(score, settings);
+    public Scores(GameSettings settings) {
+        put(Event.WIN,
+                value -> settings.integer(WIN_SCORE));
+
+        put(Event.WIN_ROUND,
+                value -> settings.integer(WIN_ROUND_SCORE));
+
+        put(Event.LOSE,
+                value -> settings.integer(LOSE_PENALTY));
     }
-
-    @Override
-    protected Map<Object, Function<Void, Integer>> eventToScore() {
-        return map(settings);
-    }
-
-    public static HashMap<Object, Function<Void, Integer>> map(SettingsReader settings) {
-        return new HashMap<>(){{
-            put(Event.WIN,
-                    value -> settings.integer(WIN_SCORE));
-
-            put(Event.WIN_ROUND,
-                    value -> settings.integer(WIN_ROUND_SCORE));
-
-            put(Event.LOSE,
-                    value -> settings.integer(LOSE_PENALTY));
-        }};
-    }
-
 }
