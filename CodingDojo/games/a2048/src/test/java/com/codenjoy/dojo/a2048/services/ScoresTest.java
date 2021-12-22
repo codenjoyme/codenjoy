@@ -24,56 +24,82 @@ package com.codenjoy.dojo.a2048.services;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.Settings;
+import com.codenjoy.dojo.services.event.ScoresImpl;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 public class ScoresTest {
+
     private PlayerScores scores;
+    private GameSettings settings;
 
     public void sum(int sum) {
-        scores.event(new Events(Events.Event.SUM, sum));
+        scores.event(new Event(Event.Type.SUM, sum));
     }
 
     @Before
     public void setup() {
-        scores = new Scores(0);
+        settings = new GameSettings();
+        scores = new ScoresImpl<>(0, new Scores(settings));
     }
 
     @Test
     public void shouldCollectScores() {
-        scores = new Scores(0);
+        // given
+        scores = new ScoresImpl<>(0, new Scores(settings));
 
+        // when
         sum(10);
         sum(20);
         sum(30);
 
+        // then
         assertEquals(30, scores.getScore());
     }
 
     @Test
-    public void shouldNoCollectWhenLessThenMax() {
-        scores = new Scores(40);
+    public void shouldNoCollect_whenLessThenMax() {
+        // given
+        scores = new ScoresImpl<>(40, new Scores(settings));
 
+        // when
         sum(10);
         sum(20);
         sum(30);
 
+        // then
         assertEquals(40, scores.getScore());
     }
 
     @Test
-    public void shouldNoCollectWhenSame() {
-        scores = new Scores(0);
+    public void shouldCollect_whenCumulative() {
+        // given
+        ScoresImpl.setup(settings, ScoresImpl.CUMULATIVELY);
 
-        sum(10);
-        sum(10);
-        sum(10);
+        scores = new ScoresImpl<>(40, new Scores(settings));
 
-        assertEquals(10, scores.getScore());
+        // when
+        sum(10);
+        sum(20);
+        sum(30);
+
+        // then
+        assertEquals(100, scores.getScore());
     }
 
+    @Test
+    public void shouldNoCollect_whenSame() {
+        // given
+        scores = new ScoresImpl<>(0, new Scores(settings));
 
+        // when
+        sum(10);
+        sum(10);
+        sum(10);
+
+        // then
+        assertEquals(10, scores.getScore());
+    }
 }

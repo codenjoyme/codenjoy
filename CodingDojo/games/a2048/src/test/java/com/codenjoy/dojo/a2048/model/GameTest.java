@@ -23,7 +23,7 @@ package com.codenjoy.dojo.a2048.model;
  */
 
 
-import com.codenjoy.dojo.a2048.services.Events;
+import com.codenjoy.dojo.a2048.services.Event;
 import com.codenjoy.dojo.a2048.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
@@ -915,7 +915,7 @@ public class GameTest {
     }
 
     private void assertEvens(String expected) {
-        ArgumentCaptor captor = ArgumentCaptor.forClass(Events.class);
+        ArgumentCaptor captor = ArgumentCaptor.forClass(Event.class);
         int count = expected.split(",").length;
         verify(listener, times(count)).event(captor.capture());
         assertEquals(expected, captor.getAllValues().toString());

@@ -23,7 +23,7 @@ package com.codenjoy.dojo.a2048.model;
  */
 
 
-import com.codenjoy.dojo.a2048.services.Events;
+import com.codenjoy.dojo.a2048.services.Event;
 import com.codenjoy.dojo.a2048.services.GameSettings;
 import com.codenjoy.dojo.games.a2048.Element;
 import com.codenjoy.dojo.services.printer.BoardReader;
@@ -87,12 +87,12 @@ public class A2048 implements Field {
         }
 
         int sum = numbers.getSum();
-        player.event(new Events(Events.Event.SUM, sum));
+        player.event(new Event(Event.Type.SUM, sum));
 
         if (isWin()) {
-            player.event(new Events(Events.Event.WIN));
+            player.event(new Event(Event.Type.WIN));
         } else if (isGameOver()) {
-            player.event(new Events(Events.Event.GAME_OVER));
+            player.event(new Event(Event.Type.GAME_OVER));
         }
 
         hero().clearDirection();

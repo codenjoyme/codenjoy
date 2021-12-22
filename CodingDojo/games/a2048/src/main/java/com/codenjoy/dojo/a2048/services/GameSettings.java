@@ -28,6 +28,7 @@ import com.codenjoy.dojo.a2048.model.generator.CornerGenerator;
 import com.codenjoy.dojo.a2048.model.generator.Generator;
 import com.codenjoy.dojo.a2048.model.generator.RandomGenerator;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.event.ScoresImpl;
 import com.codenjoy.dojo.services.settings.EditBox;
 import com.codenjoy.dojo.services.settings.SelectBox;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
@@ -87,6 +88,7 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
         NEW_NUMBERS("New numbers"),
         NUMBERS_MODE("Numbers mode"),
         BREAKS_MODE("Breaks mode"),
+        SCORE_COUNTING_TYPE(ScoresImpl.SCORE_COUNTING_TYPE),
         LEVEL_MAP("Level map");
 
         private String key;
@@ -111,6 +113,8 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
     }
 
     public GameSettings() {
+        initScore(ScoresImpl.MAX_VALUE);
+
         multiline(LEVEL_MAP, null).onChange(updateSize());
 
         integer(SIZE, 5).integerValue(SIZE).onChange(rebuildMap());
