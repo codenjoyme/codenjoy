@@ -22,7 +22,7 @@ package com.codenjoy.dojo.pong.model;
  * #L%
  */
 
-import com.codenjoy.dojo.pong.services.Events;
+import com.codenjoy.dojo.pong.services.Event;
 import com.codenjoy.dojo.pong.services.GameSettings;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
@@ -546,7 +546,7 @@ public class GameTest {
 
         game.tick();
 
-        verify(listener).event(Events.LOSE);
+        verify(listener).event(Event.LOSE);
 
         assertE("          " +
                 "----------" +

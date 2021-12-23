@@ -23,8 +23,6 @@ package com.codenjoy.dojo.pong.services;
  */
 
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
 
 import static com.codenjoy.dojo.pong.services.GameSettings.Keys.WIN_SCORE;
 
@@ -50,7 +48,7 @@ public class Scores implements PlayerScores {
 
     @Override
     public void event(Object event) {
-        if (event.equals(Events.WIN)) {
+        if (event.equals(Event.WIN)) {
             score += settings.integer(WIN_SCORE);
         }
         score = Math.max(0, score);
