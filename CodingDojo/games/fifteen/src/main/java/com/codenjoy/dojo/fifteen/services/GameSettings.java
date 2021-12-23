@@ -36,8 +36,8 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
 
     public enum Keys implements Key {
 
-        WIN_SCORE("Win score"),
-        BONUS_SCORE("Bonus score");
+        WIN_SCORE("[Score] Win score"),
+        BONUS_SCORE("[Score] Bonus score");
 
         private String key;
 

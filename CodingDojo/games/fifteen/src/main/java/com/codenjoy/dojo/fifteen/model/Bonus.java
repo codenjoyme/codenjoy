@@ -23,6 +23,7 @@ package com.codenjoy.dojo.fifteen.model;
  */
 
 public class Bonus {
+
     private int moveCount;
     private int number;
 
@@ -31,16 +32,11 @@ public class Bonus {
         this.number = number;
     }
 
-    public int getMoveCount() {
+    public int moveCount() {
         return moveCount;
     }
 
-    public int getNumber() {
+    public int number() {
         return number;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("moveCount: %s, number: %s", moveCount, number);
     }
 }

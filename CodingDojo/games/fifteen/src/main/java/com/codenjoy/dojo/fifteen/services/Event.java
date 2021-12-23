@@ -22,6 +22,47 @@ package com.codenjoy.dojo.fifteen.services;
  * #L%
  */
 
-public enum Event {
-    WIN;
+import com.codenjoy.dojo.services.event.EventObject;
+
+public class Event implements EventObject<Event.Type, Double> {
+
+    private Type type;
+    private int moveCount;
+    private int number;
+
+    public static Event BONUS(int moveCount, int number) {
+        return new Event(Type.BONUS, moveCount, number);
+    }
+
+    public Event(Type type, int moveCount, int number) {
+        this.type = type;
+        this.moveCount = moveCount;
+        this.number = number;
+    }
+
+    public enum Type {
+        WIN,
+        BONUS;
+    }
+
+    @Override
+    public Type type() {
+        return type;
+    }
+
+    @Override
+    public Double value() {
+        return 1d * number / moveCount;
+    }
+
+    @Override
+    public String toString() {
+        return (type == Type.WIN)
+                ? "Event[WIN]"
+                : "Event[" +
+                    type +
+                    ", moveCount=" + moveCount +
+                    ", number=" + number +
+                    ']';
+    }
 }

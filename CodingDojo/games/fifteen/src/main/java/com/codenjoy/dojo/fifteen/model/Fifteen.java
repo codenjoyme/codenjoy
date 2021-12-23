@@ -63,11 +63,11 @@ public class Fifteen implements Field {
 
             Bonus bonus = hero.pullBonus();
             if (bonus != null) {
-                player.event(bonus);
+                player.event(Event.BONUS(bonus.moveCount(), bonus.number()));
             }
 
             if (isAllPositionCorrect()) {
-                player.event(Event.WIN);
+                player.event(Event.Type.WIN);
                 player.getHero().die();
             }
         }

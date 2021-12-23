@@ -24,6 +24,7 @@ package com.codenjoy.dojo.fifteen.services;
 
 import com.codenjoy.dojo.fifteen.model.Bonus;
 import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.ScoresImpl;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -40,38 +41,39 @@ public class ScoresTest {
     private GameSettings settings;
 
     public void win() {
-        scores.event(Event.WIN);
+        scores.event(Event.Type.WIN);
     }
 
     public void bonus() {
-        scores.event(new Bonus(MOVE_COUNT, NUMBER));
+        scores.event(Event.BONUS(MOVE_COUNT, NUMBER));
     }
 
     @Before
     public void setup() {
         settings = new GameSettings();
-        scores = new Scores(0, settings);
+        scores = new ScoresImpl<>(0, new Scores(settings));
     }
 
     @Test
     public void shouldCollectScores() {
-        scores = new Scores(250, settings);
+        scores = new ScoresImpl<>(250, new Scores(settings));
 
         bonus();
         bonus();
 
         assertEquals(250
-                + 2 * settings.integer(BONUS_SCORE) * NUMBER / MOVE_COUNT,
+                    + 2 * settings.integer(BONUS_SCORE) * NUMBER / MOVE_COUNT,
                 scores.getScore());
     }
 
     @Test
     public void shouldCollectScores_whenWin() {
-        scores = new Scores(250, settings);
+        scores = new ScoresImpl<>(250, new Scores(settings));
 
         win();
 
-        assertEquals(250 + settings.integer(WIN_SCORE),
+        assertEquals(250
+                    + settings.integer(WIN_SCORE),
                 scores.getScore());
     }
 }
