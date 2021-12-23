@@ -23,7 +23,6 @@ package com.codenjoy.dojo.rubicscube.model;
  */
 
 
-import com.codenjoy.dojo.rubicscube.services.Events;
 import com.codenjoy.dojo.services.joystick.ActJoystick;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 

@@ -23,7 +23,7 @@ package com.codenjoy.dojo.rubicscube.model;
  */
 
 
-import com.codenjoy.dojo.rubicscube.services.Events;
+import com.codenjoy.dojo.rubicscube.services.Event;
 import com.codenjoy.dojo.rubicscube.services.GameSettings;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Joystick;
@@ -634,7 +634,7 @@ public class GameTest {
         joystick.act(RIGHT, CLOCKWISE);
         game.tick();
 
-        verify(listener).event(Events.SUCCESS);
+        verify(listener).event(Event.SUCCESS);
         verifyNoMoreInteractions(listener);
     }
 
@@ -714,7 +714,7 @@ public class GameTest {
         joystick.act(0); // просим новую игру
         game.tick();
 
-        verify(listener).event(Events.FAIL);
+        verify(listener).event(Event.FAIL);
         verifyNoMoreInteractions(listener);
 
         assertTrue(game.isGameOver());

@@ -24,8 +24,6 @@ package com.codenjoy.dojo.rubicscube.services;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -39,11 +37,11 @@ public class ScoresTest {
     private GameSettings settings;
 
     public void fail() {
-        scores.event(Events.FAIL);
+        scores.event(Event.FAIL);
     }
 
     public void success() {
-        scores.event(Events.SUCCESS);
+        scores.event(Event.SUCCESS);
     }
 
     @Before

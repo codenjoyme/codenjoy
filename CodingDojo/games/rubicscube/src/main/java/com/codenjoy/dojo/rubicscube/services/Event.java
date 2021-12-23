@@ -22,6 +22,7 @@ package com.codenjoy.dojo.rubicscube.services;
  * #L%
  */
 
-public enum Events {
-    SUCCESS, FAIL;
+public enum Event {
+    SUCCESS,
+    FAIL;
 }
