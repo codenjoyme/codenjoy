@@ -28,7 +28,7 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import com.codenjoy.dojo.snake.model.artifacts.Affectable;
 import com.codenjoy.dojo.snake.model.artifacts.Tail;
-import com.codenjoy.dojo.snake.services.Events;
+import com.codenjoy.dojo.snake.services.Event;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -134,13 +134,13 @@ public class Hero extends PlayerHero<Field> implements Affectable, Iterable<Tail
     }
 
     public void killMe() {
-        player.event(Events.KILL);
+        player.event(Event.KILL);
         alive = false;
     }
 
     public void grow() {
         growBy = 1;
-        player.event(Events.EAT_APPLE);
+        player.event(Event.EAT_APPLE);
     }
 
     public boolean itsMyHead(Point point) {
@@ -231,11 +231,11 @@ public class Hero extends PlayerHero<Field> implements Affectable, Iterable<Tail
 
     public void eatStone() {
         if (elements.size() <= 10) {
-            player.event(Events.EAT_STONE);
+            player.event(Event.EAT_STONE);
             killMe();
         } else {
             growBy = -10;
-            player.event(Events.EAT_STONE);
+            player.event(Event.EAT_STONE);
         }        
     }
 

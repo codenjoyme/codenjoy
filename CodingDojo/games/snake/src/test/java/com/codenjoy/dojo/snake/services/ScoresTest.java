@@ -36,15 +36,15 @@ public class ScoresTest {
     private GameSettings settings;
 
     public void snakeEatApple() {
-        scores.event(Events.EAT_APPLE);
+        scores.event(Event.EAT_APPLE);
     }
 
     public void snakeIsDead() {
-        scores.event(Events.KILL);
+        scores.event(Event.KILL);
     }
 
     public void snakeEatStone() {
-        scores.event(Events.EAT_STONE);
+        scores.event(Event.EAT_STONE);
     }
 
     @Before

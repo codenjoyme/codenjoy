@@ -22,6 +22,8 @@ package com.codenjoy.dojo.snake.services;
  * #L%
  */
 
-public enum Events {
-    KILL, EAT_STONE, EAT_APPLE;
+public enum Event {
+    KILL,
+    EAT_STONE,
+    EAT_APPLE;
 }

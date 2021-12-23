@@ -66,11 +66,11 @@ public class Scores implements PlayerScores {
 
     @Override
     public void event(Object event) {
-        if (event.equals(Events.KILL)) {
+        if (event.equals(Event.KILL)) {
             snakeIsDead();
-        } else if (event.equals(Events.EAT_APPLE)) {
+        } else if (event.equals(Event.EAT_APPLE)) {
             snakeEatApple();
-        }  else if (event.equals(Events.EAT_STONE)) {
+        }  else if (event.equals(Event.EAT_STONE)) {
             snakeEatStone();
         }
         score = Math.max(0, score);
