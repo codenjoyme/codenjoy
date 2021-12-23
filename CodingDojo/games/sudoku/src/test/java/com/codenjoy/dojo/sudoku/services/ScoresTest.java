@@ -36,19 +36,19 @@ public class ScoresTest {
     private GameSettings settings;
 
     public void fail() {
-        scores.event(Events.FAIL);
+        scores.event(Event.FAIL);
     }
 
     public void success() {
-        scores.event(Events.SUCCESS);
+        scores.event(Event.SUCCESS);
     }
 
     public void win() {
-        scores.event(Events.WIN);
+        scores.event(Event.WIN);
     }
 
     private void lose() {
-        scores.event(Events.LOSE);
+        scores.event(Event.LOSE);
     }
 
     @Before

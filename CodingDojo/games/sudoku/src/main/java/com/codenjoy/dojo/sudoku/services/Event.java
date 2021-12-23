@@ -23,7 +23,7 @@ package com.codenjoy.dojo.sudoku.services;
  */
 
 
-public enum Events {
+public enum Event {
     SUCCESS,
     FAIL,
     WIN,
