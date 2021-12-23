@@ -22,7 +22,7 @@ package com.codenjoy.dojo.reversi.services;
  * #L%
  */
 
-public class Events {
+public class Event {
 
     private static final String WIN = "WIN";
     private static final String LOSE = "LOSE";
@@ -31,21 +31,21 @@ public class Events {
     private String name;
     private int count;
 
-    public Events(String name, int count) {
+    public Event(String name, int count) {
         this.name = name;
         this.count = count;
     }
 
-    public static Events WIN() {
-        return new Events(WIN, 1);
+    public static Event WIN() {
+        return new Event(WIN, 1);
     }
 
-    public static Events LOSE() {
-        return new Events(LOSE, 1);
+    public static Event LOSE() {
+        return new Event(LOSE, 1);
     }
 
-    public static Events FLIP(int count) {
-        return new Events(FLIP, count);
+    public static Event FLIP(int count) {
+        return new Event(FLIP, count);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class Events {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Events events = (Events) o;
+        Event events = (Event) o;
 
         if (count != events.count) return false;
         return name.equals(events.name);

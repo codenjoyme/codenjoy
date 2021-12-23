@@ -36,15 +36,15 @@ public class ScoresTest {
     private GameSettings settings;
 
     public void lose() {
-        scores.event(Events.LOSE());
+        scores.event(Event.LOSE());
     }
 
     public void win() {
-        scores.event(Events.WIN());
+        scores.event(Event.WIN());
     }
 
     public void flip(int count) {
-        scores.event(Events.FLIP(count));
+        scores.event(Event.FLIP(count));
     }
 
     @Before
