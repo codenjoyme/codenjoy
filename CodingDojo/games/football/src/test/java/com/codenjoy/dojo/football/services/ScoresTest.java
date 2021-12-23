@@ -23,8 +23,6 @@ package com.codenjoy.dojo.football.services;
  */
 
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,11 +36,11 @@ public class ScoresTest {
     private GameSettings settings;
 
     public void lose() {
-        scores.event(Events.BOTTOM_GOAL);
+        scores.event(Event.BOTTOM_GOAL);
     }
 
     public void win() {
-        scores.event(Events.WIN);
+        scores.event(Event.WIN);
     }
 
     @Before

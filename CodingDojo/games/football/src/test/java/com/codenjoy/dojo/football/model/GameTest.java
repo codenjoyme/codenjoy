@@ -23,7 +23,7 @@ package com.codenjoy.dojo.football.model;
  */
 
 import com.codenjoy.dojo.football.model.items.Hero;
-import com.codenjoy.dojo.football.services.Events;
+import com.codenjoy.dojo.football.services.Event;
 import com.codenjoy.dojo.football.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
@@ -76,7 +76,7 @@ public class GameTest {
 
         game = new Football(level, dice, settings);
         listener = mock(EventListener.class);
-        events = new EventsListenersAssert(() -> Arrays.asList(listener), Events.class);
+        events = new EventsListenersAssert(() -> Arrays.asList(listener), Event.class);
         player = new Player(listener, settings);
         player.setHero(hero);
         game.newGame(player);

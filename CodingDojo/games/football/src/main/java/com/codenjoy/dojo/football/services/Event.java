@@ -22,7 +22,7 @@ package com.codenjoy.dojo.football.services;
  * #L%
  */
 
-public enum Events {
+public enum Event {
     WIN,
     LOSE,
     TOP_GOAL,
