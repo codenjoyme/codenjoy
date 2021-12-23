@@ -23,7 +23,6 @@ package com.codenjoy.dojo.snakebattle.services;
  */
 
 
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -42,10 +41,10 @@ public class ScoresTest {
 
     private GameSettings settings;
     Scores scores;
-    Events event;
+    Event event;
     int changeValue;
 
-    public ScoresTest(int startScore, Events event, int changeValue) {
+    public ScoresTest(int startScore, Event event, int changeValue) {
         settings = new GameSettings()
                 .integer(WIN_SCORE, 30)
                 .integer(APPLE_SCORE, 1)
@@ -60,18 +59,18 @@ public class ScoresTest {
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         Object[][] params = new Object[][]{
-                {0, Events.START, 0},
-                {0, Events.APPLE, +1},
-                {0, Events.GOLD, +5},
-                {0, Events.STONE, 0}, // счёт всегда >=0
-                {0, Events.WIN, +30},
-                {0, Events.DIE, 0}, // счёт всегда >=0
-                {100, Events.START, 0},
-                {100, Events.APPLE, +1},
-                {100, Events.GOLD, +5},
-                {100, Events.STONE, -1},
-                {100, Events.WIN, +30},
-                {100, Events.DIE, -10},
+                {0, Event.START, 0},
+                {0, Event.APPLE, +1},
+                {0, Event.GOLD, +5},
+                {0, Event.STONE, 0}, // счёт всегда >=0
+                {0, Event.WIN, +30},
+                {0, Event.DIE, 0}, // счёт всегда >=0
+                {100, Event.START, 0},
+                {100, Event.APPLE, +1},
+                {100, Event.GOLD, +5},
+                {100, Event.STONE, -1},
+                {100, Event.WIN, +30},
+                {100, Event.DIE, -10},
         };
         return Arrays.asList(params);
     }

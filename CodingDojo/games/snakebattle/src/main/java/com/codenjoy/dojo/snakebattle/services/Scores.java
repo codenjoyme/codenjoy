@@ -49,9 +49,9 @@ public class Scores implements PlayerScores {
 
     @Override
     public void event(Object object) {
-        if (!(object instanceof Events))
+        if (!(object instanceof Event))
             return;
-        Events event = (Events)object;
+        Event event = (Event)object;
         if (event.isWin()) {
             score += settings.integer(WIN_SCORE);
         } else if (event.isApple()) {

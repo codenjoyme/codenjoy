@@ -26,27 +26,27 @@ package com.codenjoy.dojo.snakebattle.services;
 import java.util.Objects;
 import java.util.function.Function;
 
-public class Events {
+public class Event {
 
-    public static final Events START = new Events("START");
-    public static final Events WIN = new Events("WIN");
-    public static final Events DIE = new Events("DIE");
-    public static final Events APPLE = new Events("APPLE");
-    public static final Events STONE = new Events("STONE");
-    public static final Function<Integer, Events> EAT = amount -> new Events("EAT", amount);
-    public static final Events GOLD = new Events("GOLD");
-    public static final Events FLYING = new Events("FLYING");
-    public static final Events FURY = new Events("FURY");
+    public static final Event START = new Event("START");
+    public static final Event WIN = new Event("WIN");
+    public static final Event DIE = new Event("DIE");
+    public static final Event APPLE = new Event("APPLE");
+    public static final Event STONE = new Event("STONE");
+    public static final Function<Integer, Event> EAT = amount -> new Event("EAT", amount);
+    public static final Event GOLD = new Event("GOLD");
+    public static final Event FLYING = new Event("FLYING");
+    public static final Event FURY = new Event("FURY");
 
     private String type;
     private int amount;
 
-    public Events(String type) {
+    public Event(String type) {
         this.type = type;
         this.amount = 1;
     }
 
-    public Events(String type, int amount) {
+    public Event(String type, int amount) {
         this.type = type;
         this.amount = amount;
     }
@@ -56,7 +56,7 @@ public class Events {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Events events = (Events) o;
+        Event events = (Event) o;
         if (isEat()) {
             return Objects.equals(type, events.type) &&
                     amount == events.amount;
