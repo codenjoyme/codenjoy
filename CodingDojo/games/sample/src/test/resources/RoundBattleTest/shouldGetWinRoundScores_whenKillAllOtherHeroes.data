@@ -11,7 +11,7 @@ shouldGetWinRoundScores_whenKillAllOtherHeroes()
     settings().integer(ROUNDS_PLAYERS_PER_ROOM, 3)
     settings().integer(ROUNDS_TIME_BEFORE_START, 1)
     settings().integer(WIN_SCORE, 10)
-    settings().integer(LOSE_PENALTY, 50)
+    settings().integer(LOSE_PENALTY, -50)
     settings().integer(WIN_ROUND_SCORE, 100)
     givenFl(
         ☼☼☼☼☼☼

@@ -23,39 +23,15 @@ package com.codenjoy.dojo.a2048.services;
  */
 
 
-import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.ScoresMap;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 
-public class Scores implements PlayerScores {
+public class Scores extends ScoresMap<Integer> {
 
-    private volatile int score;
+    public Scores(SettingsReader settings) {
+        super(settings);
 
-    public Scores(int startScore) {
-        this.score = startScore;
-    }
-
-    @Override
-    public int clear() {
-        return score = 0;
-    }
-
-    @Override
-    public Integer getScore() {
-        return score;
-    }
-
-    @Override
-    public void event(Object o) {
-        Events event = (Events)o;
-
-        if (event.getType() == Events.Event.SUM) {
-            if (event.getNumber() > score) {
-                score = event.getNumber();
-            }
-        }
-    }
-
-    @Override
-    public void update(Object score) {
-        this.score = Integer.valueOf(score.toString());
+        put(Event.Type.SUM,
+                value -> value);
     }
 }

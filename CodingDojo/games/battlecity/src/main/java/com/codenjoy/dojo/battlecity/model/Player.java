@@ -23,16 +23,14 @@ package com.codenjoy.dojo.battlecity.model;
  */
 
 
-import com.codenjoy.dojo.battlecity.services.Events;
+import com.codenjoy.dojo.battlecity.services.Event;
 import com.codenjoy.dojo.battlecity.services.GameSettings;
 import com.codenjoy.dojo.battlecity.services.Scores;
-import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.event.ScoresImpl;
 import com.codenjoy.dojo.services.round.RoundGamePlayer;
-
-import java.util.Optional;
 
 public class Player extends RoundGamePlayer<Tank, Field> {
 
@@ -58,8 +56,8 @@ public class Player extends RoundGamePlayer<Tank, Field> {
         return !isAlive();
     }
 
-    public void event(Events event) {
-        getHero().addScore(Scores.scoreFor(settings(), event));
+    public void event(Event event) {
+        getHero().addScore(ScoresImpl.scoreFor(new Scores(settings()), event));
         super.event(event);
     }
 

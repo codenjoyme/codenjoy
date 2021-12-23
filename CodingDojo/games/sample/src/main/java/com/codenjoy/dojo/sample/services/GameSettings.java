@@ -75,7 +75,7 @@ public class GameSettings extends SettingsImpl
 
         integer(WIN_SCORE, 30);
         integer(WIN_ROUND_SCORE, 100);
-        integer(LOSE_PENALTY, 20);
+        integer(LOSE_PENALTY, -20);
 
         Levels.setup(this);
     }

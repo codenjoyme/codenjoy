@@ -24,6 +24,7 @@ package com.codenjoy.dojo.sample.services;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.ScoresImpl;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -36,26 +37,26 @@ public class ScoresTest {
     private GameSettings settings;
 
     public void lose() {
-        scores.event(Events.LOSE);
+        scores.event(Event.LOSE);
     }
 
     public void win() {
-        scores.event(Events.WIN);
+        scores.event(Event.WIN);
     }
 
     public void winRound() {
-        scores.event(Events.WIN_ROUND);
+        scores.event(Event.WIN_ROUND);
     }
 
     @Before
     public void setup() {
         settings = new GameSettings();
-        scores = new Scores(0, settings);
+        scores = new ScoresImpl<>(0, new Scores(settings));
     }
 
     @Test
     public void shouldCollectScores() {
-        scores = new Scores(140, settings);
+        scores = new ScoresImpl<>(140, new Scores(settings));
 
         win();
         win();
@@ -69,7 +70,7 @@ public class ScoresTest {
 
         assertEquals(140
                 + 4 * settings.integer(WIN_SCORE)
-                - 1 * settings.integer(LOSE_PENALTY)
+                + 1 * settings.integer(LOSE_PENALTY)
                 + 2 * settings.integer(WIN_ROUND_SCORE),
                 scores.getScore());
     }

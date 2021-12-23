@@ -53,5 +53,6 @@ public class TestGameSettings extends GameSettings {
          integer(CHANCE_WALKING_ON_WATER, CHANCE);
          integer(CHANCE_VISIBILITY, CHANCE);
          integer(CHANCE_NO_SLIDING, CHANCE);
+         integer(KILL_YOUR_TANK_PENALTY, -10);
     }
 }

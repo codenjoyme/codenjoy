@@ -23,39 +23,50 @@ package com.codenjoy.dojo.battlecity.services;
  */
 
 
+import com.codenjoy.dojo.services.event.EventObject;
+
 import java.util.Objects;
 import java.util.function.Function;
 
-public class Events {
+public class Event implements EventObject<Event.Type, Integer> {
 
-    public static final Events KILL_YOUR_TANK = new Events("KILL_YOUR_TANK");
-    public static final Function<Integer, Events> KILL_OTHER_HERO_TANK = amount -> new Events("KILL_OTHER_HERO_TANK", amount);
-    public static final Events KILL_OTHER_AI_TANK = new Events("KILL_OTHER_AI_TANK");
-    public static final Events START_ROUND = new Events("START_ROUND");
-    public static final Events WIN_ROUND = new Events("WIN_ROUND");
-    public static final Function<Integer, Events> CATCH_PRIZE = type -> new Events("CATCH_PRIZE", type);
+    public static final Event KILL_YOUR_TANK = new Event(Type.KILL_YOUR_TANK);
+    public static final Function<Integer, Event> KILL_OTHER_HERO_TANK = amount -> new Event(Type.KILL_OTHER_HERO_TANK, amount);
+    public static final Event KILL_OTHER_AI_TANK = new Event(Type.KILL_OTHER_AI_TANK);
+    public static final Event START_ROUND = new Event(Type.START_ROUND);
+    public static final Event WIN_ROUND = new Event(Type.WIN_ROUND);
+    public static final Function<Integer, Event> CATCH_PRIZE = type -> new Event(Type.CATCH_PRIZE, type);
 
-    private String type;
-    private int amount;
+    private Type type;
+    private int value;
 
-    public Events(String type) {
-        this.type = type;
-        this.amount = 1;
+    enum Type {
+        KILL_YOUR_TANK,
+        KILL_OTHER_HERO_TANK,
+        KILL_OTHER_AI_TANK,
+        START_ROUND,
+        WIN_ROUND,
+        CATCH_PRIZE
     }
 
-    public Events(String type, int amount) {
+    public Event(Type type) {
         this.type = type;
-        this.amount = amount;
+        this.value = 1;
+    }
+
+    public Event(Type type, int value) {
+        this.type = type;
+        this.value = value;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Events events = (Events) o;
+        Event events = (Event) o;
         if (isKillOtherHeroTank()) {
             return Objects.equals(type, events.type) &&
-                    amount == events.amount;
+                    value == events.value;
         }
         return Objects.equals(type, events.type);
     }
@@ -84,13 +95,19 @@ public class Events {
     @Override
     public String toString() {
         if (isKillOtherHeroTank() || isCatchPrize()) {
-            return String.format("%s[%s]", type, amount);
+            return String.format("%s[%s]", type, value);
         } else {
-            return type;
+            return type.name();
         }
     }
 
-    public int getAmount() {
-        return amount;
+    @Override
+    public Integer value() {
+        return value;
+    }
+
+    @Override
+    public Type type() {
+        return type;
     }
 }

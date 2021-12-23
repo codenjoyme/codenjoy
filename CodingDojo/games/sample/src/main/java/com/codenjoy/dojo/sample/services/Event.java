@@ -35,7 +35,7 @@ package com.codenjoy.dojo.sample.services;
  * а затем вернутся в {@link Scores#event(Object)}
  * чтобы произвести подсчет очков.
  */
-public enum Events {
+public enum Event {
     WIN,
     LOSE,
 

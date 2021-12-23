@@ -101,7 +101,7 @@ public class ChatDealsTest {
                         "☼    ☼\n" +
                         "☼☼☼☼☼☼\n")
                 .integer(WIN_SCORE, 30)
-                .integer(LOSE_PENALTY, 100);
+                .integer(LOSE_PENALTY, -100);
 
 
         with.time.nowIs(12345L);

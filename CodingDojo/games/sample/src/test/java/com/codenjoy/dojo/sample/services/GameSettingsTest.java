@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.a2048.services;
+package com.codenjoy.dojo.sample.services;
 
 /*-
  * #%L
@@ -31,17 +31,9 @@ public class GameSettingsTest {
 
     @Test
     public void shouldGetAllKeys() {
-        assertEquals("[SIZE, \n" +
-                        "NEW_NUMBERS, \n" +
-                        "NUMBERS_MODE, \n" +
-                        "BREAKS_MODE, \n" +
-                        "SCORE_COUNTING_TYPE, \n" +
-                        "LEVEL_MAP, \n" +
-                        "NEW_NUMBERS_IN_CORNERS, \n" +
-                        "NEW_NUMBERS_IN_RANDOM, \n" +
-                        "BREAKS_EXISTS, \n" +
-                        "BREAKS_NOT_EXISTS]",
+        assertEquals("[WIN_SCORE, \n" +
+                        "WIN_ROUND_SCORE, \n" +
+                        "LOSE_PENALTY]",
                 Utils.split(new GameSettings().allKeys(), ", \n"));
     }
-
 }

@@ -27,7 +27,7 @@ import com.codenjoy.dojo.battlecity.model.items.Bullet;
 import com.codenjoy.dojo.battlecity.model.items.Prize;
 import com.codenjoy.dojo.battlecity.model.items.Prizes;
 import com.codenjoy.dojo.battlecity.model.items.Tree;
-import com.codenjoy.dojo.battlecity.services.Events;
+import com.codenjoy.dojo.battlecity.services.Event;
 import com.codenjoy.dojo.battlecity.services.GameSettings;
 import com.codenjoy.dojo.games.battlecity.Element;
 import com.codenjoy.dojo.services.Direction;
@@ -272,7 +272,7 @@ public class Tank extends RoundPlayerHero<Field> implements State<Element, Playe
     }
 
     public void take(Prize prize) {
-        getPlayer().event(Events.CATCH_PRIZE.apply(Integer.valueOf("" + prize.elements().ch())));
+        getPlayer().event(Event.CATCH_PRIZE.apply(Integer.valueOf("" + prize.elements().ch())));
         prizes.add(prize);
     }
 
