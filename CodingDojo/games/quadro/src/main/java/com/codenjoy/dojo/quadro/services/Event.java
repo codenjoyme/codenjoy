@@ -23,6 +23,8 @@ package com.codenjoy.dojo.quadro.services;
  */
 
 
-public enum Events {
-    WIN, LOSE, DRAW;
+public enum Event {
+    WIN,
+    LOSE,
+    DRAW;
 }
