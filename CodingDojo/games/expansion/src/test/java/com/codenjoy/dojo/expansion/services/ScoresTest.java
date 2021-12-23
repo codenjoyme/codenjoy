@@ -35,11 +35,11 @@ public class ScoresTest {
     private Scores scores;
 
     public void lose() {
-        scores.event(Events.LOSE());
+        scores.event(Event.LOSE());
     }
 
     public void win(int goldCount) {
-        scores.event(Events.WIN(goldCount));
+        scores.event(Event.WIN(goldCount));
     }
 
     @Test

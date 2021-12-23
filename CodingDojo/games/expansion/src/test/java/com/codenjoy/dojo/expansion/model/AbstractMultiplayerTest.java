@@ -25,7 +25,7 @@ package com.codenjoy.dojo.expansion.model;
 
 import com.codenjoy.dojo.expansion.model.levels.Level;
 import com.codenjoy.dojo.expansion.model.levels.items.Hero;
-import com.codenjoy.dojo.expansion.services.Events;
+import com.codenjoy.dojo.expansion.services.Event;
 import com.codenjoy.dojo.expansion.services.GameRunner;
 import com.codenjoy.dojo.expansion.services.GameSettings;
 import com.codenjoy.dojo.games.expansion.Forces;
@@ -92,13 +92,13 @@ public abstract class AbstractMultiplayerTest {
     protected GameSettings settings;
 
     @NotNull
-    Events WIN() {
-        return Events.WIN(settings.winScore());
+    Event WIN() {
+        return Event.WIN(settings.winScore());
     }
 
     @NotNull
-    Events DRAW() {
-        return Events.WIN(settings.drawScore());
+    Event DRAW() {
+        return Event.WIN(settings.drawScore());
     }
 
 

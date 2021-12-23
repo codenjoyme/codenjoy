@@ -25,7 +25,7 @@ package com.codenjoy.dojo.expansion.model;
 
 import com.codenjoy.dojo.expansion.model.levels.Levels;
 import com.codenjoy.dojo.expansion.model.levels.items.Hero;
-import com.codenjoy.dojo.expansion.services.Events;
+import com.codenjoy.dojo.expansion.services.Event;
 import com.codenjoy.dojo.expansion.services.GameSettings;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
@@ -71,7 +71,7 @@ public class Player extends GamePlayer<Hero, IField> {
                 Levels.COUNT_LAYERS);
     }
 
-    public void event(Events event) {
+    public void event(Event event) {
         if (log.isDebugEnabled()) {
             log.debug("Player {} fired event {}", lg.id(), event);
         }

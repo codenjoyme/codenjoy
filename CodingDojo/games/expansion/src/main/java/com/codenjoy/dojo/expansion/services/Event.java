@@ -22,14 +22,14 @@ package com.codenjoy.dojo.expansion.services;
  * #L%
  */
 
-public class Events {
+public class Event {
 
-    public static Events WIN(int score) {
-        return new Events(score);
+    public static Event WIN(int score) {
+        return new Event(score);
     }
 
-    public static Events LOSE() {
-        return new Events();
+    public static Event LOSE() {
+        return new Event();
     }
 
     public enum Type {
@@ -40,12 +40,12 @@ public class Events {
 
     private int score;
 
-    public Events(int score) {
+    public Event(int score) {
         type = Type.WIN;
         this.score = score;
     }
 
-    public Events() {
+    public Event() {
         type = Type.LOSE;
         this.score = 0;
     }
@@ -67,7 +67,7 @@ public class Events {
             return false;
         }
 
-        Events events = (Events) o;
+        Event events = (Event) o;
 
         if (score != events.score) {
             return false;
