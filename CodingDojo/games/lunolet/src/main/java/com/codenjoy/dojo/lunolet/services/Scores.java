@@ -24,8 +24,6 @@ package com.codenjoy.dojo.lunolet.services;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
 
 import static com.codenjoy.dojo.lunolet.services.GameSettings.Keys.CRASHED_SCORE;
 import static com.codenjoy.dojo.lunolet.services.GameSettings.Keys.LANDED_SCORE;
@@ -52,9 +50,9 @@ public class Scores implements PlayerScores {
 
     @Override
     public void event(Object event) {
-        if (event.equals(Events.LANDED)) {
+        if (event.equals(Event.LANDED)) {
             score += settings.integer(LANDED_SCORE);
-        } else if (event.equals(Events.CRASHED)) {
+        } else if (event.equals(Event.CRASHED)) {
             score += settings.integer(CRASHED_SCORE);
         }
         score = Math.max(0, score);

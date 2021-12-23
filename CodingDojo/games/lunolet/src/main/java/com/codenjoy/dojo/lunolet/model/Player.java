@@ -23,7 +23,7 @@ package com.codenjoy.dojo.lunolet.model;
  */
 
 
-import com.codenjoy.dojo.lunolet.services.Events;
+import com.codenjoy.dojo.lunolet.services.Event;
 import com.codenjoy.dojo.lunolet.services.GameSettings;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
@@ -68,11 +68,11 @@ public class Player extends GamePlayer<Hero, Field> {
         return new Hero(this);
     }
 
-    public void event(Events event) {
-        if (event == Events.LANDED) {
+    public void event(Event event) {
+        if (event == Event.LANDED) {
             levelUp();
             crashes.clear();
-        } else if (event == Events.CRASHED) {
+        } else if (event == Event.CRASHED) {
             addCrash(hero.getVesselStatus().getPoint());
         }
 

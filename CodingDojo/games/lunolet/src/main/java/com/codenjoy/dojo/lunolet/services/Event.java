@@ -23,7 +23,7 @@ package com.codenjoy.dojo.lunolet.services;
  */
 
 
-public enum Events {
+public enum Event {
     LANDED, // Finished the level by landing on the spot
     CRASHED, // Failed the level by crashing the vessel
 }
