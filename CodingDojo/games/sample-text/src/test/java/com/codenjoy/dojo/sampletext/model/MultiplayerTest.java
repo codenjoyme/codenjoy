@@ -23,7 +23,7 @@ package com.codenjoy.dojo.sampletext.model;
  */
 
 
-import com.codenjoy.dojo.sampletext.services.Events;
+import com.codenjoy.dojo.sampletext.services.Event;
 import com.codenjoy.dojo.sampletext.services.GameRunner;
 import com.codenjoy.dojo.sampletext.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
@@ -193,9 +193,9 @@ public class MultiplayerTest {
         asrtFl3("{'history':[{'answer':'answer3','question':'question1','valid':false}],'nextQuestion':'question1'}");
 
         // then
-        verify(listener1).event(Events.WIN);
-        verify(listener2).event(Events.LOSE);
-        verify(listener3).event(Events.LOSE);
+        verify(listener1).event(Event.WIN);
+        verify(listener2).event(Event.LOSE);
+        verify(listener3).event(Event.LOSE);
 
         // when
         field.tick();
