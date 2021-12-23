@@ -22,6 +22,7 @@ package com.codenjoy.dojo.quake2d.services;
  * #L%
  */
 
-public enum Events {
-    INJURE, KILL;
+public enum Event {
+    INJURE,
+    KILL;
 }

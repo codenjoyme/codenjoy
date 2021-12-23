@@ -23,8 +23,6 @@ package com.codenjoy.dojo.quake2d.services;
  */
 
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
 
 import static com.codenjoy.dojo.quake2d.services.GameSettings.Keys.INJURE_SCORE;
 import static com.codenjoy.dojo.quake2d.services.GameSettings.Keys.KILL_SCORE;
@@ -51,9 +49,9 @@ public class Scores implements PlayerScores {
 
     @Override
     public void event(Object event) {
-        if (event.equals(Events.KILL)) {
+        if (event.equals(Event.KILL)) {
             score += settings.integer(KILL_SCORE);
-        } else if (event.equals(Events.INJURE)) {
+        } else if (event.equals(Event.INJURE)) {
             score += settings.integer(INJURE_SCORE);
         }
         score = Math.max(0, score);
