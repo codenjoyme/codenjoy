@@ -24,7 +24,7 @@ package com.codenjoy.dojo.tetris.services.scores;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.tetris.services.Events;
+import com.codenjoy.dojo.tetris.services.Event;
 import com.codenjoy.dojo.tetris.services.GameSettings;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,15 +37,15 @@ public class CumulativeScoresTest {
     protected GameSettings settings;
 
     public void isLinesRemoved(int level, int lines) {
-        scores.event(Events.linesRemoved(level, lines));
+        scores.event(Event.linesRemoved(level, lines));
     }
 
     public void figuresDropped(int level, int figure) {
-        scores.event(Events.figuresDropped(level, figure));
+        scores.event(Event.figuresDropped(level, figure));
     }
 
     public void glassOverflown(int level) {
-        scores.event(Events.glassOverflown(level));
+        scores.event(Event.glassOverflown(level));
     }
 
     @Before

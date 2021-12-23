@@ -29,7 +29,6 @@ import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.services.hero.HeroDataImpl;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
-import com.codenjoy.dojo.tetris.services.Events;
 import com.codenjoy.dojo.tetris.services.GameSettings;
 
 public class Player extends GamePlayer<Hero, Field> {

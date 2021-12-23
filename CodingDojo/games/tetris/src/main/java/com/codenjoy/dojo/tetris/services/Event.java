@@ -22,7 +22,7 @@ package com.codenjoy.dojo.tetris.services;
  * #L%
  */
 
-public class Events {
+public class Event {
 
     public static final String GLASS_OVERFLOWN = "glassOverflown";
     public static final String LINES_REMOVED = "linesRemoved";
@@ -32,7 +32,7 @@ public class Events {
     private int level;
     private int data;
 
-    public Events(String type, int level, int data) {
+    public Event(String type, int level, int data) {
         this.type = type;
         this.level = level;
         this.data = data;
@@ -50,16 +50,16 @@ public class Events {
         return type.equals(FIGURES_DROPPED);
     }
 
-    public static Events glassOverflown(int levelNumber) {
-        return new Events(GLASS_OVERFLOWN, levelNumber, 0);
+    public static Event glassOverflown(int levelNumber) {
+        return new Event(GLASS_OVERFLOWN, levelNumber, 0);
     }
 
-    public static Events linesRemoved(int levelNumber, int removedLines) {
-        return new Events(LINES_REMOVED, levelNumber, removedLines);
+    public static Event linesRemoved(int levelNumber, int removedLines) {
+        return new Event(LINES_REMOVED, levelNumber, removedLines);
     }
 
-    public static Events figuresDropped(int levelNumber, int figureIndex) {
-        return new Events(FIGURES_DROPPED, levelNumber, figureIndex);
+    public static Event figuresDropped(int levelNumber, int figureIndex) {
+        return new Event(FIGURES_DROPPED, levelNumber, figureIndex);
     }
 
     @Override
@@ -84,7 +84,7 @@ public class Events {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Events events = (Events) o;
+        Event events = (Event) o;
 
         if (level != events.level) return false;
         if (data != events.data) return false;

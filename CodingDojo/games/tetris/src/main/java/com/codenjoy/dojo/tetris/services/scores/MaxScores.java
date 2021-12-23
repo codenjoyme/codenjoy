@@ -24,7 +24,7 @@ package com.codenjoy.dojo.tetris.services.scores;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.tetris.services.Events;
+import com.codenjoy.dojo.tetris.services.Event;
 import com.codenjoy.dojo.tetris.services.GameSettings;
 
 public class MaxScores extends CumulativeScores implements PlayerScores {
@@ -59,7 +59,7 @@ public class MaxScores extends CumulativeScores implements PlayerScores {
         // считаем очки по классике
         super.event(object);
 
-        Events event = (Events)object;
+        Event event = (Event)object;
 
         // посчитали текущий максимум в любом случае
         max = Math.max(max, score);

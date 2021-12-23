@@ -24,7 +24,7 @@ package com.codenjoy.dojo.tetris.services.scores;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.tetris.services.Events;
+import com.codenjoy.dojo.tetris.services.Event;
 import com.codenjoy.dojo.tetris.services.GameSettings;
 
 import static com.codenjoy.dojo.tetris.services.GameSettings.Keys.*;
@@ -53,7 +53,7 @@ public class CumulativeScores implements PlayerScores {
 
     @Override
     public void event(Object object) {
-        Events event = (Events)object;
+        Event event = (Event)object;
         if (event.isLinesRemoved()) {
             linesRemoved(event.getLevel(), event.getRemovedLines());
         } else if (event.isFiguresDropped()) {
