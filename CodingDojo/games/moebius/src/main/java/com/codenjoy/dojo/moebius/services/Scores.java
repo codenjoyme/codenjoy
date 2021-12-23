@@ -50,7 +50,7 @@ public class Scores implements PlayerScores {
 
     @Override
     public void event(Object o) {
-        Events events = (Events) o;
+        Event events = (Event) o;
         switch (events.getType()) {
             case WIN:
                 score += settings.integer(WIN_SCORE) * events.getLines();

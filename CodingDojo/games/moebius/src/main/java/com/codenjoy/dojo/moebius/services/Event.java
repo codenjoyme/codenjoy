@@ -23,7 +23,7 @@ package com.codenjoy.dojo.moebius.services;
  */
 
 
-public class Events {
+public class Event {
 
     private Event event;
     private int lines;
@@ -37,11 +37,11 @@ public class Events {
         return event + ((lines != 0)?("(" + lines + ")"):"");
     }
 
-    public Events(Event event) {
+    public Event(Event event) {
         this.event = event;
     }
 
-    public Events(Event event, int lines) {
+    public Event(Event event, int lines) {
         this.event = event;
         this.lines = lines;
     }
