@@ -24,7 +24,7 @@ package com.codenjoy.dojo.spacerace.model;
 
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.multiplayer.Single;
-import com.codenjoy.dojo.spacerace.services.Events;
+import com.codenjoy.dojo.spacerace.services.Event;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
@@ -239,8 +239,8 @@ public class MultiplayerTest {
                 "☼   ☼\n" +
                 "☼ ☻ ☼\n");
 
-        verify(listener3).event(Events.DESTROY_ENEMY);
-        verify(listener2).event(Events.LOSE);
+        verify(listener3).event(Event.DESTROY_ENEMY);
+        verify(listener2).event(Event.LOSE);
         verifyNoMoreInteractions(listener1);
 
         assertTrue(game2.isGameOver());
@@ -294,8 +294,8 @@ public class MultiplayerTest {
                 "☼ + ☼\n" +
                 "☼ ☻ ☼\n");
 
-        verify(listener3).event(Events.DESTROY_ENEMY);
-        verify(listener2).event(Events.LOSE);
+        verify(listener3).event(Event.DESTROY_ENEMY);
+        verify(listener2).event(Event.LOSE);
         verifyNoMoreInteractions(listener1);
 
         assertTrue(game2.isGameOver());
@@ -367,8 +367,8 @@ public class MultiplayerTest {
                 "☼ ☻ ☼\n" +
                 "☼   ☼\n");
 
-        verify(listener3).event(Events.DESTROY_ENEMY);
-        verify(listener2).event(Events.LOSE);
+        verify(listener3).event(Event.DESTROY_ENEMY);
+        verify(listener2).event(Event.LOSE);
         verifyNoMoreInteractions(listener1);
 
         assertTrue(game2.isGameOver());

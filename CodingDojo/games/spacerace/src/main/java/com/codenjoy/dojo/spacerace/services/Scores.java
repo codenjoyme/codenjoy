@@ -49,13 +49,13 @@ public class Scores implements PlayerScores {
 
     @Override
     public void event(Object event) {
-        if (event.equals(Events.DESTROY_BOMB)) {
+        if (event.equals(Event.DESTROY_BOMB)) {
             score += settings.integer(DESTROY_BOMB_SCORE);
-        } else if (event.equals(Events.DESTROY_STONE)) {
+        } else if (event.equals(Event.DESTROY_STONE)) {
             score += settings.integer(DESTROY_STONE_SCORE);
-        } else if (event.equals(Events.DESTROY_ENEMY)) {
+        } else if (event.equals(Event.DESTROY_ENEMY)) {
             score += settings.integer(DESTROY_ENEMY_SCORE);
-        } else if (event.equals(Events.LOSE)) {
+        } else if (event.equals(Event.LOSE)) {
             score -= settings.integer(LOSE_PENALTY);
         }
         score = Math.max(0, score);

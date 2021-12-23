@@ -22,6 +22,10 @@ package com.codenjoy.dojo.spacerace.services;
  * #L%
  */
 
-public enum Events {
-    DESTROY_ENEMY, DESTROY_BOMB, DESTROY_STONE, LOSE, RECHARGE
+public enum Event {
+    DESTROY_ENEMY,
+    DESTROY_BOMB,
+    DESTROY_STONE,
+    LOSE,
+    RECHARGE
 }
