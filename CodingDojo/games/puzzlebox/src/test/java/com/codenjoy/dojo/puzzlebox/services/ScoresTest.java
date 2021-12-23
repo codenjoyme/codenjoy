@@ -36,11 +36,11 @@ public class ScoresTest {
     private GameSettings settings;
 
     public void fill() {
-        scores.event(Events.FILL);
+        scores.event(Event.FILL);
     }
 
     public void win() {
-        scores.event(Events.WIN);
+        scores.event(Event.WIN);
     }
 
     @Before

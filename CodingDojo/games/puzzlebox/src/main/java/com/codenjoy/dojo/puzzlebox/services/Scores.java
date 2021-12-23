@@ -24,8 +24,6 @@ package com.codenjoy.dojo.puzzlebox.services;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
 
 import static com.codenjoy.dojo.puzzlebox.services.GameSettings.Keys.FILL_SCORE;
 import static com.codenjoy.dojo.puzzlebox.services.GameSettings.Keys.WIN_SCORE;
@@ -52,9 +50,9 @@ public class Scores implements PlayerScores {
 
     @Override
     public void event(Object event) {
-        if (event.equals(Events.FILL)) {
+        if (event.equals(Event.FILL)) {
             score += settings.integer(FILL_SCORE);
-        } else if (event.equals(Events.WIN)) {
+        } else if (event.equals(Event.WIN)) {
             score += settings.integer(WIN_SCORE);
         }
         score = Math.max(0, score);

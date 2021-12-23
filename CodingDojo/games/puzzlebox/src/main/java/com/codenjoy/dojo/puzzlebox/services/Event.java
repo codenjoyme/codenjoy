@@ -23,6 +23,7 @@ package com.codenjoy.dojo.puzzlebox.services;
  */
 
 
-public enum Events {
-    FILL, WIN
+public enum Event {
+    FILL,
+    WIN
 }
