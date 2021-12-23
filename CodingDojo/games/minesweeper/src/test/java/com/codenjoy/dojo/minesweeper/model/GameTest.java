@@ -24,7 +24,7 @@ package com.codenjoy.dojo.minesweeper.model;
 
 
 import com.codenjoy.dojo.minesweeper.model.items.Mine;
-import com.codenjoy.dojo.minesweeper.services.Events;
+import com.codenjoy.dojo.minesweeper.services.Event;
 import com.codenjoy.dojo.minesweeper.services.GameSettings;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
@@ -845,11 +845,11 @@ public class GameTest {
                 "☼ 11☼\n" +
                 "☼☼☼☼☼\n");
 
-        verifyEvents(Events.KILL_ON_MINE);
+        verifyEvents(Event.KILL_ON_MINE);
     }
 
-    private void verifyEvents(Events... events) {
-        for (Events event : events) {
+    private void verifyEvents(Event... events) {
+        for (Event event : events) {
             verify(listener).event(event);
         }
     }
@@ -867,7 +867,7 @@ public class GameTest {
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
-        verifyEvents(Events.CLEAN_BOARD);
+        verifyEvents(Event.CLEAN_BOARD);
     }
 
     @Test
@@ -883,7 +883,7 @@ public class GameTest {
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
-        verifyEvents(Events.CLEAN_BOARD);
+        verifyEvents(Event.CLEAN_BOARD);
 
         moveLeft();
 
@@ -930,8 +930,8 @@ public class GameTest {
                 "☼☻‼ ☼\n" +
                 "☼☼☼☼☼\n");
 
-        verifyEvents(3, Events.FORGET_CHARGE);
-        verifyEvents(Events.NO_MORE_CHARGE);
+        verifyEvents(3, Event.FORGET_CHARGE);
+        verifyEvents(Event.NO_MORE_CHARGE);
 
         unbombUp();
 
@@ -1022,7 +1022,7 @@ public class GameTest {
                 "☼☼☼☼☼\n");
     }
 
-    private void verifyEvents(int count, Events event) {
+    private void verifyEvents(int count, Event event) {
         verify(listener, times(count)).event(event);
     }
 
@@ -1039,7 +1039,7 @@ public class GameTest {
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
-        verifyEvents(Events.DESTROY_MINE);
+        verifyEvents(Event.DESTROY_MINE);
     }
 
     @Test
@@ -1056,8 +1056,8 @@ public class GameTest {
                 "☼☼☼☼☼\n");
 
         verifyEvents(
-                Events.DESTROY_MINE,
-                Events.WIN);
+                Event.DESTROY_MINE,
+                Event.WIN);
     }
 
     @Test
@@ -1073,7 +1073,7 @@ public class GameTest {
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
-        verifyEvents(Events.FORGET_CHARGE);
+        verifyEvents(Event.FORGET_CHARGE);
 
         unbombRight();
 

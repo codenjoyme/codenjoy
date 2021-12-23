@@ -28,7 +28,7 @@ import com.codenjoy.dojo.minesweeper.model.items.Cell;
 import com.codenjoy.dojo.minesweeper.model.items.Flag;
 import com.codenjoy.dojo.minesweeper.model.items.Mine;
 import com.codenjoy.dojo.minesweeper.model.items.Wall;
-import com.codenjoy.dojo.minesweeper.services.Events;
+import com.codenjoy.dojo.minesweeper.services.Event;
 import com.codenjoy.dojo.minesweeper.services.GameSettings;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
@@ -144,10 +144,10 @@ public class Minesweeper implements Field {
             if (isSapperOnMine()) {
                 player.getHero().die();
                 openAllBoard();
-                player.event(Events.KILL_ON_MINE);
+                player.event(Event.KILL_ON_MINE);
             } else {
                 if (cleaned) {
-                    player.event(Events.CLEAN_BOARD);
+                    player.event(Event.CLEAN_BOARD);
                 }
             }
             nextTurn();
@@ -312,13 +312,13 @@ public class Minesweeper implements Field {
                 if (getMines().contains(result)) {
                     removeMine(result);
                 } else {
-                    player.event(Events.FORGET_CHARGE);
+                    player.event(Event.FORGET_CHARGE);
                 }
             });
 
             if (isEmptyDetectorButPresentMines()) {
                 openAllBoard();
-                player.event(Events.NO_MORE_CHARGE);
+                player.event(Event.NO_MORE_CHARGE);
             }
         }
     }
@@ -330,10 +330,10 @@ public class Minesweeper implements Field {
         getMines().remove(result);
         increaseScore();
         recalculateWalkMap();
-        player.event(Events.DESTROY_MINE);
+        player.event(Event.DESTROY_MINE);
         if (getMines().isEmpty()) {
             openAllBoard();
-            player.event(Events.WIN);
+            player.event(Event.WIN);
         }
     }
 

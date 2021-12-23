@@ -23,7 +23,7 @@ package com.codenjoy.dojo.minesweeper.services;
  */
 
 
-public enum Events {
+public enum Event {
     KILL_ON_MINE,
     DESTROY_MINE,
     FORGET_CHARGE,

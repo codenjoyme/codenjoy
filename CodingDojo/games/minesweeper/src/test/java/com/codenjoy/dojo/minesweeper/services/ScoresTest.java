@@ -36,27 +36,27 @@ public class ScoresTest {
     private GameSettings settings;
 
     public void destroyMine() {
-        scores.event(Events.DESTROY_MINE);
+        scores.event(Event.DESTROY_MINE);
     }
 
     public void forgetCharge() {
-        scores.event(Events.FORGET_CHARGE);
+        scores.event(Event.FORGET_CHARGE);
     }
 
     public void killOnMine() {
-        scores.event(Events.KILL_ON_MINE);
+        scores.event(Event.KILL_ON_MINE);
     }
 
     public void noMoreCharge() {
-        scores.event(Events.NO_MORE_CHARGE);
+        scores.event(Event.NO_MORE_CHARGE);
     }
 
     public void clearBoard() {
-        scores.event(Events.CLEAN_BOARD);
+        scores.event(Event.CLEAN_BOARD);
     }
 
     public void minesweeperWin() {
-        scores.event(Events.WIN);
+        scores.event(Event.WIN);
     }
 
     @Before

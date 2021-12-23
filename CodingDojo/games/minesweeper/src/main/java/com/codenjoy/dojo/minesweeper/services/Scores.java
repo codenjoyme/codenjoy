@@ -51,17 +51,17 @@ public class Scores implements PlayerScores {
 
     @Override
     public void event(Object event) {
-        if (event.equals(Events.DESTROY_MINE)) {
+        if (event.equals(Event.DESTROY_MINE)) {
             onDestroyMine();
-        } else if (event.equals(Events.FORGET_CHARGE)) {
+        } else if (event.equals(Event.FORGET_CHARGE)) {
             onForgotCharge();
-        } else if (event.equals(Events.KILL_ON_MINE)) {
+        } else if (event.equals(Event.KILL_ON_MINE)) {
             onKillOnMine();
-        } else if (event.equals(Events.NO_MORE_CHARGE)) {
+        } else if (event.equals(Event.NO_MORE_CHARGE)) {
             onNoMoreCharge();
-        } else if (event.equals(Events.WIN)) {
+        } else if (event.equals(Event.WIN)) {
             onWin();
-        } else if (event.equals(Events.CLEAN_BOARD)) {
+        } else if (event.equals(Event.CLEAN_BOARD)) {
             onClearBoard();
         }
         score = Math.max(0, score);
