@@ -23,22 +23,22 @@ package com.codenjoy.dojo.icancode.services;
  */
 
 
-public class Events {
+public class Event {
 
-    public static Events WIN(int goldCount, boolean multiple) {
-        return new Events(goldCount, multiple);
+    public static Event WIN(int goldCount, boolean multiple) {
+        return new Event(goldCount, multiple);
     }
 
-    public static Events KILL_ZOMBIE(int killCount, boolean multiple) {
-        return new Events(Type.KILL_ZOMBIE, killCount, multiple);
+    public static Event KILL_ZOMBIE(int killCount, boolean multiple) {
+        return new Event(Type.KILL_ZOMBIE, killCount, multiple);
     }
 
-    public static Events KILL_HERO(int killCount, boolean multiple) {
-        return new Events(Type.KILL_HERO, killCount, multiple);
+    public static Event KILL_HERO(int killCount, boolean multiple) {
+        return new Event(Type.KILL_HERO, killCount, multiple);
     }
 
-    public static Events LOSE(boolean multiple) {
-        return new Events(multiple);
+    public static Event LOSE(boolean multiple) {
+        return new Event(multiple);
     }
 
     public enum Type {
@@ -52,19 +52,19 @@ public class Events {
     private boolean multiple;
     private int killCount;
 
-    public Events(Type type, int killCount, boolean multiple) {
+    public Event(Type type, int killCount, boolean multiple) {
         this.multiple = multiple;
         this.type = type;
         this.killCount = killCount;
     }
 
-    public Events(int goldCount, boolean multiple) {
+    public Event(int goldCount, boolean multiple) {
         this.multiple = multiple;
         type = Type.WIN;
         this.goldCount = goldCount;
     }
 
-    public Events(boolean multiple) {
+    public Event(boolean multiple) {
         this.multiple = multiple;
         type = Type.LOSE;
     }
@@ -94,7 +94,7 @@ public class Events {
             return false;
         }
 
-        Events events = (Events) o;
+        Event events = (Event) o;
 
         if (goldCount != events.goldCount) {
             return false;

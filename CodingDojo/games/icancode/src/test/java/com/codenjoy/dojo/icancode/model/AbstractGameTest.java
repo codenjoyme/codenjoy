@@ -26,7 +26,7 @@ import com.codenjoy.dojo.icancode.model.items.HeroItem;
 import com.codenjoy.dojo.icancode.model.items.Zombie;
 import com.codenjoy.dojo.icancode.model.items.ZombieBrain;
 import com.codenjoy.dojo.icancode.model.items.perks.Perk;
-import com.codenjoy.dojo.icancode.services.Events;
+import com.codenjoy.dojo.icancode.services.Event;
 import com.codenjoy.dojo.icancode.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
@@ -85,7 +85,7 @@ public abstract class AbstractGameTest {
                 .string(DEFAULT_PERKS, "ajm,ajm");
 
         listener = mock(EventListener.class);
-        events = new EventsListenersAssert(() -> Arrays.asList(listener), Events.class);
+        events = new EventsListenersAssert(() -> Arrays.asList(listener), Event.class);
         dice = mock(Dice.class);
     }
 

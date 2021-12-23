@@ -46,36 +46,36 @@ public class ScoresTest {
     }
 
     public void loseSingle() {
-        scores.event(new Events(single()));
+        scores.event(new Event(single()));
     }
 
     public void winSingle() {
-        scores.event(Events.WIN(0, single()));
+        scores.event(Event.WIN(0, single()));
     }
 
     public void winMultiple() {
-        scores.event(Events.WIN(0, multiple()));
+        scores.event(Event.WIN(0, multiple()));
     }
 
 
     public void winSingle(int goldCount) {
-        scores.event(Events.WIN(goldCount, single()));
+        scores.event(Event.WIN(goldCount, single()));
     }
 
     public void killHeroSingle(int count) {
-        scores.event(Events.KILL_HERO(count, single()));
+        scores.event(Event.KILL_HERO(count, single()));
     }
 
     public void killZombieSingle(int count) {
-        scores.event(Events.KILL_ZOMBIE(count, single()));
+        scores.event(Event.KILL_ZOMBIE(count, single()));
     }
 
     public void killHeroMultiple(int count) {
-        scores.event(Events.KILL_HERO(count, multiple()));
+        scores.event(Event.KILL_HERO(count, multiple()));
     }
 
     public void killZombieMultiple(int count) {
-        scores.event(Events.KILL_ZOMBIE(count, multiple()));
+        scores.event(Event.KILL_ZOMBIE(count, multiple()));
     }
 
     @Before

@@ -55,9 +55,9 @@ public class Scores implements PlayerScores {
 
     @Override
     public void event(Object input) {
-        Events events = (Events) input;
+        Event events = (Event) input;
 
-        Events.Type eventsType = events.getType();
+        Event.Type eventsType = events.getType();
         switch (eventsType) {
             case WIN:
                 if (!events.isMultiple()) {

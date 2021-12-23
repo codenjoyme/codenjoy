@@ -24,7 +24,7 @@ package com.codenjoy.dojo.icancode.model;
 
 import com.codenjoy.dojo.icancode.model.items.*;
 import com.codenjoy.dojo.icancode.model.items.perks.*;
-import com.codenjoy.dojo.icancode.services.Events;
+import com.codenjoy.dojo.icancode.services.Event;
 import com.codenjoy.dojo.icancode.services.GameSettings;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
@@ -113,17 +113,17 @@ public class ICanCode implements Tickable, Field {
         for (Player player : players) {
             Hero hero = player.getHero();
             if (hero.getKillZombieCount() > 0) {
-                player.event(Events.KILL_ZOMBIE(hero.getKillZombieCount(), contest));
+                player.event(Event.KILL_ZOMBIE(hero.getKillZombieCount(), contest));
                 hero.resetZombieKillCount();
             }
             if (hero.getKillHeroCount() > 0) {
-                player.event(Events.KILL_HERO(hero.getKillHeroCount(), contest));
+                player.event(Event.KILL_HERO(hero.getKillHeroCount(), contest));
                 hero.resetHeroKillCount();
             }
             if (!hero.isAlive()) {
-                player.event(Events.LOSE(contest));
+                player.event(Event.LOSE(contest));
             } else if (hero.isWin()) {
-                player.event(Events.WIN(hero.getGoldCount(), contest));
+                player.event(Event.WIN(hero.getGoldCount(), contest));
                 hero.die();
             }
         }
