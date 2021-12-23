@@ -23,7 +23,7 @@ package com.codenjoy.dojo.sokoban.services;
  */
 
 
-public enum Events {
+public enum Event {
     WIN,
     LOSE
 }
