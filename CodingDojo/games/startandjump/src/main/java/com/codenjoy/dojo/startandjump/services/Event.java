@@ -23,7 +23,7 @@ package com.codenjoy.dojo.startandjump.services;
  */
 
 
-public enum Events {
+public enum Event {
     STILL_ALIVE,
     LOSE
 }
