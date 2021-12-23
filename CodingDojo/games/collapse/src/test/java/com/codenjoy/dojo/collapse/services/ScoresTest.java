@@ -24,8 +24,7 @@ package com.codenjoy.dojo.collapse.services;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
+import com.codenjoy.dojo.services.event.ScoresImpl;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,20 +37,20 @@ public class ScoresTest {
     private GameSettings settings;
 
     public void success(int count) {
-        Events success = Events.SUCCESS;
-        success.setCount(count);
+        Event success = Event.SUCCESS;
+        success.count(count);
         scores.event(success);
     }
 
     @Before
     public void setup() {
         settings = new GameSettings();
-        scores = new Scores(0, settings);
+        scores = new ScoresImpl<>(0, new Scores(settings));
     }
 
     @Test
     public void shouldCollectScores() {
-        scores = new Scores(1000, settings);
+        scores = new ScoresImpl<>(1000, new Scores(settings));
 
         success(1);
         success(1);
@@ -65,7 +64,7 @@ public class ScoresTest {
 
     @Test
     public void shouldCollectScoresIfMoreThan1() {
-        scores = new Scores(1000, settings);
+        scores = new ScoresImpl<>(1000, new Scores(settings));
 
         success(5);
 
@@ -76,12 +75,12 @@ public class ScoresTest {
 
     @Test
     public void shouldCollectScoresIfMoreThan1_2() {
-        scores = new Scores(1000, settings);
+        scores = new ScoresImpl<>(1000, new Scores(settings));
 
         success(15);
 
         assertEquals(1000
-                        + (1 + 2  + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12 + 13 + 14 + 15)
+                        + (1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12 + 13 + 14 + 15)
                             * settings.integer(SUCCESS_SCORE),
                 scores.getScore());
     }

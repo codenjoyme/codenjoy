@@ -23,7 +23,7 @@ package com.codenjoy.dojo.collapse.model;
  */
 
 
-import com.codenjoy.dojo.collapse.services.Events;
+import com.codenjoy.dojo.collapse.services.Event;
 import com.codenjoy.dojo.collapse.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
@@ -143,8 +143,8 @@ public class Collapse implements Field {
                 cells.remove(remove);
             }
 
-            Events success = Events.SUCCESS;
-            success.setCount(count);
+            Event success = Event.SUCCESS;
+            success.count(count);
             player.event(success);
         }
     }

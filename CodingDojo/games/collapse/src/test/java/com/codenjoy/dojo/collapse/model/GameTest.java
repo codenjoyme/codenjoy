@@ -23,7 +23,7 @@ package com.codenjoy.dojo.collapse.model;
  */
 
 
-import com.codenjoy.dojo.collapse.services.Events;
+import com.codenjoy.dojo.collapse.services.Event;
 import com.codenjoy.dojo.collapse.services.GameSettings;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
@@ -218,7 +218,7 @@ public class GameTest {
                 "☼333☼" +
                 "☼☼☼☼☼");
 
-        assertEvent(4, Events.SUCCESS);
+        assertEvent(4, Event.SUCCESS);
 
         // when
         joystick.act(1, 3);
@@ -232,7 +232,7 @@ public class GameTest {
                 "☼   ☼" +
                 "☼☼☼☼☼");
 
-        assertEvent(4, Events.SUCCESS);
+        assertEvent(4, Event.SUCCESS);
     }
 
     // если в ходе моих перемещений образуются конгломераты :)
@@ -257,15 +257,15 @@ public class GameTest {
                 "☼   ☼" +
                 "☼☼☼☼☼");
 
-        assertEvent(9, Events.SUCCESS);
+        assertEvent(9, Event.SUCCESS);
     }
 
-    private void assertEvent(int expected, Events expectedType) {
-        ArgumentCaptor<Events> event = ArgumentCaptor.forClass(Events.class);
+    private void assertEvent(Integer expected, Event expectedType) {
+        ArgumentCaptor<Event> event = ArgumentCaptor.forClass(Event.class);
         verify(listener).event(event.capture());
-        Events value = event.getValue();
+        Event value = event.getValue();
         assertEquals(expectedType, value);
-        assertEquals(expected, value.getCount());
+        assertEquals(expected, value.value());
 
         Mockito.verifyNoMoreInteractions(listener);
         reset(listener);
