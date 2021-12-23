@@ -22,6 +22,6 @@ package com.codenjoy.dojo.fifteen.services;
  * #L%
  */
 
-public enum Events {
+public enum Event {
     WIN;
 }

@@ -24,9 +24,6 @@ package com.codenjoy.dojo.fifteen.services;
 
 import com.codenjoy.dojo.fifteen.model.Bonus;
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -43,7 +40,7 @@ public class ScoresTest {
     private GameSettings settings;
 
     public void win() {
-        scores.event(Events.WIN);
+        scores.event(Event.WIN);
     }
 
     public void bonus() {

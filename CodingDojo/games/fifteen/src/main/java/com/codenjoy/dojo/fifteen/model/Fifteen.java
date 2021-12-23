@@ -22,7 +22,7 @@ package com.codenjoy.dojo.fifteen.model;
  * #L%
  */
 
-import com.codenjoy.dojo.fifteen.services.Events;
+import com.codenjoy.dojo.fifteen.services.Event;
 import com.codenjoy.dojo.fifteen.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
@@ -67,7 +67,7 @@ public class Fifteen implements Field {
             }
 
             if (isAllPositionCorrect()) {
-                player.event(Events.WIN);
+                player.event(Event.WIN);
                 player.getHero().die();
             }
         }

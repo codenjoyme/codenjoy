@@ -54,7 +54,7 @@ public class Scores implements PlayerScores {
             Bonus bonus = (Bonus) event;
             score += settings.integer(BONUS_SCORE)
                     * bonus.getNumber() / bonus.getMoveCount();
-        } else if (event.equals(Events.WIN)) {
+        } else if (event.equals(Event.WIN)) {
             score += settings.integer(WIN_SCORE);
         }
 
