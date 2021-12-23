@@ -23,6 +23,7 @@ package com.codenjoy.dojo.football.services;
  */
 
 import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.ScoresImpl;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -46,12 +47,12 @@ public class ScoresTest {
     @Before
     public void setup() {
         settings = new GameSettings();
-        scores = new Scores(0, settings);
+        scores = new ScoresImpl<>(0, new Scores(settings));
     }
 
     @Test
     public void shouldCollectScores() {
-        scores = new Scores(1, settings);
+        scores = new ScoresImpl<>(1, new Scores(settings));
 
         win();
         win();
