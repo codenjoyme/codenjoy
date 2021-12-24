@@ -32,7 +32,7 @@ import java.util.List;
 import static com.codenjoy.dojo.fifteen.services.GameSettings.Keys.BONUS_SCORE;
 import static com.codenjoy.dojo.fifteen.services.GameSettings.Keys.WIN_SCORE;
 
-public final class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
+public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
 
     public enum Keys implements Key {
 

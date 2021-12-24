@@ -34,7 +34,7 @@ import org.junit.Test;
 
 import java.util.Arrays;
 
-public class SmokeTest {
+public class    SmokeTest {
 
     private Smoke smoke;
     private Dice dice;
@@ -59,7 +59,7 @@ public class SmokeTest {
 
                     @Override
                     public GameSettings getSettings() {
-                        return new GameSettings();
+                        return new TestGameSettings();
                     }
                 },
                 Arrays.asList(new AISolver(dice)),

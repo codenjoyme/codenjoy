@@ -22,7 +22,7 @@ package com.codenjoy.dojo.fifteen.services;
  * #L%
  */
 
-import com.codenjoy.dojo.fifteen.model.Bonus;
+import com.codenjoy.dojo.fifteen.TestGameSettings;
 import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.event.ScoresImpl;
 import org.junit.Before;
@@ -50,7 +50,7 @@ public class ScoresTest {
 
     @Before
     public void setup() {
-        settings = new GameSettings();
+        settings = new TestGameSettings();
         scores = new ScoresImpl<>(0, new Scores(settings));
     }
 
