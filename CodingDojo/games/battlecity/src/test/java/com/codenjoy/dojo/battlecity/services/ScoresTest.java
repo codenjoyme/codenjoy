@@ -23,6 +23,7 @@ package com.codenjoy.dojo.battlecity.services;
  */
 
 
+import com.codenjoy.dojo.battlecity.TestGameSettings;
 import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.event.ScoresImpl;
 import org.junit.Before;
@@ -50,7 +51,7 @@ public class ScoresTest {
 
     @Before
     public void setup() {
-        settings = new GameSettings();
+        settings = new TestGameSettings();
         scores = new ScoresImpl(0, new Scores(settings));
     }
 
