@@ -22,44 +22,53 @@ package com.codenjoy.dojo.tetris.services;
  * #L%
  */
 
-public class Event {
+import com.codenjoy.dojo.services.event.EventObject;
 
-    public static final String GLASS_OVERFLOWN = "glassOverflown";
-    public static final String LINES_REMOVED = "linesRemoved";
-    public static final String FIGURES_DROPPED = "figuresDropped";
+public class Event implements EventObject<Event.Type, Event> {
 
-    private String type;
+    private Type type;
     private int level;
     private int data;
 
-    public Event(String type, int level, int data) {
+    public static Event glassOverflown(int levelNumber) {
+        return new Event(Type.GLASS_OVERFLOWN, levelNumber, 0);
+    }
+
+    public static Event linesRemoved(int levelNumber, int removedLines) {
+        return new Event(Type.LINES_REMOVED, levelNumber, removedLines);
+    }
+
+    public static Event figuresDropped(int levelNumber, int figureIndex) {
+        return new Event(Type.FIGURES_DROPPED, levelNumber, figureIndex);
+    }
+
+    public enum Type {
+        GLASS_OVERFLOWN,
+        LINES_REMOVED,
+        FIGURES_DROPPED;
+    }
+
+    public Event(Type type, int level, int data) {
         this.type = type;
         this.level = level;
         this.data = data;
     }
 
     public boolean isGlassOverflown() {
-        return type.equals(GLASS_OVERFLOWN);
+        return type.equals(Type.GLASS_OVERFLOWN);
     }
 
     public boolean isLinesRemoved() {
-        return type.equals(LINES_REMOVED);
+        return type.equals(Type.LINES_REMOVED);
     }
 
     public boolean isFiguresDropped() {
-        return type.equals(FIGURES_DROPPED);
+        return type.equals(Type.FIGURES_DROPPED);
     }
 
-    public static Event glassOverflown(int levelNumber) {
-        return new Event(GLASS_OVERFLOWN, levelNumber, 0);
-    }
-
-    public static Event linesRemoved(int levelNumber, int removedLines) {
-        return new Event(LINES_REMOVED, levelNumber, removedLines);
-    }
-
-    public static Event figuresDropped(int levelNumber, int figureIndex) {
-        return new Event(FIGURES_DROPPED, levelNumber, figureIndex);
+    @Override
+    public Type type() {
+        return type;
     }
 
     @Override

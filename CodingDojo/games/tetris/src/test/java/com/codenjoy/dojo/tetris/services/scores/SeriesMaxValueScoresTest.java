@@ -23,22 +23,28 @@ package com.codenjoy.dojo.tetris.services.scores;
  */
 
 
-import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.ScoresImpl;
+import com.codenjoy.dojo.tetris.TestGameSettings;
+import org.junit.Before;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.services.event.ScoresImpl.Mode.SERIES_MAX_VALUE;
 import static org.junit.Assert.assertEquals;
 
-public class MaxScoresTest extends CumulativeScoresTest {
+public class SeriesMaxValueScoresTest extends CumulativeScoresTest {
 
-    @Override
-    public PlayerScores getScores(int score) {
-        return new MaxScores(score, settings);
+    @Before
+    public void setup() {
+        settings = new TestGameSettings();
+        settings.initScore(SERIES_MAX_VALUE);
+
+        givenScores(0);
     }
 
     @Test
     public void shouldCollectScores() {
         // given
-        scores = new MaxScores(140, settings);
+        givenScores(140);
 
         assertScore(140);
         assertCurrentScore(0);
@@ -70,7 +76,7 @@ public class MaxScoresTest extends CumulativeScoresTest {
 
         // when
         // a bit more
-        isLinesRemoved(2, 2);
+        linesRemoved(2, 2);
         figuresDropped(1, 2);
 
         // then
@@ -80,7 +86,7 @@ public class MaxScoresTest extends CumulativeScoresTest {
 
         // when
         // a bit more
-        isLinesRemoved(2, 2);
+        linesRemoved(2, 2);
         figuresDropped(1, 2);
 
         // then
@@ -118,7 +124,7 @@ public class MaxScoresTest extends CumulativeScoresTest {
     @Test
     public void shouldClearScore() {
         // given
-        scores = new MaxScores(140, settings);
+        givenScores(140);
 
         assertScore(140);
         assertCurrentScore(0);
@@ -148,7 +154,7 @@ public class MaxScoresTest extends CumulativeScoresTest {
 
         // when
         // a bit more
-        isLinesRemoved(2, 2);
+        linesRemoved(2, 2);
         figuresDropped(1, 2);
 
         // then
@@ -164,20 +170,20 @@ public class MaxScoresTest extends CumulativeScoresTest {
         assertCurrentScore(0);
     }
 
-    public void assertCurrentScore(int expected) {
-        assertEquals(expected, ((MaxScores)scores).getCurrent());
+    public void assertCurrentScore(Integer expected) {
+        assertEquals(expected, ((ScoresImpl)scores).getSeries());
     }
 
     public void someActions() {
-        isLinesRemoved(1, 1);
-        isLinesRemoved(1, 2);
-        isLinesRemoved(2, 1);
-        isLinesRemoved(2, 2);
+        linesRemoved(1, 1);
+        linesRemoved(1, 2);
+        linesRemoved(2, 1);
+        linesRemoved(2, 2);
 
         figuresDropped(1, 1);
         figuresDropped(1, 2);
-        isLinesRemoved(2, 1);
-        isLinesRemoved(2, 2);
+        linesRemoved(2, 1);
+        linesRemoved(2, 2);
     }
 
 }
