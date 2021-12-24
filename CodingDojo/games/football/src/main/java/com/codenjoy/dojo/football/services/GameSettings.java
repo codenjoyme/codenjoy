@@ -36,10 +36,10 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
 
     public enum Keys implements Key {
 
-        NUMBER_OF_PLAYERS("Number of players"),
-        IS_NEED_AI("Is need AI"),
-        WIN_SCORE("Win score"),
-        LEVEL_MAP("Level map");
+        NUMBER_OF_PLAYERS("[Game] Number of players"),
+        IS_NEED_AI("[Game] Is need AI"),
+        WIN_SCORE("[Score] Win score"),
+        LEVEL_MAP("[Level] Level map");
 
         private String key;
 

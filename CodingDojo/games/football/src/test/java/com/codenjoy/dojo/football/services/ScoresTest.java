@@ -47,13 +47,14 @@ public class ScoresTest {
     @Before
     public void setup() {
         settings = new GameSettings();
-        givenScores(0);
     }
 
     @Test
     public void shouldCollectScores() {
-        givenScores(1);
+        // given
+        givenScores(140);
 
+        // when
         win();
         win();
         win();
@@ -61,8 +62,9 @@ public class ScoresTest {
 
         lose();
 
-        assertEquals(1
-                + 4 * settings.integer(WIN_SCORE),
+        // then
+        assertEquals(140
+                    + 4 * settings.integer(WIN_SCORE),
                 scores.getScore());
     }
 
@@ -72,17 +74,56 @@ public class ScoresTest {
 
     @Test
     public void cantBeLessThanZero() {
+        // given
+        givenScores(0);
+
+        // when
         lose();
 
+        // then
         assertEquals(0, scores.getScore());
     }
 
     @Test
     public void shouldClearScore() {
+        // given
+        givenScores(0);
+
         win();
 
+        // when
         scores.clear();
 
+        // then
         assertEquals(0, scores.getScore());
+    }
+
+    @Test
+    public void shouldCollectScores_whenWin() {
+        // given
+        givenScores(140);
+
+        // when
+        win();
+        win();
+
+        // then
+        assertEquals(140
+                    + 2 * settings.integer(WIN_SCORE),
+                scores.getScore());
+    }
+
+    @Test
+    public void shouldCollectScores_whenLose() {
+        // given
+        givenScores(140);
+
+        // when
+        lose();
+        lose();
+
+        // then
+        assertEquals(140,
+                scores.getScore());
     }
 }
