@@ -51,18 +51,22 @@ public class ScoresTest {
     @Before
     public void setup() {
         settings = new TestGameSettings();
-        givenScores(0);
     }
 
     @Test
     public void shouldCollectScores() {
-        givenScores(250);
+        // given
+        givenScores(140);
 
+        // when
         bonus();
         bonus();
+        win();
 
-        assertEquals(250
-                    + 2 * settings.integer(BONUS_SCORE) * NUMBER / MOVE_COUNT,
+        // then
+        assertEquals(140
+                    + 2 * settings.integer(BONUS_SCORE) * NUMBER / MOVE_COUNT
+                    + settings.integer(WIN_SCORE),
                 scores.getScore());
     }
 
@@ -72,12 +76,31 @@ public class ScoresTest {
 
     @Test
     public void shouldCollectScores_whenWin() {
-        givenScores(250);
+        // given
+        givenScores(140);
 
+        // when
+        win();
         win();
 
-        assertEquals(250
-                    + settings.integer(WIN_SCORE),
+        // then
+        assertEquals(140
+                    + 2 * settings.integer(WIN_SCORE),
+                scores.getScore());
+    }
+
+    @Test
+    public void shouldCollectScores_whenBonus() {
+        // given
+        givenScores(140);
+
+        // when
+        bonus();
+        bonus();
+
+        // then
+        assertEquals(140
+                        + 2 * settings.integer(BONUS_SCORE) * NUMBER / MOVE_COUNT,
                 scores.getScore());
     }
 }
