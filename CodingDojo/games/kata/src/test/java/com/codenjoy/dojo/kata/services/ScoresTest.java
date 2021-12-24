@@ -26,6 +26,7 @@ package com.codenjoy.dojo.kata.services;
 import com.codenjoy.dojo.kata.services.events.NextAlgorithmEvent;
 import com.codenjoy.dojo.kata.services.events.PassTestEvent;
 import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.ScoresImpl;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -47,12 +48,12 @@ public class ScoresTest {
     @Before
     public void setup() {
         settings = new GameSettings();
-        scores = new Scores(0, settings);
+        givenScores(0);
     }
 
     @Test
     public void shouldCollectScores() {
-        scores = new Scores(140, settings);
+        givenScores(140);
 
         int complexity = 100;
         int testsCount = 10;
@@ -67,6 +68,10 @@ public class ScoresTest {
         assertEquals(140
                 + 10000
                 + 4*100, scores.getScore());
+    }
+
+    private void givenScores(int score) {
+        scores = new ScoresImpl<>(score, new Scores(settings));
     }
 
     @Test
