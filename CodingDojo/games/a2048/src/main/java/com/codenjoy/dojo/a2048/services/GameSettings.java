@@ -46,7 +46,7 @@ import static com.codenjoy.dojo.a2048.services.GameSettings.BreaksMode.BREAKS_NO
 import static com.codenjoy.dojo.a2048.services.GameSettings.Keys.*;
 import static java.util.stream.Collectors.toList;
 
-public final class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
+public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
 
     public enum BreaksMode implements SettingsReader.Key {
 
