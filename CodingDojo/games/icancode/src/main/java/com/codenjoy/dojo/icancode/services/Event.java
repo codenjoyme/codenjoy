@@ -23,7 +23,15 @@ package com.codenjoy.dojo.icancode.services;
  */
 
 
-public class Event {
+import com.codenjoy.dojo.services.event.EventObject;
+
+public class Event implements EventObject<Event.Type, Event> {
+
+    private Type type;
+
+    private int goldCount;
+    private boolean multiple;
+    private int killCount;
 
     public static Event WIN(int goldCount, boolean multiple) {
         return new Event(goldCount, multiple);
@@ -42,15 +50,11 @@ public class Event {
     }
 
     public enum Type {
-        WIN, LOSE,
-        KILL_ZOMBIE, KILL_HERO;
+        WIN,
+        LOSE,
+        KILL_ZOMBIE,
+        KILL_HERO;
     }
-
-    private Type type;
-
-    private int goldCount;
-    private boolean multiple;
-    private int killCount;
 
     public Event(Type type, int killCount, boolean multiple) {
         this.multiple = multiple;
@@ -81,8 +85,14 @@ public class Event {
         return killCount;
     }
 
-    public Type getType() {
+    @Override
+    public Type type() {
         return type;
+    }
+
+    @Override
+    public Event value() {
+        return this;
     }
 
     @Override

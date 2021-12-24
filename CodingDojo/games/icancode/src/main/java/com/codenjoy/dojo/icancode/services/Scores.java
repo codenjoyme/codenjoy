@@ -22,61 +22,31 @@ package com.codenjoy.dojo.icancode.services;
  * #L%
  */
 
-
-import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.ScoresMap;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.*;
 
-public class Scores implements PlayerScores {
+public class Scores extends ScoresMap<Event> {
 
-    private volatile int score;
-    private GameSettings settings;
+    public Scores(SettingsReader settings) {
+        super(settings);
 
-    public Scores(int startScore, GameSettings settings) {
-        this.score = startScore;
-        this.settings = settings;
-    }
+        put(Event.Type.WIN,
+                event -> (event.isMultiple() ? 0 : settings.integer(WIN_SCORE))
+                        + event.getGoldCount() * settings.integer(GOLD_SCORE));
 
-    @Override
-    public int clear() {
-        score = 0;
-        return 0;
-    }
+        put(Event.Type.LOSE,
+                event -> settings.integer(LOSE_PENALTY));
 
-    @Override
-    public void update(Object score) {
-        this.score = Integer.valueOf(score.toString());
-    }
+        put(Event.Type.KILL_ZOMBIE,
+                event -> event.isMultiple() && settings.bool(ENABLE_KILL_SCORE)
+                        ? event.getKillCount() * settings.integer(KILL_ZOMBIE_SCORE)
+                        : 0);
 
-    @Override
-    public Object getScore() {
-        return score;
-    }
-
-    @Override
-    public void event(Object input) {
-        Event events = (Event) input;
-
-        Event.Type eventsType = events.getType();
-        switch (eventsType) {
-            case WIN:
-                if (!events.isMultiple()) {
-                    score += settings.integer(WIN_SCORE);
-                }
-                score += settings.integer(GOLD_SCORE) * events.getGoldCount();
-                break;
-            case LOSE:
-                score -= settings.integer(LOSE_PENALTY);
-                break;
-            case KILL_ZOMBIE:
-                if (settings.bool(ENABLE_KILL_SCORE) && events.isMultiple())
-                    score += events.getKillCount() * settings.integer(KILL_ZOMBIE_SCORE);
-                break;
-            case KILL_HERO:
-                if (settings.bool(ENABLE_KILL_SCORE) && events.isMultiple())
-                    score += events.getKillCount() * settings.integer(KILL_HERO_SCORE);
-                break;
-        }
-        score = Math.max(0, score);
+        put(Event.Type.KILL_HERO,
+                event -> event.isMultiple() && settings.bool(ENABLE_KILL_SCORE)
+                        ? event.getKillCount() * settings.integer(KILL_HERO_SCORE)
+                        : 0);
     }
 }

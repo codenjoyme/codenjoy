@@ -24,6 +24,7 @@ package com.codenjoy.dojo.icancode.services;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.ScoresImpl;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -57,7 +58,6 @@ public class ScoresTest {
         scores.event(Event.WIN(0, multiple()));
     }
 
-
     public void winSingle(int goldCount) {
         scores.event(Event.WIN(goldCount, single()));
     }
@@ -80,13 +80,17 @@ public class ScoresTest {
 
     @Before
     public void setup() {
-        settings = new GameSettings();
-        scores = new Scores(0, settings);
+        settings = new TestGameSettings();
+        givenScores(0);
+    }
+
+    private void givenScores(int score) {
+        scores = new ScoresImpl<>(score, new Scores(settings));
     }
 
     @Test
     public void shouldCollectScores() {
-        scores = new Scores(140, settings);
+        givenScores(140);
 
         winSingle();
         winSingle();
@@ -97,13 +101,13 @@ public class ScoresTest {
 
         assertEquals(140
                 + 4 * settings.integer(WIN_SCORE)
-                - settings.integer(LOSE_PENALTY),
+                + settings.integer(LOSE_PENALTY),
                 scores.getScore());
     }
 
     @Test
     public void shouldCollectScores_ignoreOnMultiple() {
-        scores = new Scores(140, settings);
+        givenScores(140);
 
         winMultiple();
         winMultiple();
@@ -115,11 +119,11 @@ public class ScoresTest {
 
     @Test
     public void shouldWithWithGold() {
-        scores = new Scores(0, settings);
+        givenScores(0);
 
-        winSingle(0);  //+
-        winSingle(1);  //+
-        winSingle(2);  //+
+        winSingle(0);
+        winSingle(1);
+        winSingle(2);
 
         assertEquals(3 * settings.integer(WIN_SCORE)
                 + 3 * settings.integer(GOLD_SCORE),
