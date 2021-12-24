@@ -26,14 +26,14 @@ import com.codenjoy.dojo.a2048.services.GameSettings;
 
 import static com.codenjoy.dojo.a2048.services.GameSettings.BreaksMode.BREAKS_NOT_EXISTS;
 import static com.codenjoy.dojo.a2048.services.GameSettings.Keys.*;
-import static com.codenjoy.dojo.a2048.services.GameSettings.Keys.BREAKS_MODE;
 import static com.codenjoy.dojo.a2048.services.GameSettings.NumbersMode.NEW_NUMBERS_IN_CORNERS;
 
 public class TestGameSettings extends GameSettings {
 
     public TestGameSettings() {
-        mode(NEW_NUMBERS_IN_CORNERS, 0);
-        mode(BREAKS_NOT_EXISTS, 0);
+        integer(SIZE, 5);
+        mode(NEW_NUMBERS_IN_CORNERS, 4);
+        mode(BREAKS_NOT_EXISTS, 5);
     }
 
     public GameSettings mode(GameSettings.NumbersMode mode, int count) {

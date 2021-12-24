@@ -25,7 +25,6 @@ package com.codenjoy.dojo.a2048.model;
 
 import com.codenjoy.dojo.a2048.TestGameSettings;
 import com.codenjoy.dojo.a2048.services.Event;
-import com.codenjoy.dojo.a2048.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
@@ -43,7 +42,7 @@ import java.util.stream.IntStream;
 
 import static com.codenjoy.dojo.a2048.services.GameSettings.BreaksMode.BREAKS_EXISTS;
 import static com.codenjoy.dojo.a2048.services.GameSettings.BreaksMode.BREAKS_NOT_EXISTS;
-import static com.codenjoy.dojo.a2048.services.GameSettings.Keys.*;
+import static com.codenjoy.dojo.a2048.services.GameSettings.Keys.LEVEL_MAP;
 import static com.codenjoy.dojo.a2048.services.GameSettings.NumbersMode.NEW_NUMBERS_IN_CORNERS;
 import static com.codenjoy.dojo.a2048.services.GameSettings.NumbersMode.NEW_NUMBERS_IN_RANDOM;
 import static org.junit.Assert.*;
@@ -66,6 +65,8 @@ public class GameTest {
         dice = mock(Dice.class);
         printer = new PrinterFactoryImpl<>();
         settings = new TestGameSettings();
+        settings.mode(NEW_NUMBERS_IN_CORNERS, 0);
+        settings.mode(BREAKS_NOT_EXISTS, 0);
     }
 
     private void dice(int...ints) {
