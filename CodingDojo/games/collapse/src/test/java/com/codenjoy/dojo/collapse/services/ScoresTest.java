@@ -23,6 +23,7 @@ package com.codenjoy.dojo.collapse.services;
  */
 
 
+import com.codenjoy.dojo.collapse.TestGameSettings;
 import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.event.ScoresImpl;
 import org.junit.Before;
@@ -44,13 +45,17 @@ public class ScoresTest {
 
     @Before
     public void setup() {
-        settings = new GameSettings();
-        scores = new ScoresImpl<>(0, new Scores(settings));
+        settings = new TestGameSettings();
+        givenScores(0);
+    }
+
+    private void givenScores(int score) {
+        scores = new ScoresImpl<>(score, new Scores(settings));
     }
 
     @Test
     public void shouldCollectScores() {
-        scores = new ScoresImpl<>(1000, new Scores(settings));
+        givenScores(1000);
 
         success(1);
         success(1);
@@ -64,7 +69,7 @@ public class ScoresTest {
 
     @Test
     public void shouldCollectScoresIfMoreThan1() {
-        scores = new ScoresImpl<>(1000, new Scores(settings));
+        givenScores(1000);
 
         success(5);
 
@@ -75,7 +80,7 @@ public class ScoresTest {
 
     @Test
     public void shouldCollectScoresIfMoreThan1_2() {
-        scores = new ScoresImpl<>(1000, new Scores(settings));
+        givenScores(1000);
 
         success(15);
 
