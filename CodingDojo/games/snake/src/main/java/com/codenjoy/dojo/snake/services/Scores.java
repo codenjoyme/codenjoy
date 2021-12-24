@@ -28,7 +28,7 @@ import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import java.util.stream.IntStream;
 
-import static com.codenjoy.dojo.services.event.ScoresImpl.SCORE_COUNTING_TYPE;
+import static com.codenjoy.dojo.services.event.ScoresImpl.Mode.CUMULATIVELY;
 import static com.codenjoy.dojo.snake.services.GameSettings.Keys.EAT_STONE_PENALTY;
 import static com.codenjoy.dojo.snake.services.GameSettings.Keys.GAME_OVER_PENALTY;
 
@@ -41,7 +41,7 @@ public class Scores extends ScoresMap<Integer> {
                 value -> settings.integer(GAME_OVER_PENALTY));
 
         put(Event.Type.EAT_APPLE,
-                value -> ScoresImpl.mode(settings) == ScoresImpl.CUMULATIVELY
+                value -> ScoresImpl.modeValue(settings) == CUMULATIVELY
                         ? value
                         : IntStream.rangeClosed(3, value).sum());
 

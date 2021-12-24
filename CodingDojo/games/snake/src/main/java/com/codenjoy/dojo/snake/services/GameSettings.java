@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.settings.SettingsReader;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.codenjoy.dojo.services.event.ScoresImpl.Mode.CUMULATIVELY;
 import static com.codenjoy.dojo.snake.services.GameSettings.Keys.*;
 
 public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
@@ -39,7 +40,8 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         GAME_OVER_PENALTY("[Score] Game over penalty"),
         START_SNAKE_LENGTH("[Game] Start snake length"),
         EAT_STONE_PENALTY("[Score] Eat stone penalty"),
-        EAT_STONE_DECREASE("[Game] Eat stone decrease");
+        EAT_STONE_DECREASE("[Game] Eat stone decrease"),
+        SCORE_COUNTING_TYPE(ScoresImpl.SCORE_COUNTING_TYPE.key());
 
         private String key;
 
@@ -59,7 +61,7 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
     }
 
     public GameSettings() {
-        ScoresImpl.setup(this, ScoresImpl.CUMULATIVELY);
+        initScore(CUMULATIVELY);
 
         integer(BOARD_SIZE, 15);
         integer(GAME_OVER_PENALTY, -0);

@@ -31,6 +31,7 @@ import org.junit.Test;
 
 import java.util.stream.IntStream;
 
+import static com.codenjoy.dojo.services.event.ScoresImpl.Mode.MAX_VALUE;
 import static org.junit.Assert.assertEquals;
 
 public class MaxScoresTest {
@@ -54,7 +55,7 @@ public class MaxScoresTest {
     @Before
     public void setup() {
         settings = new TestGameSettings();
-        ScoresImpl.setup(settings, ScoresImpl.MAX_VALUE);
+        settings.initScore(MAX_VALUE);
 
         scores = getScores(0);
     }

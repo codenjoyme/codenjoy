@@ -29,6 +29,7 @@ import com.codenjoy.dojo.snake.TestGameSettings;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.services.event.ScoresImpl.Mode.CUMULATIVELY;
 import static com.codenjoy.dojo.snake.services.GameSettings.Keys.EAT_STONE_PENALTY;
 import static com.codenjoy.dojo.snake.services.GameSettings.Keys.GAME_OVER_PENALTY;
 import static org.junit.Assert.assertEquals;
@@ -53,7 +54,7 @@ public class CumulativelyScoresTest {
     @Before
     public void setup() {
         settings = new TestGameSettings();
-        ScoresImpl.setup(settings, ScoresImpl.CUMULATIVELY);
+        settings.initScore(CUMULATIVELY);
 
         givenScores(0);
     }

@@ -1,8 +1,8 @@
 package com.codenjoy.dojo.snake;
 
-import com.codenjoy.dojo.services.event.ScoresImpl;
 import com.codenjoy.dojo.snake.services.GameSettings;
 
+import static com.codenjoy.dojo.services.event.ScoresImpl.Mode.CUMULATIVELY;
 import static com.codenjoy.dojo.snake.services.GameSettings.Keys.*;
 
 public class TestGameSettings extends GameSettings {
@@ -11,7 +11,7 @@ public class TestGameSettings extends GameSettings {
      * Here you can override the settings for all tests.
      */
     public TestGameSettings() {
-        ScoresImpl.setup(this, ScoresImpl.CUMULATIVELY);
+        initScore(CUMULATIVELY);
 
         integer(BOARD_SIZE, 15);
         integer(GAME_OVER_PENALTY, -50);
