@@ -51,12 +51,12 @@ public class ScoresTest {
     @Before
     public void setup() {
         settings = new TestGameSettings();
-        scores = new ScoresImpl<>(0, new Scores(settings));
+        givenScores(0);
     }
 
     @Test
     public void shouldCollectScores() {
-        scores = new ScoresImpl<>(250, new Scores(settings));
+        givenScores(250);
 
         bonus();
         bonus();
@@ -66,9 +66,13 @@ public class ScoresTest {
                 scores.getScore());
     }
 
+    private void givenScores(int score) {
+        scores = new ScoresImpl<>(score, new Scores(settings));
+    }
+
     @Test
     public void shouldCollectScores_whenWin() {
-        scores = new ScoresImpl<>(250, new Scores(settings));
+        givenScores(250);
 
         win();
 
