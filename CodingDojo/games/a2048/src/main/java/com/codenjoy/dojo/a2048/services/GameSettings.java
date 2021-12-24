@@ -88,7 +88,7 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         NEW_NUMBERS("New numbers"),
         NUMBERS_MODE("Numbers mode"),
         BREAKS_MODE("Breaks mode"),
-        SCORE_COUNTING_TYPE(ScoresImpl.SCORE_COUNTING_TYPE),
+        SCORE_COUNTING_TYPE(ScoresImpl.SCORE_COUNTING_TYPE.key()),
         LEVEL_MAP("Level map");
 
         private String key;
@@ -113,7 +113,7 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
     }
 
     public GameSettings() {
-        initScore(ScoresImpl.MAX_VALUE);
+        initScore(ScoresImpl.Mode.MAX_VALUE);
 
         multiline(LEVEL_MAP, null).onChange(updateSize());
 

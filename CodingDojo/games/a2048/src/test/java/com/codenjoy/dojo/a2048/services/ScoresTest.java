@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.event.ScoresImpl;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.services.event.ScoresImpl.Mode.CUMULATIVELY;
 import static org.junit.Assert.assertEquals;
 
 public class ScoresTest {
@@ -81,7 +82,7 @@ public class ScoresTest {
     @Test
     public void shouldCollect_whenCumulative() {
         // given
-        ScoresImpl.setup(settings, ScoresImpl.CUMULATIVELY);
+        settings.initScore(CUMULATIVELY);
 
         givenScores(40);
 
