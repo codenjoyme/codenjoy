@@ -50,7 +50,6 @@ public class ScoresTest {
     @Before
     public void setup() {
         settings = new TestGameSettings();
-        givenScores(0);
     }
 
     private void givenScores(int score) {
@@ -72,8 +71,8 @@ public class ScoresTest {
 
         // then
         assertEquals(140
-                + 5 * settings.integer(WIN_SCORE)
-                + settings.integer(LOSE_PENALTY),
+                    + 5 * settings.integer(WIN_SCORE)
+                    + settings.integer(LOSE_PENALTY),
                 scores.getScore());
     }
 
@@ -100,5 +99,35 @@ public class ScoresTest {
 
         // then
         assertEquals(0, scores.getScore());
+    }
+
+    @Test
+    public void shouldCollectScores_whenWin() {
+        // given
+        givenScores(140);
+
+        // when
+        win(1);
+        win(2);
+
+        // then
+        assertEquals(140
+                    + (1 + 2) * settings.integer(WIN_SCORE),
+                scores.getScore());
+    }
+
+    @Test
+    public void shouldCollectScores_whenLose() {
+        // given
+        givenScores(140);
+
+        // when
+        lose(1);
+        lose(2);
+
+        // then
+        assertEquals(140
+                    + (1 + 2) * settings.integer(LOSE_PENALTY),
+                scores.getScore());
     }
 }
