@@ -82,7 +82,6 @@ public class ScoresTest {
     @Before
     public void setup() {
         settings = new TestGameSettings();
-        givenScores(0);
     }
 
     private void givenScores(int score) {
@@ -91,8 +90,10 @@ public class ScoresTest {
 
     @Test
     public void shouldCollectScores() {
+        // given
         givenScores(140);
 
+        // when
         winSingle();
         winSingle();
         winSingle();
@@ -100,85 +101,115 @@ public class ScoresTest {
 
         loseSingle();
 
+        // then
         assertEquals(140
-                + 4 * settings.integer(WIN_SCORE)
-                + settings.integer(LOSE_PENALTY),
+                    + 4 * settings.integer(WIN_SCORE)
+                    + settings.integer(LOSE_PENALTY),
                 scores.getScore());
     }
 
     @Test
     public void shouldCollectScores_ignoreOnMultiple() {
+        // given
         givenScores(140);
 
+        // when
         winMultiple();
         winMultiple();
         winMultiple();
         winMultiple();
 
+        // then
         assertEquals(140, scores.getScore());
     }
 
     @Test
     public void shouldWithWithGold() {
-        givenScores(0);
+        // given
+        givenScores(140);
 
+        // when
         winSingle(0);
         winSingle(1);
         winSingle(2);
 
-        assertEquals(3 * settings.integer(WIN_SCORE)
-                + 3 * settings.integer(GOLD_SCORE),
+        // then
+        assertEquals(140
+                    + 3 * settings.integer(WIN_SCORE)
+                    + 3 * settings.integer(GOLD_SCORE),
                 scores.getScore());
     }
 
     @Test
     public void shouldStillZeroAfterDead() {
+        // given
+        givenScores(0);
+
+        // when
         loseSingle();
 
+        // then
         assertEquals(0, scores.getScore());
     }
 
     @Test
     public void shouldClearScore() {
+        // given
+        givenScores(0);
+
         winSingle();
 
+        // when
         scores.clear();
 
+        // then
         assertEquals(0, scores.getScore());
     }
 
     @Test
     public void shouldNotCountZombieKillInSingleMode() {
+        // given
+        givenScores(140);
         settings.bool(ENABLE_KILL_SCORE, true);
 
+        // when
         killZombieSingle(1);
         killHeroSingle(1);
 
-        assertEquals(0, scores.getScore());
+        // then
+        assertEquals(140, scores.getScore());
     }
 
     @Test
     public void disabledKillsShouldNotCountKillZombiesAndHero() {
+        // given
+        givenScores(140);
         settings.bool(ENABLE_KILL_SCORE, false);
 
+        // when
         killZombieMultiple(1);
         killHeroMultiple(1);
 
-        assertEquals(0, scores.getScore());
+        // then
+        assertEquals(140, scores.getScore());
     }
 
     @Test
     public void shouldCountKills() {
+        // given
+        givenScores(140);
         int zombie = 2;
         int heroes = 1;
-
         settings.bool(ENABLE_KILL_SCORE, true);
 
+        // when
         killZombieMultiple(zombie);
         killHeroMultiple(heroes);
 
-        assertEquals(settings.integer(KILL_HERO_SCORE) * heroes
-                + settings.integer(KILL_ZOMBIE_SCORE) * zombie,
+        // then
+        assertEquals(140
+                    + settings.integer(KILL_HERO_SCORE) * heroes
+                    + settings.integer(KILL_ZOMBIE_SCORE) * zombie,
                 scores.getScore());
     }
 }
