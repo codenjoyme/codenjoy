@@ -66,8 +66,6 @@ public class GameTest {
         dice = mock(Dice.class);
         printer = new PrinterFactoryImpl<>();
         settings = new TestGameSettings();
-        settings.mode(NEW_NUMBERS_IN_CORNERS, 0);
-        settings.mode(BREAKS_NOT_EXISTS, 0);
     }
 
     private void dice(int...ints) {

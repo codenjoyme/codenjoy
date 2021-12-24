@@ -32,9 +32,8 @@ import static com.codenjoy.dojo.a2048.services.GameSettings.NumbersMode.NEW_NUMB
 public class TestGameSettings extends GameSettings {
 
     public TestGameSettings() {
-        integer(SIZE, 5);
-        mode(NEW_NUMBERS_IN_CORNERS, 4);
-        mode(BREAKS_NOT_EXISTS, 5);
+        mode(NEW_NUMBERS_IN_CORNERS, 0);
+        mode(BREAKS_NOT_EXISTS, 0);
     }
 
     public GameSettings mode(GameSettings.NumbersMode mode, int count) {
