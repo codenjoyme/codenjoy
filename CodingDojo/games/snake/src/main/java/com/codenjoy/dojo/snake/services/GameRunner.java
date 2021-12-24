@@ -28,6 +28,7 @@ import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.AbstractGameType;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.ScoresImpl;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
@@ -42,18 +43,12 @@ import com.codenjoy.dojo.snake.model.artifacts.BasicWalls;
 import com.codenjoy.dojo.snake.model.artifacts.RandomArtifactGenerator;
 
 import static com.codenjoy.dojo.snake.services.GameSettings.Keys.BOARD_SIZE;
-import static com.codenjoy.dojo.snake.services.GameSettings.Keys.MAX_SCORE_MODE;
 
 public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public PlayerScores getPlayerScores(Object score, GameSettings settings) {
-        // TODO этa настройка работает только, если удалить всех игроков и снова загрузить а надо сделать, чтобы reset all boards кнопка триггерила это тоже
-        if (settings.bool(MAX_SCORE_MODE)) {
-            return new MaxScores((Integer) score, settings);
-        } else {
-            return new Scores(Integer.valueOf(score.toString()), settings);
-        }
+        return new ScoresImpl<>(Integer.parseInt(score.toString()), new Scores(settings));
     }
 
     @Override

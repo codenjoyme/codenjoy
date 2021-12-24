@@ -22,8 +22,44 @@ package com.codenjoy.dojo.snake.services;
  * #L%
  */
 
-public enum Event {
-    KILL,
-    EAT_STONE,
-    EAT_APPLE;
+import com.codenjoy.dojo.services.event.EventObject;
+
+import java.util.function.Function;
+
+public class Event implements EventObject<Event.Type, Integer> {
+
+    private Type type;
+    private Integer value;
+
+    public static final Event KILL = new Event(Type.KILL, 0);
+    public static final Event EAT_STONE = new Event(Type.EAT_STONE, 0);
+    public static final Function<Integer, Event> EAT_APPLE = value -> new Event(Type.EAT_APPLE, value);
+
+    private Event(Type type, Integer value) {
+        this.type = type;
+        this.value = value;
+    }
+
+    enum Type {
+        KILL,
+        EAT_STONE,
+        EAT_APPLE;
+    }
+
+    @Override
+    public Type type() {
+        return type;
+    }
+
+    @Override
+    public Integer value() {
+        return value;
+    }
+
+    @Override
+    public String toString() {
+        return (type == Type.EAT_APPLE)
+                ? "EAT_APPLE[" + value + "]"
+                : type.name();
+    }
 }

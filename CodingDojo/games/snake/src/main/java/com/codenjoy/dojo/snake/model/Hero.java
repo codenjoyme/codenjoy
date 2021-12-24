@@ -140,7 +140,7 @@ public class Hero extends PlayerHero<Field> implements Affectable, Iterable<Tail
 
     public void grow() {
         growBy = 1;
-        player.event(Event.EAT_APPLE);
+        player.event(Event.EAT_APPLE.apply(getLength()));
     }
 
     public boolean itsMyHead(Point point) {

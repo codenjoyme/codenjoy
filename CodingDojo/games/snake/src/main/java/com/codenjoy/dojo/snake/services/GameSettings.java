@@ -22,6 +22,7 @@ package com.codenjoy.dojo.snake.services;
  * #L%
  */
 
+import com.codenjoy.dojo.services.event.ScoresImpl;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
@@ -34,12 +35,11 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
 
     public enum Keys implements Key {
 
-        BOARD_SIZE("Board size"),
-        MAX_SCORE_MODE("Max score mode"),
-        GAME_OVER_PENALTY("Game over penalty"),
-        START_SNAKE_LENGTH("Start snake length"),
-        EAT_STONE_PENALTY("Eat stone penalty"),
-        EAT_STONE_DECREASE("Eat stone decrease");
+        BOARD_SIZE("[Level] Board size"),
+        GAME_OVER_PENALTY("[Score] Game over penalty"),
+        START_SNAKE_LENGTH("[Game] Start snake length"),
+        EAT_STONE_PENALTY("[Score] Eat stone penalty"),
+        EAT_STONE_DECREASE("[Game] Eat stone decrease");
 
         private String key;
 
@@ -59,11 +59,12 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
     }
 
     public GameSettings() {
+        ScoresImpl.setup(this, ScoresImpl.CUMULATIVELY);
+
         integer(BOARD_SIZE, 15);
-        bool(MAX_SCORE_MODE, false);
-        integer(GAME_OVER_PENALTY, 0);
+        integer(GAME_OVER_PENALTY, -0);
         integer(START_SNAKE_LENGTH, 2);
-        integer(EAT_STONE_PENALTY, 0);
+        integer(EAT_STONE_PENALTY, -0);
         integer(EAT_STONE_DECREASE, 10);
     }
 }

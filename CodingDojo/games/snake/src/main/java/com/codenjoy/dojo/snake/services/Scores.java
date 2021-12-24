@@ -22,78 +22,30 @@ package com.codenjoy.dojo.snake.services;
  * #L%
  */
 
+import com.codenjoy.dojo.services.event.ScoresImpl;
+import com.codenjoy.dojo.services.event.ScoresMap;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 
-import com.codenjoy.dojo.services.PlayerScores;
+import java.util.stream.IntStream;
 
-import static com.codenjoy.dojo.snake.services.GameSettings.Keys.*;
+import static com.codenjoy.dojo.services.event.ScoresImpl.SCORE_COUNTING_TYPE;
+import static com.codenjoy.dojo.snake.services.GameSettings.Keys.EAT_STONE_PENALTY;
+import static com.codenjoy.dojo.snake.services.GameSettings.Keys.GAME_OVER_PENALTY;
 
-// Классический подсчет очков, где очки постоянно агреггируются от игре к игре.
-// "Инкриз" очков рассчитывается из текущего размера змеи в момент съедания яблока.
-// Тогда как камень укорачивает только длинну (-10), ровно как и суицид (до 2х).
-// В нконтролирруемой по времени игре побеждает тот, кто дольше играл, если это не ок -
-// стоит выбирать MaxScore стратегию подсчета очков.  Включается опция на админке
-// путем установки настройки игры "Max score mode" в false.
-public class Scores implements PlayerScores {
+public class Scores extends ScoresMap<Integer> {
 
-    protected volatile int score;
-    protected volatile int length;  // TODO remove from here
-    protected GameSettings settings;
+    public Scores(SettingsReader settings) {
+        super(settings);
 
-    public Scores(int startScore, GameSettings setup) {
-        this.settings = setup;
-        score = startScore;
-        initLength();
-    }
+        put(Event.Type.KILL,
+                value -> settings.integer(GAME_OVER_PENALTY));
 
-    protected void initLength() {
-        length = settings.integer(START_SNAKE_LENGTH);
-    }
+        put(Event.Type.EAT_APPLE,
+                value -> ScoresImpl.mode(settings) == ScoresImpl.CUMULATIVELY
+                        ? value
+                        : IntStream.rangeClosed(3, value).sum());
 
-    @Override
-    public int clear() {
-        initLength();
-        return score = 0;
-    }
-
-    @Override
-    public Integer getScore() {
-        return score;
-    }
-
-    public Integer getLength() {
-        return length;
-    }
-
-    @Override
-    public void event(Object event) {
-        if (event.equals(Event.KILL)) {
-            snakeIsDead();
-        } else if (event.equals(Event.EAT_APPLE)) {
-            snakeEatApple();
-        }  else if (event.equals(Event.EAT_STONE)) {
-            snakeEatStone();
-        }
-        score = Math.max(0, score);
-        length = Math.max(settings.integer(START_SNAKE_LENGTH), length);
-    }
-
-    protected void snakeIsDead() {
-        score -= settings.integer(GAME_OVER_PENALTY);
-        initLength();
-    }
-
-    protected void snakeEatApple() {
-        length++;
-        score += length;
-    }
-
-    protected void snakeEatStone() {
-        score -= settings.integer(EAT_STONE_PENALTY);
-        length -= settings.integer(EAT_STONE_DECREASE);
-    }
-
-    @Override
-    public void update(Object score) {
-        this.score = Integer.valueOf(score.toString());
+        put(Event.Type.EAT_STONE,
+                value -> settings.integer(EAT_STONE_PENALTY));
     }
 }
