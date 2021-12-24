@@ -55,13 +55,13 @@ public class CumulativelyScoresTest {
         settings = new TestGameSettings();
         ScoresImpl.setup(settings, ScoresImpl.CUMULATIVELY);
 
-        scores = getScores(0);
+        givenScores(0);
     }
 
     @Test
     public void shouldCollectScores() {
         // given
-        scores = getScores(240);
+        givenScores(240);
 
         // when
         eatApple(3);
@@ -84,7 +84,7 @@ public class CumulativelyScoresTest {
     @Test
     public void shouldSnakeLengthCantLessThen3() {
         // given
-        scores = getScores(0);
+        givenScores(0);
 
         // when
         eatStone();
@@ -100,14 +100,14 @@ public class CumulativelyScoresTest {
         assertEquals(3, score());
     }
 
-    private PlayerScores getScores(int score) {
-        return new ScoresImpl<>(score, new Scores(settings));
+    private void givenScores(int score) {
+        scores = new ScoresImpl<>(score, new Scores(settings));
     }
 
     @Test
     public void shouldShortLengthWhenEatStone() {
         // given
-        scores = getScores(0);
+        givenScores(0);
 
         eatApple(3);
         eatApple(4);
@@ -135,7 +135,7 @@ public class CumulativelyScoresTest {
     @Test
     public void shouldClearScoreTogetherWithSnakeLength() {
         // given
-        scores = getScores(0);
+        givenScores(0);
 
         eatApple(3);
         eatApple(4);
@@ -161,7 +161,7 @@ public class CumulativelyScoresTest {
     @Test
     public void shouldStartsFrom3_afterDead() {
         // given
-        scores = getScores(200);
+        givenScores(200);
 
         // when
         kill();
@@ -182,7 +182,7 @@ public class CumulativelyScoresTest {
     @Test
     public void shouldStillZeroAfterDead() {
         // given
-        scores = getScores(0);
+        givenScores(0);
 
         // when
         kill();
@@ -194,7 +194,7 @@ public class CumulativelyScoresTest {
     @Test
     public void shouldStillZero_afterEatStone() {
         // given
-        scores = getScores(0);
+        givenScores(0);
 
         // when
         eatStone();
@@ -206,7 +206,7 @@ public class CumulativelyScoresTest {
     @Test
     public void shouldClearScore() {
         // given
-        scores = getScores(0);
+        givenScores(0);
 
         eatApple(3);
 
