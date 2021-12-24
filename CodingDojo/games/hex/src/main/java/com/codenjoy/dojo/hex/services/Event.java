@@ -22,20 +22,26 @@ package com.codenjoy.dojo.hex.services;
  * #L%
  */
 
+import com.codenjoy.dojo.services.event.EventObject;
 
-public class Event {
+public class Event implements EventObject<Event.Type, Integer> {
 
-    private EventEnum event;
-    private int count;
+    private Type type;
+    private Integer value;
 
-    // TODO подумать в контексте фреймворка как сделать так, чтобы любой ивент мог передавать параметры
-    public enum EventEnum {
-        WIN, LOSE;
+    public enum Type {
+        WIN,
+        LOSE;
+    }
+
+    public Event(Event.Type type, Integer value) {
+        this.type = type;
+        this.value = value;
     }
 
     @Override
     public String toString() {
-        return event + ((count != 0)?("(" + count + ")"):"");
+        return type + ((value != 0)?("(" + value + ")"):"");
     }
 
     @Override
@@ -45,27 +51,24 @@ public class Event {
 
         Event event = (Event) o;
 
-        if (count != event.count) return false;
-        if (this.event != event.event) return false;
+        if (value != event.value) return false;
+        if (this.type != event.type) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        return count;
+        return value;
     }
 
-    public Event(EventEnum event, int count) {
-        this.event = event;
-        this.count = count;
+    @Override
+    public Integer value() {
+        return value;
     }
 
-    public int getCount() {
-        return count;
-    }
-
-    public EventEnum getType() {
-        return event;
+    @Override
+    public Type type() {
+        return type;
     }
 }

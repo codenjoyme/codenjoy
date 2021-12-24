@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.hex.services;
+package com.codenjoy.dojo.hex;
 
 /*-
  * #%L
- * expansion - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 - 2020 Codenjoy
+ * Copyright (C) 2021 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,42 +22,13 @@ package com.codenjoy.dojo.hex.services;
  * #L%
  */
 
-
-import com.codenjoy.dojo.hex.model.Level;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
-import com.codenjoy.dojo.services.settings.SettingsReader;
-
-import java.util.Arrays;
-import java.util.List;
+import com.codenjoy.dojo.hex.services.GameSettings;
 
 import static com.codenjoy.dojo.hex.services.GameSettings.Keys.*;
 
-public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
+public class TestGameSettings extends GameSettings {
 
-    public enum Keys implements Key {
-
-        WIN_SCORE("[Score] Win score"),
-        LOSE_PENALTY("[Score] Lose penalty"),
-        LEVEL_MAP("[Level] Level map");
-
-        private String key;
-
-        Keys(String key) {
-            this.key = key;
-        }
-
-        @Override
-        public String key() {
-            return key;
-        }
-    }
-
-    @Override
-    public List<Key> allKeys() {
-        return Arrays.asList(Keys.values());
-    }
-
-    public GameSettings() {
+    public TestGameSettings() {
         integer(WIN_SCORE, 30);
         integer(LOSE_PENALTY, -100);
 
@@ -77,10 +48,5 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
                 "☼             ☼\n" +
                 "☼             ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n");
-}
-
-    public Level level() {
-        return new Level(string(LEVEL_MAP));
     }
-
 }
