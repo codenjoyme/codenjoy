@@ -29,7 +29,6 @@ import com.codenjoy.dojo.icancode.model.Level;
 import com.codenjoy.dojo.icancode.services.GameRunner;
 import com.codenjoy.dojo.icancode.services.GameSettings;
 import com.codenjoy.dojo.icancode.services.Levels;
-import com.codenjoy.dojo.icancode.services.TestGameSettings;
 import com.codenjoy.dojo.icancode.services.ai.AISolver;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.utils.Smoke;
@@ -38,8 +37,6 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
-
-import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.*;
 
 public class SmokeTest {
 

@@ -22,13 +22,13 @@ package com.codenjoy.dojo.icancode.model;
  * #L%
  */
 
+import com.codenjoy.dojo.icancode.TestGameSettings;
 import com.codenjoy.dojo.icancode.model.items.HeroItem;
 import com.codenjoy.dojo.icancode.model.items.Zombie;
 import com.codenjoy.dojo.icancode.model.items.ZombieBrain;
 import com.codenjoy.dojo.icancode.model.items.perks.Perk;
 import com.codenjoy.dojo.icancode.services.Event;
 import com.codenjoy.dojo.icancode.services.GameSettings;
-import com.codenjoy.dojo.icancode.services.TestGameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;

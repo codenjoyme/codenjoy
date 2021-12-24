@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.icancode.services;
+package com.codenjoy.dojo.icancode;
 
 /*-
  * #%L
@@ -21,6 +21,8 @@ package com.codenjoy.dojo.icancode.services;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
+import com.codenjoy.dojo.icancode.services.GameSettings;
 
 import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.*;
 
