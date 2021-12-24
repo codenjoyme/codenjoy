@@ -63,7 +63,7 @@ public class SmokeTest {
 
                     @Override
                     public GameSettings getSettings() {
-                        return new GameSettings();
+                        return new TestGameSettings();
                     }
                 },
                 players, solver, Board::new);

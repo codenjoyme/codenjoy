@@ -87,11 +87,11 @@ public class Scores implements PlayerScores {
         }
 
         if (data instanceof Integer) {
-            score = Integer.valueOf(data.toString());
+            score = Integer.parseInt(data.toString());
             scores.put(SCORE, score);
         } else if (data instanceof JSONObject) {
             JSONObject json = (JSONObject) data;
-            score = Integer.valueOf(json.getInt(SCORE));
+            score = json.getInt(SCORE);
             scores.put(SCORE, score);
             scores.put(ROUNDS, json.getJSONArray(ROUNDS));
         } else {

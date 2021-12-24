@@ -23,7 +23,10 @@ package com.codenjoy.dojo.expansion.services;
  */
 
 
+import com.codenjoy.dojo.expansion.TestGameSettings;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 import org.json.JSONObject;
+import org.junit.Before;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.expansion.services.Scores.DETAILS;
@@ -33,6 +36,7 @@ import static org.junit.Assert.assertEquals;
 public class ScoresTest {
 
     private Scores scores;
+    private SettingsReader settings;
 
     public void lose() {
         scores.event(Event.LOSE());
@@ -42,18 +46,23 @@ public class ScoresTest {
         scores.event(Event.WIN(goldCount));
     }
 
+    @Before
+    public void setup() {
+        settings = new TestGameSettings();
+    }
+
     @Test
     public void shouldCollectScores() {
         // given
         scores = new Scores("{'score':140}");
 
         // when
-        win(1);  //+
-        win(1);  //+
-        win(1);  //+
-        win(1);  //+
+        win(1);
+        win(1);
+        win(1);
+        win(1);
 
-        lose();  //-
+        lose();
 
         // then
         assertEquals(140 + 4 - 0, score());
@@ -73,7 +82,7 @@ public class ScoresTest {
         scores = new Scores("{'score':0}");
 
         // when
-        lose();   //-
+        lose();
 
         // then
         assertEquals(0, score());
@@ -83,7 +92,7 @@ public class ScoresTest {
     public void shouldClearScore() {
         // given
         scores = new Scores("{'score':0}");
-        win(1);    // +
+        win(1);
 
         // when
         scores.clear();
