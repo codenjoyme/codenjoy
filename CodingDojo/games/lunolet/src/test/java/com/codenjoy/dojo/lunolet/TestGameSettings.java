@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.collapse;
+package com.codenjoy.dojo.lunolet;
 
 /*-
  * #%L
@@ -22,7 +22,7 @@ package com.codenjoy.dojo.collapse;
  * #L%
  */
 
-import com.codenjoy.dojo.collapse.services.GameSettings;
+import com.codenjoy.dojo.lunolet.services.GameSettings;
 
 public class TestGameSettings extends GameSettings {
 

@@ -30,9 +30,10 @@ import com.codenjoy.dojo.services.settings.SettingsReader;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.codenjoy.dojo.pong.services.GameSettings.Keys.*;
+import static com.codenjoy.dojo.pong.services.GameSettings.Keys.LEVEL_MAP;
+import static com.codenjoy.dojo.pong.services.GameSettings.Keys.WIN_SCORE;
 
-public final class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
+public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
 
     public enum Keys implements Key {
 

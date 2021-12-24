@@ -31,7 +31,7 @@ import java.util.List;
 
 import static com.codenjoy.dojo.lemonade.services.GameSettings.Keys.*;
 
-public final class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
+public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
 
     public enum Keys implements Key {
 

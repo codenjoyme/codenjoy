@@ -26,7 +26,10 @@ import com.codenjoy.dojo.fifteen.services.GameSettings;
 
 public class TestGameSettings extends GameSettings {
 
+    /**
+     * Here you can override the settings for all tests.
+     */
     public TestGameSettings() {
-        // add here settings for all tests
+
     }
 }

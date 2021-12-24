@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.collapse;
+package com.codenjoy.dojo.reversi;
 
 /*-
  * #%L
@@ -22,7 +22,7 @@ package com.codenjoy.dojo.collapse;
  * #L%
  */
 
-import com.codenjoy.dojo.collapse.services.GameSettings;
+import com.codenjoy.dojo.reversi.services.GameSettings;
 
 public class TestGameSettings extends GameSettings {
 

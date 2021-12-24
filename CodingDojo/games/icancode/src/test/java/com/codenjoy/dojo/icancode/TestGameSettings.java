@@ -28,6 +28,9 @@ import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.*;
 
 public class TestGameSettings extends GameSettings {
 
+    /**
+     * Here you can override the settings for all tests.
+     */
     public TestGameSettings() {
         bool(CHEATS, true);
         integer(PERK_ACTIVITY, 10);

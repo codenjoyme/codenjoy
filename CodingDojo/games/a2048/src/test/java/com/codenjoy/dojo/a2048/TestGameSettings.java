@@ -30,6 +30,9 @@ import static com.codenjoy.dojo.a2048.services.GameSettings.NumbersMode.NEW_NUMB
 
 public class TestGameSettings extends GameSettings {
 
+    /**
+     * Here you can override the settings for all tests.
+     */
     public TestGameSettings() {
         integer(SIZE, 5);
         mode(NEW_NUMBERS_IN_CORNERS, 4);

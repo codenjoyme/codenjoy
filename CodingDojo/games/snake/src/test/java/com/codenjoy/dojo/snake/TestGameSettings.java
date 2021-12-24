@@ -7,6 +7,9 @@ import static com.codenjoy.dojo.snake.services.GameSettings.Keys.*;
 
 public class TestGameSettings extends GameSettings {
 
+    /**
+     * Here you can override the settings for all tests.
+     */
     public TestGameSettings() {
         ScoresImpl.setup(this, ScoresImpl.CUMULATIVELY);
 

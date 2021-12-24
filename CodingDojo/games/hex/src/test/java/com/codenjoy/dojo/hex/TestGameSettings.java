@@ -28,6 +28,9 @@ import static com.codenjoy.dojo.hex.services.GameSettings.Keys.*;
 
 public class TestGameSettings extends GameSettings {
 
+    /**
+     * Here you can override the settings for all tests.
+     */
     public TestGameSettings() {
         integer(WIN_SCORE, 30);
         integer(LOSE_PENALTY, -100);

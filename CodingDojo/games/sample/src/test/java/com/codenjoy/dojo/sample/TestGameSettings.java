@@ -29,12 +29,13 @@ import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_ENABLED
 
 public class TestGameSettings extends GameSettings {
 
+    /**
+     * Here you can override the settings for all tests.
+     */
     public TestGameSettings() {
         bool(ROUNDS_ENABLED, false);
         integer(WIN_SCORE, 30);
         integer(LOSE_PENALTY, -100);
         integer(WIN_ROUND_SCORE, 200);
-
-        // тут можно переопределить настройки для всех тестов
     }
 }
