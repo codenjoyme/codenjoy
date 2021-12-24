@@ -44,7 +44,6 @@ public class ScoresTest {
     @Before
     public void setup() {
         settings = new TestGameSettings();
-        givenScores(0);
     }
 
     private void givenScores(int score) {
