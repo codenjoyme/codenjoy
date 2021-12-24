@@ -22,50 +22,27 @@ package com.codenjoy.dojo.kata.services;
  * #L%
  */
 
-
 import com.codenjoy.dojo.kata.services.events.NextAlgorithmEvent;
 import com.codenjoy.dojo.kata.services.events.PassTestEvent;
-import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.ScoresMap;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import static com.codenjoy.dojo.kata.services.GameSettings.Keys.*;
 
-public class Scores implements PlayerScores {
+public class Scores extends ScoresMap<Object> {
 
-    private volatile int score;
-    private GameSettings settings;
+    public Scores(SettingsReader settings) {
+        super(settings);
 
-    public Scores(int startScore, GameSettings settings) {
-        this.score = startScore;
-        this.settings = settings;
-    }
+        put(PassTestEvent.class,
+                event -> ((PassTestEvent) event).getScore(
+                        settings.integer(A_CONSTANT),
+                        settings.integer(D_CONSTANT)));
 
-    @Override
-    public int clear() {
-        return score = 0;
-    }
-
-    @Override
-    public Integer getScore() {
-        return score;
-    }
-
-    @Override
-    public void event(Object event) {
-        if (event instanceof PassTestEvent) {
-            score += ((PassTestEvent) event).getScore(
-                    settings.integer(A_CONSTANT),
-                    settings.integer(D_CONSTANT));
-        } else if (event instanceof NextAlgorithmEvent) {
-            score += ((NextAlgorithmEvent) event).getScore(
-                    settings.integer(A_CONSTANT),
-                    settings.integer(B_CONSTANT),
-                    settings.integer(C_CONSTANT));
-        }
-        score = Math.max(0, score);
-    }
-
-    @Override
-    public void update(Object score) {
-        this.score = Integer.valueOf(score.toString());
+        put(NextAlgorithmEvent.class,
+                event -> ((NextAlgorithmEvent) event).getScore(
+                        settings.integer(A_CONSTANT),
+                        settings.integer(B_CONSTANT),
+                        settings.integer(C_CONSTANT)));
     }
 }

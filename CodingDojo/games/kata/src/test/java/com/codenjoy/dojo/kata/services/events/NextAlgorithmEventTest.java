@@ -31,7 +31,7 @@ import static org.junit.Assert.assertEquals;
 public class NextAlgorithmEventTest {
 
     @Test
-    public void shouldWork_whenComplexityIs0() throws InterruptedException {
+    public void shouldWork_whenComplexityIs0() {
         int complexity = 0;
         assertScores(0, complexity, 0);
         assertScores(0, complexity, 0.1);
@@ -41,7 +41,7 @@ public class NextAlgorithmEventTest {
     }
 
     @Test
-    public void shouldWork_whenDoubleTimeLessThan1() throws InterruptedException {
+    public void shouldWork_whenDoubleTimeLessThan1() {
         int complexity = 1;
         assertScores(100, complexity, 1);
         assertScores(30, complexity, 3);

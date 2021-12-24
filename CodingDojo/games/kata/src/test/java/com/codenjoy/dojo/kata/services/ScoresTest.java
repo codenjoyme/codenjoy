@@ -22,7 +22,7 @@ package com.codenjoy.dojo.kata.services;
  * #L%
  */
 
-
+import com.codenjoy.dojo.kata.TestGameSettings;
 import com.codenjoy.dojo.kata.services.events.NextAlgorithmEvent;
 import com.codenjoy.dojo.kata.services.events.PassTestEvent;
 import com.codenjoy.dojo.services.PlayerScores;
@@ -47,7 +47,7 @@ public class ScoresTest {
 
     @Before
     public void setup() {
-        settings = new GameSettings();
+        settings = new TestGameSettings();
         givenScores(0);
     }
 
@@ -83,6 +83,4 @@ public class ScoresTest {
 
         assertEquals(0, scores.getScore());
     }
-
-
 }
