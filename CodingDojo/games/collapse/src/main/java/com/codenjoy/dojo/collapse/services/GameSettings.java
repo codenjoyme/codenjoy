@@ -32,7 +32,7 @@ import java.util.List;
 import static com.codenjoy.dojo.collapse.services.GameSettings.Keys.FIELD_SIZE;
 import static com.codenjoy.dojo.collapse.services.GameSettings.Keys.SUCCESS_SCORE;
 
-public final class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
+public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
 
     public enum Keys implements Key {
 

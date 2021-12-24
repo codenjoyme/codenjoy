@@ -22,10 +22,12 @@ package com.codenjoy.dojo.collapse.model;
  * #L%
  */
 
-
+import com.codenjoy.dojo.collapse.TestGameSettings;
 import com.codenjoy.dojo.collapse.services.Event;
 import com.codenjoy.dojo.collapse.services.GameSettings;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.utils.TestUtils;
@@ -51,7 +53,7 @@ public class GameTest {
     @Before
     public void setup() {
         printerFactory = new PrinterFactoryImpl();
-        settings = new GameSettings();
+        settings = new TestGameSettings();
     }
 
     private void givenFl(String board) {
