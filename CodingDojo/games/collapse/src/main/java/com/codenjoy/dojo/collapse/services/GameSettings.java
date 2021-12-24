@@ -36,8 +36,8 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
 
     public enum Keys implements Key {
 
-        SUCCESS_SCORE("Success score"),
-        FIELD_SIZE("Field size");
+        SUCCESS_SCORE("[Score] Success score"),
+        FIELD_SIZE("[Level] Field size");
 
         private String key;
 
@@ -60,5 +60,4 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         integer(SUCCESS_SCORE, 1);
         integer(FIELD_SIZE, 30);
     }
-
 }

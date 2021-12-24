@@ -33,6 +33,7 @@ import com.codenjoy.dojo.services.printer.BoardReader;
 import java.util.Collection;
 import java.util.function.Consumer;
 
+import static com.codenjoy.dojo.collapse.services.Event.Type.SUCCESS;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class Collapse implements Field {
@@ -143,9 +144,7 @@ public class Collapse implements Field {
                 cells.remove(remove);
             }
 
-            Event success = Event.SUCCESS;
-            success.count(count);
-            player.event(success);
+            player.event(new Event(SUCCESS, count));
         }
     }
 

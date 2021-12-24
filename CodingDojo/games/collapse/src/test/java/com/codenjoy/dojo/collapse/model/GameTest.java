@@ -220,7 +220,7 @@ public class GameTest {
                 "☼333☼" +
                 "☼☼☼☼☼");
 
-        assertEvent(4, Event.SUCCESS);
+        assertEvent("Event[SUCCESS:4]");
 
         // when
         joystick.act(1, 3);
@@ -234,7 +234,7 @@ public class GameTest {
                 "☼   ☼" +
                 "☼☼☼☼☼");
 
-        assertEvent(4, Event.SUCCESS);
+        assertEvent("Event[SUCCESS:4]");
     }
 
     // если в ходе моих перемещений образуются конгломераты :)
@@ -259,15 +259,13 @@ public class GameTest {
                 "☼   ☼" +
                 "☼☼☼☼☼");
 
-        assertEvent(9, Event.SUCCESS);
+        assertEvent("Event[SUCCESS:9]");
     }
 
-    private void assertEvent(Integer expected, Event expectedType) {
+    private void assertEvent(String expected) {
         ArgumentCaptor<Event> event = ArgumentCaptor.forClass(Event.class);
         verify(listener).event(event.capture());
-        Event value = event.getValue();
-        assertEquals(expectedType, value);
-        assertEquals(expected, value.value());
+        assertEquals(expected, event.getValue().toString());
 
         Mockito.verifyNoMoreInteractions(listener);
         reset(listener);

@@ -28,14 +28,12 @@ import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import java.util.stream.IntStream;
 
-import static com.codenjoy.dojo.collapse.services.GameSettings.Keys.SUCCESS_SCORE;
-
 public class Scores extends ScoresMap<Integer> {
 
     public Scores(SettingsReader settings) {
         super(settings);
 
-        put(Event.SUCCESS,
+        put(Event.Type.SUCCESS,
                 value -> IntStream.range(1, value + 1).sum());
     }
 }

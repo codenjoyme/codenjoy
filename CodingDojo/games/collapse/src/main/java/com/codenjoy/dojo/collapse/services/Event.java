@@ -25,23 +25,32 @@ package com.codenjoy.dojo.collapse.services;
 
 import com.codenjoy.dojo.services.event.EventObject;
 
-public enum Event implements EventObject<Event, Integer> {
+public class Event implements EventObject<Event.Type, Integer> {
 
-    SUCCESS;
+    public enum Type {
+        SUCCESS;
+    }
 
-    private int count;
-
-    public void count(int count) {
+    public Event(Type type, int count) {
+        this.type = type;
         this.count = count;
     }
 
+    private Type type;
+    private int count;
+
     @Override
-    public Event type() {
-        return this;
+    public Event.Type type() {
+        return type;
     }
 
     @Override
     public Integer value() {
         return count;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Event[%s:%s]", type, count);
     }
 }
