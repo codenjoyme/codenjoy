@@ -23,6 +23,7 @@ package com.codenjoy.dojo.sampletext.model;
  */
 
 
+import com.codenjoy.dojo.sampletext.TestGameSettings;
 import com.codenjoy.dojo.sampletext.services.Event;
 import com.codenjoy.dojo.sampletext.services.GameRunner;
 import com.codenjoy.dojo.sampletext.services.GameSettings;
@@ -54,7 +55,7 @@ public class MultiplayerTest {
     // появляется другие игроки, игра становится мультипользовательской
     @Before
     public void setup() {
-        GameSettings settings = new GameSettings()
+        GameSettings settings = new TestGameSettings()
                 .string(QUESTIONS,
                         "question1=answer1\n" +
                         "question2=answer2\n" +

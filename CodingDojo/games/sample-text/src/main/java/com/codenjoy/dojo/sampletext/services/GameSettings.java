@@ -41,9 +41,9 @@ public class GameSettings extends SettingsImpl
 
     public enum Keys implements Key {
 
-        WIN_SCORE("Win score"),
-        LOSE_PENALTY("Lose penalty"),
-        QUESTIONS("Questions");
+        WIN_SCORE("[Score] Win score"),
+        LOSE_PENALTY("[Score] Lose penalty"),
+        QUESTIONS("[Game] Questions");
 
         private String key;
 
@@ -67,7 +67,7 @@ public class GameSettings extends SettingsImpl
         initSemifinal();
 
         integer(WIN_SCORE, 30);
-        integer(LOSE_PENALTY, 100);
+        integer(LOSE_PENALTY, -100);
      
         multiline(QUESTIONS,
                 "question1=answer1\n" +

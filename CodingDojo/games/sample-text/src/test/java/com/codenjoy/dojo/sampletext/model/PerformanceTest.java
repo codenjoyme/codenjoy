@@ -42,7 +42,7 @@ public class PerformanceTest {
     public void test() {
         GameRunner gameType = new GameRunner();
 
-        List<Game> games = new LinkedList<Game>();
+        List<Game> games = new LinkedList<>();
 
         PrinterFactory factory = gameType.getPrinterFactory();
         for (int index = 0; index < 50; index++) {
