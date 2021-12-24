@@ -24,7 +24,7 @@ package com.codenjoy.dojo.fifteen.services;
 
 import com.codenjoy.dojo.services.event.EventObject;
 
-public class Event implements EventObject<Event.Type, Double> {
+public class Event implements EventObject<Event.Type, Event> {
 
     private Type type;
     private int moveCount;
@@ -40,6 +40,14 @@ public class Event implements EventObject<Event.Type, Double> {
         this.number = number;
     }
 
+    public int number() {
+        return number;
+    }
+
+    public int moveCount() {
+        return moveCount;
+    }
+
     public enum Type {
         WIN,
         BONUS;
@@ -48,11 +56,6 @@ public class Event implements EventObject<Event.Type, Double> {
     @Override
     public Type type() {
         return type;
-    }
-
-    @Override
-    public Double value() {
-        return 1d * number / moveCount;
     }
 
     @Override

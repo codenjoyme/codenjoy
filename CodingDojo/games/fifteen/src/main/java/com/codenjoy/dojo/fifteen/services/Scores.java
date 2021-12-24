@@ -28,15 +28,16 @@ import com.codenjoy.dojo.services.settings.SettingsReader;
 import static com.codenjoy.dojo.fifteen.services.GameSettings.Keys.BONUS_SCORE;
 import static com.codenjoy.dojo.fifteen.services.GameSettings.Keys.WIN_SCORE;
 
-public class Scores extends ScoresMap<Double> {
+public class Scores extends ScoresMap<Event> {
 
     public Scores(SettingsReader settings) {
         super(settings);
 
         put(Event.Type.BONUS,
-                value -> (int) (value * settings.integer(BONUS_SCORE)));
+                event -> (int) (1d * event.number() / event.moveCount()
+                        * settings.integer(BONUS_SCORE)));
 
         put(Event.Type.WIN,
-                value -> settings.integer(WIN_SCORE));
+                event -> settings.integer(WIN_SCORE));
     }
 }
