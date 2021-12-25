@@ -24,7 +24,7 @@ package com.codenjoy.dojo.moebius.model;
 
 
 import com.codenjoy.dojo.games.moebius.Element;
-import com.codenjoy.dojo.moebius.services.Events;
+import com.codenjoy.dojo.moebius.services.Event;
 import com.codenjoy.dojo.moebius.services.GameSettings;
 import com.codenjoy.dojo.services.BoardUtils;
 import com.codenjoy.dojo.services.Dice;
@@ -71,7 +71,7 @@ public class Moebius implements Field {
         if (pt.isPresent()) {
             setLine(pt.get(), Element.random(dice));
         } else {
-            player.event(new Events(Events.Event.GAME_OVER));
+            player.event(new Event(Event.Event.GAME_OVER));
             player.getHero().die();
         }
     }
@@ -94,7 +94,7 @@ public class Moebius implements Field {
                     count++;
                 }
             }
-            player.event(new Events(Events.Event.WIN, count));
+            player.event(new Event(Event.Event.WIN, count));
         } while (!processing.isEmpty());
     }
 

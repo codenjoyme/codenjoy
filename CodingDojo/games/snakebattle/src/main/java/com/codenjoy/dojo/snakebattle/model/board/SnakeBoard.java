@@ -34,7 +34,7 @@ import com.codenjoy.dojo.snakebattle.model.Level;
 import com.codenjoy.dojo.snakebattle.model.Player;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 import com.codenjoy.dojo.snakebattle.model.objects.*;
-import com.codenjoy.dojo.snakebattle.services.Events;
+import com.codenjoy.dojo.snakebattle.services.Event;
 import com.codenjoy.dojo.snakebattle.services.GameSettings;
 
 import java.util.*;
@@ -62,7 +62,7 @@ public class SnakeBoard extends RoundField<Player> implements Field {
     private GameSettings settings;
 
     public SnakeBoard(Level level, Dice dice, GameSettings settings) {
-        super(Events.START, Events.WIN, Events.DIE, settings);
+        super(Event.START, Event.WIN, Event.DIE, settings);
         this.dice = dice;
         walls = level.walls();
         starts = level.startPoints();
@@ -229,7 +229,7 @@ public class SnakeBoard extends RoundField<Player> implements Field {
 
         info.forEach((attacker, pray, reduce) -> {
             if (attacker.isAlive()) {
-                attacker.event(Events.EAT.apply(reduce));
+                attacker.event(Event.EAT.apply(reduce));
             }
         });
     }
@@ -242,25 +242,25 @@ public class SnakeBoard extends RoundField<Player> implements Field {
 
             if (apples.contains(head)) {
                 apples.remove(head);
-                player.event(Events.APPLE);
+                player.event(Event.APPLE);
             }
             if (stones.contains(head) && !hero.isFlying()) {
                 stones.remove(head);
                 if (player.isAlive()) {
-                    player.event(Events.STONE);
+                    player.event(Event.STONE);
                 }
             }
             if (gold.contains(head)) {
                 gold.remove(head);
-                player.event(Events.GOLD);
+                player.event(Event.GOLD);
             }
             if (flyingPills.contains(head)) {
                 flyingPills.remove(head);
-                player.event(Events.FLYING);
+                player.event(Event.FLYING);
             }
             if (furyPills.contains(head)) {
                 furyPills.remove(head);
-                player.event(Events.FURY);
+                player.event(Event.FURY);
             }
         }
     }

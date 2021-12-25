@@ -24,19 +24,20 @@ package com.codenjoy.dojo.lunolet.model;
 
 
 import com.codenjoy.dojo.games.lunolet.VesselState;
+import com.codenjoy.dojo.lunolet.TestGameSettings;
 import com.codenjoy.dojo.lunolet.services.GameSettings;
 import com.codenjoy.dojo.services.EventListener;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
 
 public class HeroTest {
 
     @Test
     public void initAndThenUp() {
         EventListener listener = mock(EventListener.class);
-        GameSettings settings = new GameSettings();
+        GameSettings settings = new TestGameSettings();
         Player player = new Player(listener, settings);
 
         Hero hero = new Hero(player);

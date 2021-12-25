@@ -28,7 +28,7 @@ import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.sudoku.model.level.Level;
-import com.codenjoy.dojo.sudoku.services.Events;
+import com.codenjoy.dojo.sudoku.services.Event;
 import com.codenjoy.dojo.sudoku.services.GameSettings;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Test;
@@ -258,7 +258,7 @@ public class GameTest {
         joystick.act(2, 2, 5);
         game.tick();
 
-        verify(listener).event(Events.FAIL);
+        verify(listener).event(Event.FAIL);
         verifyNoMoreInteractions(listener);
     }
 
@@ -269,7 +269,7 @@ public class GameTest {
         joystick.act(2, 8, 8);
         game.tick();
 
-        verify(listener).event(Events.SUCCESS);
+        verify(listener).event(Event.SUCCESS);
         verifyNoMoreInteractions(listener);
     }
 
@@ -312,8 +312,8 @@ public class GameTest {
         joystick.act(3, 9, 5);
         game.tick();
 
-        verify(listener, times(3)).event(Events.SUCCESS);
-        verify(listener).event(Events.WIN);
+        verify(listener, times(3)).event(Event.SUCCESS);
+        verify(listener).event(Event.WIN);
         verifyNoMoreInteractions(listener);
     }
 
@@ -396,12 +396,12 @@ public class GameTest {
 
         joystick.act(2, 2, 5);
         game.tick();
-        verify(listener).event(Events.FAIL);
+        verify(listener).event(Event.FAIL);
 
         joystick.act(0); // просим новую игру
         game.tick();
 
-        verify(listener).event(Events.LOSE);
+        verify(listener).event(Event.LOSE);
         verifyNoMoreInteractions(listener);
 
         assertTrue(game.isGameOver());

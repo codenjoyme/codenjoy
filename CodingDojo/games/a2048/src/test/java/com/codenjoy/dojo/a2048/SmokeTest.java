@@ -22,7 +22,6 @@ package com.codenjoy.dojo.a2048;
  * #L%
  */
 
-
 import com.codenjoy.dojo.a2048.services.GameRunner;
 import com.codenjoy.dojo.a2048.services.GameSettings;
 import com.codenjoy.dojo.a2048.services.ai.AISolver;
@@ -33,8 +32,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
-
-import static com.codenjoy.dojo.a2048.services.GameSettings.Keys.SIZE;
 
 public class SmokeTest {
 
@@ -62,8 +59,7 @@ public class SmokeTest {
 
                     @Override
                     public GameSettings getSettings() {
-                        return new GameSettings()
-                                .integer(SIZE, 5);
+                        return new TestGameSettings();
                     }
                 },
                 Arrays.asList(new AISolver(dice, maxDeep)),

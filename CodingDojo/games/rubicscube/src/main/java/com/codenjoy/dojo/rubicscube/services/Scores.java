@@ -50,9 +50,9 @@ public class Scores implements PlayerScores {
 
     @Override
     public void event(Object event) {
-        if (event.equals(Events.FAIL)) {
+        if (event.equals(Event.FAIL)) {
             score -= settings.integer(FAIL_PENALTY);
-        } else if (event.equals(Events.SUCCESS)) {
+        } else if (event.equals(Event.SUCCESS)) {
             score += settings.integer(SUCCESS_SCORE);
         }
         score = Math.max(0, score);

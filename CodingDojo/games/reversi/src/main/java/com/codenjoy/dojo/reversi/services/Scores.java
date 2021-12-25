@@ -49,7 +49,7 @@ public class Scores implements PlayerScores {
 
     @Override
     public void event(Object object) {
-        Events event = (Events)object;
+        Event event = (Event)object;
 
         if (event.isFlip()) {
             score += settings.integer(FLIP_SCORE) * event.count();

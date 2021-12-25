@@ -24,6 +24,7 @@ package com.codenjoy.dojo.kata.model;
 
 
 import com.codenjoy.dojo.games.kata.Element;
+import com.codenjoy.dojo.kata.TestGameSettings;
 import com.codenjoy.dojo.kata.model.levels.Level;
 import com.codenjoy.dojo.kata.model.levels.LevelsPool;
 import com.codenjoy.dojo.kata.model.levels.LevelsPoolImpl;
@@ -56,7 +57,7 @@ public class GameTest {
     @Before
     public void setup() {
         dice = mock(Dice.class);
-        settings = new GameSettings();
+        settings = new TestGameSettings();
     }
 
     private void dice(int...ints) {

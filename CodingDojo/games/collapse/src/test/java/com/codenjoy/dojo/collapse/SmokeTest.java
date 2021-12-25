@@ -61,7 +61,7 @@ public class SmokeTest {
 
                     @Override
                     public GameSettings getSettings() {
-                        return new GameSettings()
+                        return new TestGameSettings()
                                 .integer(FIELD_SIZE, 20);
                     }
                 },

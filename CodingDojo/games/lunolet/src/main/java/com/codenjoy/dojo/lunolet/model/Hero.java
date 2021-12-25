@@ -24,7 +24,7 @@ package com.codenjoy.dojo.lunolet.model;
 
 
 import com.codenjoy.dojo.games.lunolet.VesselState;
-import com.codenjoy.dojo.lunolet.services.Events;
+import com.codenjoy.dojo.lunolet.services.Event;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
 import java.awt.geom.Point2D;
@@ -215,9 +215,9 @@ public class Hero extends PlayerHero<Field> {
 
             // trigger player events
             if (simulator.Status.State == VesselState.LANDED) {
-                player.event(Events.LANDED);
+                player.event(Event.LANDED);
             } else if (simulator.Status.State == VesselState.CRASHED) {
-                player.event(Events.CRASHED);
+                player.event(Event.CRASHED);
             }
         }
     }

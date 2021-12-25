@@ -36,15 +36,15 @@ public class ScoresTest {
     private GameSettings settings;
 
     private void win() {
-        scores.event(Events.WIN);
+        scores.event(Event.WIN);
     }
 
     private void lose() {
-        scores.event(Events.LOSE);
+        scores.event(Event.LOSE);
     }
 
     private void draw() {
-        scores.event(Events.DRAW);
+        scores.event(Event.DRAW);
     }
 
     @Before

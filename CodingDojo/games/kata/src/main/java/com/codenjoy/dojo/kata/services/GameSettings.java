@@ -25,6 +25,7 @@ package com.codenjoy.dojo.kata.services;
 
 import com.codenjoy.dojo.kata.model.levels.Level;
 import com.codenjoy.dojo.kata.model.levels.LevelsLoader;
+import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
@@ -33,17 +34,16 @@ import java.util.List;
 
 import static com.codenjoy.dojo.kata.services.GameSettings.Keys.*;
 
-public final class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
-
+public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
 
     public enum Keys implements Key {
 
-        WIN_SCORE("Win score"),
-        LOSE_PENALTY("Lose penalty"),
-        A_CONSTANT("A constant"),
-        B_CONSTANT("B constant"),
-        C_CONSTANT("C constant"),
-        D_CONSTANT("D constant");
+        WIN_SCORE("[Score] Win score"),
+        LOSE_PENALTY("[Score] Lose penalty"),
+        A_CONSTANT("[Score] A constant"),
+        B_CONSTANT("[Score] B constant"),
+        C_CONSTANT("[Score] C constant"),
+        D_CONSTANT("[Score] D constant");
 
         private String key;
 
@@ -64,7 +64,7 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
 
     public GameSettings() {
         integer(WIN_SCORE, 30);
-        integer(LOSE_PENALTY, 100);
+        integer(LOSE_PENALTY, -100);
 
         integer(A_CONSTANT, 100);
         integer(B_CONSTANT, 3);
@@ -76,4 +76,7 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
         return LevelsLoader.getAlgorithms();
     }
 
+    public Calculator<Object> calculator() {
+        return new Calculator<>(new Scores(this));
+    }
 }

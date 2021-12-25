@@ -35,19 +35,19 @@ public class ScoresTest {
     private GameSettings settings;
 
     public void lose() {
-        scores.event(Events.LOSE);
+        scores.event(Event.LOSE);
     }
 
     public void destroyEnemy() {
-        scores.event(Events.DESTROY_ENEMY);
+        scores.event(Event.DESTROY_ENEMY);
     }
 
     public void destroyBomb() {
-        scores.event(Events.DESTROY_BOMB);
+        scores.event(Event.DESTROY_BOMB);
     }
 
     public void destroyStone() {
-        scores.event(Events.DESTROY_STONE);
+        scores.event(Event.DESTROY_STONE);
     }
 
     @Before

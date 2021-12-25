@@ -24,6 +24,7 @@ package com.codenjoy.dojo.sampletext.services;
 
 import com.codenjoy.dojo.sampletext.model.Level;
 import com.codenjoy.dojo.sampletext.model.LevelImpl;
+import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.incativity.InactivitySettings;
 import com.codenjoy.dojo.services.semifinal.SemifinalSettings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
@@ -41,9 +42,9 @@ public class GameSettings extends SettingsImpl
 
     public enum Keys implements Key {
 
-        WIN_SCORE("Win score"),
-        LOSE_PENALTY("Lose penalty"),
-        QUESTIONS("Questions");
+        WIN_SCORE("[Score] Win score"),
+        LOSE_PENALTY("[Score] Lose penalty"),
+        QUESTIONS("[Game] Questions");
 
         private String key;
 
@@ -67,7 +68,7 @@ public class GameSettings extends SettingsImpl
         initSemifinal();
 
         integer(WIN_SCORE, 30);
-        integer(LOSE_PENALTY, 100);
+        integer(LOSE_PENALTY, -100);
      
         multiline(QUESTIONS,
                 "question1=answer1\n" +
@@ -94,5 +95,9 @@ public class GameSettings extends SettingsImpl
 
     public Level level() {
         return new LevelImpl(string(QUESTIONS).split("\n"));
+    }
+
+    public Calculator<Void> calculator() {
+        return new Calculator<>(new Scores(this));
     }
 }

@@ -49,11 +49,11 @@ public class Scores implements PlayerScores {
 
     @Override
     public void event(Object event) {
-        if (event.equals(Events.WIN))
+        if (event.equals(Event.WIN))
             score += settings.integer(WIN_SCORE);
-        else if (event.equals(Events.LOSE))
+        else if (event.equals(Event.LOSE))
             score -= settings.integer(LOSE_PENALTY);
-        else if (event.equals(Events.DRAW))
+        else if (event.equals(Event.DRAW))
             score += settings.integer(DRAW_SCORE);
         score = Math.max(0, score);
     }

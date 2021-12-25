@@ -22,7 +22,7 @@ package com.codenjoy.dojo.quake2d.model;
  * #L%
  */
 
-import com.codenjoy.dojo.quake2d.services.Events;
+import com.codenjoy.dojo.quake2d.services.Event;
 import com.codenjoy.dojo.quake2d.services.GameSettings;
 import com.codenjoy.dojo.services.BoardUtils;
 import com.codenjoy.dojo.services.Dice;
@@ -116,7 +116,7 @@ public class Quake2D implements Field {
             Hero hero = player.getHero();
 
             if (!hero.isAlive() && hero.getDeathTimeCounter() == IS_ALIVE) {
-                player.event(Events.KILL);
+                player.event(Event.KILL);
                 hero.setDeathTimeCounter(IS_DEAD);
             } else if (!hero.isAlive() && hero.getDeathTimeCounter() == IS_DEAD){
                 hero.setDeathTimeCounter(IS_ALIVE);

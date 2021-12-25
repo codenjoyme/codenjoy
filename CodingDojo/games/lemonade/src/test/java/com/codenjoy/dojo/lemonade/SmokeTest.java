@@ -59,7 +59,7 @@ public class SmokeTest {
 
                     @Override
                     public GameSettings getSettings() {
-                        return new GameSettings();
+                        return super.getSettings();
                     }
                 },
                 Arrays.asList(new AISolver(dice)),

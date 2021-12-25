@@ -24,7 +24,7 @@ package com.codenjoy.dojo.minesweeper;
 
 
 import com.codenjoy.dojo.games.minesweeper.Board;
-import com.codenjoy.dojo.minesweeper.services.Events;
+import com.codenjoy.dojo.minesweeper.services.Event;
 import com.codenjoy.dojo.minesweeper.services.GameRunner;
 import com.codenjoy.dojo.minesweeper.services.GameSettings;
 import com.codenjoy.dojo.minesweeper.services.ai.AISolver;
@@ -58,8 +58,8 @@ public class SmokeTest {
 
         SmokeUtils.recheck = actual -> {
             // мы ни разу не проиграли и всегда правильно отгадывали где мины
-            assertFalse(actual.contains(Events.KILL_ON_MINE.name()));
-            assertFalse(actual.contains(Events.FORGET_CHARGE.name()));
+            assertFalse(actual.contains(Event.KILL_ON_MINE.name()));
+            assertFalse(actual.contains(Event.FORGET_CHARGE.name()));
         };
 
         smoke.play(ticks, "SmokeTest.data",
@@ -71,7 +71,7 @@ public class SmokeTest {
 
                     @Override
                     public GameSettings getSettings() {
-                        return super.getSettings()
+                        return new TestGameSettings()
                                 .integer(BOARD_SIZE, 15)
                                 .integer(MINES_ON_BOARD, 10);
                     }

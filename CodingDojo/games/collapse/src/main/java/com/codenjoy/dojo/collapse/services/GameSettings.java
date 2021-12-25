@@ -23,6 +23,7 @@ package com.codenjoy.dojo.collapse.services;
  */
 
 
+import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
@@ -32,12 +33,12 @@ import java.util.List;
 import static com.codenjoy.dojo.collapse.services.GameSettings.Keys.FIELD_SIZE;
 import static com.codenjoy.dojo.collapse.services.GameSettings.Keys.SUCCESS_SCORE;
 
-public final class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
+public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
 
     public enum Keys implements Key {
 
-        SUCCESS_SCORE("Success score"),
-        FIELD_SIZE("Field size");
+        SUCCESS_SCORE("[Score] Success score"),
+        FIELD_SIZE("[Level] Field size");
 
         private String key;
 
@@ -61,4 +62,7 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
         integer(FIELD_SIZE, 30);
     }
 
+    public Calculator<Integer> calculator() {
+        return new Calculator<>(new Scores(this));
+    }
 }

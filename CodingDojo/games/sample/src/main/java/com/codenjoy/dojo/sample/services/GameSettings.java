@@ -25,6 +25,8 @@ package com.codenjoy.dojo.sample.services;
 
 import com.codenjoy.dojo.sample.model.Level;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.event.Calculator;
+import com.codenjoy.dojo.services.event.ScoresImpl;
 import com.codenjoy.dojo.services.incativity.InactivitySettings;
 import com.codenjoy.dojo.services.level.LevelsSettings;
 import com.codenjoy.dojo.services.round.RoundSettings;
@@ -36,6 +38,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.codenjoy.dojo.sample.services.GameSettings.Keys.*;
+import static com.codenjoy.dojo.services.event.Mode.CUMULATIVELY;
 
 public class GameSettings extends SettingsImpl
         implements SettingsReader<GameSettings>,
@@ -46,9 +49,10 @@ public class GameSettings extends SettingsImpl
 
     public enum Keys implements Key {
 
-        WIN_SCORE("Win score"),
-        WIN_ROUND_SCORE("Win round score"),
-        LOSE_PENALTY("Lose penalty");
+        WIN_SCORE("[Score] Win score"),
+        WIN_ROUND_SCORE("[Score] Win round score"),
+        LOSE_PENALTY("[Score] Lose penalty"),
+        SCORE_COUNTING_TYPE(ScoresImpl.SCORE_COUNTING_TYPE.key());
 
         private String key;
 
@@ -72,6 +76,7 @@ public class GameSettings extends SettingsImpl
         initRound();
         initSemifinal();
         initLevels();
+        initScore(CUMULATIVELY);
 
         integer(WIN_SCORE, 30);
         integer(WIN_ROUND_SCORE, 100);
@@ -82,5 +87,9 @@ public class GameSettings extends SettingsImpl
 
     public Level level(int level, Dice dice) {
         return new Level(getRandomLevelMap(level, dice));
+    }
+
+    public Calculator<Void> calculator() {
+        return new Calculator<>(new Scores(this));
     }
 }

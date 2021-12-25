@@ -23,92 +23,85 @@ package com.codenjoy.dojo.snake.services;
  */
 
 
+import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.Calculator;
+import com.codenjoy.dojo.services.event.ScoresImpl;
+import com.codenjoy.dojo.snake.TestGameSettings;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.stream.IntStream;
 
+import static com.codenjoy.dojo.services.event.Mode.MAX_VALUE;
 import static org.junit.Assert.assertEquals;
 
 public class MaxScoresTest {
 
-    private Scores scores;
+    private PlayerScores scores;
 
     private GameSettings settings;
 
-    public void snakeEatApple() {
-        scores.event(Events.EAT_APPLE);
+    public void eatApple(int length) {
+        scores.event(Event.EAT_APPLE.apply(length));
     }
 
-    public void snakeIsDead() {
-        scores.event(Events.KILL);
+    public void kill() {
+        scores.event(Event.KILL);
     }
 
-    public void snakeEatStone() {
-        scores.event(Events.EAT_STONE);
+    public void eatStone() {
+        scores.event(Event.EAT_STONE);
     }
 
     @Before
     public void setup() {
-        settings = new GameSettings();
-        scores = getScores(0);
+        settings = new TestGameSettings();
+        settings.initScore(MAX_VALUE);
     }
 
-    private MaxScores getScores(int startScore) {
-        return getScores(startScore, 2);
-    }
-
-    private MaxScores getScores(int startScore, int startLength) {
-        return new MaxScores(startScore, settings){{
-            length = startLength;
-        }};
+    private void givenScores(int score) {
+        scores = new ScoresImpl<>(score, new Calculator<>(new Scores(settings)));
     }
 
     @Test
     public void shouldCollectScores() {
         // given
-        scores = getScores(scoreFor(7), 7);
+        givenScores(scoreFor(7));
 
         // when
-        snakeEatApple();  //+8
+        eatApple(8);
 
         // then
-        assertEquals(8, length());
         assertEquals(scoreFor(8), score());
 
         // when
-        snakeEatApple();  //+9
+        eatApple(9);
 
         // then
-        assertEquals(9, length());
         assertEquals(scoreFor(9), score());
 
         // when
-        snakeEatApple();  //+10
+        eatApple(10);
 
         // then
-        assertEquals(10, length());
         assertEquals(scoreFor(10), score());
 
         // when
-        snakeEatApple();  //+11
+        eatApple(11);
 
         // then
-        assertEquals(11, length());
         assertEquals(scoreFor(11), score());
 
         // when
-        snakeEatApple();  //+12
+        eatApple(12);
 
         // then
-        assertEquals(12, length());
         assertEquals(scoreFor(12), score());
 
         // when
-        snakeEatApple();  //+13
+        eatApple(13);
 
         // then
-        assertEquals(13, length());
         assertEquals(scoreFor(13), score());
     }
 
@@ -119,36 +112,32 @@ public class MaxScoresTest {
     @Test
     public void shouldSnakeLengthCantLessThen3() {
         // given
-        scores = getScores(0);
+        givenScores(0);
 
         // when
-        snakeEatStone();  //do nothing with score, just try length =- 10
-        snakeEatStone();  //do nothing with score, just try length =- 10
+        eatStone();
+        eatStone();
 
         // then
-        assertEquals(2, length());
         assertEquals(0, score());
 
         // when
-        snakeEatApple();
+        eatApple(2);
 
         // then
-        assertEquals(3, length());
-        assertEquals(3, score());
+        assertEquals(scoreFor(2), score());
     }
 
     @Test
     public void shouldShortLength_whenEatStone() {
         // given
         shouldCollectScores();
-        assertEquals(13, length());
         assertEquals(scoreFor(13), score());
 
         // when
-        snakeEatStone();  //do nothing with score, just length =- 10
+        eatStone();
 
         // then
-        assertEquals(13 - 10, length());
         assertEquals(scoreFor(13), score());
     }
 
@@ -156,80 +145,71 @@ public class MaxScoresTest {
     public void shouldShortLength_whenDead() {
         // given
         shouldCollectScores();
-        assertEquals(13, length());
         assertEquals(scoreFor(13), score());
 
         // when
-        snakeIsDead();    //do nothing with score, just length = 2
+        kill();
 
         // then
-        assertEquals(2, length());
         assertEquals(scoreFor(13), score());
     }
 
     @Test
     public void shouldClearScoreTogetherWithSnakeLength() {
         // given
-        scores = getScores(0);
+        givenScores(0);
 
-        snakeEatApple();  //+3
-        snakeEatApple();  //+4
-        snakeEatApple();  //+5
-        snakeEatApple();  //+6
-        snakeEatApple();  //+7
-        snakeEatApple();  //+8
-        snakeEatApple();  //+9
-        snakeEatApple();  //+10
-        snakeEatApple();  //+11
-        snakeEatApple();  //+12
+        eatApple(3);
+        eatApple(4);
+        eatApple(5);
+        eatApple(6);
+        eatApple(7);
+        eatApple(8);
+        eatApple(9);
+        eatApple(10);
+        eatApple(11);
+        eatApple(12);
 
         // when
         scores.clear();
 
         // then
         assertEquals(0, score());
-        assertEquals(2, length());
 
         // when
-        snakeEatApple();  //+3
-        snakeEatApple();  //+4
+        eatApple(3);
+        eatApple(4);
 
         // then
         assertEquals(scoreFor(4), score());
-        assertEquals(4, length());
     }
 
     @Test
     public void shouldStartsFromMaxScore_afterDead() {
         // given
-        scores = getScores(100, 20);
+        givenScores(100);
 
         // when
-        snakeIsDead();    //do nothing with score, just length = 2
+        kill();
 
-        snakeEatApple();  //+3
-        snakeEatApple();  //+4
+        eatApple(3);
+        eatApple(4);
 
         // then
         assertEquals(100, score());
-        assertEquals(4, length());
     }
 
     private int score() {
-        return scores.getScore().intValue();
-    }
-
-    private int length() {
-        return scores.getLength().intValue();
+        return (int) scores.getScore();
     }
 
     @Test
     public void shouldStillZeroAfterDead() {
         // given
-        scores = getScores(0);
+        givenScores(0);
 
         // when
-        snakeIsDead();    //do nothing with score, just length = 2
+        kill();
 
         // then
         assertEquals(0, score());
@@ -238,10 +218,10 @@ public class MaxScoresTest {
     @Test
     public void shouldStillZero_afterEatStone() {
         // given
-        scores = getScores(0);
+        givenScores(0);
 
         // when
-        snakeEatStone();    //do nothing with score, just try length =- 10
+        eatStone();
 
         // then
         assertEquals(0, score());
@@ -250,9 +230,9 @@ public class MaxScoresTest {
     @Test
     public void shouldClearScore() {
         // given
-        scores = getScores(0);
+        givenScores(0);
 
-        snakeEatApple();  //+3
+        eatApple(3);
 
         // when
         scores.clear();

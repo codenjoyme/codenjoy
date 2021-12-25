@@ -23,7 +23,10 @@ package com.codenjoy.dojo.sampletext.services;
  */
 
 
+import com.codenjoy.dojo.sampletext.TestGameSettings;
 import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.Calculator;
+import com.codenjoy.dojo.services.event.ScoresImpl;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -37,22 +40,22 @@ public class ScoresTest {
     private GameSettings settings;
 
     public void lose() {
-        scores.event(Events.LOSE);
+        scores.event(Event.LOSE);
     }
 
     public void win() {
-        scores.event(Events.WIN);
+        scores.event(Event.WIN);
     }
 
     @Before
     public void setup() {
-        settings = new GameSettings();
-        scores = new Scores(0, settings);
+        settings = new TestGameSettings();
+        givenScores(0);
     }
 
     @Test
     public void shouldCollectScores() {
-        scores = new Scores(140, settings);
+        givenScores(140);
 
         win();
         win();
@@ -63,8 +66,12 @@ public class ScoresTest {
 
         assertEquals(140
                 + 4 * settings.integer(WIN_SCORE)
-                - settings.integer(LOSE_PENALTY),
+                + settings.integer(LOSE_PENALTY),
                 scores.getScore());
+    }
+
+    private void givenScores(int score) {
+        scores = new ScoresImpl<>(score, new Calculator<>(new Scores(settings)));
     }
 
     @Test
@@ -82,6 +89,4 @@ public class ScoresTest {
 
         assertEquals(0, scores.getScore());
     }
-
-
 }

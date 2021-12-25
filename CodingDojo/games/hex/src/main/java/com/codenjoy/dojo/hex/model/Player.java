@@ -185,12 +185,12 @@ public class Player extends GamePlayer<Hero, Field> implements Tickable {
 
     public void fireEvents() {
         if (lose > 0) {
-            listener.event(new Event(Event.EventEnum.LOSE, lose));
+            listener.event(new Event(Event.Type.LOSE, lose));
             lose = 0;
         }
 
         if (win > 0) {
-            listener.event(new Event(Event.EventEnum.WIN, win));
+            listener.event(new Event(Event.Type.WIN, win));
             win = 0;
         }
     }

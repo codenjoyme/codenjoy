@@ -23,7 +23,7 @@ package com.codenjoy.dojo.sampletext.model;
  */
 
 
-import com.codenjoy.dojo.sampletext.services.Events;
+import com.codenjoy.dojo.sampletext.services.Event;
 import com.codenjoy.dojo.sampletext.services.GameSettings;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
@@ -80,11 +80,11 @@ public class Player extends GamePlayer<Hero, Field> {
             String validAnswer = field.getAnswer(questionIndex);
             if (validAnswer.equals(answer)) {
                 logSuccess(question, answer);
-                event(Events.WIN);
+                event(Event.WIN);
                 questionIndex++;
             } else {
                 logFailure(question, answer);
-                event(Events.LOSE);
+                event(Event.LOSE);
                 questionIndex = 0;
             }
         }

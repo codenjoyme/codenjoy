@@ -40,7 +40,7 @@ import static com.codenjoy.dojo.expansion.services.GameSettings.Keys.*;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.ArrayUtils.toArray;
 
-public final class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
+public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
 
     public static final int UNLIMITED = -1;
 

@@ -38,8 +38,6 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.*;
-
 public class SmokeTest {
 
     private Smoke smoke;
@@ -70,17 +68,7 @@ public class SmokeTest {
 
                     @Override
                     public GameSettings getSettings() {
-                        return super.getSettings()
-                                .bool(CHEATS, true)
-                                .integer(PERK_ACTIVITY, 10)
-                                .integer(PERK_AVAILABILITY, 10)
-                                .integer(PERK_DROP_RATIO, 100)
-                                .integer(DEATH_RAY_PERK_RANGE, 10)
-                                .integer(GUN_RECHARGE, 2)
-                                .integer(GUN_REST_TIME, 4)
-                                .integer(GUN_SHOT_QUEUE, 2)
-                                .integer(TICKS_PER_NEW_ZOMBIE, 5)
-                                .string(DEFAULT_PERKS, "ajm,ajm");
+                        return new TestGameSettings();
                     }
 
                     @Override

@@ -22,7 +22,7 @@ package com.codenjoy.dojo.football.model;
  * #L%
  */
 
-import com.codenjoy.dojo.football.services.Events;
+import com.codenjoy.dojo.football.services.Event;
 import com.codenjoy.dojo.football.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
@@ -87,7 +87,7 @@ public class MultiplayerTest {
         game3 = new Single(new Player(listener3, settings), factory);
         game3.on(field);
 
-        events = new EventsListenersAssert(() -> Arrays.asList(listener1, listener2, listener3), Events.class);
+        events = new EventsListenersAssert(() -> Arrays.asList(listener1, listener2, listener3), Event.class);
 
         dice(1, 1);
         game1.newGame();

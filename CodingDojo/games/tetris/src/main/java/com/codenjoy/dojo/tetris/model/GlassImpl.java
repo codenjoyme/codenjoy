@@ -25,7 +25,7 @@ package com.codenjoy.dojo.tetris.model;
 
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.games.tetris.Element;
-import com.codenjoy.dojo.tetris.services.Events;
+import com.codenjoy.dojo.tetris.services.Event;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -127,7 +127,7 @@ public class GlassImpl implements Glass {
         }
 
         if (listener != null) {
-            listener.event(Events.figuresDropped(getLevel.get(), figure.type().getColor().index()));
+            listener.event(Event.figuresDropped(getLevel.get(), figure.type().getColor().index()));
         }
     }
 
@@ -142,7 +142,7 @@ public class GlassImpl implements Glass {
         }
         if (removed > 0) {
             if (listener != null) {
-                listener.event(Events.linesRemoved(getLevel.get(), removed));
+                listener.event(Event.linesRemoved(getLevel.get(), removed));
             }
         }
     }
@@ -180,7 +180,7 @@ public class GlassImpl implements Glass {
             occupied.set(i, BigInteger.ZERO);
         }
         if (listener != null) {
-            listener.event(Events.glassOverflown(getLevel.get()));
+            listener.event(Event.glassOverflown(getLevel.get()));
         }
     }
 

@@ -26,7 +26,7 @@ import com.codenjoy.dojo.services.BoardUtils;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
-import com.codenjoy.dojo.spacerace.services.Events;
+import com.codenjoy.dojo.spacerace.services.Event;
 import com.codenjoy.dojo.spacerace.services.GameSettings;
 
 import java.util.*;
@@ -92,7 +92,7 @@ public class Spacerace implements Field {
             Hero hero = player.getHero();
 
             if (!hero.isAlive()) {
-                player.event(Events.LOSE);
+                player.event(Event.LOSE);
             }
         }
     }
@@ -144,7 +144,7 @@ public class Spacerace implements Field {
         } else if(point instanceof Bullet) {
             bullets.remove(point);
             getPlayerFor(((Bullet)point).getOwner())
-                    .ifPresent(p -> p.event(Events.DESTROY_ENEMY));
+                    .ifPresent(p -> p.event(Event.DESTROY_ENEMY));
         }
         player.getHero().die();
     }
@@ -297,12 +297,12 @@ public class Spacerace implements Field {
                 explosions.add(new Explosion(bullet));
                 bullets.remove(bullet);
                 stones.remove(bullet);
-                fireWinScoresFor(bullet, Events.DESTROY_STONE);
+                fireWinScoresFor(bullet, Event.DESTROY_STONE);
             }
         }
     }
 
-    private void fireWinScoresFor(Bullet bullet, Events event) {
+    private void fireWinScoresFor(Bullet bullet, Event event) {
         Hero hero = bullet.getOwner();
         getPlayerFor(hero).
                 ifPresent(p -> p.event(event));
@@ -314,7 +314,7 @@ public class Spacerace implements Field {
                 bombs.remove(bullet);
                 bullets.remove(bullet);
                 bombExplosion(bullet);
-                fireWinScoresFor(bullet, Events.DESTROY_BOMB);
+                fireWinScoresFor(bullet, Event.DESTROY_BOMB);
             }
         }
     }

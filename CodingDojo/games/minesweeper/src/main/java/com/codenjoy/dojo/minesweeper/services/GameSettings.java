@@ -23,6 +23,7 @@ package com.codenjoy.dojo.minesweeper.services;
  */
 
 
+import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
@@ -31,18 +32,18 @@ import java.util.List;
 
 import static com.codenjoy.dojo.minesweeper.services.GameSettings.Keys.*;
 
-public final class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
+public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
 
     public enum Keys implements Key {
 
-        WIN_SCORE("Win score"),
-        BOARD_SIZE("Board size"),
-        GAME_OVER_PENALTY("Game over penalty"),
-        DESTROYED_PENALTY("Forgot penalty"),
-        DESTROYED_FORGOT_PENALTY("Destroyed forgot penalty"),
-        CLEAR_BOARD_SCORE("Clear board score"),
-        MINES_ON_BOARD("Mines on board"),
-        DETECTOR_CHARGE("Detector charge");
+        WIN_SCORE("[Score] Win score"),
+        BOARD_SIZE("[Level] Board size"),
+        GAME_OVER_PENALTY("[Score] Game over penalty"),
+        DESTROYED_PENALTY("[Score] Forgot penalty"),
+        DESTROYED_FORGOT_PENALTY("[Score] Destroyed forgot penalty"),
+        CLEAR_BOARD_SCORE("[Score] Clear board score"),
+        MINES_ON_BOARD("[Game] Mines on board"),
+        DETECTOR_CHARGE("[Game] Detector charge");
 
         private String key;
 
@@ -63,14 +64,18 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
 
     public GameSettings() {
         integer(WIN_SCORE, 300);
-        integer(GAME_OVER_PENALTY, 15);
+        integer(GAME_OVER_PENALTY, -15);
         integer(DESTROYED_PENALTY, 5);
-        integer(DESTROYED_FORGOT_PENALTY, 2);
+        integer(DESTROYED_FORGOT_PENALTY, -2);
         integer(CLEAR_BOARD_SCORE, 1);
 
         integer(BOARD_SIZE, 15);
         integer(MINES_ON_BOARD, 30);
         integer(DETECTOR_CHARGE, 100);
+    }
+
+    public Calculator<Void> calculator() {
+        return new Calculator<>(new Scores(this));
     }
 
 }

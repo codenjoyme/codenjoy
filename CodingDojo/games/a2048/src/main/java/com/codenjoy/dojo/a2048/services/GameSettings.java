@@ -28,6 +28,7 @@ import com.codenjoy.dojo.a2048.model.generator.CornerGenerator;
 import com.codenjoy.dojo.a2048.model.generator.Generator;
 import com.codenjoy.dojo.a2048.model.generator.RandomGenerator;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.event.ScoresImpl;
 import com.codenjoy.dojo.services.settings.EditBox;
 import com.codenjoy.dojo.services.settings.SelectBox;
@@ -44,9 +45,10 @@ import java.util.stream.Stream;
 import static com.codenjoy.dojo.a2048.services.GameSettings.BreaksMode.BREAKS_EXISTS;
 import static com.codenjoy.dojo.a2048.services.GameSettings.BreaksMode.BREAKS_NOT_EXISTS;
 import static com.codenjoy.dojo.a2048.services.GameSettings.Keys.*;
+import static com.codenjoy.dojo.services.event.Mode.MAX_VALUE;
 import static java.util.stream.Collectors.toList;
 
-public final class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
+public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
 
     public enum BreaksMode implements SettingsReader.Key {
 
@@ -88,7 +90,7 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
         NEW_NUMBERS("New numbers"),
         NUMBERS_MODE("Numbers mode"),
         BREAKS_MODE("Breaks mode"),
-        SCORE_COUNTING_TYPE(ScoresImpl.SCORE_COUNTING_TYPE),
+        SCORE_COUNTING_TYPE(ScoresImpl.SCORE_COUNTING_TYPE.key()),
         LEVEL_MAP("Level map");
 
         private String key;
@@ -113,7 +115,7 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
     }
 
     public GameSettings() {
-        initScore(ScoresImpl.MAX_VALUE);
+        initScore(MAX_VALUE);
 
         multiline(LEVEL_MAP, null).onChange(updateSize());
 
@@ -231,4 +233,7 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
 
     }
 
+    public Calculator<Integer> calculator() {
+        return new Calculator<>(new Scores(this));
+    }
 }

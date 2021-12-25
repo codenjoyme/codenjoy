@@ -34,7 +34,7 @@ import org.junit.Test;
 
 import java.util.*;
 
-import static com.codenjoy.dojo.expansion.services.Events.LOSE;
+import static com.codenjoy.dojo.expansion.services.Event.LOSE;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.utils.TestUtils.injectNN;
 import static org.junit.Assert.assertEquals;

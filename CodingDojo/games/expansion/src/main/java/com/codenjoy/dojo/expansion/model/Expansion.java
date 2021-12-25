@@ -27,7 +27,7 @@ import com.codenjoy.dojo.expansion.model.levels.Item;
 import com.codenjoy.dojo.expansion.model.levels.Level;
 import com.codenjoy.dojo.expansion.model.levels.items.*;
 import com.codenjoy.dojo.expansion.model.replay.GameLogger;
-import com.codenjoy.dojo.expansion.services.Events;
+import com.codenjoy.dojo.expansion.services.Event;
 import com.codenjoy.dojo.expansion.services.GameSettings;
 import com.codenjoy.dojo.games.expansion.Forces;
 import com.codenjoy.dojo.games.expansion.ForcesMoves;
@@ -50,10 +50,10 @@ import java.util.function.Consumer;
 
 public class Expansion implements Tickable, IField {
 
-    public static Events WIN_MULTIPLE;
-    public static Events DRAW_MULTIPLE;
-    public static final Events WIN_SINGLE = Events.WIN(0);
-    public static final Events LOSE = Events.LOSE();
+    public static Event WIN_MULTIPLE;
+    public static Event DRAW_MULTIPLE;
+    public static final Event WIN_SINGLE = Event.WIN(0);
+    public static final Event LOSE = Event.LOSE();
 
     private static final Logger log = LoggerFactory.getLogger(Expansion.class);
 
@@ -77,8 +77,8 @@ public class Expansion implements Tickable, IField {
         this.ticker = ticker;
         this.dice = dice;
         this.settings = settings;
-        WIN_MULTIPLE = Events.WIN(settings.winScore());
-        DRAW_MULTIPLE = Events.WIN(settings.drawScore());
+        WIN_MULTIPLE = Event.WIN(settings.winScore());
+        DRAW_MULTIPLE = Event.WIN(settings.drawScore());
         level.field(this);
         isMultiplayer = multiple;
         players = new LinkedList();
@@ -119,7 +119,7 @@ public class Expansion implements Tickable, IField {
             for (Player player : players) {
                 Hero hero = player.getHero();
 
-                Events status = checkStatus(player, hero);
+                Event status = checkStatus(player, hero);
                 if (status != null) {
                     player.event(status);
                 }
@@ -304,7 +304,7 @@ public class Expansion implements Tickable, IField {
         }
     }
 
-    private Events checkStatus(Player player, Hero hero) {
+    private Event checkStatus(Player player, Hero hero) {
         if (players.size() == 1) {
             List<Cell> freeCells = level.cellsWith(
                     cell -> cell.getItems(HeroForces.class).isEmpty() &&

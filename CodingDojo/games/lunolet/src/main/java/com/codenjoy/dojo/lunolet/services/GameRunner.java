@@ -27,11 +27,15 @@ import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.games.lunolet.Board;
 import com.codenjoy.dojo.games.lunolet.Element;
+import com.codenjoy.dojo.lunolet.model.LevelManager;
+import com.codenjoy.dojo.lunolet.model.Lunolet;
+import com.codenjoy.dojo.lunolet.model.LunoletPrinter;
+import com.codenjoy.dojo.lunolet.model.Player;
 import com.codenjoy.dojo.lunolet.services.ai.AISolver;
-import com.codenjoy.dojo.lunolet.model.*;
 import com.codenjoy.dojo.services.AbstractGameType;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.ScoresImpl;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
@@ -50,7 +54,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public PlayerScores getPlayerScores(Object score, GameSettings settings) {
-        return new Scores(Integer.valueOf(score.toString()), settings);
+        return new ScoresImpl<>(Integer.parseInt(score.toString()), settings.calculator());
     }
 
     @Override

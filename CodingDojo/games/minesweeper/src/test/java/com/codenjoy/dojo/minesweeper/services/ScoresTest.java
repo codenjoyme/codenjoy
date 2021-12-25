@@ -23,7 +23,10 @@ package com.codenjoy.dojo.minesweeper.services;
  */
 
 
+import com.codenjoy.dojo.minesweeper.TestGameSettings;
 import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.Calculator;
+import com.codenjoy.dojo.services.event.ScoresImpl;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -36,44 +39,44 @@ public class ScoresTest {
     private GameSettings settings;
 
     public void destroyMine() {
-        scores.event(Events.DESTROY_MINE);
+        scores.event(Event.DESTROY_MINE);
     }
 
-    public void forgetCharge() {
-        scores.event(Events.FORGET_CHARGE);
+    public void forgotCharge() {
+        scores.event(Event.FORGET_CHARGE);
     }
 
     public void killOnMine() {
-        scores.event(Events.KILL_ON_MINE);
+        scores.event(Event.KILL_ON_MINE);
     }
 
     public void noMoreCharge() {
-        scores.event(Events.NO_MORE_CHARGE);
+        scores.event(Event.NO_MORE_CHARGE);
     }
 
     public void clearBoard() {
-        scores.event(Events.CLEAN_BOARD);
+        scores.event(Event.CLEAN_BOARD);
     }
 
     public void minesweeperWin() {
-        scores.event(Events.WIN);
+        scores.event(Event.WIN);
     }
 
     @Before
     public void setup() {
-        settings = new GameSettings();
+        settings = new TestGameSettings();
     }
 
     @Test
     public void shouldCollectScores() {
-        scores = new Scores(140, settings);
+        givenScores(140);
 
         destroyMine();
         destroyMine();
         destroyMine();
         destroyMine();
 
-        forgetCharge();
+        forgotCharge();
 
         noMoreCharge();
 
@@ -86,8 +89,8 @@ public class ScoresTest {
 
         assertEquals(140
                         + 1 + 2 + 3 + 4
-                        - settings.integer(DESTROYED_FORGOT_PENALTY)
-                        - 2 * settings.integer(GAME_OVER_PENALTY)
+                        + settings.integer(DESTROYED_FORGOT_PENALTY)
+                        + 2 * settings.integer(GAME_OVER_PENALTY)
                         + 2 * settings.integer(CLEAR_BOARD_SCORE)
                         + settings.integer(WIN_SCORE),
                 scores.getScore());
@@ -95,7 +98,7 @@ public class ScoresTest {
 
     @Test
     public void shouldStillZeroAfterDead() {
-        scores = new Scores(0, settings);
+        givenScores(0);
 
         killOnMine();
 
@@ -104,16 +107,20 @@ public class ScoresTest {
 
     @Test
     public void shouldStillZeroAfterForgotCharge() {
-        scores = new Scores(0, settings);
+        givenScores(0);
 
-        forgetCharge();
+        forgotCharge();
 
         assertEquals(0, scores.getScore());
     }
 
+    private void givenScores(int score) {
+        scores = new ScoresImpl<>(score, new Calculator<>(new Scores(settings)));
+    }
+
     @Test
     public void shouldStillZeroAfterNoMoreCharge() {
-        scores = new Scores(0, settings);
+        givenScores(0);
 
         noMoreCharge();
 
@@ -122,7 +129,7 @@ public class ScoresTest {
 
     @Test
     public void shouldDestroyMinesCountStartsFromZeroAfterDead() {
-        scores = new Scores(0, settings);
+        givenScores(0);
 
         destroyMine();
         killOnMine();
@@ -136,7 +143,7 @@ public class ScoresTest {
     public void shouldDecreaseMinesCountAfterForgotCharge() {
         settings.integer(DESTROYED_PENALTY, 2);
 
-        scores = new Scores(0, settings);
+        givenScores(0);
 
         destroyMine();
         destroyMine();
@@ -144,27 +151,27 @@ public class ScoresTest {
         destroyMine();
         destroyMine();
 
-        forgetCharge();
+        forgotCharge();
 
         destroyMine();
         destroyMine();
         destroyMine();
 
         assertEquals(1 + 2 + 3 + 4 + 5
-                - settings.integer(DESTROYED_FORGOT_PENALTY)
+                + settings.integer(DESTROYED_FORGOT_PENALTY)
                 + 4 + 5 + 6, scores.getScore());
     }
 
     @Test
     public void shouldMinesCountIsZeroAfterManyTimesForgotCharge() {
-        scores = new Scores(0, settings);
+        givenScores(0);
 
         destroyMine();
         destroyMine();
 
-        forgetCharge();
-        forgetCharge();
-        forgetCharge();
+        forgotCharge();
+        forgotCharge();
+        forgotCharge();
 
         destroyMine();
 
@@ -173,7 +180,7 @@ public class ScoresTest {
 
     @Test
     public void shouldScore_whenWin() {
-        scores = new Scores(0, settings);
+        givenScores(0);
 
         minesweeperWin();
 
@@ -183,7 +190,7 @@ public class ScoresTest {
 
     @Test
     public void shouldScore_whenClearBoard() {
-        scores = new Scores(0, settings);
+        givenScores(0);
 
         clearBoard();
 
@@ -194,7 +201,7 @@ public class ScoresTest {
 
     @Test
     public void shouldClearScore() {
-        scores = new Scores(0, settings);
+        givenScores(0);
 
         clearBoard();
 
@@ -202,7 +209,4 @@ public class ScoresTest {
 
         assertEquals(0, scores.getScore());
     }
-
-
-
 }

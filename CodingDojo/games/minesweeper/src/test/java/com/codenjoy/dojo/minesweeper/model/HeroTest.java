@@ -24,6 +24,7 @@ package com.codenjoy.dojo.minesweeper.model;
 
 
 import com.codenjoy.dojo.games.minesweeper.Element;
+import com.codenjoy.dojo.minesweeper.TestGameSettings;
 import com.codenjoy.dojo.minesweeper.model.items.Mine;
 import com.codenjoy.dojo.minesweeper.services.GameSettings;
 import com.codenjoy.dojo.services.Direction;
@@ -56,7 +57,7 @@ public class HeroTest {
 
     @Before
     public void gameStart() {
-        settings = new GameSettings()
+        settings = new TestGameSettings()
                 .integer(GameSettings.Keys.BOARD_SIZE, BOARD_SIZE)
                 .integer(GameSettings.Keys.MINES_ON_BOARD, MINES_COUNT)
                 .integer(GameSettings.Keys.DETECTOR_CHARGE, CHARGE_COUNT);

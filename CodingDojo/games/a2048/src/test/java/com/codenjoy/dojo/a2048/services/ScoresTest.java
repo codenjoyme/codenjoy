@@ -23,11 +23,14 @@ package com.codenjoy.dojo.a2048.services;
  */
 
 
+import com.codenjoy.dojo.a2048.TestGameSettings;
 import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.event.ScoresImpl;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.services.event.Mode.CUMULATIVELY;
 import static org.junit.Assert.assertEquals;
 
 public class ScoresTest {
@@ -41,14 +44,17 @@ public class ScoresTest {
 
     @Before
     public void setup() {
-        settings = new GameSettings();
-        scores = new ScoresImpl<>(0, new Scores(settings));
+        settings = new TestGameSettings();
+    }
+
+    private void givenScores(int score) {
+        scores = new ScoresImpl<>(score, new Calculator<>(new Scores(settings)));
     }
 
     @Test
     public void shouldCollectScores() {
         // given
-        scores = new ScoresImpl<>(0, new Scores(settings));
+        givenScores(0);
 
         // when
         sum(10);
@@ -62,7 +68,7 @@ public class ScoresTest {
     @Test
     public void shouldNoCollect_whenLessThenMax() {
         // given
-        scores = new ScoresImpl<>(40, new Scores(settings));
+        givenScores(40);
 
         // when
         sum(10);
@@ -76,9 +82,9 @@ public class ScoresTest {
     @Test
     public void shouldCollect_whenCumulative() {
         // given
-        ScoresImpl.setup(settings, ScoresImpl.CUMULATIVELY);
+        settings.initScore(CUMULATIVELY);
 
-        scores = new ScoresImpl<>(40, new Scores(settings));
+        givenScores(40);
 
         // when
         sum(10);
@@ -92,7 +98,7 @@ public class ScoresTest {
     @Test
     public void shouldNoCollect_whenSame() {
         // given
-        scores = new ScoresImpl<>(0, new Scores(settings));
+        givenScores(0);
 
         // when
         sum(10);

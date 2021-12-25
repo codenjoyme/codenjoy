@@ -37,6 +37,9 @@ public class TestGameSettings extends GameSettings {
     public static final int DICE_VISIBILITY = 3*CHANCE;
     public static final int DICE_NO_SLIDING = 4*CHANCE;
 
+    /**
+     * Here you can override the settings for all tests.
+     */
     public TestGameSettings() {
          bool(ROUNDS_ENABLED, false);
          integer(SPAWN_AI_PRIZE, 4);

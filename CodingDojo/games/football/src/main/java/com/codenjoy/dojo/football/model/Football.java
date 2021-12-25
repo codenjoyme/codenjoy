@@ -26,7 +26,7 @@ import com.codenjoy.dojo.football.model.items.Ball;
 import com.codenjoy.dojo.football.model.items.Goal;
 import com.codenjoy.dojo.football.model.items.Hero;
 import com.codenjoy.dojo.football.model.items.Wall;
-import com.codenjoy.dojo.football.services.Events;
+import com.codenjoy.dojo.football.services.Event;
 import com.codenjoy.dojo.football.services.GameSettings;
 import com.codenjoy.dojo.games.football.Element;
 import com.codenjoy.dojo.services.BoardUtils;
@@ -75,14 +75,14 @@ public class Football implements Field {
         for (Ball ball : balls) {
             for (Goal goal : topGoals) {
                 if (goal.itsMe(ball)) {
-                    checkGoal(Events.TOP_GOAL, Element.TOP_GOAL);
+                    checkGoal(Event.TOP_GOAL, Element.TOP_GOAL);
                     return;
                 }
             }
 
             for (Goal goal : bottomGoals) {
                 if (goal.itsMe(ball)) {
-                    checkGoal(Events.BOTTOM_GOAL, Element.BOTTOM_GOAL);
+                    checkGoal(Event.BOTTOM_GOAL, Element.BOTTOM_GOAL);
                     return;
                 }
             }
@@ -118,14 +118,14 @@ public class Football implements Field {
         }
     }
 
-    public void checkGoal(Events event, Element element) {
+    public void checkGoal(Event event, Element element) {
         for (Player player : players) {
             player.event(event);
             player.goalHited(true);
             if (player.myGoal() != element) {
-                player.event(Events.WIN);
+                player.event(Event.WIN);
             } else {
-                player.event(Events.LOSE);
+                player.event(Event.LOSE);
             }
         }
     }

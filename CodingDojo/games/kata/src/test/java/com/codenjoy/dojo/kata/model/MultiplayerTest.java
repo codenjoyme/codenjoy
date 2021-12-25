@@ -24,6 +24,7 @@ package com.codenjoy.dojo.kata.model;
 
 
 import com.codenjoy.dojo.games.kata.Element;
+import com.codenjoy.dojo.kata.TestGameSettings;
 import com.codenjoy.dojo.kata.model.levels.Level;
 import com.codenjoy.dojo.kata.model.levels.LevelsPoolImpl;
 import com.codenjoy.dojo.kata.services.GameRunner;
@@ -66,7 +67,7 @@ public class MultiplayerTest {
                 "question3=answer3");
 
         dice = mock(Dice.class);
-        GameSettings settings = new GameSettings();
+        GameSettings settings = new TestGameSettings();
         field = new Kata(dice, settings);
         PrinterFactory factory = new GameRunner().getPrinterFactory();
 

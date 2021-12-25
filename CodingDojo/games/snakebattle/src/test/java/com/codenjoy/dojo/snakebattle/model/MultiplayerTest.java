@@ -30,7 +30,7 @@ import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.snakebattle.TestGameSettings;
 import com.codenjoy.dojo.snakebattle.model.board.SnakeBoard;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
-import com.codenjoy.dojo.snakebattle.services.Events;
+import com.codenjoy.dojo.snakebattle.services.Event;
 import com.codenjoy.dojo.snakebattle.services.GameSettings;
 import com.codenjoy.dojo.utils.TestUtils;
 import com.codenjoy.dojo.utils.events.EventsListenersAssert;
@@ -70,7 +70,7 @@ public class MultiplayerTest {
                 .integer(ROUNDS_MIN_TICKS_FOR_WIN, 1);
 
         printer = new PrinterFactoryImpl();
-        events = new EventsListenersAssert(() -> Arrays.asList(heroEvents, enemyEvents), Events.class);
+        events = new EventsListenersAssert(() -> Arrays.asList(heroEvents, enemyEvents), Event.class);
     }
 
     @After

@@ -22,11 +22,12 @@ package com.codenjoy.dojo.icancode.model;
  * #L%
  */
 
+import com.codenjoy.dojo.icancode.TestGameSettings;
 import com.codenjoy.dojo.icancode.model.items.HeroItem;
 import com.codenjoy.dojo.icancode.model.items.Zombie;
 import com.codenjoy.dojo.icancode.model.items.ZombieBrain;
 import com.codenjoy.dojo.icancode.model.items.perks.Perk;
-import com.codenjoy.dojo.icancode.services.Events;
+import com.codenjoy.dojo.icancode.services.Event;
 import com.codenjoy.dojo.icancode.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
@@ -74,18 +75,13 @@ public abstract class AbstractGameTest {
     public void setup() {
         mode = ICanCode.TRAINING;
 
-        settings = spy(new GameSettings())
-                .integer(PERK_ACTIVITY, 10)
-                .integer(PERK_AVAILABILITY, 10)
-                .integer(PERK_DROP_RATIO, 100)
-                .integer(DEATH_RAY_PERK_RANGE, 10)
+        settings = spy(new TestGameSettings())
                 .integer(GUN_RECHARGE, 0)
                 .integer(GUN_REST_TIME, 0)
-                .integer(GUN_SHOT_QUEUE, 0)
-                .string(DEFAULT_PERKS, "ajm,ajm");
+                .integer(GUN_SHOT_QUEUE, 0);
 
         listener = mock(EventListener.class);
-        events = new EventsListenersAssert(() -> Arrays.asList(listener), Events.class);
+        events = new EventsListenersAssert(() -> Arrays.asList(listener), Event.class);
         dice = mock(Dice.class);
     }
 

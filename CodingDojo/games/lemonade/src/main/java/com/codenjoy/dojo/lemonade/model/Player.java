@@ -23,8 +23,7 @@ package com.codenjoy.dojo.lemonade.model;
  */
 
 
-import com.codenjoy.dojo.lemonade.services.EventArgs;
-import com.codenjoy.dojo.lemonade.services.EventType;
+import com.codenjoy.dojo.lemonade.services.Event;
 import com.codenjoy.dojo.lemonade.services.GameSettings;
 import com.codenjoy.dojo.lemonade.services.ScoreMode;
 import com.codenjoy.dojo.services.EventListener;
@@ -91,13 +90,13 @@ public class Player extends GamePlayer<Hero, GameField<Player>> {
             while (history.size() > 10)
                 history.remove();
             if (salesResult.isBankrupt()) {
-                event(new EventArgs(EventType.LOSE,
+                event(new Event(Event.Type.LOSE,
                         salesResult.getProfit(),
                         salesResult.getAssetsAfter()));
             } else {
                 // raise WIN event only on SUM_OF_PROFITS game mode OR on the last day in LAST_DAY_ASSETS game mode
                 if (!isLastDayAssetsGameMode || day == settings.integer(LIMIT_DAYS)) {
-                    event(new EventArgs(EventType.WIN,
+                    event(new Event(Event.Type.WIN,
                             salesResult.getProfit(),
                             salesResult.getAssetsAfter()));
                 }

@@ -24,6 +24,7 @@ package com.codenjoy.dojo.sample.services;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.event.ScoresImpl;
 import org.junit.Before;
 import org.junit.Test;
@@ -51,12 +52,12 @@ public class ScoresTest {
     @Before
     public void setup() {
         settings = new GameSettings();
-        scores = new ScoresImpl<>(0, new Scores(settings));
+        givenScores(0);
     }
 
     @Test
     public void shouldCollectScores() {
-        scores = new ScoresImpl<>(140, new Scores(settings));
+        givenScores(140);
 
         win();
         win();
@@ -73,6 +74,10 @@ public class ScoresTest {
                 + 1 * settings.integer(LOSE_PENALTY)
                 + 2 * settings.integer(WIN_ROUND_SCORE),
                 scores.getScore());
+    }
+
+    private void givenScores(int score) {
+        scores = new ScoresImpl<>(score, new Calculator<>(new Scores(settings)));
     }
 
     @Test

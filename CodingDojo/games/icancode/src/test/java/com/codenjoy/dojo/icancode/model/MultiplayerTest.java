@@ -25,7 +25,7 @@ package com.codenjoy.dojo.icancode.model;
 import com.codenjoy.dojo.icancode.model.items.Gold;
 import com.codenjoy.dojo.icancode.model.items.LaserMachine;
 import com.codenjoy.dojo.icancode.model.items.perks.DeathRayPerk;
-import com.codenjoy.dojo.icancode.services.Events;
+import com.codenjoy.dojo.icancode.services.Event;
 import com.codenjoy.dojo.icancode.services.GameRunner;
 import com.codenjoy.dojo.icancode.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
@@ -83,7 +83,7 @@ public class MultiplayerTest {
                 .integer(GUN_SHOT_QUEUE, 0)
                 .string(DEFAULT_PERKS, "ajm,ajm");
 
-        events = new EventsListenersAssert(() -> Arrays.asList(listener1, listener2), Events.class);
+        events = new EventsListenersAssert(() -> Arrays.asList(listener1, listener2), Event.class);
         dice = mock(Dice.class);
     }
 

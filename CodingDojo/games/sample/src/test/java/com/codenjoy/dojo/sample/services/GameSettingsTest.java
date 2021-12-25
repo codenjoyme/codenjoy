@@ -33,7 +33,8 @@ public class GameSettingsTest {
     public void shouldGetAllKeys() {
         assertEquals("[WIN_SCORE, \n" +
                         "WIN_ROUND_SCORE, \n" +
-                        "LOSE_PENALTY]",
+                        "LOSE_PENALTY, \n" +
+                        "SCORE_COUNTING_TYPE]",
                 Utils.split(new GameSettings().allKeys(), ", \n"));
     }
 }
