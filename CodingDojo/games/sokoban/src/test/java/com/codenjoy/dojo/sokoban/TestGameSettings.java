@@ -24,12 +24,16 @@ package com.codenjoy.dojo.sokoban;
 
 import com.codenjoy.dojo.sokoban.services.GameSettings;
 
+import static com.codenjoy.dojo.sokoban.services.GameSettings.Keys.LOSE_PENALTY;
+import static com.codenjoy.dojo.sokoban.services.GameSettings.Keys.WIN_SCORE;
+
 public class TestGameSettings extends GameSettings {
 
     /**
      * Here you can override the settings for all tests.
      */
     public TestGameSettings() {
-
+        integer(WIN_SCORE, 3);
+        integer(LOSE_PENALTY, -10);
     }
 }
