@@ -62,7 +62,7 @@ public class SmokeTest {
 
                     @Override
                     public GameSettings getSettings() {
-                        return new GameSettings()
+                        return new TestGameSettings()
                                 .string(LEVEL_MAP,
                                         "           \n" +
                                         "-----------\n" +
