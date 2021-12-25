@@ -24,12 +24,16 @@ package com.codenjoy.dojo.spacerace;
 
 import com.codenjoy.dojo.spacerace.services.GameSettings;
 
+import static com.codenjoy.dojo.spacerace.services.GameSettings.Keys.DESTROY_ENEMY_SCORE;
+import static com.codenjoy.dojo.spacerace.services.GameSettings.Keys.LOSE_PENALTY;
+
 public class TestGameSettings extends GameSettings {
 
     /**
      * Here you can override the settings for all tests.
      */
     public TestGameSettings() {
-
+        integer(DESTROY_ENEMY_SCORE, 50);
+        integer(LOSE_PENALTY, -10);
     }
 }

@@ -23,9 +23,13 @@ package com.codenjoy.dojo.spacerace.services;
  */
 
 import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.Calculator;
+import com.codenjoy.dojo.services.event.ScoresImpl;
+import com.codenjoy.dojo.spacerace.TestGameSettings;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.spacerace.services.GameSettings.Keys.*;
 import static org.junit.Assert.assertEquals;
 
 public class ScoresTest {
@@ -52,14 +56,15 @@ public class ScoresTest {
 
     @Before
     public void setup() {
-        settings = new GameSettings();
-        scores = new Scores(0, settings);
+        settings = new TestGameSettings();
     }
 
     @Test
     public void shouldCollectScores() {
-        scores = new Scores(140, settings);
+        // given
+        givenScores(140);
 
+        // when
         destroyEnemy();
         destroyEnemy();
         destroyEnemy();
@@ -72,24 +77,101 @@ public class ScoresTest {
 
         lose();
 
-        assertEquals(2090, scores.getScore());
+        // then
+        assertEquals(140
+                    + 4 *  settings.integer(DESTROY_ENEMY_SCORE)
+                    + 2 *  settings.integer(DESTROY_STONE_SCORE)
+                    + settings.integer(DESTROY_BOMB_SCORE)
+                    + settings.integer(LOSE_PENALTY),
+                scores.getScore());
+    }
+
+    private void givenScores(int score) {
+        scores = new ScoresImpl<>(score, new Calculator<>(new Scores(settings)));
     }
 
     @Test
     public void shouldStillZeroAfterDead() {
+        // given
+        givenScores(0);
+
+        // when
         lose();
 
+        // then
         assertEquals(0, scores.getScore());
     }
 
     @Test
     public void shouldClearScore() {
+        // given
+        givenScores(0);
         destroyEnemy();
 
+        // when
         scores.clear();
 
+        // then
         assertEquals(0, scores.getScore());
     }
 
+    @Test
+    public void shouldCollectScores_whenDestroyEnemy() {
+        // given
+        givenScores(140);
 
+        // when
+        destroyEnemy();
+        destroyEnemy();
+
+        // then
+        assertEquals(140
+                    + 2 *  settings.integer(DESTROY_ENEMY_SCORE),
+                scores.getScore());
+    }
+
+    @Test
+    public void shouldCollectScores_whenDestroyStone() {
+        // given
+        givenScores(140);
+
+        // when
+        destroyStone();
+        destroyStone();
+
+        // then
+        assertEquals(140
+                    + 2 *  settings.integer(DESTROY_STONE_SCORE),
+                scores.getScore());
+    }
+
+    @Test
+    public void shouldCollectScores_whenDestroyBomb() {
+        // given
+        givenScores(140);
+
+        // when
+        destroyBomb();
+        destroyBomb();
+
+        // then
+        assertEquals(140
+                    + 2 * settings.integer(DESTROY_BOMB_SCORE),
+                scores.getScore());
+    }
+
+    @Test
+    public void shouldCollectScores_whenLose() {
+        // given
+        givenScores(140);
+
+        // when
+        lose();
+        lose();
+
+        // then
+        assertEquals(140
+                    + 2 * settings.integer(LOSE_PENALTY),
+                scores.getScore());
+    }
 }
