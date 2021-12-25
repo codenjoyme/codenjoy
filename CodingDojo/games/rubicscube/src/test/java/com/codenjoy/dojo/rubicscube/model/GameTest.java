@@ -23,6 +23,7 @@ package com.codenjoy.dojo.rubicscube.model;
  */
 
 
+import com.codenjoy.dojo.rubicscube.TestGameSettings;
 import com.codenjoy.dojo.rubicscube.services.Event;
 import com.codenjoy.dojo.rubicscube.services.GameSettings;
 import com.codenjoy.dojo.services.EventListener;
@@ -33,9 +34,7 @@ import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 public class GameTest {
@@ -75,7 +74,7 @@ public class GameTest {
 
     @Before
     public void setup() {
-        settings = new GameSettings();
+        settings = new TestGameSettings();
     }
 
     private void givenFl(String command) {

@@ -24,12 +24,16 @@ package com.codenjoy.dojo.rubicscube;
 
 import com.codenjoy.dojo.rubicscube.services.GameSettings;
 
+import static com.codenjoy.dojo.rubicscube.services.GameSettings.Keys.FAIL_PENALTY;
+import static com.codenjoy.dojo.rubicscube.services.GameSettings.Keys.SUCCESS_SCORE;
+
 public class TestGameSettings extends GameSettings {
 
     /**
      * Here you can override the settings for all tests.
      */
     public TestGameSettings() {
-
+        integer(SUCCESS_SCORE, 10);
+        integer(FAIL_PENALTY, -5);
     }
 }

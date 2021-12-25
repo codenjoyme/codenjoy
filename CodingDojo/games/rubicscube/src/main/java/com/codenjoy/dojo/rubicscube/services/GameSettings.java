@@ -22,6 +22,7 @@ package com.codenjoy.dojo.rubicscube.services;
  * #L%
  */
 
+import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
@@ -35,8 +36,8 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
 
     public enum Keys implements Key {
 
-        SUCCESS_SCORE("Success score"),
-        FAIL_PENALTY("Fail penalty");
+        SUCCESS_SCORE("[Score] Success score"),
+        FAIL_PENALTY("[Score] Fail penalty");
 
         private String key;
 
@@ -57,6 +58,10 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
 
     public GameSettings() {
         integer(SUCCESS_SCORE, 1000);
-        integer(FAIL_PENALTY, 500);
+        integer(FAIL_PENALTY, -500);
+    }
+
+    public Calculator<Void> calculator() {
+        return new Calculator<>(new Scores(this));
     }
 }

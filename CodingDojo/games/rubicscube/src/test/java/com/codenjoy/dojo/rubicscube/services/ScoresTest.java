@@ -23,7 +23,10 @@ package com.codenjoy.dojo.rubicscube.services;
  */
 
 
+import com.codenjoy.dojo.rubicscube.TestGameSettings;
 import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.Calculator;
+import com.codenjoy.dojo.services.event.ScoresImpl;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -46,14 +49,15 @@ public class ScoresTest {
 
     @Before
     public void setup() {
-        settings = new GameSettings();
-        scores = new Scores(0, settings);
+        settings = new TestGameSettings();
     }
 
     @Test
     public void shouldCollectScores() {
-        scores = new Scores(140, settings);
+        // given
+        givenScores(140);
 
+        // when
         success();
         success();
         success();
@@ -61,26 +65,69 @@ public class ScoresTest {
 
         fail();
 
+        // then
         assertEquals(140
-                + 4 * settings.integer(SUCCESS_SCORE)
-                - settings.integer(FAIL_PENALTY),
+                    + 4 * settings.integer(SUCCESS_SCORE)
+                    + settings.integer(FAIL_PENALTY),
                 scores.getScore());
+    }
+
+    private void givenScores(int score) {
+        scores = new ScoresImpl<>(score, new Calculator<>(new Scores(settings)));
     }
 
     @Test
     public void shouldStillZeroAfterFail() {
+        // given
+        givenScores(0);
+
+        // when
         fail();
 
+        // then
         assertEquals(0, scores.getScore());
     }
 
     @Test
     public void shouldClearScore() {
+        // given
+        givenScores(0);
         success();
 
+        // when
         scores.clear();
 
+        // then
         assertEquals(0, scores.getScore());
     }
 
+    @Test
+    public void shouldCollectScores_whenSuccess() {
+        // given
+        givenScores(140);
+
+        // when
+        success();
+        success();
+
+        // then
+        assertEquals(140
+                    + 2 * settings.integer(SUCCESS_SCORE),
+                scores.getScore());
+    }
+
+    @Test
+    public void shouldCollectScores_whenFail() {
+        // given
+        givenScores(140);
+
+        // when
+        fail();
+        fail();
+
+        // then
+        assertEquals(140
+                    + 2 * settings.integer(FAIL_PENALTY),
+                scores.getScore());
+    }
 }
