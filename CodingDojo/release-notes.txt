@@ -239,7 +239,7 @@
         Hex
         Kata
         Clifford
-        Minesweeper
+        Verland
         Moebius
     Добавлен SmokeTest для некоторых игр, которые уже приведены к новому интерфейсу
     Рефакторинг: Для всех игр используется getDice() из AbstractGameType
