@@ -22,6 +22,7 @@ package com.codenjoy.dojo.sudoku.services;
  * #L%
  */
 
+import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 import com.codenjoy.dojo.sudoku.model.level.Level;
@@ -36,11 +37,11 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
 
     public enum Keys implements Key {
 
-        WIN_SCORE("Win score"),
-        FAIL_PENALTY("Fail penalty"),
-        LOSE_PENALTY("Lose penalty"),
-        SUCCESS_SCORE("Success score"),
-        LEVELS_COUNT("Levels count");
+        WIN_SCORE("[Score] Win score"),
+        FAIL_PENALTY("[Score] Fail penalty"),
+        LOSE_PENALTY("[Score] Lose penalty"),
+        SUCCESS_SCORE("[Score] Success score"),
+        LEVELS_COUNT("[Level] Levels count");
 
         private String key;
 
@@ -61,8 +62,8 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
 
     public GameSettings() {
         integer(WIN_SCORE, 1000);
-        integer(FAIL_PENALTY, 10);
-        integer(LOSE_PENALTY, 500);
+        integer(FAIL_PENALTY, -10);
+        integer(LOSE_PENALTY, -500);
         integer(SUCCESS_SCORE, 10);
         integer(LEVELS_COUNT, 0);
         Levels.setup(this);
@@ -85,4 +86,7 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         return "Level" + index + "";
     }
 
+    public Calculator<Void> calculator() {
+        return new Calculator<>(new Scores(this));
+    }
 }
