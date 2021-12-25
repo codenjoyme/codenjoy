@@ -51,11 +51,11 @@ function initHotkeys() {
             setup.enableJoystick = !setup.enableJoystick;
             alert("Joystick " + (setup.enableJoystick ? "enabled" : "disabled") + ".\n" +
                     "Please press:\n" +
-                    " - Arrows [← → ↑ ↓] keys to to send 'DIRECTION' command;\n" +
-                    " - Space key to send 'ACT' command;\n" +
-                    " - Space then Arrows to send 'ACT,DIRECTION' command;\n" +
-                    " - 0..9 to send 'ACT(n)' command\n;" +
-                    " - 0..9 then Arrows to send 'ACT(n),DIRECTION' command."
+                    "1) Arrows [← → ↑ ↓] keys to to send 'DIRECTION'\n" +
+                    "2) Space key to send 'ACT'\n" +
+                    "3) Space then Arrows to send 'ACT,DIRECTION'\n" +
+                    "4) 0..9 to send 'ACT(n)'\n" +
+                    "5) 0..9 then Arrows to send 'ACT(n),DIRECTION'"
             );
         } else if (adminKey && ev.keyCode == 76) { // ... + L (Log)
             window.open(contextPath + '/board/log/player/'
