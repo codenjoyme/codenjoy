@@ -25,10 +25,10 @@ package com.codenjoy.dojo.moebius.services;
 
 public class Event {
 
-    private Event event;
+    private Type event;
     private int lines;
 
-    public enum Event {
+    public enum Type {
         GAME_OVER, WIN;
     }
 
@@ -37,11 +37,11 @@ public class Event {
         return event + ((lines != 0)?("(" + lines + ")"):"");
     }
 
-    public Event(Event event) {
+    public Event(Type event) {
         this.event = event;
     }
 
-    public Event(Event event, int lines) {
+    public Event(Type event, int lines) {
         this.event = event;
         this.lines = lines;
     }
@@ -50,7 +50,7 @@ public class Event {
         return lines;
     }
 
-    public Event getType() {
+    public Type getType() {
         return event;
     }
 }
