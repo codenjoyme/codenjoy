@@ -25,11 +25,12 @@ package com.codenjoy.dojo.a2048.services;
 
 import com.codenjoy.dojo.a2048.TestGameSettings;
 import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.event.ScoresImpl;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.codenjoy.dojo.services.event.ScoresImpl.Mode.CUMULATIVELY;
+import static com.codenjoy.dojo.services.event.Mode.CUMULATIVELY;
 import static org.junit.Assert.assertEquals;
 
 public class ScoresTest {
@@ -47,7 +48,7 @@ public class ScoresTest {
     }
 
     private void givenScores(int score) {
-        scores = new ScoresImpl<>(score, new Scores(settings));
+        scores = new ScoresImpl<>(score, new Calculator<>(new Scores(settings)));
     }
 
     @Test
