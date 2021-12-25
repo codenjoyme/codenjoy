@@ -22,6 +22,7 @@ package com.codenjoy.dojo.snake.services;
  * #L%
  */
 
+import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.event.ScoresImpl;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
@@ -29,7 +30,7 @@ import com.codenjoy.dojo.services.settings.SettingsReader;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.codenjoy.dojo.services.event.ScoresImpl.Mode.CUMULATIVELY;
+import static com.codenjoy.dojo.services.event.Mode.CUMULATIVELY;
 import static com.codenjoy.dojo.snake.services.GameSettings.Keys.*;
 
 public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
@@ -68,5 +69,9 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         integer(START_SNAKE_LENGTH, 2);
         integer(EAT_STONE_PENALTY, -0);
         integer(EAT_STONE_DECREASE, 10);
+    }
+
+    public Calculator<Integer> calculator() {
+        return new Calculator<>(new Scores(this));
     }
 }

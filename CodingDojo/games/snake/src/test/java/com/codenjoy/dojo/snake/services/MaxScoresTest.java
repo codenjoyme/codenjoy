@@ -24,6 +24,7 @@ package com.codenjoy.dojo.snake.services;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.event.ScoresImpl;
 import com.codenjoy.dojo.snake.TestGameSettings;
 import org.junit.Before;
@@ -31,7 +32,7 @@ import org.junit.Test;
 
 import java.util.stream.IntStream;
 
-import static com.codenjoy.dojo.services.event.ScoresImpl.Mode.MAX_VALUE;
+import static com.codenjoy.dojo.services.event.Mode.MAX_VALUE;
 import static org.junit.Assert.assertEquals;
 
 public class MaxScoresTest {
@@ -56,18 +57,16 @@ public class MaxScoresTest {
     public void setup() {
         settings = new TestGameSettings();
         settings.initScore(MAX_VALUE);
-
-        scores = getScores(0);
     }
 
-    private PlayerScores getScores(int score) {
-        return new ScoresImpl<>(score, new Scores(settings));
+    private void givenScores(int score) {
+        scores = new ScoresImpl<>(score, new Calculator<>(new Scores(settings)));
     }
 
     @Test
     public void shouldCollectScores() {
         // given
-        scores = getScores(scoreFor(7));
+        givenScores(scoreFor(7));
 
         // when
         eatApple(8);
@@ -113,7 +112,7 @@ public class MaxScoresTest {
     @Test
     public void shouldSnakeLengthCantLessThen3() {
         // given
-        scores = getScores(0);
+        givenScores(0);
 
         // when
         eatStone();
@@ -158,7 +157,7 @@ public class MaxScoresTest {
     @Test
     public void shouldClearScoreTogetherWithSnakeLength() {
         // given
-        scores = getScores(0);
+        givenScores(0);
 
         eatApple(3);
         eatApple(4);
@@ -188,7 +187,7 @@ public class MaxScoresTest {
     @Test
     public void shouldStartsFromMaxScore_afterDead() {
         // given
-        scores = getScores(100);
+        givenScores(100);
 
         // when
         kill();
@@ -207,7 +206,7 @@ public class MaxScoresTest {
     @Test
     public void shouldStillZeroAfterDead() {
         // given
-        scores = getScores(0);
+        givenScores(0);
 
         // when
         kill();
@@ -219,7 +218,7 @@ public class MaxScoresTest {
     @Test
     public void shouldStillZero_afterEatStone() {
         // given
-        scores = getScores(0);
+        givenScores(0);
 
         // when
         eatStone();
@@ -231,7 +230,7 @@ public class MaxScoresTest {
     @Test
     public void shouldClearScore() {
         // given
-        scores = getScores(0);
+        givenScores(0);
 
         eatApple(3);
 

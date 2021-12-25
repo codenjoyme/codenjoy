@@ -28,7 +28,7 @@ import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import java.util.stream.IntStream;
 
-import static com.codenjoy.dojo.services.event.ScoresImpl.Mode.CUMULATIVELY;
+import static com.codenjoy.dojo.services.event.Mode.CUMULATIVELY;
 import static com.codenjoy.dojo.snake.services.GameSettings.Keys.EAT_STONE_PENALTY;
 import static com.codenjoy.dojo.snake.services.GameSettings.Keys.GAME_OVER_PENALTY;
 

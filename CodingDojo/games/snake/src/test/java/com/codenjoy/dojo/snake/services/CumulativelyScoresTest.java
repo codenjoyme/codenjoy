@@ -24,12 +24,13 @@ package com.codenjoy.dojo.snake.services;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.event.ScoresImpl;
 import com.codenjoy.dojo.snake.TestGameSettings;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.codenjoy.dojo.services.event.ScoresImpl.Mode.CUMULATIVELY;
+import static com.codenjoy.dojo.services.event.Mode.CUMULATIVELY;
 import static com.codenjoy.dojo.snake.services.GameSettings.Keys.EAT_STONE_PENALTY;
 import static com.codenjoy.dojo.snake.services.GameSettings.Keys.GAME_OVER_PENALTY;
 import static org.junit.Assert.assertEquals;
@@ -55,14 +56,12 @@ public class CumulativelyScoresTest {
     public void setup() {
         settings = new TestGameSettings();
         settings.initScore(CUMULATIVELY);
-
-        givenScores(0);
     }
 
     @Test
     public void shouldCollectScores() {
         // given
-        givenScores(240);
+        givenScores(140);
 
         // when
         eatApple(3);
@@ -75,10 +74,10 @@ public class CumulativelyScoresTest {
         kill();
 
         // then
-        assertEquals(240
-                        + 3 + 4 + 5 + 6
-                        + settings.integer(EAT_STONE_PENALTY)
-                        + settings.integer(GAME_OVER_PENALTY),
+        assertEquals(140
+                    + 3 + 4 + 5 + 6
+                    + settings.integer(EAT_STONE_PENALTY)
+                    + settings.integer(GAME_OVER_PENALTY),
                 score());
     }
 
@@ -102,13 +101,13 @@ public class CumulativelyScoresTest {
     }
 
     private void givenScores(int score) {
-        scores = new ScoresImpl<>(score, new Scores(settings));
+        scores = new ScoresImpl<>(score, new Calculator<>(new Scores(settings)));
     }
 
     @Test
     public void shouldShortLengthWhenEatStone() {
         // given
-        givenScores(0);
+        givenScores(140);
 
         eatApple(3);
         eatApple(4);
@@ -128,9 +127,11 @@ public class CumulativelyScoresTest {
         eatApple(4);
 
         // then
-        assertEquals(3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12
-                + settings.integer(EAT_STONE_PENALTY)
-                + 3 + 4, score());
+        assertEquals(140
+                    + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12
+                    + settings.integer(EAT_STONE_PENALTY)
+                    + 3 + 4, 
+                score());
     }
 
     @Test
@@ -162,7 +163,7 @@ public class CumulativelyScoresTest {
     @Test
     public void shouldStartsFrom3_afterDead() {
         // given
-        givenScores(200);
+        givenScores(140);
 
         // when
         kill();
@@ -171,9 +172,10 @@ public class CumulativelyScoresTest {
         eatApple(4);
 
         // then
-        assertEquals(200
-                + settings.integer(GAME_OVER_PENALTY)
-                + 3 + 4, score());
+        assertEquals(140
+                    + settings.integer(GAME_OVER_PENALTY)
+                    + 3 + 4, 
+                score());
     }
 
     private int score() {

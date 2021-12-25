@@ -2,7 +2,7 @@ package com.codenjoy.dojo.snake;
 
 import com.codenjoy.dojo.snake.services.GameSettings;
 
-import static com.codenjoy.dojo.services.event.ScoresImpl.Mode.CUMULATIVELY;
+import static com.codenjoy.dojo.services.event.Mode.CUMULATIVELY;
 import static com.codenjoy.dojo.snake.services.GameSettings.Keys.*;
 
 public class TestGameSettings extends GameSettings {
