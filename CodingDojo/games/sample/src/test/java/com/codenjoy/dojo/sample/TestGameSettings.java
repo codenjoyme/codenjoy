@@ -25,7 +25,7 @@ package com.codenjoy.dojo.sample;
 import com.codenjoy.dojo.sample.services.GameSettings;
 
 import static com.codenjoy.dojo.sample.services.GameSettings.Keys.*;
-import static com.codenjoy.dojo.services.event.ScoresImpl.Mode.CUMULATIVELY;
+import static com.codenjoy.dojo.services.event.Mode.CUMULATIVELY;
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_ENABLED;
 
 public class TestGameSettings extends GameSettings {
