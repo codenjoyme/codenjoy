@@ -23,10 +23,11 @@ package com.codenjoy.dojo.expansion.model.attack;
  */
 
 
-import com.codenjoy.dojo.games.expansion.Element;
+import com.codenjoy.dojo.expansion.TestGameSettings;
 import com.codenjoy.dojo.expansion.model.levels.Cell;
 import com.codenjoy.dojo.expansion.model.levels.items.HeroForces;
 import com.codenjoy.dojo.expansion.services.GameSettings;
+import com.codenjoy.dojo.games.expansion.Element;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -85,7 +86,7 @@ public class DefenderHasAdvantageAttackTest {
 
     @Before
     public void setup() {
-        settings = new GameSettings();
+        settings = new TestGameSettings();
     }
 
     @Test

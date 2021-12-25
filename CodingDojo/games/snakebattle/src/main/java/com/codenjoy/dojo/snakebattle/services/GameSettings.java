@@ -22,6 +22,7 @@ package com.codenjoy.dojo.snakebattle.services;
  * #L%
  */
 
+import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.round.RoundSettings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
@@ -80,7 +81,7 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         integer(WIN_SCORE, 50);
         integer(APPLE_SCORE, 1);
         integer(GOLD_SCORE, 10);
-        integer(DIE_PENALTY, 0);
+        integer(DIE_PENALTY, -0);
         integer(STONE_SCORE, 5);
         integer(EAT_SCORE, 10);
 
@@ -121,4 +122,7 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         return new Level(string(LEVEL_MAP));
     }
 
+    public Calculator<Integer> calculator() {
+        return new Calculator<>(new Scores(this));
+    }
 }

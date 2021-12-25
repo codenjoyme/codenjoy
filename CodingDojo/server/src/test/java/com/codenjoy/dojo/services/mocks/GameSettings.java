@@ -34,7 +34,7 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
 
     public enum Keys implements Key {
 
-        LEVEL_MAP("Level map");
+        LEVEL_MAP("[Level] Level map");
 
         private String key;
 

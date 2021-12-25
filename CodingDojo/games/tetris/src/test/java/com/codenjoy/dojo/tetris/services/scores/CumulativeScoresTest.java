@@ -57,8 +57,6 @@ public class CumulativeScoresTest {
     public void setup() {
         settings = new TestGameSettings();
         settings.initScore(CUMULATIVELY);
-
-        givenScores(0);
     }
 
     protected void givenScores(int score) {

@@ -23,6 +23,7 @@ package com.codenjoy.dojo.quadro.model;
  */
 
 
+import com.codenjoy.dojo.quadro.TestGameSettings;
 import com.codenjoy.dojo.quadro.services.Event;
 import com.codenjoy.dojo.quadro.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
@@ -55,7 +56,7 @@ public class GameTest {
     public void setup() {
         dice = mock(Dice.class);
         printer = new PrinterFactoryImpl();
-        settings = new GameSettings();
+        settings = new TestGameSettings();
     }
 
     private void dice(int... ints) {

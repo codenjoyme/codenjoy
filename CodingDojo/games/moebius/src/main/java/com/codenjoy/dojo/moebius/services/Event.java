@@ -23,34 +23,39 @@ package com.codenjoy.dojo.moebius.services;
  */
 
 
-public class Event {
+import com.codenjoy.dojo.services.event.EventObject;
+
+public class Event implements EventObject<Event.Type, Integer> {
 
     private Type event;
-    private int lines;
+    private int value;
 
     public enum Type {
-        GAME_OVER, WIN;
+        GAME_OVER,
+        WIN;
     }
 
     @Override
     public String toString() {
-        return event + ((lines != 0)?("(" + lines + ")"):"");
+        return event + ((value != 0)?("(" + value + ")"):"");
     }
 
     public Event(Type event) {
         this.event = event;
     }
 
-    public Event(Type event, int lines) {
+    public Event(Type event, int value) {
         this.event = event;
-        this.lines = lines;
+        this.value = value;
     }
 
-    public int getLines() {
-        return lines;
+    @Override
+    public Integer value() {
+        return value;
     }
 
-    public Type getType() {
+    @Override
+    public Type type() {
         return event;
     }
 }

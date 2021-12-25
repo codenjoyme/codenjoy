@@ -23,34 +23,35 @@ package com.codenjoy.dojo.snakebattle.services;
  */
 
 
+import com.codenjoy.dojo.services.event.EventObject;
+
 import java.util.Objects;
-import java.util.function.Function;
 
-public class Event {
+public class Event implements EventObject<Event.Type, Integer> {
 
-    public static final Event START = new Event("START");
-    public static final Event WIN = new Event("WIN");
-    public static final Event DIE = new Event("DIE");
-    public static final Event APPLE = new Event("APPLE");
-    public static final Event STONE = new Event("STONE");
-    public static final Function<Integer, Event> EAT = amount -> new Event("EAT", amount);
-    public static final Event GOLD = new Event("GOLD");
-    public static final Event FLYING = new Event("FLYING");
-    public static final Event FURY = new Event("FURY");
+    private Type type;
+    private int value;
 
-    private String type;
-    private int amount;
-
-    public Event(String type) {
-        this.type = type;
-        this.amount = 1;
+    public enum Type {
+        START,
+        WIN,
+        DIE,
+        APPLE,
+        STONE,
+        EAT,
+        GOLD,
+        FLYING,
+        FURY
     }
 
-    public Event(String type, int amount) {
-        this.type = type;
-        this.amount = amount;
+    public Event(Type type) {
+        this(type, 1);
     }
 
+    public Event(Type type, int value) {
+        this.type = type;
+        this.value = value;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -59,7 +60,7 @@ public class Event {
         Event events = (Event) o;
         if (isEat()) {
             return Objects.equals(type, events.type) &&
-                    amount == events.amount;
+                    value == events.value;
         }
         return Objects.equals(type, events.type);
     }
@@ -69,40 +70,25 @@ public class Event {
         return Objects.hash(type);
     }
 
-    public boolean isWin() {
-        return type.equals(WIN.type);
+    @Override
+    public Type type() {
+        return type;
     }
 
-    public boolean isApple() {
-        return type.equals(APPLE.type);
-    }
-
-    public boolean isGold() {
-        return type.equals(GOLD.type);
-    }
-
-    public boolean isDie() {
-        return type.equals(DIE.type);
-    }
-
-    public boolean isStone() {
-        return type.equals(STONE.type);
-    }
-
-    public boolean isEat() {
-        return type.equals(EAT.apply(1).type);
-    }
-
-    public int getAmount() {
-        return amount;
+    @Override
+    public Integer value() {
+        return value;
     }
 
     @Override
     public String toString() {
         if (isEat()) {
-            return String.format("%s[%s]", type, amount);
-        } else {
-            return type;
+            return String.format("%s[%s]", type, value);
         }
+        return type.name();
+    }
+
+    private boolean isEat() {
+        return type == Type.EAT;
     }
 }

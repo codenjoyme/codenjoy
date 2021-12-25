@@ -37,8 +37,6 @@ public class SeriesMaxValueScoresTest extends CumulativeScoresTest {
     public void setup() {
         settings = new TestGameSettings();
         settings.initScore(SERIES_MAX_VALUE);
-
-        givenScores(0);
     }
 
     @Test

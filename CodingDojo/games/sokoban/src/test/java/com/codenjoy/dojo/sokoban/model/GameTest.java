@@ -27,11 +27,12 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-import com.codenjoy.dojo.sokoban.services.TextIOHelper;
+import com.codenjoy.dojo.sokoban.TestGameSettings;
 import com.codenjoy.dojo.sokoban.model.items.Box;
 import com.codenjoy.dojo.sokoban.model.items.Hero;
 import com.codenjoy.dojo.sokoban.model.items.Mark;
 import com.codenjoy.dojo.sokoban.services.GameSettings;
+import com.codenjoy.dojo.sokoban.services.TextIOHelper;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -59,7 +60,7 @@ public class GameTest {
     @Before
     public void setup() {
         dice = mock(Dice.class);
-        settings = new GameSettings();
+        settings = new TestGameSettings();
         printer = new PrinterFactoryImpl();
     }
 

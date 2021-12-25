@@ -22,11 +22,11 @@ package com.codenjoy.dojo.icancode.model;
  * #L%
  */
 
+import com.codenjoy.dojo.icancode.services.GameRunner;
 import com.codenjoy.dojo.profile.Profiler;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.utils.TestUtils;
-import com.codenjoy.dojo.icancode.services.GameRunner;
 import org.junit.Test;
 
 import java.util.LinkedList;
@@ -40,7 +40,7 @@ public class PerformanceTest {
     public void test() {
         GameRunner iCanCode = new GameRunner();
 
-        List<com.codenjoy.dojo.services.Game> games = new LinkedList<>();
+        List<Game> games = new LinkedList<>();
 
         for (int index = 0; index < 50; index++) {
             Game game = TestUtils.buildGame(iCanCode,

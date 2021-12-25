@@ -23,6 +23,7 @@ package com.codenjoy.dojo.icancode.model.items.perks;
  */
 
 import com.codenjoy.dojo.games.icancode.Element;
+import com.codenjoy.dojo.icancode.TestGameSettings;
 import com.codenjoy.dojo.icancode.model.ICanCode;
 import com.codenjoy.dojo.icancode.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
@@ -45,8 +46,8 @@ public class PerkUtilsTest {
     private GameSettings settings;
 
     @Before
-    public void setUp() {
-        settings = new GameSettings();
+    public void setup() {
+        settings = new TestGameSettings();
     }
 
     @Test

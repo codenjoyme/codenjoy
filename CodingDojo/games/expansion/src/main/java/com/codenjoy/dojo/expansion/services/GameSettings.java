@@ -57,7 +57,7 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         INITIAL_FORCES("Initial forces count"),
         INCREASE_FORCES_PER_TICK("Increase forces per tick count"),
         INCREASE_FORCES_GOLD_SCORE("Increase forces gold score"),
-        REGION_SCORES("Total count territories is occupied by you increase force score"),
+        REGION_SCORE("Total count territories is occupied by you increase force score"),
         DEFENDER_HAS_ADVANTAGE("Defender has advantage"),
         DEFENDER_ATTACK_ADVANTAGE("Defender attack advantage"),
         COMMAND("Command"),
@@ -98,7 +98,7 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         integer(INITIAL_FORCES, 10);
         integer(INCREASE_FORCES_PER_TICK, 10);
         integer(INCREASE_FORCES_GOLD_SCORE, 1);
-        integer(REGION_SCORES, 10);
+        integer(REGION_SCORE, 10);
 
         bool(DEFENDER_HAS_ADVANTAGE, true);
         real(DEFENDER_ATTACK_ADVANTAGE, 1.3);
@@ -164,7 +164,7 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
     }
 
     public int regionsScores() {
-        return integer(REGION_SCORES);
+        return integer(REGION_SCORE);
     }
 
     public int goldScore() {
@@ -231,7 +231,7 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
     }
 
     public GameSettings regionsScores(int value) {
-        integer(REGION_SCORES, value);
+        integer(REGION_SCORE, value);
         return this;
     }
 

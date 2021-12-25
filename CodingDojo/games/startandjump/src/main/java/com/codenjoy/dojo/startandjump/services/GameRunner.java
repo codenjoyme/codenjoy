@@ -25,20 +25,21 @@ package com.codenjoy.dojo.startandjump.services;
 
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
+import com.codenjoy.dojo.games.startandjump.Board;
+import com.codenjoy.dojo.games.startandjump.Element;
 import com.codenjoy.dojo.services.AbstractGameType;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.ScoresImpl;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.CharElement;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.games.startandjump.Board;
-import com.codenjoy.dojo.startandjump.services.ai.AISolver;
-import com.codenjoy.dojo.games.startandjump.Element;
 import com.codenjoy.dojo.startandjump.model.Player;
 import com.codenjoy.dojo.startandjump.model.StartAndJump;
+import com.codenjoy.dojo.startandjump.services.ai.AISolver;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
@@ -51,7 +52,7 @@ public class GameRunner extends AbstractGameType<GameSettings> implements GameTy
 
     @Override
     public PlayerScores getPlayerScores(Object score, GameSettings settings) {
-        return new Scores(Integer.valueOf(score.toString()), settings);
+        return new ScoresImpl<>(Integer.parseInt(score.toString()), settings.calculator());
     }
 
     @Override

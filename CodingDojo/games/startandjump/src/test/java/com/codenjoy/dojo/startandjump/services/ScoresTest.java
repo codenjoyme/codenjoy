@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.reversi.services;
+package com.codenjoy.dojo.startandjump.services;
 
 /*-
  * #%L
@@ -22,32 +22,29 @@ package com.codenjoy.dojo.reversi.services;
  * #L%
  */
 
-
-import com.codenjoy.dojo.reversi.TestGameSettings;
 import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.event.ScoresImpl;
+import com.codenjoy.dojo.startandjump.TestGameSettings;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.codenjoy.dojo.reversi.services.GameSettings.Keys.*;
+import static com.codenjoy.dojo.startandjump.services.GameSettings.Keys.LOSE_PENALTY;
+import static com.codenjoy.dojo.startandjump.services.GameSettings.Keys.WIN_SCORE;
 import static org.junit.Assert.assertEquals;
 
 public class ScoresTest {
 
     private PlayerScores scores;
+
     private GameSettings settings;
 
     public void lose() {
         scores.event(Event.LOSE);
     }
 
-    public void win() {
-        scores.event(Event.WIN);
-    }
-
-    public void flip(int count) {
-        scores.event(Event.FLIP.apply(count));
+    public void stillAlive() {
+        scores.event(Event.STILL_ALIVE);
     }
 
     @Before
@@ -61,21 +58,18 @@ public class ScoresTest {
         givenScores(140);
 
         // when
-        win();
-        win();
-        win();
-        win();
+        stillAlive();
+        stillAlive();
+        stillAlive();
+        stillAlive();
 
-        flip(35);
-        flip(45);
-
+        lose();
         lose();
 
         // then
         assertEquals(140
                     + 4 * settings.integer(WIN_SCORE)
-                    + (35 + 45)*settings.integer(FLIP_SCORE)
-                    + settings.integer(LOSE_PENALTY),
+                    + 2 * settings.integer(LOSE_PENALTY),
                 scores.getScore());
     }
 
@@ -99,7 +93,7 @@ public class ScoresTest {
     public void shouldClearScore() {
         // given
         givenScores(0);
-        win();
+        stillAlive();
 
         // when
         scores.clear();
@@ -109,32 +103,17 @@ public class ScoresTest {
     }
 
     @Test
-    public void shouldCollectScores_whenWin() {
+    public void shouldCollectScores_whenStillAlive() {
         // given
         givenScores(140);
 
         // when
-        win();
-        win();
+        stillAlive();
+        stillAlive();
 
         // then
         assertEquals(140
-                    + 2 * settings.integer(WIN_SCORE),
-                scores.getScore());
-    }
-
-    @Test
-    public void shouldCollectScores_whenFlip() {
-        // given
-        givenScores(140);
-
-        // when
-        flip(35);
-        flip(45);
-
-        // then
-        assertEquals(140
-                    + (35 + 45)*settings.integer(FLIP_SCORE),
+                    + 2 *  settings.integer(WIN_SCORE),
                 scores.getScore());
     }
 
@@ -149,7 +128,7 @@ public class ScoresTest {
 
         // then
         assertEquals(140
-                    + 2 * settings.integer(LOSE_PENALTY),
+                    + 2 *  settings.integer(LOSE_PENALTY),
                 scores.getScore());
     }
 }

@@ -23,11 +23,11 @@ package com.codenjoy.dojo.expansion.model.replay;
  */
 
 
+import com.codenjoy.dojo.expansion.TestGameSettings;
 import com.codenjoy.dojo.expansion.services.GameSettings;
 import com.codenjoy.dojo.utils.JsonUtils;
 import org.json.JSONObject;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.*;
@@ -36,7 +36,7 @@ import java.nio.file.FileSystems;
 import java.util.*;
 
 import static java.util.stream.Collectors.toList;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class LoggerReaderTest {
 
@@ -68,7 +68,7 @@ public class LoggerReaderTest {
 
     @Before
     public void setUp() throws Exception {
-        settings = new GameSettings();
+        settings = new TestGameSettings();
     }
 
     @Test

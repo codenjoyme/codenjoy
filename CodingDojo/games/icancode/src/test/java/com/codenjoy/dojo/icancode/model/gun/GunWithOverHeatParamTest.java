@@ -22,6 +22,7 @@ package com.codenjoy.dojo.icancode.model.gun;
  * #L%
  */
 
+import com.codenjoy.dojo.icancode.TestGameSettings;
 import com.codenjoy.dojo.icancode.services.GameSettings;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,7 +48,7 @@ public class GunWithOverHeatParamTest {
 
     public GunWithOverHeatParamTest(Params params) {
         this.params = params;
-        settings = new GameSettings();
+        settings = new TestGameSettings();
         gun = new GunWithOverHeat(){{
             settings = GunWithOverHeatParamTest.this.settings;
         }};

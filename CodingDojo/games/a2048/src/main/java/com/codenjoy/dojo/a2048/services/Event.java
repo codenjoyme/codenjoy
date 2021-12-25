@@ -28,7 +28,7 @@ import com.codenjoy.dojo.services.event.EventObject;
 public class Event implements EventObject<Event.Type, Integer> {
 
     private Type event;
-    private int number;
+    private int value;
 
     public enum Type {
         SUM,
@@ -38,21 +38,21 @@ public class Event implements EventObject<Event.Type, Integer> {
 
     @Override
     public String toString() {
-        return event + ((number != 0)?("(" + number + ")"):"");
+        return event + ((value != 0)?("(" + value + ")"):"");
     }
 
     public Event(Type event) {
         this.event = event;
     }
 
-    public Event(Type event, int number) {
+    public Event(Type event, int value) {
         this.event = event;
-        this.number = number;
+        this.value = value;
     }
 
     @Override
     public Integer value() {
-        return number;
+        return value;
     }
 
     @Override

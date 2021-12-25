@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.sudoku.TestGameSettings;
 import com.codenjoy.dojo.sudoku.model.level.Level;
 import com.codenjoy.dojo.sudoku.services.Event;
 import com.codenjoy.dojo.sudoku.services.GameSettings;
@@ -63,7 +64,7 @@ public class GameTest {
     private void givenFl(String board, String mask) {
         Level level = new Level(removeBoard(board), removeBoard(mask));
 
-        settings = new GameSettings();
+        settings = new TestGameSettings();
         game = new Sudoku(level, 0, settings);
         listener = mock(EventListener.class);
         player = new Player(listener, settings);

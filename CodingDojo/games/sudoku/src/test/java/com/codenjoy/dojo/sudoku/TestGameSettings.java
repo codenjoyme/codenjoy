@@ -24,12 +24,18 @@ package com.codenjoy.dojo.sudoku;
 
 import com.codenjoy.dojo.sudoku.services.GameSettings;
 
+import static com.codenjoy.dojo.sudoku.services.GameSettings.Keys.*;
+
 public class TestGameSettings extends GameSettings {
 
     /**
      * Here you can override the settings for all tests.
      */
     public TestGameSettings() {
-
+        integer(WIN_SCORE, 10);
+        integer(FAIL_PENALTY, -1);
+        integer(LOSE_PENALTY, -5);
+        integer(SUCCESS_SCORE, 3);
+        integer(LEVELS_COUNT, 0);
     }
 }

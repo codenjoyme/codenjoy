@@ -23,46 +23,23 @@ package com.codenjoy.dojo.reversi.services;
  */
 
 
-import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.ScoresMap;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import static com.codenjoy.dojo.reversi.services.GameSettings.Keys.*;
 
-public class Scores implements PlayerScores {
+public class Scores extends ScoresMap<Integer> {
 
-    private volatile int score;
-    private GameSettings settings;
+    public Scores(SettingsReader settings) {
+        super(settings);
 
-    public Scores(int startScore, GameSettings settings) {
-        this.score = startScore;
-        this.settings = settings;
-    }
+        put(Event.Type.FLIP,
+                value -> value * settings.integer(FLIP_SCORE));
 
-    @Override
-    public int clear() {
-        return score = 0;
-    }
+        put(Event.Type.WIN,
+                value -> settings.integer(WIN_SCORE));
 
-    @Override
-    public Integer getScore() {
-        return score;
-    }
-
-    @Override
-    public void event(Object object) {
-        Event event = (Event)object;
-
-        if (event.isFlip()) {
-            score += settings.integer(FLIP_SCORE) * event.count();
-        } else if (event.isWin()) {
-            score += settings.integer(WIN_SCORE);
-        } else if (event.isLose()) {
-            score -= settings.integer(LOSE_PENALTY);
-        }
-        score = Math.max(0, score);
-    }
-
-    @Override
-    public void update(Object score) {
-        this.score = Integer.valueOf(score.toString());
+        put(Event.Type.LOSE,
+                value -> settings.integer(LOSE_PENALTY));
     }
 }

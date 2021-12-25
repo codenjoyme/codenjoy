@@ -22,6 +22,7 @@ package com.codenjoy.dojo.tetris.services;
  * #L%
  */
 
+import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.event.ScoresImpl;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
@@ -88,4 +89,7 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         return factory.allLevels();
     }
 
+    public Calculator<Event> calculator() {
+        return new Calculator<>(new Scores(this));
+    }
 }

@@ -22,6 +22,7 @@ package com.codenjoy.dojo.quake2d.model;
  * #L%
  */
 
+import com.codenjoy.dojo.quake2d.TestGameSettings;
 import com.codenjoy.dojo.quake2d.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
@@ -54,7 +55,7 @@ public class GameTest {
     public void setup() {
         dice = mock(Dice.class);
         printer = new PrinterFactoryImpl();
-        settings = new GameSettings();
+        settings = new TestGameSettings();
     }
 
     private void dice(int...ints) {

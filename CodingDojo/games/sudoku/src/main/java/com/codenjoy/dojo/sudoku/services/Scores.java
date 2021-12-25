@@ -23,46 +23,26 @@ package com.codenjoy.dojo.sudoku.services;
  */
 
 
-import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.ScoresMap;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import static com.codenjoy.dojo.sudoku.services.GameSettings.Keys.*;
 
-public class Scores implements PlayerScores {
+public class Scores extends ScoresMap<Void> {
 
-    private volatile int score;
-    private GameSettings settings;
+    public Scores(SettingsReader settings) {
+        super(settings);
 
-    public Scores(int startScore, GameSettings settings) {
-        this.score = startScore;
-        this.settings = settings;
-    }
+        put(Event.WIN,
+                value -> settings.integer(WIN_SCORE));
 
-    @Override
-    public int clear() {
-        return score = 0;
-    }
+        put(Event.FAIL,
+                value -> settings.integer(FAIL_PENALTY));
 
-    @Override
-    public Integer getScore() {
-        return score;
-    }
+        put(Event.SUCCESS,
+                value -> settings.integer(SUCCESS_SCORE));
 
-    @Override
-    public void event(Object event) {
-        if (event.equals(Event.WIN)) {
-            score += settings.integer(WIN_SCORE);
-        } else if (event.equals(Event.FAIL)) {
-            score -= settings.integer(FAIL_PENALTY);
-        } else if (event.equals(Event.SUCCESS)) {
-            score += settings.integer(SUCCESS_SCORE);
-        } else if (event.equals(Event.LOSE)) {
-            score -= settings.integer(LOSE_PENALTY);
-        }
-        score = Math.max(0, score);
-    }
-
-    @Override
-    public void update(Object score) {
-        this.score = Integer.valueOf(score.toString());
+        put(Event.LOSE,
+                value -> settings.integer(LOSE_PENALTY));
     }
 }

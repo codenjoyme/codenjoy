@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.reversi.services;
+package com.codenjoy.dojo.quake2d.services;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2016 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -23,14 +23,17 @@ package com.codenjoy.dojo.reversi.services;
  */
 
 
-import com.codenjoy.dojo.reversi.TestGameSettings;
+import com.codenjoy.dojo.quake2d.TestGameSettings;
 import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.event.ScoresImpl;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.codenjoy.dojo.reversi.services.GameSettings.Keys.*;
+import static com.codenjoy.dojo.quake2d.services.Event.INJURE;
+import static com.codenjoy.dojo.quake2d.services.Event.KILL;
+import static com.codenjoy.dojo.quake2d.services.GameSettings.Keys.INJURE_SCORE;
+import static com.codenjoy.dojo.quake2d.services.GameSettings.Keys.KILL_SCORE;
 import static org.junit.Assert.assertEquals;
 
 public class ScoresTest {
@@ -38,16 +41,12 @@ public class ScoresTest {
     private PlayerScores scores;
     private GameSettings settings;
 
-    public void lose() {
-        scores.event(Event.LOSE);
+    private void kill() {
+        scores.event(KILL);
     }
 
-    public void win() {
-        scores.event(Event.WIN);
-    }
-
-    public void flip(int count) {
-        scores.event(Event.FLIP.apply(count));
+    private void injure() {
+        scores.event(INJURE);
     }
 
     @Before
@@ -61,21 +60,16 @@ public class ScoresTest {
         givenScores(140);
 
         // when
-        win();
-        win();
-        win();
-        win();
+        kill();
+        kill();
+        kill();
 
-        flip(35);
-        flip(45);
-
-        lose();
+        injure();
 
         // then
         assertEquals(140
-                    + 4 * settings.integer(WIN_SCORE)
-                    + (35 + 45)*settings.integer(FLIP_SCORE)
-                    + settings.integer(LOSE_PENALTY),
+                    + 3 * settings.integer(KILL_SCORE)
+                    + settings.integer(INJURE_SCORE),
                 scores.getScore());
     }
 
@@ -84,12 +78,13 @@ public class ScoresTest {
     }
 
     @Test
-    public void shouldStillZeroAfterDead() {
+    public void shouldStillZero_ifLessThan0() {
         // given
+        settings.integer(INJURE_SCORE, -10);
         givenScores(0);
 
         // when
-        lose();
+        injure();
 
         // then
         assertEquals(0, scores.getScore());
@@ -99,7 +94,7 @@ public class ScoresTest {
     public void shouldClearScore() {
         // given
         givenScores(0);
-        win();
+        kill();
 
         // when
         scores.clear();
@@ -109,47 +104,32 @@ public class ScoresTest {
     }
 
     @Test
-    public void shouldCollectScores_whenWin() {
+    public void shouldCollectScores_whenKill() {
         // given
         givenScores(140);
 
         // when
-        win();
-        win();
+        kill();
+        kill();
 
         // then
         assertEquals(140
-                    + 2 * settings.integer(WIN_SCORE),
+                    + 2 * settings.integer(KILL_SCORE),
                 scores.getScore());
     }
 
     @Test
-    public void shouldCollectScores_whenFlip() {
+    public void shouldCollectScores_whenInjure() {
         // given
         givenScores(140);
 
         // when
-        flip(35);
-        flip(45);
+        injure();
+        injure();
 
         // then
         assertEquals(140
-                    + (35 + 45)*settings.integer(FLIP_SCORE),
-                scores.getScore());
-    }
-
-    @Test
-    public void shouldCollectScores_whenLose() {
-        // given
-        givenScores(140);
-
-        // when
-        lose();
-        lose();
-
-        // then
-        assertEquals(140
-                    + 2 * settings.integer(LOSE_PENALTY),
+                    + 2 * settings.integer(INJURE_SCORE),
                 scores.getScore());
     }
 }

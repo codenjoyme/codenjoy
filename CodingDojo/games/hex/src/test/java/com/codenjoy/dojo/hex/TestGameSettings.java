@@ -32,7 +32,7 @@ public class TestGameSettings extends GameSettings {
      * Here you can override the settings for all tests.
      */
     public TestGameSettings() {
-        integer(WIN_SCORE, +2);
+        integer(WIN_SCORE, 2);
         integer(LOSE_PENALTY, -1);
 
         multiline(LEVEL_MAP,

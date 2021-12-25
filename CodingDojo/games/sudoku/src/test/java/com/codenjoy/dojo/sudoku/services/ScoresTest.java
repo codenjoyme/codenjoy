@@ -24,6 +24,9 @@ package com.codenjoy.dojo.sudoku.services;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.Calculator;
+import com.codenjoy.dojo.services.event.ScoresImpl;
+import com.codenjoy.dojo.sudoku.TestGameSettings;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -53,48 +56,106 @@ public class ScoresTest {
 
     @Before
     public void setup() {
-        settings = new GameSettings();
-        scores = new Scores(0, settings);
+        settings = new TestGameSettings();
     }
 
     @Test
     public void shouldCollectScores() {
-        scores = new Scores(140, settings);
+        // given
+        givenScores(140);
 
-        success();  // +10
-        success();  // +10
-        success();  // +10
-        success();  // +10
+        // when
+        success();
+        success();
+        success();
+        success();
 
-        fail(); // -10
+        fail();
 
-        win(); // +1000
+        win();
 
-        lose(); // -500
+        lose();
 
+        // then
         assertEquals(140
-                + 4 * settings.integer(SUCCESS_SCORE)
-                - settings.integer(FAIL_PENALTY)
-                + settings.integer(WIN_SCORE)
-                - settings.integer(LOSE_PENALTY),
+                    + 4 * settings.integer(SUCCESS_SCORE)
+                    + settings.integer(FAIL_PENALTY)
+                    + settings.integer(WIN_SCORE)
+                    + settings.integer(LOSE_PENALTY),
                 scores.getScore());
+    }
+
+    private void givenScores(int score) {
+        scores = new ScoresImpl<>(score, new Calculator<>(new Scores(settings)));
     }
 
     @Test
     public void shouldStillZeroAfterFail() {
-        fail();    //-10
+        // given
+        givenScores(0);
 
+        // when
+        fail();
+
+        // then
         assertEquals(0, scores.getScore());
     }
 
     @Test
     public void shouldClearScore() {
-        win();    // +30
+        // given
+        givenScores(0);
+        win();
 
+        // when
         scores.clear();
 
+        // then
         assertEquals(0, scores.getScore());
     }
 
+    @Test
+    public void shouldCollectScores_whenSuccess() {
+        // given
+        givenScores(140);
 
+        // when
+        success();
+        success();
+
+        // then
+        assertEquals(140
+                        + 2 * settings.integer(SUCCESS_SCORE),
+                scores.getScore());
+    }
+
+    @Test
+    public void shouldCollectScores_whenFail() {
+        // given
+        givenScores(140);
+
+        // when
+        fail();
+        fail();
+
+        // then
+        assertEquals(140
+                        + 2 * settings.integer(FAIL_PENALTY),
+                scores.getScore());
+    }
+
+    @Test
+    public void shouldCollectScores_whenWin() {
+        // given
+        givenScores(140);
+
+        // when
+        win();
+        win();
+
+        // then
+        assertEquals(140
+                        + 2 * settings.integer(WIN_SCORE),
+                scores.getScore());
+    }
 }

@@ -22,6 +22,7 @@ package com.codenjoy.dojo.spacerace.services;
  * #L%
  */
 
+import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 import com.codenjoy.dojo.spacerace.model.Level;
@@ -35,13 +36,13 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
 
     public enum Keys implements Key {
 
-        TICKS_TO_RECHARGE("Ticks to recharge"),
-        BULLETS_COUNT("Bullets count"),
-        DESTROY_BOMB_SCORE("Destroy bomb score"),
-        DESTROY_STONE_SCORE("Destroy stone score"),
-        DESTROY_ENEMY_SCORE("Destroy enemy score"),
-        LOSE_PENALTY("Lose penalty"),
-        LEVEL_MAP("Level map");
+        TICKS_TO_RECHARGE("[Game] Ticks to recharge"),
+        BULLETS_COUNT("[Game] Bullets count"),
+        DESTROY_BOMB_SCORE("[Score] Destroy bomb score"),
+        DESTROY_STONE_SCORE("[Score] Destroy stone score"),
+        DESTROY_ENEMY_SCORE("[Score] Destroy enemy score"),
+        LOSE_PENALTY("[ScoreL ose penalty"),
+        LEVEL_MAP("[Level] Level map");
 
         private String key;
 
@@ -67,7 +68,7 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         integer(DESTROY_BOMB_SCORE, 30);
         integer(DESTROY_STONE_SCORE, 10);
         integer(DESTROY_ENEMY_SCORE, 500);
-        integer(LOSE_PENALTY, 100);
+        integer(LOSE_PENALTY, -100);
 
         multiline(LEVEL_MAP,
                 "☼                            ☼" +
@@ -106,4 +107,7 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         return new Level(string(LEVEL_MAP));
     }
 
+    public Calculator<Void> calculator() {
+        return new Calculator<>(new Scores(this));
+    }
 }

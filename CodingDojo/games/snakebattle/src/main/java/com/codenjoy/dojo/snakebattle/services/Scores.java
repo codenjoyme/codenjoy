@@ -23,53 +23,32 @@ package com.codenjoy.dojo.snakebattle.services;
  */
 
 
-import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.ScoresMap;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import static com.codenjoy.dojo.snakebattle.services.GameSettings.Keys.*;
 
-public class Scores implements PlayerScores {
+public class Scores extends ScoresMap<Integer> {
 
-    private GameSettings settings;
-    private volatile int score;
+    public Scores(SettingsReader settings) {
+        super(settings);
 
-    public Scores(int startScore, GameSettings settings) {
-        this.score = startScore;
-        this.settings = settings;
-    }
+        put(Event.Type.WIN,
+                value -> settings.integer(WIN_SCORE));
 
-    @Override
-    public int clear() {
-        return score = 0;
-    }
+        put(Event.Type.APPLE,
+                value -> settings.integer(APPLE_SCORE));
 
-    @Override
-    public Integer getScore() {
-        return score;
-    }
+        put(Event.Type.GOLD,
+                value -> settings.integer(GOLD_SCORE));
 
-    @Override
-    public void event(Object object) {
-        if (!(object instanceof Event))
-            return;
-        Event event = (Event)object;
-        if (event.isWin()) {
-            score += settings.integer(WIN_SCORE);
-        } else if (event.isApple()) {
-            score += settings.integer(APPLE_SCORE);
-        } else if (event.isGold()) {
-            score += settings.integer(GOLD_SCORE);
-        } else if (event.isDie()) {
-            score -= settings.integer(DIE_PENALTY);
-        } else if (event.isStone()) {
-            score += settings.integer(STONE_SCORE);
-        } else if (event.isEat()) {
-            score += settings.integer(EAT_SCORE) * event.getAmount();
-        }
-        score = Math.max(0, score);
-    }
+        put(Event.Type.DIE,
+                value -> settings.integer(DIE_PENALTY));
 
-    @Override
-    public void update(Object score) {
-        this.score = Integer.valueOf(score.toString());
+        put(Event.Type.STONE,
+                value -> settings.integer(STONE_SCORE));
+
+        put(Event.Type.EAT,
+                value -> value * settings.integer(EAT_SCORE));
     }
 }

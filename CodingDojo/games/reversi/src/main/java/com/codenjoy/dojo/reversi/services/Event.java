@@ -22,51 +22,43 @@ package com.codenjoy.dojo.reversi.services;
  * #L%
  */
 
-public class Event {
+import com.codenjoy.dojo.services.event.EventObject;
 
-    private static final String WIN = "WIN";
-    private static final String LOSE = "LOSE";
-    private static final String FLIP = "FLIP";
+import java.util.function.Function;
 
-    private String name;
-    private int count;
+public class Event implements EventObject<Event.Type, Integer> {
 
-    public Event(String name, int count) {
-        this.name = name;
-        this.count = count;
+    public static final Event WIN = new Event(Type.WIN, 1);
+    public static final Event LOSE = new Event(Type.LOSE, 1);
+    public static final Function<Integer, Event> FLIP = count -> new Event(Type.FLIP, count);
+
+    private Type type;
+    private int value;
+
+    Event(Type type, int value) {
+        this.type = type;
+        this.value = value;
     }
 
-    public static Event WIN() {
-        return new Event(WIN, 1);
-    }
-
-    public static Event LOSE() {
-        return new Event(LOSE, 1);
-    }
-
-    public static Event FLIP(int count) {
-        return new Event(FLIP, count);
+    public enum Type {
+        WIN,
+        LOSE,
+        FLIP
     }
 
     @Override
     public String toString() {
-        return String.format("%s:%s", name, count);
+        return String.format("%s:%s", type, value);
     }
 
-    public boolean isFlip() {
-        return name.equals(FLIP);
+    @Override
+    public Type type() {
+        return type;
     }
 
-    public int count() {
-        return count;
-    }
-
-    public boolean isLose() {
-        return name.equals(LOSE);
-    }
-
-    public boolean isWin() {
-        return name.equals(WIN);
+    @Override
+    public Integer value() {
+        return value;
     }
 
     @Override
@@ -76,14 +68,14 @@ public class Event {
 
         Event events = (Event) o;
 
-        if (count != events.count) return false;
-        return name.equals(events.name);
+        if (value != events.value) return false;
+        return type.equals(events.type);
     }
 
     @Override
     public int hashCode() {
-        int result = name.hashCode();
-        result = 31 * result + count;
+        int result = type.hashCode();
+        result = 31 * result + value;
         return result;
     }
 }

@@ -24,6 +24,7 @@ package com.codenjoy.dojo.puzzlebox.services;
 
 
 import com.codenjoy.dojo.puzzlebox.model.Level;
+import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
@@ -36,9 +37,9 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
 
     public enum Keys implements Key {
 
-        WIN_SCORE("Win score"),
-        FILL_SCORE("Fill score"),
-        LEVEL_MAP("Level map");
+        WIN_SCORE("[Score] Win score"),
+        FILL_SCORE("[Score] Fill score"),
+        LEVEL_MAP("[Level] Level map");
 
         private String key;
 
@@ -98,4 +99,7 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         return new Level(string(LEVEL_MAP));
     }
 
+    public Calculator<Void> calculator() {
+        return new Calculator<>(new Scores(this));
+    }
 }
