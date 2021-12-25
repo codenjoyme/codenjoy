@@ -23,80 +23,62 @@ package com.codenjoy.dojo.minesweeper.services;
  */
 
 
-import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.ScoresMap;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import static com.codenjoy.dojo.minesweeper.services.GameSettings.Keys.*;
 
-public class Scores implements PlayerScores {
+public class Scores extends ScoresMap<Void> {
 
-    private volatile int score;
-    private GameSettings settings;
     private volatile int destroyed;
 
-    public Scores(int startScore, GameSettings settings) {
-        this.score = startScore;
-        this.settings = settings;
-        destroyed = 0;
+    public Scores(SettingsReader settings) {
+        super(settings);
+
+        put(Event.DESTROY_MINE,
+                event -> onDestroyMine());
+
+        put(Event.FORGET_CHARGE,
+                event -> onForgotCharge());
+
+        put(Event.KILL_ON_MINE,
+                event -> onKillOnMine());
+
+        put(Event.NO_MORE_CHARGE,
+                event -> onNoMoreCharge());
+
+        put(Event.WIN,
+                event -> onWin());
+
+        put(Event.CLEAN_BOARD,
+                event -> onClearBoard());
     }
 
-    @Override
-    public Integer getScore() {
-        return score;
+    private int onClearBoard() {
+        return settings.integer(CLEAR_BOARD_SCORE);
     }
 
-    @Override
-    public int clear() {
-        return score = 0;
+    private int onWin() {
+        return settings.integer(WIN_SCORE);
     }
 
-    @Override
-    public void event(Object event) {
-        if (event.equals(Event.DESTROY_MINE)) {
-            onDestroyMine();
-        } else if (event.equals(Event.FORGET_CHARGE)) {
-            onForgotCharge();
-        } else if (event.equals(Event.KILL_ON_MINE)) {
-            onKillOnMine();
-        } else if (event.equals(Event.NO_MORE_CHARGE)) {
-            onNoMoreCharge();
-        } else if (event.equals(Event.WIN)) {
-            onWin();
-        } else if (event.equals(Event.CLEAN_BOARD)) {
-            onClearBoard();
-        }
-        score = Math.max(0, score);
+    private int onNoMoreCharge() {
+        return onKillOnMine();
     }
 
-    private void onClearBoard() {
-        score += settings.integer(CLEAR_BOARD_SCORE);
-    }
-
-    private void onWin() {
-        score += settings.integer(WIN_SCORE);
-    }
-
-    private void onNoMoreCharge() {
-        onKillOnMine();
-    }
-
-    private void onDestroyMine() {
+    private int onDestroyMine() {
         destroyed++;
-        score += destroyed;
+        return destroyed;
     }
 
-    private void onForgotCharge() {
-        score -= settings.integer(DESTROYED_FORGOT_PENALTY);
+    private int onForgotCharge() {
         destroyed -= settings.integer(DESTROYED_PENALTY);
         destroyed = Math.max(0, destroyed);
+        return settings.integer(DESTROYED_FORGOT_PENALTY);
     }
 
-    private void onKillOnMine() {
-        score -= settings.integer(GAME_OVER_PENALTY);
+    private int onKillOnMine() {
         destroyed = 0;
-    }
-
-    @Override
-    public void update(Object score) {
-        this.score = Integer.valueOf(score.toString());
+        return settings.integer(GAME_OVER_PENALTY);
     }
 }

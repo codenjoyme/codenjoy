@@ -23,6 +23,7 @@ package com.codenjoy.dojo.minesweeper.model;
  */
 
 
+import com.codenjoy.dojo.minesweeper.TestGameSettings;
 import com.codenjoy.dojo.minesweeper.model.items.Mine;
 import com.codenjoy.dojo.minesweeper.services.GameSettings;
 import com.codenjoy.dojo.services.EventListener;
@@ -44,7 +45,7 @@ public class RandomMinesGeneratorTest {
 
     @Before
     public void setup() {
-        settings = new GameSettings()
+        settings = new TestGameSettings()
                 .integer(GameSettings.Keys.BOARD_SIZE, 16)
                 .integer(GameSettings.Keys.MINES_ON_BOARD, 0)
                 .integer(GameSettings.Keys.DETECTOR_CHARGE, 1);

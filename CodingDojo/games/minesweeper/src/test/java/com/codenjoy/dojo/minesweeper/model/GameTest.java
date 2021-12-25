@@ -23,6 +23,7 @@ package com.codenjoy.dojo.minesweeper.model;
  */
 
 
+import com.codenjoy.dojo.minesweeper.TestGameSettings;
 import com.codenjoy.dojo.minesweeper.model.items.Mine;
 import com.codenjoy.dojo.minesweeper.services.Event;
 import com.codenjoy.dojo.minesweeper.services.GameSettings;
@@ -52,7 +53,7 @@ public class GameTest {
     @Before
     public void setup() {
         printerFactory = new PrinterFactoryImpl();
-        settings = new GameSettings()
+        settings = new TestGameSettings()
                 .integer(BOARD_SIZE, 5)
                 .integer(DETECTOR_CHARGE, 3);
     }
