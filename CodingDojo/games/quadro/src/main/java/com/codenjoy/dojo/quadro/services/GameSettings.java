@@ -24,6 +24,7 @@ package com.codenjoy.dojo.quadro.services;
 
 
 import com.codenjoy.dojo.quadro.model.Level;
+import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
@@ -36,10 +37,10 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
 
     public enum Keys implements Key {
 
-        WIN_SCORE("Win score"),
-        LOSE_PENALTY("Lose penalty"),
-        DRAW_SCORE("Draw score"),
-        LEVEL_MAP("Level map");
+        WIN_SCORE("[Score] Win score"),
+        LOSE_PENALTY("[Score] Lose penalty"),
+        DRAW_SCORE("[Score] Draw score"),
+        LEVEL_MAP("[Level] Level map");
 
         private String key;
 
@@ -60,7 +61,7 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
 
     public GameSettings() {
         integer(WIN_SCORE, 10);
-        integer(LOSE_PENALTY, 1);
+        integer(LOSE_PENALTY, -1);
         integer(DRAW_SCORE, 3);
 
         multiline(LEVEL_MAP,
@@ -79,4 +80,7 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         return new Level(string(LEVEL_MAP));
     }
 
+    public Calculator<Void> calculator() {
+        return new Calculator<>(new Scores(this));
+    }
 }
