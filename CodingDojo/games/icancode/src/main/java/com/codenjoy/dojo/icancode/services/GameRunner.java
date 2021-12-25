@@ -57,7 +57,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public PlayerScores getPlayerScores(Object score, GameSettings settings) {
-        return new ScoresImpl<>(Integer.parseInt(score.toString()), new Scores(settings));
+        return new ScoresImpl<>(Integer.parseInt(score.toString()), settings.calculator());
     }
 
     @Override

@@ -25,6 +25,7 @@ package com.codenjoy.dojo.icancode.services;
 
 import com.codenjoy.dojo.icancode.model.items.ZombieBrain;
 import com.codenjoy.dojo.icancode.services.levels.Level;
+import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
@@ -159,4 +160,7 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         return "Level" + index + " ";
     }
 
+    public Calculator<Event> calculator() {
+        return new Calculator<>(new Scores(this));
+    }
 }
