@@ -37,7 +37,7 @@ import com.codenjoy.dojo.services.round.RoundGamePlayer;
  */
 public class Player extends RoundGamePlayer<Hero, Field> {
 
-    private Calculator<Integer> calculator;
+    private Calculator<Void> calculator;
 
     public Player(EventListener listener, GameSettings settings) {
         super(listener, settings);
