@@ -23,9 +23,10 @@ package com.codenjoy.dojo.expansion.model.attack;
  */
 
 
-import com.codenjoy.dojo.games.expansion.Element;
+import com.codenjoy.dojo.expansion.TestGameSettings;
 import com.codenjoy.dojo.expansion.model.levels.items.HeroForces;
 import com.codenjoy.dojo.expansion.services.GameSettings;
+import com.codenjoy.dojo.games.expansion.Element;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -33,7 +34,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class OneByOneAttackTest {
 
@@ -46,7 +47,7 @@ public class OneByOneAttackTest {
         }
 
         public static Forces get(String code) {
-            int count = Integer.valueOf(code.substring(0, code.length() - 1));
+            int count = Integer.parseInt(code.substring(0, code.length() - 1));
             char ch = code.charAt(code.length() - 1);
             Element element = Element.valueOf(ch);
             return new Forces(count, element);
@@ -60,7 +61,7 @@ public class OneByOneAttackTest {
 
     @Before
     public void setUp() throws Exception {
-        settings = new GameSettings();
+        settings = new TestGameSettings();
     }
 
     @Test
