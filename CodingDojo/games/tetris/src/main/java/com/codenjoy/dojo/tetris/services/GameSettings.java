@@ -31,7 +31,7 @@ import com.codenjoy.dojo.tetris.model.levels.level.ProbabilityWithoutOverflownLe
 import java.util.Arrays;
 import java.util.List;
 
-import static com.codenjoy.dojo.services.event.ScoresImpl.Mode.CUMULATIVELY;
+import static com.codenjoy.dojo.services.event.Mode.CUMULATIVELY;
 import static com.codenjoy.dojo.tetris.services.GameSettings.Keys.*;
 
 public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {

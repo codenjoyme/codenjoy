@@ -26,7 +26,7 @@ import com.codenjoy.dojo.services.event.ScoresImpl;
 import com.codenjoy.dojo.services.event.ScoresMap;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
-import static com.codenjoy.dojo.services.event.ScoresImpl.Mode.SERIES_MAX_VALUE;
+import static com.codenjoy.dojo.services.event.Mode.SERIES_MAX_VALUE;
 import static com.codenjoy.dojo.tetris.services.GameSettings.Keys.*;
 
 public class Scores extends ScoresMap<Event> {

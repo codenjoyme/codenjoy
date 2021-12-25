@@ -24,6 +24,7 @@ package com.codenjoy.dojo.tetris.services.scores;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.event.ScoresImpl;
 import com.codenjoy.dojo.tetris.TestGameSettings;
 import com.codenjoy.dojo.tetris.services.Event;
@@ -32,7 +33,7 @@ import com.codenjoy.dojo.tetris.services.Scores;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.codenjoy.dojo.services.event.ScoresImpl.Mode.CUMULATIVELY;
+import static com.codenjoy.dojo.services.event.Mode.CUMULATIVELY;
 import static org.junit.Assert.assertEquals;
 
 public class CumulativeScoresTest {
@@ -61,7 +62,7 @@ public class CumulativeScoresTest {
     }
 
     protected void givenScores(int score) {
-        scores = new ScoresImpl<>(score, new Scores(settings));
+        scores = new ScoresImpl<>(score, new Calculator<>(new Scores(settings)));
     }
 
     public void assertScore(int expected) {

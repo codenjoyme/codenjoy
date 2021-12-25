@@ -28,7 +28,7 @@ import com.codenjoy.dojo.tetris.TestGameSettings;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.codenjoy.dojo.services.event.ScoresImpl.Mode.SERIES_MAX_VALUE;
+import static com.codenjoy.dojo.services.event.Mode.SERIES_MAX_VALUE;
 import static org.junit.Assert.assertEquals;
 
 public class SeriesMaxValueScoresTest extends CumulativeScoresTest {
