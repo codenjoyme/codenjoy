@@ -23,6 +23,7 @@ package com.codenjoy.dojo.fifteen.services;
  */
 
 
+import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
@@ -59,5 +60,9 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
     public GameSettings() {
         integer(WIN_SCORE, 30);
         integer(BONUS_SCORE, 100);
+    }
+
+    public Calculator<Event> calculator() {
+        return new Calculator<>(new Scores(this));
     }
 }

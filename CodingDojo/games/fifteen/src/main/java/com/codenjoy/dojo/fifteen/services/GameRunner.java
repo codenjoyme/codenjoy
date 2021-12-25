@@ -24,9 +24,12 @@ package com.codenjoy.dojo.fifteen.services;
 
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.games.fifteen.Board;
+import com.codenjoy.dojo.fifteen.model.Fifteen;
+import com.codenjoy.dojo.fifteen.model.Level;
+import com.codenjoy.dojo.fifteen.model.Player;
+import com.codenjoy.dojo.fifteen.model.Randomizer;
 import com.codenjoy.dojo.fifteen.services.ai.AISolver;
-import com.codenjoy.dojo.fifteen.model.*;
+import com.codenjoy.dojo.games.fifteen.Board;
 import com.codenjoy.dojo.games.fifteen.Element;
 import com.codenjoy.dojo.services.AbstractGameType;
 import com.codenjoy.dojo.services.EventListener;
@@ -49,7 +52,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public PlayerScores getPlayerScores(Object score, GameSettings settings) {
-        return new ScoresImpl<>(Integer.parseInt(score.toString()), new Scores(settings));
+        return new ScoresImpl<>(Integer.parseInt(score.toString()), settings.calculator());
     }
 
     @Override
