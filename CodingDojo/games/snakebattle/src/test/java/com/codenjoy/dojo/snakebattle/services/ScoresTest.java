@@ -23,6 +23,9 @@ package com.codenjoy.dojo.snakebattle.services;
  */
 
 
+import com.codenjoy.dojo.services.event.Calculator;
+import com.codenjoy.dojo.services.event.ScoresImpl;
+import com.codenjoy.dojo.snakebattle.TestGameSettings;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -30,47 +33,50 @@ import org.junit.runners.Parameterized;
 import java.util.Arrays;
 import java.util.Collection;
 
+import static com.codenjoy.dojo.snakebattle.services.Event.Type.*;
 import static com.codenjoy.dojo.snakebattle.services.GameSettings.Keys.*;
 import static org.junit.Assert.assertEquals;
 
-/**
- * @author K.ilya
- */
+
 @RunWith(Parameterized.class)
 public class ScoresTest {
 
     private GameSettings settings;
-    Scores scores;
-    Event event;
-    int changeValue;
+    private ScoresImpl scores;
+    private Event event;
+    private int changeValue;
 
-    public ScoresTest(int startScore, Event event, int changeValue) {
-        settings = new GameSettings()
+    public ScoresTest(int score, Event event, int changeValue) {
+        settings = new TestGameSettings()
                 .integer(WIN_SCORE, 30)
                 .integer(APPLE_SCORE, 1)
                 .integer(GOLD_SCORE, 5)
-                .integer(DIE_PENALTY, 10)
+                .integer(DIE_PENALTY, -10)
                 .integer(STONE_SCORE, -1);
-        scores = new Scores(startScore, settings);
+        givenScores(score);
         this.event = event;
         this.changeValue = changeValue;
+    }
+
+    private void givenScores(int score) {
+        scores = new ScoresImpl<>(score, new Calculator<>(new Scores(settings)));
     }
 
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         Object[][] params = new Object[][]{
-                {0, Event.START, 0},
-                {0, Event.APPLE, +1},
-                {0, Event.GOLD, +5},
-                {0, Event.STONE, 0}, // счёт всегда >=0
-                {0, Event.WIN, +30},
-                {0, Event.DIE, 0}, // счёт всегда >=0
-                {100, Event.START, 0},
-                {100, Event.APPLE, +1},
-                {100, Event.GOLD, +5},
-                {100, Event.STONE, -1},
-                {100, Event.WIN, +30},
-                {100, Event.DIE, -10},
+                {0, new Event(START), 0},
+                {0, new Event(APPLE), +1},
+                {0, new Event(GOLD), +5},
+                {0, new Event(STONE), 0}, // счёт всегда >=0
+                {0, new Event(WIN), +30},
+                {0, new Event(DIE), 0}, // счёт всегда >=0
+                {100, new Event(START), 0},
+                {100, new Event(APPLE), +1},
+                {100, new Event(GOLD), +5},
+                {100, new Event(STONE), -1},
+                {100, new Event(WIN), +30},
+                {100, new Event(DIE), -10},
         };
         return Arrays.asList(params);
     }

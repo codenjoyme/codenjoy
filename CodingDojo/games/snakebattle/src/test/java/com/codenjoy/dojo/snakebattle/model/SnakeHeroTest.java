@@ -24,6 +24,7 @@ package com.codenjoy.dojo.snakebattle.model;
 
 
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.snakebattle.TestGameSettings;
 import com.codenjoy.dojo.snakebattle.model.board.SnakeBoard;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 import com.codenjoy.dojo.snakebattle.model.hero.Tail;
@@ -34,7 +35,7 @@ import org.junit.Test;
 import java.util.LinkedList;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
-import static com.codenjoy.dojo.snakebattle.services.GameSettings.Keys.*;
+import static com.codenjoy.dojo.snakebattle.services.GameSettings.Keys.STONE_REDUCED;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -52,11 +53,7 @@ public class SnakeHeroTest {
 
     @Before
     public void setup() {
-        settings = new GameSettings()
-                .integer(FLYING_COUNT, 10)
-                .integer(FURY_COUNT, 10)
-                .integer(STONE_REDUCED, 3);
-
+        settings = new TestGameSettings();
         hero = new Hero(pt(0, 0));
         game = mock(SnakeBoard.class);
         when(game.settings()).thenReturn(settings);
