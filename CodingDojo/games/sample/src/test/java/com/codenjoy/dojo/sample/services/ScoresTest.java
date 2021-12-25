@@ -23,6 +23,7 @@ package com.codenjoy.dojo.sample.services;
  */
 
 
+import com.codenjoy.dojo.sample.TestGameSettings;
 import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.event.ScoresImpl;
@@ -51,14 +52,15 @@ public class ScoresTest {
 
     @Before
     public void setup() {
-        settings = new GameSettings();
-        givenScores(0);
+        settings = new TestGameSettings();
     }
 
     @Test
     public void shouldCollectScores() {
+        // given
         givenScores(140);
 
+        // when
         win();
         win();
         win();
@@ -69,6 +71,7 @@ public class ScoresTest {
         winRound();
         winRound();
 
+        // then
         assertEquals(140
                 + 4 * settings.integer(WIN_SCORE)
                 + 1 * settings.integer(LOSE_PENALTY)
@@ -82,17 +85,71 @@ public class ScoresTest {
 
     @Test
     public void shouldStillZeroAfterDead() {
+        // given
+        givenScores(0);
+
+        // when
         lose();
 
+        // then
         assertEquals(0, scores.getScore());
     }
 
     @Test
     public void shouldClearScore() {
+        // given
+        givenScores(0);
         win();
 
+        // when
         scores.clear();
 
+        // then
         assertEquals(0, scores.getScore());
+    }
+
+    @Test
+    public void shouldCollectScores_whenWin() {
+        // given
+        givenScores(140);
+
+        // when
+        win();
+        win();
+
+        // then
+        assertEquals(140
+                    + 2 * settings.integer(WIN_SCORE),
+                scores.getScore());
+    }
+
+    @Test
+    public void shouldCollectScores_whenLose() {
+        // given
+        givenScores(140);
+
+        // when
+        lose();
+        lose();
+
+        // then
+        assertEquals(140
+                    + 2 * settings.integer(LOSE_PENALTY),
+                scores.getScore());
+    }
+
+    @Test
+    public void shouldCollectScores_whenWinRound() {
+        // given
+        givenScores(140);
+
+        // when
+        winRound();
+        winRound();
+
+        // then
+        assertEquals(140
+                    + 2 * settings.integer(WIN_ROUND_SCORE),
+                scores.getScore());
     }
 }

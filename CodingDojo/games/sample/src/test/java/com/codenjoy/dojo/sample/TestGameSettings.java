@@ -37,7 +37,7 @@ public class TestGameSettings extends GameSettings {
         initScore(CUMULATIVELY);
         bool(ROUNDS_ENABLED, false);
         integer(WIN_SCORE, 30);
-        integer(LOSE_PENALTY, -100);
-        integer(WIN_ROUND_SCORE, 200);
+        integer(LOSE_PENALTY, -10);
+        integer(WIN_ROUND_SCORE, 20);
     }
 }
