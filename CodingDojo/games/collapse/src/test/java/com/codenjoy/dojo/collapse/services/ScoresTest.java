@@ -25,6 +25,7 @@ package com.codenjoy.dojo.collapse.services;
 
 import com.codenjoy.dojo.collapse.TestGameSettings;
 import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.event.ScoresImpl;
 import org.junit.Before;
 import org.junit.Test;
@@ -48,7 +49,7 @@ public class ScoresTest {
     }
 
     private void givenScores(int score) {
-        scores = new ScoresImpl<>(score, new Scores(settings));
+        scores = new ScoresImpl<>(score, new Calculator<>(new Scores(settings)));
     }
 
     @Test
