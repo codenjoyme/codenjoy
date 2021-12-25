@@ -24,6 +24,7 @@ package com.codenjoy.dojo.moebius.services;
 
 
 import com.codenjoy.dojo.moebius.model.Level;
+import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
@@ -34,12 +35,11 @@ import static com.codenjoy.dojo.moebius.services.GameSettings.Keys.*;
 
 public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
 
-
     public enum Keys implements Key {
 
-        WIN_SCORE("Win score"),
-        LOSE_PENALTY("Lose penalty"),
-        SIZE("Size");
+        WIN_SCORE("[Score] Win score"),
+        LOSE_PENALTY("[Score] Lose penalty"),
+        SIZE("[Level] Size");
 
         private String key;
 
@@ -61,11 +61,14 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
     public GameSettings() {
         integer(SIZE, 15);
         integer(WIN_SCORE, 1);
-        integer(LOSE_PENALTY, 0);
+        integer(LOSE_PENALTY, -0);
     }
 
     public Level level() {
         return new Level(integer(SIZE));
     }
 
+    public Calculator<Integer> calculator() {
+        return new Calculator<>(new Scores(this));
+    }
 }

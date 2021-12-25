@@ -23,6 +23,7 @@ package com.codenjoy.dojo.moebius.model;
  */
 
 
+import com.codenjoy.dojo.moebius.TestGameSettings;
 import com.codenjoy.dojo.moebius.services.Event;
 import com.codenjoy.dojo.moebius.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
@@ -54,7 +55,7 @@ public class GameTest {
     public void setup() {
         dice = mock(Dice.class);
         printer = new PrinterFactoryImpl();
-        settings = new GameSettings();
+        settings = new TestGameSettings();
     }
 
     private void dice(int...ints) {
@@ -405,8 +406,8 @@ public class GameTest {
         ArgumentCaptor<Event> event = ArgumentCaptor.forClass(Event.class);
         verify(listener).event(event.capture());
         Event actual = event.getValue();
-        assertEquals(expected.getType(), actual.getType());
-        assertEquals(expected.getLines(), actual.getLines());
+        assertEquals(expected.type(), actual.type());
+        assertEquals(expected.value(), actual.value());
     }
 
     @Test
