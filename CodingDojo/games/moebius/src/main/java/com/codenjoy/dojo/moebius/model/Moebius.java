@@ -71,7 +71,7 @@ public class Moebius implements Field {
         if (pt.isPresent()) {
             setLine(pt.get(), Element.random(dice));
         } else {
-            player.event(new Event(Event.Event.GAME_OVER));
+            player.event(new Event(Event.Type.GAME_OVER));
             player.getHero().die();
         }
     }
@@ -94,7 +94,7 @@ public class Moebius implements Field {
                     count++;
                 }
             }
-            player.event(new Event(Event.Event.WIN, count));
+            player.event(new Event(Event.Type.WIN, count));
         } while (!processing.isEmpty());
     }
 

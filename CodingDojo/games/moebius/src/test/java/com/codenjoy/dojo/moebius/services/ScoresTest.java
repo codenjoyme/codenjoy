@@ -37,11 +37,11 @@ public class ScoresTest {
     private GameSettings settings;
 
     public void gameOver() {
-        scores.event(new Event(Event.Event.GAME_OVER));
+        scores.event(new Event(Event.Type.GAME_OVER));
     }
 
     public void win(int lines) {
-        scores.event(new Event(Event.Event.WIN, lines));
+        scores.event(new Event(Event.Type.WIN, lines));
     }
 
     @Before
