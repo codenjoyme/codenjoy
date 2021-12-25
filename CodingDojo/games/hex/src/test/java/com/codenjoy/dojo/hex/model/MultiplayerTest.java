@@ -24,6 +24,7 @@ package com.codenjoy.dojo.hex.model;
 
 
 import com.codenjoy.dojo.games.hex.Element;
+import com.codenjoy.dojo.hex.TestGameSettings;
 import com.codenjoy.dojo.hex.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
@@ -58,7 +59,7 @@ public class MultiplayerTest {
         listener = mock(EventListener.class);
         when(level.size()).thenReturn(5);
 
-        GameSettings settings = new GameSettings();
+        GameSettings settings = new TestGameSettings();
         game = new Hex(level, dice, settings);
         List<Game> games = new LinkedList<>();
         for (int index = 0; index < count; index++) {
