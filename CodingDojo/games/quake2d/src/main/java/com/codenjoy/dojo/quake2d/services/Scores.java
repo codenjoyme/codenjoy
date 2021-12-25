@@ -22,43 +22,22 @@ package com.codenjoy.dojo.quake2d.services;
  * #L%
  */
 
-import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.ScoresMap;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import static com.codenjoy.dojo.quake2d.services.GameSettings.Keys.INJURE_SCORE;
 import static com.codenjoy.dojo.quake2d.services.GameSettings.Keys.KILL_SCORE;
 
-public class Scores implements PlayerScores {
+public class Scores extends ScoresMap<Void> {
 
-    private volatile int score;
-    private GameSettings settings;
+    public Scores(SettingsReader settings) {
+        super(settings);
 
-    public Scores(int startScore, GameSettings settings) {
-        this.score = startScore;
-        this.settings = settings;
-    }
+        put(Event.KILL,
+                value -> settings.integer(KILL_SCORE));
 
-    @Override
-    public int clear() {
-        return score = 0;
-    }
+        put(Event.INJURE,
+                value -> settings.integer(INJURE_SCORE));
 
-    @Override
-    public Integer getScore() {
-        return score;
-    }
-
-    @Override
-    public void event(Object event) {
-        if (event.equals(Event.KILL)) {
-            score += settings.integer(KILL_SCORE);
-        } else if (event.equals(Event.INJURE)) {
-            score += settings.integer(INJURE_SCORE);
-        }
-        score = Math.max(0, score);
-    }
-
-    @Override
-    public void update(Object score) {
-        this.score = Integer.valueOf(score.toString());
     }
 }
