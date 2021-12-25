@@ -23,6 +23,7 @@ package com.codenjoy.dojo.lemonade.model;
  */
 
 
+import com.codenjoy.dojo.lemonade.TestGameSettings;
 import com.codenjoy.dojo.lemonade.services.GameRunner;
 import com.codenjoy.dojo.lemonade.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
@@ -34,7 +35,6 @@ import com.codenjoy.dojo.utils.JsonUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.codenjoy.dojo.lemonade.services.GameSettings.Keys.LIMIT_DAYS;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
@@ -69,8 +69,7 @@ public class MultiplayerTest {
     // появляется другие игроки, игра становится мультипользовательской
     @Before
     public void setup() {
-        settings = new GameSettings()
-                .integer(LIMIT_DAYS, 0);
+        settings = new TestGameSettings();
         dice = mock(Dice.class);
         field = new Lemonade(settings);
         GameRunner runner = new GameRunner(){

@@ -24,12 +24,14 @@ package com.codenjoy.dojo.lemonade;
 
 import com.codenjoy.dojo.lemonade.services.GameSettings;
 
+import static com.codenjoy.dojo.lemonade.services.GameSettings.Keys.LIMIT_DAYS;
+
 public class TestGameSettings extends GameSettings {
 
     /**
      * Here you can override the settings for all tests.
      */
     public TestGameSettings() {
-
+        integer(LIMIT_DAYS, 0);
     }
 }

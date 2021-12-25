@@ -23,15 +23,36 @@ package com.codenjoy.dojo.lemonade.services;
  */
 
 
-public class EventArgs {
-    public final EventType type;
-    public final double profit;
-    public final double assetsAfter;
+import com.codenjoy.dojo.services.event.EventObject;
 
-    public EventArgs(EventType type, double profit, double assetsAfter) {
+public class Event implements EventObject<Event.Type, Event> {
+
+    public Type type;
+    public double profit;
+    public double assetsAfter;
+
+    public enum Type {
+        WIN,
+        LOSE
+    }
+
+    public Event(Type type, double profit, double assetsAfter) {
         this.type = type;
         this.profit = profit;
         this.assetsAfter = assetsAfter;
+    }
+
+    public double profit() {
+        return profit;
+    }
+
+    public double assetsAfter() {
+        return assetsAfter;
+    }
+
+    @Override
+    public Type type() {
+        return type;
     }
 
     @Override

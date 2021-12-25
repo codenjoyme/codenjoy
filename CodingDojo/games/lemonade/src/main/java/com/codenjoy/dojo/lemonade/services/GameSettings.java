@@ -23,6 +23,7 @@ package com.codenjoy.dojo.lemonade.services;
  */
 
 
+import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
@@ -35,10 +36,10 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
 
     public enum Keys implements Key {
 
-        WIN_SCORE("Win score"),
-        LOSE_PENALTY("Lose penalty"),
-        BANKRUPT_PENALTY("Bankrupt penalty"),
-        LIMIT_DAYS("Limit days");
+        WIN_SCORE("[Score] Win score"),
+        LOSE_PENALTY("[Score] Lose penalty"),
+        BANKRUPT_PENALTY("[Score] Bankrupt penalty"),
+        LIMIT_DAYS("[Game] Limit days");
 
         private String key;
 
@@ -59,9 +60,8 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
 
     public GameSettings() {
         integer(WIN_SCORE, 30);
-        integer(LOSE_PENALTY, 100);
-
-        integer(BANKRUPT_PENALTY, 100);
+        integer(LOSE_PENALTY, -100);
+        integer(BANKRUPT_PENALTY, -100);
         integer(LIMIT_DAYS, 30);
     }
 
@@ -71,5 +71,7 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
                 : ScoreMode.SUM_OF_PROFITS;
     }
 
-
+    public Calculator<Integer> calculator() {
+        return new Calculator<>(new Scores(this));
+    }
 }
