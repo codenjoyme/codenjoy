@@ -63,7 +63,7 @@ public class SmokeTest {
 
                     @Override
                     public GameSettings getSettings() {
-                        return super.getSettings()
+                        return new TestGameSettings()
                                 .integer(GLASS_SIZE, 10)
                                 .string(GAME_LEVELS, AllFigureLevels.class.getSimpleName());
                     }

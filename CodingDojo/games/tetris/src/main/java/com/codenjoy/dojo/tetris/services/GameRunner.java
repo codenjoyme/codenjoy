@@ -28,7 +28,6 @@ import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.games.tetris.Board;
 import com.codenjoy.dojo.games.tetris.Element;
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.event.ScoresImpl;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
@@ -59,8 +58,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public PlayerScores getPlayerScores(Object score, GameSettings settings) {
-        return new ScoresImpl<>(Integer.parseInt(score.toString()),
-                new Calculator<>(new Scores(settings)));
+        return new ScoresImpl<>(Integer.parseInt(score.toString()), settings.calculator());
     }
 
     @Override

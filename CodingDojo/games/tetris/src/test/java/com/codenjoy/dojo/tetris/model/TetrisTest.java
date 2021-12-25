@@ -30,6 +30,7 @@ import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.tetris.TestGameSettings;
 import com.codenjoy.dojo.tetris.services.Event;
 import com.codenjoy.dojo.tetris.services.GameSettings;
 import org.junit.Before;
@@ -58,7 +59,7 @@ public class TetrisTest {
     @Before
     public void setup() {
         dice = mock(Dice.class);
-        settings = new GameSettings();
+        settings = new TestGameSettings();
     }
 
     private void dice(int...ints) {
