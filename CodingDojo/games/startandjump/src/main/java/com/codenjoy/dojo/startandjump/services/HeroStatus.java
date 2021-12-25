@@ -22,7 +22,6 @@ package com.codenjoy.dojo.startandjump.services;
  * #L%
  */
 
-
 public enum HeroStatus {
     IDLE,
     JUMPING,

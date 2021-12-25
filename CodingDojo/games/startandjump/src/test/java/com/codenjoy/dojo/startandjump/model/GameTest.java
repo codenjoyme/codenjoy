@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.startandjump.TestGameSettings;
 import com.codenjoy.dojo.startandjump.services.GameSettings;
 import com.codenjoy.dojo.startandjump.services.HeroStatus;
 import com.codenjoy.dojo.utils.TestUtils;
@@ -54,7 +55,7 @@ public class GameTest {
     @Before
     public void setup() {
         dice = mock(Dice.class);
-        settings = new GameSettings();
+        settings = new TestGameSettings();
         printer = new PrinterFactoryImpl();
     }
 
