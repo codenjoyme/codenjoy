@@ -27,7 +27,7 @@ import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import static com.codenjoy.dojo.football.services.GameSettings.Keys.WIN_SCORE;
 
-public class Scores extends ScoresMap<Integer> {
+public class Scores extends ScoresMap<Void> {
 
     public Scores(SettingsReader settings) {
         super(settings);

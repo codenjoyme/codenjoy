@@ -34,7 +34,7 @@ import static com.codenjoy.dojo.sample.services.GameSettings.Keys.*;
  * Обычно хочется, чтобы константы очков не были захардкоджены,
  * потому используй объект {@link Settings} для их хранения.
  */
-public class Scores extends ScoresMap<Integer> {
+public class Scores extends ScoresMap<Void> {
 
     public Scores(SettingsReader settings) {
         super(settings);

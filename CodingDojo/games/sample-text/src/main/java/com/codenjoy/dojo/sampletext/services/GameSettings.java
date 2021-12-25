@@ -97,7 +97,7 @@ public class GameSettings extends SettingsImpl
         return new LevelImpl(string(QUESTIONS).split("\n"));
     }
 
-    public Calculator<Integer> calculator() {
+    public Calculator<Void> calculator() {
         return new Calculator<>(new Scores(this));
     }
 }
