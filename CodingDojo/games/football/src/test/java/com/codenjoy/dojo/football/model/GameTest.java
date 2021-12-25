@@ -22,6 +22,7 @@ package com.codenjoy.dojo.football.model;
  * #L%
  */
 
+import com.codenjoy.dojo.football.TestGameSettings;
 import com.codenjoy.dojo.football.model.items.Hero;
 import com.codenjoy.dojo.football.services.Event;
 import com.codenjoy.dojo.football.services.GameSettings;
@@ -56,7 +57,7 @@ public class GameTest {
     public void setup() {
         dice = mock(Dice.class);
         printer = new PrinterFactoryImpl();
-        settings = new GameSettings();
+        settings = new TestGameSettings();
     }
 
     private void dice(int...ints) {

@@ -22,6 +22,7 @@ package com.codenjoy.dojo.football.model;
  * #L%
  */
 
+import com.codenjoy.dojo.football.TestGameSettings;
 import com.codenjoy.dojo.football.services.Event;
 import com.codenjoy.dojo.football.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
@@ -71,7 +72,7 @@ public class MultiplayerTest {
                 "☼☼┬┬☼☼\n");
 
         dice = mock(Dice.class);
-        GameSettings settings = new GameSettings();
+        GameSettings settings = new TestGameSettings();
         field = new Football(level, dice, settings);
         PrinterFactory factory = new PrinterFactoryImpl();
 

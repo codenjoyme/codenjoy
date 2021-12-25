@@ -22,6 +22,7 @@ package com.codenjoy.dojo.football.services;
  * #L%
  */
 
+import com.codenjoy.dojo.football.TestGameSettings;
 import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.event.ScoresImpl;
@@ -47,7 +48,7 @@ public class ScoresTest {
 
     @Before
     public void setup() {
-        settings = new GameSettings();
+        settings = new TestGameSettings();
     }
 
     @Test
