@@ -23,6 +23,7 @@ package com.codenjoy.dojo.reversi.model;
  */
 
 
+import com.codenjoy.dojo.reversi.TestGameSettings;
 import com.codenjoy.dojo.reversi.services.Event;
 import com.codenjoy.dojo.reversi.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
@@ -59,7 +60,7 @@ public class GameTest {
     public void setup() {
         dice = mock(Dice.class);
         printer = new PrinterFactoryImpl();
-        settings = new GameSettings();
+        settings = new TestGameSettings();
     }
 
     private void dice(int...ints) {
@@ -167,7 +168,7 @@ public class GameTest {
                 "        ",
                 player2);
 
-        verify(listener1).event(Event.FLIP(1));
+        verify(listener1).event(Event.FLIP.apply(1));
         verifyNoMoreInteractions();
     }
 
@@ -196,7 +197,7 @@ public class GameTest {
                 "        ",
                 player2);
 
-        verify(listener1).event(Event.FLIP(1));
+        verify(listener1).event(Event.FLIP.apply(1));
         verifyNoMoreInteractions();
     }
 
@@ -225,7 +226,7 @@ public class GameTest {
                 "        ",
                 player2);
 
-        verify(listener1).event(Event.FLIP(1));
+        verify(listener1).event(Event.FLIP.apply(1));
         verifyNoMoreInteractions();
     }
 
@@ -254,7 +255,7 @@ public class GameTest {
                 "        ",
                 player2);
 
-        verify(listener1).event(Event.FLIP(1));
+        verify(listener1).event(Event.FLIP.apply(1));
         verifyNoMoreInteractions();
     }
 
@@ -311,7 +312,7 @@ public class GameTest {
                 "        ",
                 player2);
 
-        verify(listener1).event(Event.FLIP(4));
+        verify(listener1).event(Event.FLIP.apply(4));
         verifyNoMoreInteractions();
     }
 
@@ -340,7 +341,7 @@ public class GameTest {
                 "        ",
                 player2);
 
-        verify(listener1).event(Event.FLIP(1));
+        verify(listener1).event(Event.FLIP.apply(1));
         verifyNoMoreInteractions();
     }
 
@@ -369,7 +370,7 @@ public class GameTest {
                 "    o   ",
                 player2);
 
-        verify(listener1).event(Event.FLIP(10));
+        verify(listener1).event(Event.FLIP.apply(10));
         verifyNoMoreInteractions();
     }
 
@@ -455,7 +456,7 @@ public class GameTest {
                 "        ",
                 player2);
 
-        verify(listener1).event(Event.FLIP(5));
+        verify(listener1).event(Event.FLIP.apply(5));
         verifyNoMoreInteractions();
     }
 
@@ -484,7 +485,7 @@ public class GameTest {
                 "o       ",
                 player2);
 
-        verify(listener1).event(Event.FLIP(7));
+        verify(listener1).event(Event.FLIP.apply(7));
         verifyNoMoreInteractions();
     }
 
@@ -521,7 +522,7 @@ public class GameTest {
         hero2.act(5, 4);
         game.tick();
 
-        verify(listener2).event(Event.FLIP(1));
+        verify(listener2).event(Event.FLIP.apply(1));
         verifyNoMoreInteractions();
 
         assertE("        " +
@@ -537,7 +538,7 @@ public class GameTest {
         hero1.act(5, 3);
         game.tick();
 
-        verify(listener1).event(Event.FLIP(1));
+        verify(listener1).event(Event.FLIP.apply(1));
         verifyNoMoreInteractions();
 
         assertE("        " +
@@ -577,7 +578,7 @@ public class GameTest {
                 player1);
 
 
-        verify(listener2).event(Event.FLIP(1));
+        verify(listener2).event(Event.FLIP.apply(1));
         verifyNoMoreInteractions();
 
         hero1.act(0, 0);
@@ -593,9 +594,9 @@ public class GameTest {
                 "oooooooo",
                 player2);
 
-        verify(listener1).event(Event.FLIP(4));
-        verify(listener1).event(Event.WIN());
-        verify(listener2).event(Event.LOSE());
+        verify(listener1).event(Event.FLIP.apply(4));
+        verify(listener1).event(Event.WIN);
+        verify(listener2).event(Event.LOSE);
         verifyNoMoreInteractions();
 
         game.tick(); // reset to new game
@@ -636,7 +637,7 @@ public class GameTest {
                 " oooXXXX",
                 player2);
 
-        verify(listener1).event(Event.FLIP(1));
+        verify(listener1).event(Event.FLIP.apply(1));
         verifyNoMoreInteractions();
 
         hero2.act(0, 0);
@@ -652,9 +653,9 @@ public class GameTest {
                 "xxxxxxxx",
                 player1);
 
-        verify(listener1).event(Event.LOSE());
-        verify(listener2).event(Event.FLIP(4));
-        verify(listener2).event(Event.WIN());
+        verify(listener1).event(Event.LOSE);
+        verify(listener2).event(Event.FLIP.apply(4));
+        verify(listener2).event(Event.WIN);
         verifyNoMoreInteractions();
 
         game.tick(); // reset to new game
@@ -695,7 +696,7 @@ public class GameTest {
                 "        ",
                 player1);
 
-        verify(listener2).event(Event.FLIP(1));
+        verify(listener2).event(Event.FLIP.apply(1));
         verifyNoMoreInteractions();
 
         hero1.act(0, 4);
@@ -711,9 +712,9 @@ public class GameTest {
                 "        ",
                 player2);
 
-        verify(listener1).event(Event.FLIP(3));
-        verify(listener1).event(Event.WIN());
-        verify(listener2).event(Event.LOSE());
+        verify(listener1).event(Event.FLIP.apply(3));
+        verify(listener1).event(Event.WIN);
+        verify(listener2).event(Event.LOSE);
         verifyNoMoreInteractions();
 
         game.tick(); // reset to new game
@@ -754,7 +755,7 @@ public class GameTest {
                 "        ",
                 player2);
 
-        verify(listener1).event(Event.FLIP(1));
+        verify(listener1).event(Event.FLIP.apply(1));
         verifyNoMoreInteractions();
 
         hero2.act(0, 4);
@@ -770,9 +771,9 @@ public class GameTest {
                 "        ",
                 player1);
 
-        verify(listener1).event(Event.LOSE());
-        verify(listener2).event(Event.FLIP(3));
-        verify(listener2).event(Event.WIN());
+        verify(listener1).event(Event.LOSE);
+        verify(listener2).event(Event.FLIP.apply(3));
+        verify(listener2).event(Event.WIN);
         verifyNoMoreInteractions();
 
         game.tick(); // reset to new game
@@ -813,7 +814,7 @@ public class GameTest {
                 "        ",
                 player1);
 
-        verify(listener2).event(Event.FLIP(1));
+        verify(listener2).event(Event.FLIP.apply(1));
         verifyNoMoreInteractions();
 
         hero1.act(0, 4);
@@ -830,9 +831,9 @@ public class GameTest {
                 player2);
 
 
-        verify(listener1).event(Event.FLIP(3));
-        verify(listener1).event(Event.WIN());
-        verify(listener2).event(Event.LOSE());
+        verify(listener1).event(Event.FLIP.apply(3));
+        verify(listener1).event(Event.WIN);
+        verify(listener2).event(Event.LOSE);
         verifyNoMoreInteractions();
 
         game.tick(); // reset to new game
@@ -873,7 +874,7 @@ public class GameTest {
                 "        ",
                 player2);
 
-        verify(listener1).event(Event.FLIP(1));
+        verify(listener1).event(Event.FLIP.apply(1));
         verifyNoMoreInteractions();
 
         hero2.act(0, 4);
@@ -889,9 +890,9 @@ public class GameTest {
                 "        ",
                 player1);
 
-        verify(listener1).event(Event.LOSE());
-        verify(listener2).event(Event.FLIP(3));
-        verify(listener2).event(Event.WIN());
+        verify(listener1).event(Event.LOSE);
+        verify(listener2).event(Event.FLIP.apply(3));
+        verify(listener2).event(Event.WIN);
         verifyNoMoreInteractions();
 
         game.tick(); // reset to new game
@@ -1007,7 +1008,7 @@ public class GameTest {
                 "        ",
                 player2);
 
-        verify(listener1).event(Event.FLIP(1));
+        verify(listener1).event(Event.FLIP.apply(1));
         verifyNoMoreInteractions();
     }
 
@@ -1181,7 +1182,7 @@ public class GameTest {
                 "    ",
                 player2);
 
-        verify(listener1).event(Event.FLIP(1));
+        verify(listener1).event(Event.FLIP.apply(1));
         verifyNoMoreInteractions();
     }
 
@@ -1219,7 +1220,7 @@ public class GameTest {
                 "            ",
                 player2);
 
-        verify(listener1).event(Event.FLIP(1));
+        verify(listener1).event(Event.FLIP.apply(1));
         verifyNoMoreInteractions();
     }
 
@@ -1294,7 +1295,7 @@ public class GameTest {
                 "        ",
                 player2);
 
-        verify(listener1).event(Event.FLIP(1));
+        verify(listener1).event(Event.FLIP.apply(1));
         verifyNoMoreInteractions();
 
         hero2.act(6, 7);
@@ -1310,7 +1311,7 @@ public class GameTest {
                 "        ",
                 player2);
 
-        verify(listener2).event(Event.FLIP(3));
+        verify(listener2).event(Event.FLIP.apply(3));
         verifyNoMoreInteractions();
 
         hero2.act(2, 5);
@@ -1326,7 +1327,7 @@ public class GameTest {
                 "        ",
                 player1);
 
-        verify(listener2).event(Event.FLIP(1));
+        verify(listener2).event(Event.FLIP.apply(1));
         verifyNoMoreInteractions();
     }
 
@@ -1355,7 +1356,7 @@ public class GameTest {
                 "        ",
                 player1);
 
-        verify(listener2).event(Event.FLIP(1));
+        verify(listener2).event(Event.FLIP.apply(1));
         verifyNoMoreInteractions();
 
         hero1.act(6, 7);
@@ -1371,7 +1372,7 @@ public class GameTest {
                 "        ",
                 player1);
 
-        verify(listener1).event(Event.FLIP(3));
+        verify(listener1).event(Event.FLIP.apply(3));
         verifyNoMoreInteractions();
 
         hero1.act(2, 5);
@@ -1388,7 +1389,7 @@ public class GameTest {
                 "        ",
                 player2);
 
-        verify(listener1).event(Event.FLIP(1));
+        verify(listener1).event(Event.FLIP.apply(1));
         verifyNoMoreInteractions();
     }
 
@@ -1493,7 +1494,7 @@ public class GameTest {
                 "        ",
                 player2);
 
-        verify(listener2).event(Event.FLIP(1));
+        verify(listener2).event(Event.FLIP.apply(1));
         verifyNoMoreInteractions();
 
         hero2.act(1, 7);
@@ -1509,9 +1510,9 @@ public class GameTest {
                 "        ",
                 player1);
 
-        verify(listener1).event(Event.LOSE());
-        verify(listener2).event(Event.FLIP(1));
-        verify(listener2).event(Event.WIN());
+        verify(listener1).event(Event.LOSE);
+        verify(listener2).event(Event.FLIP.apply(1));
+        verify(listener2).event(Event.WIN);
         verifyNoMoreInteractions();
 
         game.tick(); // reset to new game
@@ -1560,7 +1561,7 @@ public class GameTest {
                 "        ",
                 player1);
 
-        verify(listener1).event(Event.FLIP(1));
+        verify(listener1).event(Event.FLIP.apply(1));
         verifyNoMoreInteractions();
 
         hero1.act(1, 7);
@@ -1576,9 +1577,9 @@ public class GameTest {
                 "        ",
                 player2);
 
-        verify(listener1).event(Event.FLIP(1));
-        verify(listener1).event(Event.WIN());
-        verify(listener2).event(Event.LOSE());
+        verify(listener1).event(Event.FLIP.apply(1));
+        verify(listener1).event(Event.WIN);
+        verify(listener2).event(Event.LOSE);
         verifyNoMoreInteractions();
 
         game.tick(); // reset to new game

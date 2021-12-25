@@ -147,14 +147,14 @@ public class Reversi implements Field {
         long countBlack = chips(false).size();
 
         if (countWhite == countBlack) {
-            whitePlayer().event(Event.WIN());
-            blackPlayer().event(Event.WIN());
+            whitePlayer().event(Event.WIN);
+            blackPlayer().event(Event.WIN);
         } else if (countBlack < countWhite) {
-            whitePlayer().event(Event.WIN());
-            blackPlayer().event(Event.LOSE());
+            whitePlayer().event(Event.WIN);
+            blackPlayer().event(Event.LOSE);
         } else if (countBlack > countWhite) {
-            whitePlayer().event(Event.LOSE());
-            blackPlayer().event(Event.WIN());
+            whitePlayer().event(Event.LOSE);
+            blackPlayer().event(Event.WIN);
         }
     }
 
@@ -236,7 +236,7 @@ public class Reversi implements Field {
             Chip chip = new Chip(color, pt, this);
             int count = flipper.flip(chip);
             if (count > 0){
-                player(color).event(Event.FLIP(count));
+                player(color).event(Event.FLIP.apply(count));
                 chips.add(chip);
             }
         }

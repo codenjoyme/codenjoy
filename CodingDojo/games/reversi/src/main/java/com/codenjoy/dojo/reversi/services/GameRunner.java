@@ -27,9 +27,13 @@ import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.games.reversi.Board;
 import com.codenjoy.dojo.games.reversi.Element;
+import com.codenjoy.dojo.reversi.model.Player;
+import com.codenjoy.dojo.reversi.model.Reversi;
 import com.codenjoy.dojo.reversi.services.ai.AISolver;
-import com.codenjoy.dojo.reversi.model.*;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.AbstractGameType;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.ScoresImpl;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
@@ -47,7 +51,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public PlayerScores getPlayerScores(Object score, GameSettings settings) {
-        return new Scores(Integer.valueOf(score.toString()), settings);
+        return new ScoresImpl<>(Integer.parseInt(score.toString()), settings.calculator());
     }
 
     @Override
