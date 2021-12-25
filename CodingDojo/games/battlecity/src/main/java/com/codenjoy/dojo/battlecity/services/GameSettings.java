@@ -26,6 +26,7 @@ package com.codenjoy.dojo.battlecity.services;
 import com.codenjoy.dojo.battlecity.model.levels.Level;
 import com.codenjoy.dojo.games.battlecity.Element;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.incativity.InactivitySettings;
 import com.codenjoy.dojo.services.round.RoundSettings;
 import com.codenjoy.dojo.services.semifinal.SemifinalSettings;
@@ -180,4 +181,7 @@ public class GameSettings extends SettingsImpl
         return new Level(string(LEVEL_MAP), dice);
     }
 
+    public Calculator<Integer> calculator() {
+        return new Calculator<>(new Scores(this));
+    }
 }

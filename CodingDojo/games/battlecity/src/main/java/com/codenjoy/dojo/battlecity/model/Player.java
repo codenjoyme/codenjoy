@@ -25,19 +25,20 @@ package com.codenjoy.dojo.battlecity.model;
 
 import com.codenjoy.dojo.battlecity.services.Event;
 import com.codenjoy.dojo.battlecity.services.GameSettings;
-import com.codenjoy.dojo.battlecity.services.Scores;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.event.ScoresImpl;
+import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.round.RoundGamePlayer;
 
 public class Player extends RoundGamePlayer<Tank, Field> {
 
+    private Calculator<Integer> calculator;
     private int killed;
 
     public Player(EventListener listener, GameSettings settings){
         super(listener, settings);
+        calculator = settings().calculator();
         reset();
     }
 
@@ -57,7 +58,7 @@ public class Player extends RoundGamePlayer<Tank, Field> {
     }
 
     public void event(Event event) {
-        getHero().addScore(ScoresImpl.scoreFor(new Scores(settings()), event));
+        hero.addScore(calculator.score(event));
         super.event(event);
     }
 
