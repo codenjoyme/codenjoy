@@ -34,6 +34,8 @@ import org.junit.Test;
 
 import java.util.Arrays;
 
+import static com.codenjoy.dojo.lemonade.services.GameSettings.Keys.LIMIT_DAYS;
+
 public class SmokeTest {
 
     private Smoke smoke;
@@ -59,7 +61,8 @@ public class SmokeTest {
 
                     @Override
                     public GameSettings getSettings() {
-                        return super.getSettings();
+                        return new TestGameSettings()
+                                .integer(LIMIT_DAYS, 30);
                     }
                 },
                 Arrays.asList(new AISolver(dice)),
