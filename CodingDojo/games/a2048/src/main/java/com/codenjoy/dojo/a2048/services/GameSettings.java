@@ -86,12 +86,12 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
 
     public enum Keys implements SettingsReader.Key {
 
-        SIZE("Size"),
-        NEW_NUMBERS("New numbers"),
-        NUMBERS_MODE("Numbers mode"),
-        BREAKS_MODE("Breaks mode"),
+        SIZE("[Level] Size"),
+        NEW_NUMBERS("[Game] New numbers"),
+        NUMBERS_MODE("[Game] Numbers mode"),
+        BREAKS_MODE("[Game] Breaks mode"),
         SCORE_COUNTING_TYPE(ScoresImpl.SCORE_COUNTING_TYPE.key()),
-        LEVEL_MAP("Level map");
+        LEVEL_MAP("[Level] Level map");
 
         private String key;
 

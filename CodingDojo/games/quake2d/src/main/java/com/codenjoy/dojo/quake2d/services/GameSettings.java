@@ -37,9 +37,9 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
 
     public enum Keys implements Key {
 
-        KILL_SCORE("Kill score"),
-        INJURE_SCORE("Injure score"),
-        LEVEL_MAP("Level map");
+        KILL_SCORE("[Score] Kill score"),
+        INJURE_SCORE("[Score] Injure score"),
+        LEVEL_MAP("[Level] Level map");
 
         private String key;
 
