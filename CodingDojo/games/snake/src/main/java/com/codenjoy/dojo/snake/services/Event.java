@@ -29,13 +29,13 @@ import java.util.function.Function;
 public class Event implements EventObject<Event.Type, Integer> {
 
     private Type type;
-    private Integer value;
+    private int value;
 
     public static final Event KILL = new Event(Type.KILL, 0);
     public static final Event EAT_STONE = new Event(Type.EAT_STONE, 0);
     public static final Function<Integer, Event> EAT_APPLE = value -> new Event(Type.EAT_APPLE, value);
 
-    private Event(Type type, Integer value) {
+    private Event(Type type, int value) {
         this.type = type;
         this.value = value;
     }

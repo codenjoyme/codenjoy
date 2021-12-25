@@ -27,14 +27,14 @@ import com.codenjoy.dojo.services.event.EventObject;
 public class Event implements EventObject<Event.Type, Integer> {
 
     private Type type;
-    private Integer value;
+    private int value;
 
     public enum Type {
         WIN,
         LOSE;
     }
 
-    public Event(Event.Type type, Integer value) {
+    public Event(Event.Type type, int value) {
         this.type = type;
         this.value = value;
     }

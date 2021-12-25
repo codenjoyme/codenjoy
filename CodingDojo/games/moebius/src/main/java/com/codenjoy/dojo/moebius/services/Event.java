@@ -28,7 +28,7 @@ import com.codenjoy.dojo.services.event.EventObject;
 public class Event implements EventObject<Event.Type, Integer> {
 
     private Type event;
-    private int lines;
+    private int value;
 
     public enum Type {
         GAME_OVER,
@@ -37,21 +37,21 @@ public class Event implements EventObject<Event.Type, Integer> {
 
     @Override
     public String toString() {
-        return event + ((lines != 0)?("(" + lines + ")"):"");
+        return event + ((value != 0)?("(" + value + ")"):"");
     }
 
     public Event(Type event) {
         this.event = event;
     }
 
-    public Event(Type event, int lines) {
+    public Event(Type event, int value) {
         this.event = event;
-        this.lines = lines;
+        this.value = value;
     }
 
     @Override
     public Integer value() {
-        return lines;
+        return value;
     }
 
     @Override
