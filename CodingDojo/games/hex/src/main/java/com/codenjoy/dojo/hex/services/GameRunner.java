@@ -27,8 +27,9 @@ import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.games.hex.Board;
 import com.codenjoy.dojo.games.hex.Element;
+import com.codenjoy.dojo.hex.model.Hex;
+import com.codenjoy.dojo.hex.model.Player;
 import com.codenjoy.dojo.hex.services.ai.AISolver;
-import com.codenjoy.dojo.hex.model.*;
 import com.codenjoy.dojo.services.AbstractGameType;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.PlayerScores;
@@ -50,7 +51,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public PlayerScores getPlayerScores(Object score, GameSettings settings) {
-        return new ScoresImpl<>(Integer.parseInt(score.toString()), new Scores(settings));
+        return new ScoresImpl<>(Integer.parseInt(score.toString()), settings.calculator());
     }
 
     @Override

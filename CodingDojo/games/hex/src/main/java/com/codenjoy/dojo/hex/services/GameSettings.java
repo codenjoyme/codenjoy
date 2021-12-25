@@ -24,6 +24,7 @@ package com.codenjoy.dojo.hex.services;
 
 
 import com.codenjoy.dojo.hex.model.Level;
+import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
@@ -77,10 +78,13 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
                 "☼             ☼\n" +
                 "☼             ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n");
-}
+    }
 
     public Level level() {
         return new Level(string(LEVEL_MAP));
     }
 
+    public Calculator<Integer> calculator() {
+        return new Calculator<>(new Scores(this));
+    }
 }
