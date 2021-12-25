@@ -23,43 +23,21 @@ package com.codenjoy.dojo.lunolet.services;
  */
 
 
-import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.ScoresMap;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 
-import static com.codenjoy.dojo.lunolet.services.GameSettings.Keys.CRASHED_SCORE;
+import static com.codenjoy.dojo.lunolet.services.GameSettings.Keys.CRASHED_PENALTY;
 import static com.codenjoy.dojo.lunolet.services.GameSettings.Keys.LANDED_SCORE;
 
-public class Scores implements PlayerScores {
+public class Scores extends ScoresMap<Void> {
 
-    private volatile int score;
-    private GameSettings settings;
+    public Scores(SettingsReader settings) {
+        super(settings);
 
-    public Scores(int startScore, GameSettings settings) {
-        this.score = startScore;
-        this.settings = settings;
-    }
+        put(Event.LANDED,
+                event -> settings.integer(LANDED_SCORE));
 
-    @Override
-    public Object getScore() {
-        return score;
-    }
-
-    @Override
-    public int clear() {
-        return score = 0;
-    }
-
-    @Override
-    public void event(Object event) {
-        if (event.equals(Event.LANDED)) {
-            score += settings.integer(LANDED_SCORE);
-        } else if (event.equals(Event.CRASHED)) {
-            score += settings.integer(CRASHED_SCORE);
-        }
-        score = Math.max(0, score);
-    }
-
-    @Override
-    public void update(Object score) {
-        this.score = Integer.valueOf(score.toString());
+        put(Event.CRASHED,
+                event -> settings.integer(CRASHED_PENALTY));
     }
 }

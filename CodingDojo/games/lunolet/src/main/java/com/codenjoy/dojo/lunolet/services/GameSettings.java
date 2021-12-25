@@ -23,21 +23,22 @@ package com.codenjoy.dojo.lunolet.services;
  */
 
 
+import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static com.codenjoy.dojo.lunolet.services.GameSettings.Keys.CRASHED_SCORE;
+import static com.codenjoy.dojo.lunolet.services.GameSettings.Keys.CRASHED_PENALTY;
 import static com.codenjoy.dojo.lunolet.services.GameSettings.Keys.LANDED_SCORE;
 
 public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
 
     public enum Keys implements Key {
 
-        LANDED_SCORE("Landed score"),
-        CRASHED_SCORE("Crashed score");
+        LANDED_SCORE("[Score] Landed score"),
+        CRASHED_PENALTY("[Score] Crashed penalty");
 
         private String key;
 
@@ -58,8 +59,10 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
 
     public GameSettings() {
         integer(LANDED_SCORE, 10);
-        integer(CRASHED_SCORE, -1);
+        integer(CRASHED_PENALTY, -1);
     }
 
-
+    public Calculator<Void> calculator() {
+        return new Calculator<>(new Scores(this));
+    }
 }
