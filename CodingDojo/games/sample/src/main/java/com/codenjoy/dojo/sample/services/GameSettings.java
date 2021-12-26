@@ -23,8 +23,6 @@ package com.codenjoy.dojo.sample.services;
  */
 
 
-import com.codenjoy.dojo.sample.model.Level;
-import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.event.ScoresImpl;
 import com.codenjoy.dojo.services.settings.AllSettings;
@@ -34,7 +32,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.codenjoy.dojo.sample.services.GameSettings.Keys.*;
-import static com.codenjoy.dojo.services.event.Mode.CUMULATIVELY;
 
 public class GameSettings extends SettingsImpl implements AllSettings<GameSettings> {
 
@@ -70,10 +67,6 @@ public class GameSettings extends SettingsImpl implements AllSettings<GameSettin
         integer(LOSE_PENALTY, -20);
 
         Levels.setup(this);
-    }
-
-    public Level level(int level, Dice dice) {
-        return new Level(getRandomLevelMap(level, dice));
     }
 
     public Calculator<Void> calculator() {
