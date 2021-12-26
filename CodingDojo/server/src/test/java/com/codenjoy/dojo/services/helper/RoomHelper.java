@@ -68,6 +68,6 @@ public class RoomHelper {
     }
 
     public String board(String id) {
-        return (String) deals.get(id).getGame().getBoardAsString();
+        return deals.get(id).getGame().getBoardAsString().toString();
     }
 }
