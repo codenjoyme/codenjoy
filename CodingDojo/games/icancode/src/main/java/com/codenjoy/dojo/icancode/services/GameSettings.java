@@ -26,6 +26,8 @@ package com.codenjoy.dojo.icancode.services;
 import com.codenjoy.dojo.icancode.model.items.ZombieBrain;
 import com.codenjoy.dojo.icancode.services.levels.Level;
 import com.codenjoy.dojo.services.event.Calculator;
+import com.codenjoy.dojo.services.multiplayer.Mode;
+import com.codenjoy.dojo.services.multiplayer.MultiplayerSettings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
@@ -34,18 +36,13 @@ import java.util.List;
 
 import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.*;
 
-public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
-
-    public static final String CLASSIC_TRAINING = "Single training & all in one final";
-    public static final String ALL_SINGLE = "All levels are single";
-    public static final String ALL_IN_ROOMS = "All levels in rooms";
-    public static final String TRAINING_MULTIMAP = "Single training & final in rooms";
+public class GameSettings extends SettingsImpl
+        implements SettingsReader<GameSettings>,
+                   MultiplayerSettings<GameSettings> {
 
     public enum Keys implements Key {
 
         IS_TRAINING_MODE("[Game] Is training mode"),
-        GAME_MODE("[Game] Game mode"),
-        ROOM_SIZE("[Game] Room size"),
         VIEW_SIZE("[Game] Map view size"),
         LEVELS_COUNT("[Game] Levels count"),
         CHEATS("[Game] Cheats enabled"),
@@ -89,16 +86,13 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
     }
 
     public GameSettings() {
+        initMultiplayer(5, Arrays.asList(
+                Mode.TRAINING.key(),
+                Mode.ALL_SINGLE.key(),
+                Mode.ALL_IN_ROOMS.key(),
+                Mode.TRAINING_FINAL_IN_ROOMS.key()));
+
         bool(IS_TRAINING_MODE, true);
-        options(GAME_MODE,
-                Arrays.asList(
-                        CLASSIC_TRAINING,
-                        ALL_SINGLE,
-                        ALL_IN_ROOMS,
-                        TRAINING_MULTIMAP
-                ),
-                CLASSIC_TRAINING);
-        integer(ROOM_SIZE, 5);
         integer(VIEW_SIZE, 20);
         integer(LEVELS_COUNT, 0);
         bool(CHEATS, false);
@@ -125,12 +119,6 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         integer(LOSE_PENALTY, -5);
 
         Levels.setup(this);
-    }
-
-    public int roomSize() {
-        return integer(ROOM_SIZE) == 0
-                ? Integer.MAX_VALUE
-                : integer(ROOM_SIZE);
     }
 
     public String levelMap(int index) {

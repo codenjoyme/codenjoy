@@ -23,6 +23,7 @@ package com.codenjoy.dojo.snakebattle.services;
  */
 
 import com.codenjoy.dojo.services.event.Calculator;
+import com.codenjoy.dojo.services.multiplayer.MultiplayerSettings;
 import com.codenjoy.dojo.services.round.RoundSettings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
@@ -33,7 +34,10 @@ import java.util.List;
 
 import static com.codenjoy.dojo.snakebattle.services.GameSettings.Keys.*;
 
-public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings>, RoundSettings<GameSettings> {
+public class GameSettings extends SettingsImpl
+        implements SettingsReader<GameSettings>,
+                   RoundSettings<GameSettings>,
+                   MultiplayerSettings<GameSettings> {
 
     public enum Keys implements Key {
 

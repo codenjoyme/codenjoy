@@ -85,7 +85,8 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public MultiplayerType getMultiplayerType(GameSettings settings) {
-        return settings.getRoundsMultiplayerType();
+        // TODO добавить LevelsSettings как в других играх
+        return settings.multiplayerType(1);
     }
 
     @Override

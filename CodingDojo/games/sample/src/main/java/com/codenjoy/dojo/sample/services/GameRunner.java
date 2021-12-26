@@ -97,7 +97,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public MultiplayerType getMultiplayerType(GameSettings settings) {
-        return MultiplayerType.MULTIPLE;
+        return settings.multiplayerType(settings.getLevelsCount());
     }
 
     @Override
