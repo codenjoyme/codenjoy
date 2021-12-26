@@ -30,7 +30,6 @@ import com.codenjoy.dojo.a2048.model.generator.RandomGenerator;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.event.ScoresImpl;
-import com.codenjoy.dojo.services.settings.EditBox;
 import com.codenjoy.dojo.services.settings.SelectBox;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
@@ -136,9 +135,7 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
     }
 
     private BiConsumer<String, String> updateSize() {
-        // TODO вот тут конечно не очень хорошо
-        return (old, updated) -> parameter(SIZE, EditBox.class)
-                .justSet((int)Math.sqrt(updated.length()));
+        return (old, updated) -> integerValue(SIZE).justSet((int)Math.sqrt(updated.length()));
     }
 
     private BiConsumer<Integer, Integer> rebuildMap() {

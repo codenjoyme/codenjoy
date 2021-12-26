@@ -100,6 +100,12 @@ public class PParameter {
             }
 
             @Override
+            public Parameter justSet(Object value) {
+                PParameter.this.value = value.toString();
+                return this;
+            }
+
+            @Override
             public Parameter def(Object value) {
                 PParameter.this.def = value.toString();
                 return this;
