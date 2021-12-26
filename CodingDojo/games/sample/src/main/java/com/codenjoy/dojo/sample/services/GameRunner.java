@@ -65,14 +65,14 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public GameField createGame(int levelNumber, GameSettings settings) {
-        Level level = settings.level(levelNumber, getDice());
+        Level level = settings.level(levelNumber, getDice(), Level::new);
         return new Sample(getDice(), level, settings);
     }
 
     @Override
     public Parameter<Integer> getBoardSize(GameSettings settings) {
         // TODO решить что-то с этим наконец
-        return v(settings.level(LevelProgress.levelsStartsFrom1, getDice()).size());
+        return v(settings.level(LevelProgress.levelsStartsFrom1, getDice(), Level::new).size());
     }
 
     @Override
@@ -97,7 +97,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public MultiplayerType getMultiplayerType(GameSettings settings) {
-        return MultiplayerType.MULTIPLE;
+        return settings.multiplayerType(settings.getLevelsCount());
     }
 
     @Override

@@ -44,9 +44,8 @@ import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
 import com.codenjoy.dojo.services.settings.Parameter;
 import org.json.JSONObject;
 
-import static com.codenjoy.dojo.icancode.services.GameSettings.*;
-import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.*;
-import static com.codenjoy.dojo.services.multiplayer.MultiplayerType.*;
+import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.IS_TRAINING_MODE;
+import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.VIEW_SIZE;
 
 public class GameRunner extends AbstractGameType<GameSettings> {
 
@@ -80,23 +79,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public MultiplayerType getMultiplayerType(GameSettings settings) {
-        int count = Levels.all().size();
-        int roomSize = settings.roomSize();
-
-        switch (settings.string(GAME_MODE)) {
-            default:
-            case CLASSIC_TRAINING:
-                return TRAINING.apply(count);
-
-            case ALL_SINGLE:
-                return SINGLE_LEVELS.apply(count);
-
-            case ALL_IN_ROOMS:
-                return MULTIPLE_LEVELS.apply(roomSize, count);
-
-            case TRAINING_MULTIMAP:
-                return MULTIPLE_LEVELS_MULTIROOM.apply(roomSize, count);
-        }
+        return settings.multiplayerType(Levels.all().size());
     }
 
     public Level loadLevel(int level, GameSettings settings) {

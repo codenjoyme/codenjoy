@@ -35,8 +35,8 @@ public class GameSettingsTest {
                         "NEW_NUMBERS, \n" +
                         "NUMBERS_MODE, \n" +
                         "BREAKS_MODE, \n" +
-                        "SCORE_COUNTING_TYPE, \n" +
                         "LEVEL_MAP, \n" +
+                        "SCORE_COUNTING_TYPE, \n" +
                         "NEW_NUMBERS_IN_CORNERS, \n" +
                         "NEW_NUMBERS_IN_RANDOM, \n" +
                         "BREAKS_EXISTS, \n" +

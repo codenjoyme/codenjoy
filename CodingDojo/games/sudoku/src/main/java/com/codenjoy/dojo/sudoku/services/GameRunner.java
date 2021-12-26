@@ -95,7 +95,7 @@ public class GameRunner extends AbstractGameType<GameSettings> implements GameTy
 
     @Override
     public MultiplayerType getMultiplayerType(GameSettings settings) {
-        return MultiplayerType.SINGLE_LEVELS.apply(Levels.all().size());
+        return MultiplayerType.ALL_SINGLE.apply(Levels.all().size());
     }
 
     @Override

@@ -90,7 +90,7 @@ public class ThirdGameType extends FakeGameType {
                     MultiplayerType.DISPOSABLE);
         } else {
             if (reader.bool(PARAMETER6)){
-                return MultiplayerType.SINGLE_LEVELS.apply(reader.integer(PARAMETER5));
+                return MultiplayerType.ALL_SINGLE.apply(reader.integer(PARAMETER5));
             } else {
                 return MultiplayerType.MULTIPLE;
             }

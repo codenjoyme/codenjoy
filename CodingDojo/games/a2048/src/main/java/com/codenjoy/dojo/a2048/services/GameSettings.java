@@ -30,7 +30,6 @@ import com.codenjoy.dojo.a2048.model.generator.RandomGenerator;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.event.ScoresImpl;
-import com.codenjoy.dojo.services.settings.EditBox;
 import com.codenjoy.dojo.services.settings.SelectBox;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
@@ -42,9 +41,9 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
-import static com.codenjoy.dojo.a2048.services.GameSettings.BreaksMode.BREAKS_EXISTS;
 import static com.codenjoy.dojo.a2048.services.GameSettings.BreaksMode.BREAKS_NOT_EXISTS;
 import static com.codenjoy.dojo.a2048.services.GameSettings.Keys.*;
+import static com.codenjoy.dojo.a2048.services.GameSettings.NumbersMode.NEW_NUMBERS_IN_CORNERS;
 import static com.codenjoy.dojo.services.event.Mode.MAX_VALUE;
 import static java.util.stream.Collectors.toList;
 
@@ -52,13 +51,25 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
 
     public enum BreaksMode implements SettingsReader.Key {
 
-        BREAKS_EXISTS("With breaks mode"),
-        BREAKS_NOT_EXISTS("Without breaks mode");
+        BREAKS_EXISTS(0, "With breaks mode"),
+        BREAKS_NOT_EXISTS(1, "Without breaks mode");
 
+        private int value;
         private String key;
 
-        BreaksMode(String key) {
+        BreaksMode(int value, String key) {
+            this.value = value;
             this.key = key;
+        }
+
+        public static List<String> keys() {
+            return Arrays.stream(values())
+                    .map(BreaksMode::key)
+                    .collect(toList());
+        }
+
+        public int value() {
+            return value;
         }
 
         @Override
@@ -69,13 +80,25 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
 
     public enum NumbersMode implements SettingsReader.Key {
 
-        NEW_NUMBERS_IN_CORNERS("Classic (corner only) mode"),
-        NEW_NUMBERS_IN_RANDOM("With random numbers mode");
+        NEW_NUMBERS_IN_CORNERS(0, "Classic (corner only) mode"),
+        NEW_NUMBERS_IN_RANDOM(1, "With random numbers mode");
 
+        private int value;
         private String key;
 
-        NumbersMode(String key) {
+        NumbersMode(int value, String key) {
+            this.value = value;
             this.key = key;
+        }
+
+        public static List<String> keys() {
+            return Arrays.stream(values())
+                    .map(NumbersMode::key)
+                    .collect(toList());
+        }
+
+        public int value() {
+            return value;
         }
 
         @Override
@@ -90,8 +113,8 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         NEW_NUMBERS("[Game] New numbers"),
         NUMBERS_MODE("[Game] Numbers mode"),
         BREAKS_MODE("[Game] Breaks mode"),
-        SCORE_COUNTING_TYPE(ScoresImpl.SCORE_COUNTING_TYPE.key()),
-        LEVEL_MAP("[Level] Level map");
+        LEVEL_MAP("[Level] Level map"),
+        SCORE_COUNTING_TYPE(ScoresImpl.SCORE_COUNTING_TYPE.key());
 
         private String key;
 
@@ -123,22 +146,16 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
 
         integer(NEW_NUMBERS, 4);
 
-        options(NUMBERS_MODE,
-                Arrays.asList(NumbersMode.NEW_NUMBERS_IN_CORNERS.key(), NumbersMode.NEW_NUMBERS_IN_RANDOM.key()),
-                NumbersMode.NEW_NUMBERS_IN_CORNERS.key());
+        options(NUMBERS_MODE, NumbersMode.keys(), NEW_NUMBERS_IN_CORNERS.key());
 
-        options(BREAKS_MODE,
-                Arrays.asList(BREAKS_EXISTS.key(), BREAKS_NOT_EXISTS.key()),
-                BREAKS_NOT_EXISTS.key())
+        options(BREAKS_MODE, BreaksMode.keys(), BREAKS_NOT_EXISTS.key())
                 .onChange(rebuildMap());
 
         rebuildMap().accept(null, null);
     }
 
     private BiConsumer<String, String> updateSize() {
-        // TODO вот тут конечно не очень хорошо
-        return (old, updated) -> parameter(SIZE, EditBox.class)
-                .justSet((int)Math.sqrt(updated.length()));
+        return (old, updated) -> integerValue(SIZE).justSet((int)Math.sqrt(updated.length()));
     }
 
     private BiConsumer<Integer, Integer> rebuildMap() {
