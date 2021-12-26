@@ -46,6 +46,6 @@ public class Scores extends ScoresMap<Void> {
                 value -> settings.integer(WIN_ROUND_SCORE));
 
         put(Event.LOSE,
-                value -> settings.integer(LOSE_PENALTY));
+                value -> heroDie(LOSE_PENALTY));
     }
 }
