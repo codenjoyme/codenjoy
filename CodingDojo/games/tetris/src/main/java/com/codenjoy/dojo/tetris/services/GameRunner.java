@@ -94,7 +94,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
         String levelsType = settings.string(GAME_LEVELS);
         Levels levels = loadLevelsFor(NullFigureQueue.INSTANCE, levelsType);
 
-        return MultiplayerType.SINGLE_LEVELS.apply(levels.count());
+        return MultiplayerType.ALL_SINGLE.apply(levels.count());
     }
 
     @Override
