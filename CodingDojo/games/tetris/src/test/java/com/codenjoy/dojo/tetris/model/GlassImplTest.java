@@ -25,7 +25,7 @@ package com.codenjoy.dojo.tetris.model;
 
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.games.tetris.Element;
-import com.codenjoy.dojo.tetris.services.Events;
+import com.codenjoy.dojo.tetris.services.Event;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -331,7 +331,7 @@ public class GlassImplTest {
     public void shouldNotifyWhenLineRemoved() {
         glass.drop(glassWidthFigure, 0, HEIGHT);
 
-        verify(listener).event(Events.linesRemoved(1, 1));
+        verify(listener).event(Event.linesRemoved(1, 1));
     }
 
     @Test
@@ -341,42 +341,42 @@ public class GlassImplTest {
 
         glass.drop(new FigureImpl(0, 0, "#", "#"), WIDTH - 1, HEIGHT);
 
-        verify(listener).event(Events.linesRemoved(1, 2));
+        verify(listener).event(Event.linesRemoved(1, 2));
     }
 
     @Test
     public void shouldNotifyScoreBoardWhenDropped() {
         glass.drop(point, 0, HEIGHT);
 
-        verify(listener).event(Events.figuresDropped(1, point.type().getColor().index()));
+        verify(listener).event(Event.figuresDropped(1, point.type().getColor().index()));
     }
 
     @Test
     public void shouldTriggerListenerWhenOverflow() {
         glass.empty();
 
-        verify(listener).event(Events.glassOverflown(1));
+        verify(listener).event(Event.glassOverflown(1));
     }
 
     @Test
     public void shouldTriggerAllListenersWhenOverflow() {
         glass.empty();
 
-        verify(listener).event(Events.glassOverflown(1));
+        verify(listener).event(Event.glassOverflown(1));
     }
 
     @Test
     public void shouldNotifyAllListenersScoreBoardWhenDropped() {
         glass.drop(point, 0, HEIGHT);
 
-        verify(listener).event(Events.figuresDropped(1, point.type().getColor().index()));
+        verify(listener).event(Event.figuresDropped(1, point.type().getColor().index()));
     }
 
     @Test
     public void shouldNotifyAllListenersScoreBoardWhenLinesRemoved() {
         glass.drop(glassWidthFigure, 0, HEIGHT);
 
-        verify(listener).event(Events.figuresDropped(1, glassWidthFigure.type().getColor().index()));
+        verify(listener).event(Event.figuresDropped(1, glassWidthFigure.type().getColor().index()));
     }
 
     @Test
@@ -385,7 +385,7 @@ public class GlassImplTest {
 
         try {
             glass.drop(Type.I.create(), WIDTH / 2, HEIGHT);
-            verify(listener, times(1)).event(Events.figuresDropped(1, Type.I.getColor().index()));
+            verify(listener, times(1)).event(Event.figuresDropped(1, Type.I.getColor().index()));
         } catch (Exception e) {
             fail("Was exception: " + e);
         }
@@ -430,7 +430,7 @@ public class GlassImplTest {
         glass.drop(createLine(Type.I, "#########"), 1, TOP_Y);
         glass.drop(createLine(Type.J, "#"), 0, TOP_Y);
 
-        verify(listener).event(Events.linesRemoved(1, 1));
+        verify(listener).event(Event.linesRemoved(1, 1));
         assertTrue(glass.accept(point, 0, 0));
     }
 
@@ -439,7 +439,7 @@ public class GlassImplTest {
         glass.drop(createLine("# ########"), 0, TOP_Y);
         glass.drop(createLine("##########"), 0, TOP_Y);
 
-        verify(listener).event(Events.linesRemoved(1, 1));
+        verify(listener).event(Event.linesRemoved(1, 1));
         assertFalse(glass.accept(point, 0, 0));
         assertTrue(glass.accept(point, 1, 0));
     }

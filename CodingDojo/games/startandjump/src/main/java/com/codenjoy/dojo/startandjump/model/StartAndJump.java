@@ -26,7 +26,7 @@ package com.codenjoy.dojo.startandjump.model;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
-import com.codenjoy.dojo.startandjump.services.Events;
+import com.codenjoy.dojo.startandjump.services.Event;
 import com.codenjoy.dojo.startandjump.services.GameSettings;
 import com.codenjoy.dojo.startandjump.services.HeroStatus;
 
@@ -121,12 +121,12 @@ public class StartAndJump implements Field {
             }
         }
         for (Player player : players) {
-            player.event(Events.STILL_ALIVE);
+            player.event(Event.STILL_ALIVE);
         }
     }
 
     private void loseGame(Player player, Hero hero) {
-        player.event(Events.LOSE);
+        player.event(Event.LOSE);
         platformGenerator.setPreviousY(2);
         hero.dies();
     }

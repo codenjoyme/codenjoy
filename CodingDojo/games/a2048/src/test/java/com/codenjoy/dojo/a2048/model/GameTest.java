@@ -23,8 +23,8 @@ package com.codenjoy.dojo.a2048.model;
  */
 
 
-import com.codenjoy.dojo.a2048.services.Events;
-import com.codenjoy.dojo.a2048.services.GameSettings;
+import com.codenjoy.dojo.a2048.TestGameSettings;
+import com.codenjoy.dojo.a2048.services.Event;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
@@ -42,7 +42,7 @@ import java.util.stream.IntStream;
 
 import static com.codenjoy.dojo.a2048.services.GameSettings.BreaksMode.BREAKS_EXISTS;
 import static com.codenjoy.dojo.a2048.services.GameSettings.BreaksMode.BREAKS_NOT_EXISTS;
-import static com.codenjoy.dojo.a2048.services.GameSettings.Keys.*;
+import static com.codenjoy.dojo.a2048.services.GameSettings.Keys.LEVEL_MAP;
 import static com.codenjoy.dojo.a2048.services.GameSettings.NumbersMode.NEW_NUMBERS_IN_CORNERS;
 import static com.codenjoy.dojo.a2048.services.GameSettings.NumbersMode.NEW_NUMBERS_IN_RANDOM;
 import static org.junit.Assert.*;
@@ -58,15 +58,15 @@ public class GameTest {
     private EventListener listener;
     private Level level;
     private PrinterFactory printer;
-    private GameSettings settings;
+    private TestGameSettings settings;
 
     @Before
     public void setup() {
         dice = mock(Dice.class);
-        printer = new PrinterFactoryImpl();
-        settings = new GameSettings();
-        mode(NEW_NUMBERS_IN_CORNERS, 0);
-        mode(BREAKS_NOT_EXISTS, 0);
+        printer = new PrinterFactoryImpl<>();
+        settings = new TestGameSettings();
+        settings.mode(NEW_NUMBERS_IN_CORNERS, 0);
+        settings.mode(BREAKS_NOT_EXISTS, 0);
     }
 
     private void dice(int...ints) {
@@ -397,7 +397,7 @@ public class GameTest {
     @Test
     public void shouldAddScoreWhenMultipleAdd() {
         // given
-        mode(NEW_NUMBERS_IN_RANDOM, 3);
+        settings.mode(NEW_NUMBERS_IN_RANDOM, 3);
 
         givenFl("    " +
                 "    " +
@@ -429,20 +429,11 @@ public class GameTest {
                 " 222");
     }
 
-    private GameSettings mode(GameSettings.NumbersMode mode, int count) {
-        return settings.string(NUMBERS_MODE, mode.key())
-                .integer(NEW_NUMBERS, count);
-    }
-
-    private void mode(GameSettings.BreaksMode mode, int size) {
-        settings.integer(SIZE, size)
-                .string(BREAKS_MODE, mode.key());
-    }
 
     @Test
     public void shouldFireEventWhenIncScore() {
         // given
-        mode(NEW_NUMBERS_IN_RANDOM, 0);
+        settings.mode(NEW_NUMBERS_IN_RANDOM, 0);
 
         givenFl("    " +
                 "    " +
@@ -461,7 +452,7 @@ public class GameTest {
 
         assertEvens("[SUM(4)]");
 
-        mode(NEW_NUMBERS_IN_RANDOM, 1);
+        settings.mode(NEW_NUMBERS_IN_RANDOM, 1);
 
         // when
         joystick.up();
@@ -480,7 +471,7 @@ public class GameTest {
     @Test
     public void shouldNewRandomNumberWhenTick() {
         // given
-        mode(NEW_NUMBERS_IN_RANDOM, 1);
+        settings.mode(NEW_NUMBERS_IN_RANDOM, 1);
 
         givenFl("    " +
                 "    " +
@@ -515,7 +506,7 @@ public class GameTest {
     @Test
     public void shouldNewNumberAtCornerWhenTick() {
         // given
-        mode(NEW_NUMBERS_IN_CORNERS, 4);
+        settings.mode(NEW_NUMBERS_IN_CORNERS, 4);
 
         givenFl("    " +
                 "    " +
@@ -566,7 +557,7 @@ public class GameTest {
     @Test
     public void shouldNewNumbersWhenTick() {
         // given
-        mode(NEW_NUMBERS_IN_RANDOM, 4);
+        settings.mode(NEW_NUMBERS_IN_RANDOM, 4);
 
         givenFl("    " +
                 "    " +
@@ -589,7 +580,7 @@ public class GameTest {
     @Test
     public void shouldNewNumberOnlyIfUserAct() {
         // given
-        mode(NEW_NUMBERS_IN_RANDOM, 1);
+        settings.mode(NEW_NUMBERS_IN_RANDOM, 1);
 
         givenFl("    " +
                 "    " +
@@ -620,7 +611,7 @@ public class GameTest {
     @Test
     public void shouldGameOverWhenNoSpace() {
         // given
-        mode(NEW_NUMBERS_IN_RANDOM, 1);
+        settings.mode(NEW_NUMBERS_IN_RANDOM, 1);
 
         givenFl("4848" +
                 "8282" +
@@ -915,7 +906,7 @@ public class GameTest {
     }
 
     private void assertEvens(String expected) {
-        ArgumentCaptor captor = ArgumentCaptor.forClass(Events.class);
+        ArgumentCaptor captor = ArgumentCaptor.forClass(Event.class);
         int count = expected.split(",").length;
         verify(listener, times(count)).event(captor.capture());
         assertEquals(expected, captor.getAllValues().toString());
@@ -1089,7 +1080,7 @@ public class GameTest {
     @Test
     public void shouldPrintWithBreakWhenSizeIs2() {
         // given
-        mode(BREAKS_EXISTS, 2);
+        settings.mode(BREAKS_EXISTS, 2);
         givenFl(null);
 
         // when
@@ -1103,7 +1094,7 @@ public class GameTest {
     @Test
     public void shouldPrintWithBreakWhenSizeIs3() {
         // given
-        mode(BREAKS_EXISTS, 3);
+        settings.mode(BREAKS_EXISTS, 3);
 
         givenFl(null);
 
@@ -1119,7 +1110,7 @@ public class GameTest {
     @Test
     public void shouldPrintWithBreakWhenSizeIs4() {
         // given
-        mode(BREAKS_EXISTS, 4);
+        settings.mode(BREAKS_EXISTS, 4);
 
         givenFl(null);
 
@@ -1136,7 +1127,7 @@ public class GameTest {
     @Test
     public void shouldPrintWithBreakWhenSizeIs5() {
         // given
-        mode(BREAKS_EXISTS, 5);
+        settings.mode(BREAKS_EXISTS, 5);
 
         givenFl(null);
 
@@ -1154,7 +1145,7 @@ public class GameTest {
     @Test
     public void shouldPrintWithBreakWhenSizeIs6() {
         // given
-        mode(BREAKS_EXISTS, 6);
+        settings.mode(BREAKS_EXISTS, 6);
 
         givenFl(null);
 
@@ -1173,7 +1164,7 @@ public class GameTest {
     @Test
     public void shouldPrintWithBreakWhenSizeIs7() {
         // given
-        mode(BREAKS_EXISTS, 7);
+        settings.mode(BREAKS_EXISTS, 7);
 
         givenFl(null);
 
@@ -1193,7 +1184,7 @@ public class GameTest {
     @Test
     public void shouldPrintWithBreakWhenSizeIs8() {
         // given
-        mode(BREAKS_EXISTS, 8);
+        settings.mode(BREAKS_EXISTS, 8);
 
         givenFl(null);
 
@@ -1214,7 +1205,7 @@ public class GameTest {
     @Test
     public void shouldPrintWithBreakWhenSizeIs9() {
         // given
-        mode(BREAKS_EXISTS, 9);
+        settings.mode(BREAKS_EXISTS, 9);
 
         givenFl(null);
 
@@ -1236,7 +1227,7 @@ public class GameTest {
     @Test
     public void shouldGenerateOnly2NewNumbers_inCornerCase1() {
         // given
-        mode(NEW_NUMBERS_IN_CORNERS, 3);
+        settings.mode(NEW_NUMBERS_IN_CORNERS, 3);
 
         givenFl("     " +
                 "     " +
@@ -1260,7 +1251,7 @@ public class GameTest {
     @Test
     public void shouldGenerateOnly2NewNumbers_inCornerCase2() {
         // given
-        mode(NEW_NUMBERS_IN_CORNERS, 3);
+        settings.mode(NEW_NUMBERS_IN_CORNERS, 3);
 
         givenFl("     " +
                 "     " +
@@ -1283,7 +1274,7 @@ public class GameTest {
     @Test
     public void shouldGenerateOnly2NewNumbers_inRandomCase1() {
         // given
-        mode(NEW_NUMBERS_IN_RANDOM, 3);
+        settings.mode(NEW_NUMBERS_IN_RANDOM, 3);
 
         givenFl("     " +
                 "     " +
@@ -1308,7 +1299,7 @@ public class GameTest {
     @Test
     public void shouldGenerateOnly2NewNumbers_inRandomCase2() {
         // given
-        mode(NEW_NUMBERS_IN_RANDOM, 3);
+        settings.mode(NEW_NUMBERS_IN_RANDOM, 3);
 
         givenFl("     " +
                 "     " +
@@ -1333,7 +1324,7 @@ public class GameTest {
     @Test
     public void shouldBreakNotMove() {
         // given
-        mode(BREAKS_EXISTS, 5);
+        settings.mode(BREAKS_EXISTS, 5);
 
         givenFl(null);
 
@@ -1352,8 +1343,8 @@ public class GameTest {
     @Test
     public void shouldNumberStopAtBreak() {
         // given
-        mode(BREAKS_EXISTS, 5);
-        mode(NEW_NUMBERS_IN_CORNERS, 4);
+        settings.mode(BREAKS_EXISTS, 5);
+        settings.mode(NEW_NUMBERS_IN_CORNERS, 4);
 
         givenFl(null);
 
@@ -1365,7 +1356,7 @@ public class GameTest {
                 "     " +
                 "2 x 2");
 
-        mode(NEW_NUMBERS_IN_CORNERS, 0);
+        settings.mode(NEW_NUMBERS_IN_CORNERS, 0);
 
         // when
         joystick.left();
@@ -1415,8 +1406,8 @@ public class GameTest {
     @Test
     public void shouldNotClearBreak() {
         // given
-        mode(BREAKS_EXISTS, 5);
-        mode(NEW_NUMBERS_IN_CORNERS, 4);
+        settings.mode(BREAKS_EXISTS, 5);
+        settings.mode(NEW_NUMBERS_IN_CORNERS, 4);
 
         givenFl(null);
 
@@ -1435,8 +1426,8 @@ public class GameTest {
     @Test
     public void shouldNewNumbersWithBreak() {
         // given
-        mode(BREAKS_EXISTS, 5);
-        mode(NEW_NUMBERS_IN_RANDOM, 1);
+        settings.mode(BREAKS_EXISTS, 5);
+        settings.mode(NEW_NUMBERS_IN_RANDOM, 1);
 
         givenFl(null);
 
@@ -1500,8 +1491,8 @@ public class GameTest {
     @Test
     public void shouldGameOverWhenCantGoWithBreaks() {
         // given
-        mode(BREAKS_EXISTS, 4);
-        mode(NEW_NUMBERS_IN_CORNERS, 4);
+        settings.mode(BREAKS_EXISTS, 4);
+        settings.mode(NEW_NUMBERS_IN_CORNERS, 4);
         givenFl(null);
 
         IntStream.range(0, 12).forEach(i -> {

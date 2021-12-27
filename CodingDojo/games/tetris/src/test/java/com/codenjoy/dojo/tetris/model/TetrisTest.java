@@ -30,7 +30,8 @@ import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-import com.codenjoy.dojo.tetris.services.Events;
+import com.codenjoy.dojo.tetris.TestGameSettings;
+import com.codenjoy.dojo.tetris.services.Event;
 import com.codenjoy.dojo.tetris.services.GameSettings;
 import org.junit.Before;
 import org.junit.Test;
@@ -58,7 +59,7 @@ public class TetrisTest {
     @Before
     public void setup() {
         dice = mock(Dice.class);
-        settings = new GameSettings();
+        settings = new TestGameSettings();
     }
 
     private void dice(int...ints) {
@@ -282,7 +283,7 @@ public class TetrisTest {
                 "......." +
                 ".......");
 
-        verify(listener).event(Events.glassOverflown(1));
+        verify(listener).event(Event.glassOverflown(1));
     }
 
     @Test
@@ -319,7 +320,7 @@ public class TetrisTest {
                 "IOOIJI." +
                 "IOOJJI.");
 
-        verify(listener).event(Events.figuresDropped(1, Type.O.getColor().index()));
+        verify(listener).event(Event.figuresDropped(1, Type.O.getColor().index()));
 
         hero.down();
         game.tick();
@@ -333,7 +334,7 @@ public class TetrisTest {
                 ".......");
 
         // TODO разобраться, почему не настает этот случай
-        verify(listener).event(Events.glassOverflown(1));
+        verify(listener).event(Event.glassOverflown(1));
     }
 
     @Test
@@ -579,7 +580,7 @@ public class TetrisTest {
                 "OO...." +
                 "OO....");
 
-        verify(listener).event(Events.figuresDropped(level, figure));
+        verify(listener).event(Event.figuresDropped(level, figure));
         reset(listener);
 
         hero.down();
@@ -592,7 +593,7 @@ public class TetrisTest {
                 "OOOO.." +
                 "OOOO..");
 
-        verify(listener).event(Events.figuresDropped(level, figure));
+        verify(listener).event(Event.figuresDropped(level, figure));
         reset(listener);
 
         hero.right();
@@ -607,8 +608,8 @@ public class TetrisTest {
                 "......" +
                 "......");
 
-        verify(listener).event(Events.figuresDropped(level, figure));
-        verify(listener).event(Events.linesRemoved(level, 2));
+        verify(listener).event(Event.figuresDropped(level, figure));
+        verify(listener).event(Event.linesRemoved(level, 2));
     }
 
     @Test
@@ -654,8 +655,8 @@ public class TetrisTest {
                 ".........." +
                 "..........");
 
-        verify(listener).event(Events.figuresDropped(level, figure));
-        verify(listener).event(Events.linesRemoved(level, 2));
+        verify(listener).event(Event.figuresDropped(level, figure));
+        verify(listener).event(Event.linesRemoved(level, 2));
     }
 
     // тут начиналось переполнение long внутри glass
@@ -705,8 +706,8 @@ public class TetrisTest {
                 "..........." +
                 "...........");
 
-        verify(listener).event(Events.figuresDropped(level, figure));
-        verify(listener).event(Events.linesRemoved(level, 2));
+        verify(listener).event(Event.figuresDropped(level, figure));
+        verify(listener).event(Event.linesRemoved(level, 2));
     }
 
     @Test

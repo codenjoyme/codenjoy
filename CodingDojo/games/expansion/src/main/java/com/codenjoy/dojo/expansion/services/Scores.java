@@ -87,11 +87,11 @@ public class Scores implements PlayerScores {
         }
 
         if (data instanceof Integer) {
-            score = Integer.valueOf(data.toString());
+            score = Integer.parseInt(data.toString());
             scores.put(SCORE, score);
         } else if (data instanceof JSONObject) {
             JSONObject json = (JSONObject) data;
-            score = Integer.valueOf(json.getInt(SCORE));
+            score = json.getInt(SCORE);
             scores.put(SCORE, score);
             scores.put(ROUNDS, json.getJSONArray(ROUNDS));
         } else {
@@ -134,14 +134,14 @@ public class Scores implements PlayerScores {
 
     @Override
     public void event(Object input) {
-        Events events = (Events)input;
+        Event events = (Event)input;
 
         int score = events.getScore();
         rounds().put(score);
 
-        if (events.getType() == Events.Type.WIN) {
+        if (events.getType() == Event.Type.WIN) {
             this.score += score;
-        } else if (events.getType() == Events.Type.LOSE) {
+        } else if (events.getType() == Event.Type.LOSE) {
             this.score -= score;
         }
         this.score = Math.max(0, this.score);

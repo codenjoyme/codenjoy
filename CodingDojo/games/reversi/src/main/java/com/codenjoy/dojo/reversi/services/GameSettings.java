@@ -24,6 +24,7 @@ package com.codenjoy.dojo.reversi.services;
 
 
 import com.codenjoy.dojo.reversi.model.Level;
+import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
@@ -32,14 +33,14 @@ import java.util.List;
 
 import static com.codenjoy.dojo.reversi.services.GameSettings.Keys.*;
 
-public final class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
+public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
 
     public enum Keys implements Key {
 
-        WIN_SCORE("Win score"),
-        FLIP_SCORE("Flip score"),
-        LOSE_PENALTY("Lose penalty"),
-        LEVEL_MAP("Level map");
+        WIN_SCORE("[Score] Win score"),
+        FLIP_SCORE("[Score] Flip score"),
+        LOSE_PENALTY("[Score] Lose penalty"),
+        LEVEL_MAP("[Level] Level map");
 
         private String key;
 
@@ -61,7 +62,7 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
     public GameSettings() {
         integer(WIN_SCORE, 100);
         integer(FLIP_SCORE, 1);
-        integer(LOSE_PENALTY, 0);
+        integer(LOSE_PENALTY, -0);
 
         multiline(LEVEL_MAP,
                 "        \n" +
@@ -78,4 +79,7 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
         return new Level(string(LEVEL_MAP));
     }
 
+    public Calculator<Integer> calculator() {
+        return new Calculator<>(new Scores(this));
+    }
 }

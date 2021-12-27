@@ -25,7 +25,7 @@ package com.codenjoy.dojo.sample.model;
 
 import com.codenjoy.dojo.games.sample.Element;
 import com.codenjoy.dojo.sample.TestGameSettings;
-import com.codenjoy.dojo.sample.services.Events;
+import com.codenjoy.dojo.sample.services.Event;
 import com.codenjoy.dojo.sample.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
@@ -58,6 +58,7 @@ public abstract class AbstractGameTest {
     private Sample field;
     private GameSettings settings;
     private EventsListenersAssert events;
+    private Level level;
 
     @Before
     public void setup() {
@@ -69,7 +70,7 @@ public abstract class AbstractGameTest {
         settings = new TestGameSettings();
         setupSettings();
         printer = new PrinterFactoryImpl<>();
-        events = new EventsListenersAssert(() -> listeners, Events.class);
+        events = new EventsListenersAssert(() -> listeners, Event.class);
     }
 
     @After
@@ -88,12 +89,22 @@ public abstract class AbstractGameTest {
     public void givenFl(String... maps) {
         int levelNumber = LevelProgress.levelsStartsFrom1;
         settings.setLevelMaps(levelNumber, maps);
-        Level level = settings.level(levelNumber, dice);
+        level = settings.level(levelNumber, dice, Level::new);
+
+        beforeCrateField();
 
         field = new Sample(dice, level, settings);
         level.heroes().forEach(this::givenPlayer);
 
-        // other field preparation stuff
+        afterCreateField();
+    }
+
+    private void beforeCrateField() {
+        // settings / level pre-processing
+    }
+
+    private void afterCreateField() {
+        // settings / field post-processing
     }
 
     protected void givenPlayer(Hero hero) {

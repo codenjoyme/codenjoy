@@ -344,7 +344,7 @@ public class RoundBattleTest extends AbstractGameCheckTest {
         settings().integer(ROUNDS_PLAYERS_PER_ROOM, 3)
                 .integer(ROUNDS_TIME_BEFORE_START, 1)
                 .integer(WIN_SCORE, 10)
-                .integer(LOSE_PENALTY, 50)
+                .integer(LOSE_PENALTY, -50)
                 .integer(WIN_ROUND_SCORE, 100);
 
         givenFl("☼☼☼☼☼☼\n" +

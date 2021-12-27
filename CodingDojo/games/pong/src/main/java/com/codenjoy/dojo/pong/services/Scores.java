@@ -22,42 +22,17 @@ package com.codenjoy.dojo.pong.services;
  * #L%
  */
 
-import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
+import com.codenjoy.dojo.services.event.ScoresMap;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import static com.codenjoy.dojo.pong.services.GameSettings.Keys.WIN_SCORE;
 
-public class Scores implements PlayerScores {
+public class Scores extends ScoresMap<Void> {
 
-    private volatile int score;
-    private GameSettings settings;
+    public Scores(SettingsReader settings) {
+        super(settings);
 
-    public Scores(int startScore, GameSettings settings) {
-        this.score = startScore;
-        this.settings = settings;
-    }
-
-    @Override
-    public int clear() {
-        return score = 0;
-    }
-
-    @Override
-    public Integer getScore() {
-        return score;
-    }
-
-    @Override
-    public void event(Object event) {
-        if (event.equals(Events.WIN)) {
-            score += settings.integer(WIN_SCORE);
-        }
-        score = Math.max(0, score);
-    }
-
-    @Override
-    public void update(Object score) {
-        this.score = Integer.valueOf(score.toString());
+        put(Event.WIN,
+                value -> settings.integer(WIN_SCORE));
     }
 }

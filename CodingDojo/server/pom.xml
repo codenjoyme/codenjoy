@@ -234,21 +234,6 @@
             </dependencies>
         </profile>
         <profile>
-            <id>minesweeper</id>
-            <activation>
-                <property>
-                    <name>allGames</name>
-                </property>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>${project.groupId}</groupId>
-                    <artifactId>minesweeper-engine</artifactId>
-                    <version>${project.version}</version>
-                </dependency>
-            </dependencies>
-        </profile>
-        <profile>
             <id>rubicscube</id>
             <activation>
                 <property>

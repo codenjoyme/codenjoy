@@ -23,47 +23,17 @@ package com.codenjoy.dojo.collapse.services;
  */
 
 
-import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
+import com.codenjoy.dojo.services.event.ScoresMap;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 
-import static com.codenjoy.dojo.collapse.services.GameSettings.Keys.SUCCESS_SCORE;
+import java.util.stream.IntStream;
 
-public class Scores implements PlayerScores {
+public class Scores extends ScoresMap<Integer> {
 
-    private volatile int score;
-    private GameSettings settings;
+    public Scores(SettingsReader settings) {
+        super(settings);
 
-    public Scores(int startScore, GameSettings settings) {
-        this.score = startScore;
-        this.settings = settings;
-    }
-
-    @Override
-    public int clear() {
-        return score = 0;
-    }
-
-    @Override
-    public Integer getScore() {
-        return score;
-    }
-
-    @Override
-    public void event(Object event) {
-        if (event.equals(Events.SUCCESS)) {
-            int count = ((Events) event).getCount();
-            int inc = 0;
-            for (int i = 1; i <= count; i++) {
-                inc += i * settings.integer(SUCCESS_SCORE);
-            }
-            score += inc;
-        }
-        score = Math.max(0, score);
-    }
-
-    @Override
-    public void update(Object score) {
-        this.score = Integer.valueOf(score.toString());
+        put(Event.Type.SUCCESS,
+                value -> IntStream.range(1, value + 1).sum());
     }
 }

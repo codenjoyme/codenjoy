@@ -27,7 +27,7 @@ import com.codenjoy.dojo.battlecity.TestGameSettings;
 import com.codenjoy.dojo.battlecity.model.items.AITank;
 import com.codenjoy.dojo.battlecity.model.items.Bullet;
 import com.codenjoy.dojo.battlecity.model.items.Wall;
-import com.codenjoy.dojo.battlecity.services.Events;
+import com.codenjoy.dojo.battlecity.services.Event;
 import com.codenjoy.dojo.battlecity.services.GameRunner;
 import com.codenjoy.dojo.battlecity.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
@@ -83,7 +83,7 @@ public class GameTest {
         dice = mock(Dice.class);
         settings = new TestGameSettings();
         printerFactory = new PrinterFactoryImpl();
-        events = new EventsListenersAssert(() -> listeners, Events.class);
+        events = new EventsListenersAssert(() -> listeners, Event.class);
     }
 
     @After

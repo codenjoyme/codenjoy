@@ -24,9 +24,14 @@ package com.codenjoy.dojo.sokoban.services;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.Calculator;
+import com.codenjoy.dojo.services.event.ScoresImpl;
+import com.codenjoy.dojo.sokoban.TestGameSettings;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.sokoban.services.GameSettings.Keys.LOSE_PENALTY;
+import static com.codenjoy.dojo.sokoban.services.GameSettings.Keys.WIN_SCORE;
 import static org.junit.Assert.assertEquals;
 
 public class ScoresTest {
@@ -35,23 +40,24 @@ public class ScoresTest {
     private GameSettings settings;
 
     public void lose() {
-        scores.event(Events.LOSE);
+        scores.event(Event.LOSE);
     }
 
     public void win() {
-        scores.event(Events.WIN);
+        scores.event(Event.WIN);
     }
 
     @Before
     public void setup() {
-        settings = new GameSettings();
-        scores = new Scores(0, settings);
+        settings = new TestGameSettings();
     }
 
     @Test
     public void shouldCollectScores() {
-        scores = new Scores(140, settings);
+        // given
+        givenScores(140);
 
+        // when
         win();
         win();
         win();
@@ -59,24 +65,69 @@ public class ScoresTest {
 
         lose();
 
-        assertEquals(160, scores.getScore());
+        // then
+        assertEquals(140
+                    + 4 * settings.integer(WIN_SCORE)
+                    + settings.integer(LOSE_PENALTY),
+                scores.getScore());
+    }
+
+    private void givenScores(int score) {
+        scores = new ScoresImpl<>(score, new Calculator<>(new Scores(settings)));
     }
 
     @Test
     public void shouldStillZeroAfterDead() {
+        // given
+        givenScores(0);
+
+        // when
         lose();
 
+        // then
         assertEquals(0, scores.getScore());
     }
 
     @Test
     public void shouldClearScore() {
+        // given
+        givenScores(0);
         win();
 
+        // when
         scores.clear();
 
+        // then
         assertEquals(0, scores.getScore());
     }
 
+    @Test
+    public void shouldCollectScores_whenWin() {
+        // given
+        givenScores(140);
 
+        // when
+        win();
+        win();
+
+        // then
+        assertEquals(140
+                    + 2 * settings.integer(WIN_SCORE),
+                scores.getScore());
+    }
+
+    @Test
+    public void shouldCollectScores_whenLose() {
+        // given
+        givenScores(140);
+
+        // when
+        lose();
+        lose();
+
+        // then
+        assertEquals(140
+                    + 2 * settings.integer(LOSE_PENALTY),
+                scores.getScore());
+    }
 }

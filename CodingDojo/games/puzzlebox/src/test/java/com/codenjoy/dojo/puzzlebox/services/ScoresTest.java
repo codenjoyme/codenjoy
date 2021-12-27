@@ -23,11 +23,15 @@ package com.codenjoy.dojo.puzzlebox.services;
  */
 
 
+import com.codenjoy.dojo.puzzlebox.TestGameSettings;
 import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.Calculator;
+import com.codenjoy.dojo.services.event.ScoresImpl;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.codenjoy.dojo.puzzlebox.services.GameSettings.Keys.*;
+import static com.codenjoy.dojo.puzzlebox.services.GameSettings.Keys.FILL_SCORE;
+import static com.codenjoy.dojo.puzzlebox.services.GameSettings.Keys.WIN_SCORE;
 import static org.junit.Assert.assertEquals;
 
 public class ScoresTest {
@@ -36,23 +40,24 @@ public class ScoresTest {
     private GameSettings settings;
 
     public void fill() {
-        scores.event(Events.FILL);
+        scores.event(Event.FILL);
     }
 
     public void win() {
-        scores.event(Events.WIN);
+        scores.event(Event.WIN);
     }
 
     @Before
     public void setup() {
-        settings = new GameSettings();
-        scores = new Scores(0, settings);
+        settings = new TestGameSettings();
     }
 
     @Test
     public void shouldCollectScores() {
-        scores = new Scores(140, settings);
+        // given
+        givenScores(140);
 
+        // when
         win();
         win();
         win();
@@ -60,27 +65,70 @@ public class ScoresTest {
 
         fill();
 
+        // then
         assertEquals(140
-                + 4 * settings.integer(WIN_SCORE)
-                + settings.integer(FILL_SCORE),
+                    + 4 * settings.integer(WIN_SCORE)
+                    + settings.integer(FILL_SCORE),
                 scores.getScore());
+    }
+
+    private void givenScores(int score) {
+        scores = new ScoresImpl<>(score, new Calculator<>(new Scores(settings)));
     }
 
     @Test
     public void shouldStillZeroAfterDead() {
+        // given
         settings.integer(FILL_SCORE, -1);
+        givenScores(0);
 
+        // when
         fill();
 
+        // then
         assertEquals(0, scores.getScore());
     }
 
     @Test
     public void shouldClearScore() {
+        // given
+        givenScores(0);
         win();
 
+        // when
         scores.clear();
 
+        // then
         assertEquals(0, scores.getScore());
+    }
+
+    @Test
+    public void shouldCollectScores_whenWin() {
+        // given
+        givenScores(140);
+
+        // when
+        win();
+        win();
+
+        // then
+        assertEquals(140
+                    + 2 * settings.integer(WIN_SCORE),
+                scores.getScore());
+    }
+
+    @Test
+    public void shouldCollectScores_whenFill() {
+        // given
+        givenScores(140);
+
+        // when
+        fill();
+        fill();
+
+        // then
+        assertEquals(140
+                    + 2 * settings.integer(FILL_SCORE),
+                scores.getScore());
     }
 }

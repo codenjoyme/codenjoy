@@ -23,6 +23,7 @@ package com.codenjoy.dojo.expansion.model.replay;
  */
 
 
+import com.codenjoy.dojo.expansion.TestGameSettings;
 import com.codenjoy.dojo.expansion.model.Expansion;
 import com.codenjoy.dojo.expansion.model.IField;
 import com.codenjoy.dojo.expansion.model.Player;
@@ -43,7 +44,7 @@ public class ExpansionGameLoggerTest {
 
     @Before
     public void setup() {
-        settings = new GameSettings();
+        settings = new TestGameSettings();
     }
 
     @Test

@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.tetris.TestGameSettings;
 import com.codenjoy.dojo.tetris.model.levels.gamelevel.FigureTypesLevel;
 import com.codenjoy.dojo.tetris.services.GameSettings;
 import org.junit.Test;
@@ -93,7 +94,7 @@ public class CleanScoresTetrisTest {
             return null;
         }).when(onChangeLevel).levelCompleted(anyInt(), any());
 
-        settings = new GameSettings();
+        settings = new TestGameSettings();
         game = new Tetris(levels, queue, level.size(), settings);
         listener = mock(EventListener.class);
         player = new Player(listener, settings);

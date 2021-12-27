@@ -22,47 +22,26 @@ package com.codenjoy.dojo.spacerace.services;
  * #L%
  */
 
-import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.ScoresMap;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import static com.codenjoy.dojo.spacerace.services.GameSettings.Keys.*;
 
-public class Scores implements PlayerScores {
+public class Scores extends ScoresMap<Void> {
 
-    private volatile int score;
+    public Scores(SettingsReader settings) {
+        super(settings);
 
-    private GameSettings settings;
+        put(Event.DESTROY_BOMB,
+                value -> settings.integer(DESTROY_BOMB_SCORE));
 
-    public Scores(int startScore, GameSettings settings) {
-        this.score = startScore;
-        this.settings = settings;
-    }
+        put(Event.DESTROY_STONE,
+                value -> settings.integer(DESTROY_STONE_SCORE));
 
-    @Override
-    public int clear() {
-        return score = 0;
-    }
+        put(Event.DESTROY_ENEMY,
+                value -> settings.integer(DESTROY_ENEMY_SCORE));
 
-    @Override
-    public Integer getScore() {
-        return score;
-    }
-
-    @Override
-    public void event(Object event) {
-        if (event.equals(Events.DESTROY_BOMB)) {
-            score += settings.integer(DESTROY_BOMB_SCORE);
-        } else if (event.equals(Events.DESTROY_STONE)) {
-            score += settings.integer(DESTROY_STONE_SCORE);
-        } else if (event.equals(Events.DESTROY_ENEMY)) {
-            score += settings.integer(DESTROY_ENEMY_SCORE);
-        } else if (event.equals(Events.LOSE)) {
-            score -= settings.integer(LOSE_PENALTY);
-        }
-        score = Math.max(0, score);
-    }
-
-    @Override
-    public void update(Object score) {
-        this.score = Integer.valueOf(score.toString());
+        put(Event.LOSE,
+                value -> settings.integer(LOSE_PENALTY));
     }
 }

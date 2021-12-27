@@ -23,6 +23,7 @@ package com.codenjoy.dojo.lemonade.model;
  */
 
 
+import com.codenjoy.dojo.lemonade.TestGameSettings;
 import com.codenjoy.dojo.lemonade.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
@@ -30,7 +31,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
-import static com.codenjoy.dojo.lemonade.services.GameSettings.Keys.LIMIT_DAYS;
 import static com.codenjoy.dojo.utils.JsonUtils.clean;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -51,8 +51,7 @@ public class GameTest {
     @Before
     public void setup() {
         dice = mock(Dice.class);
-        settings = new GameSettings()
-                .integer(LIMIT_DAYS, 0);
+        settings = new TestGameSettings();
     }
 
     private void dice(int... ints) {

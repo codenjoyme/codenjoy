@@ -27,7 +27,7 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.sokoban.model.items.*;
-import com.codenjoy.dojo.sokoban.services.Events;
+import com.codenjoy.dojo.sokoban.services.Event;
 import com.codenjoy.dojo.sokoban.services.GameSettings;
 
 import java.util.LinkedList;
@@ -77,7 +77,7 @@ public class Sokoban implements Field {
         hero.tick();
 
         if (!hero.isAlive() || boxesBlocked) {
-            player.event(Events.LOSE);
+            player.event(Event.LOSE);
         }
 
         for (Mark mark : marks) {
@@ -94,7 +94,7 @@ public class Sokoban implements Field {
 
         if (marksToWin == realMarksToWin) {
             isWon = true;
-            player.event(Events.WIN);
+            player.event(Event.WIN);
         }
 
     }

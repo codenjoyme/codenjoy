@@ -24,6 +24,7 @@ package com.codenjoy.dojo.quake2d.services;
 
 
 import com.codenjoy.dojo.quake2d.model.Level;
+import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
@@ -32,13 +33,13 @@ import java.util.List;
 
 import static com.codenjoy.dojo.quake2d.services.GameSettings.Keys.*;
 
-public final class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
+public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
 
     public enum Keys implements Key {
 
-        KILL_SCORE("Kill score"),
-        INJURE_SCORE("Injure score"),
-        LEVEL_MAP("Level map");
+        KILL_SCORE("[Score] Kill score"),
+        INJURE_SCORE("[Score] Injure score"),
+        LEVEL_MAP("[Level] Level map");
 
         private String key;
 
@@ -98,4 +99,7 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
         return new Level(string(LEVEL_MAP));
     }
 
+    public Calculator<Void> calculator() {
+        return new Calculator<>(new Scores(this));
+    }
 }

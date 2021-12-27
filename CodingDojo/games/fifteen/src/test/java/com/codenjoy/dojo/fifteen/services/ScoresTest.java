@@ -22,11 +22,10 @@ package com.codenjoy.dojo.fifteen.services;
  * #L%
  */
 
-import com.codenjoy.dojo.fifteen.model.Bonus;
+import com.codenjoy.dojo.fifteen.TestGameSettings;
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
-import org.junit.Assert;
+import com.codenjoy.dojo.services.event.Calculator;
+import com.codenjoy.dojo.services.event.ScoresImpl;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -43,38 +42,66 @@ public class ScoresTest {
     private GameSettings settings;
 
     public void win() {
-        scores.event(Events.WIN);
+        scores.event(Event.Type.WIN);
     }
 
     public void bonus() {
-        scores.event(new Bonus(MOVE_COUNT, NUMBER));
+        scores.event(Event.BONUS(MOVE_COUNT, NUMBER));
     }
 
     @Before
     public void setup() {
-        settings = new GameSettings();
-        scores = new Scores(0, settings);
+        settings = new TestGameSettings();
     }
 
     @Test
     public void shouldCollectScores() {
-        scores = new Scores(250, settings);
+        // given
+        givenScores(140);
 
+        // when
         bonus();
         bonus();
+        win();
 
-        assertEquals(250
-                + 2 * settings.integer(BONUS_SCORE) * NUMBER / MOVE_COUNT,
+        // then
+        assertEquals(140
+                    + 2 * settings.integer(BONUS_SCORE) * NUMBER / MOVE_COUNT
+                    + settings.integer(WIN_SCORE),
                 scores.getScore());
+    }
+
+    private void givenScores(int score) {
+        scores = new ScoresImpl<>(score, new Calculator<>(new Scores(settings)));
     }
 
     @Test
     public void shouldCollectScores_whenWin() {
-        scores = new Scores(250, settings);
+        // given
+        givenScores(140);
 
+        // when
+        win();
         win();
 
-        assertEquals(250 + settings.integer(WIN_SCORE),
+        // then
+        assertEquals(140
+                    + 2 * settings.integer(WIN_SCORE),
+                scores.getScore());
+    }
+
+    @Test
+    public void shouldCollectScores_whenBonus() {
+        // given
+        givenScores(140);
+
+        // when
+        bonus();
+        bonus();
+
+        // then
+        assertEquals(140
+                        + 2 * settings.integer(BONUS_SCORE) * NUMBER / MOVE_COUNT,
                 scores.getScore());
     }
 }

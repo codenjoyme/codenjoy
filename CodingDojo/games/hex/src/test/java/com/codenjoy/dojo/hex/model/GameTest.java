@@ -23,9 +23,12 @@ package com.codenjoy.dojo.hex.model;
  */
 
 
+import com.codenjoy.dojo.hex.TestGameSettings;
 import com.codenjoy.dojo.hex.services.Event;
 import com.codenjoy.dojo.hex.services.GameSettings;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.utils.TestUtils;
@@ -59,7 +62,7 @@ public class GameTest {
     public void setup() {
         dice = mock(Dice.class);
         printerFactory = new PrinterFactoryImpl();
-        settings = new GameSettings();
+        settings = new TestGameSettings();
     }
 
     private void dice(int... ints) {
@@ -584,7 +587,7 @@ public class GameTest {
         game.tick();
 
         // then
-        verify(listener1).event(new Event(Event.EventEnum.WIN, 1));
+        verify(listener1).event(new Event(Event.Type.WIN, 1));
 
         assertE("☼☼☼☼☼" +
                 "☼  ☺☼" +
@@ -621,8 +624,8 @@ public class GameTest {
         game.tick();
 
         // then
-        verify(listener1).event(new Event(Event.EventEnum.WIN, 2));
-        verify(listener2).event(new Event(Event.EventEnum.LOSE, 1));
+        verify(listener1).event(new Event(Event.Type.WIN, 2));
+        verify(listener2).event(new Event(Event.Type.LOSE, 1));
 
         assertE("☼☼☼☼☼" +
                 "☼  ♥☼" +
@@ -721,8 +724,8 @@ public class GameTest {
                 "☼☼☼☼☼");
 
         // then
-        verify(listener1).event(new Event(Event.EventEnum.WIN, 3));
-        verify(listener2).event(new Event(Event.EventEnum.LOSE, 2));
+        verify(listener1).event(new Event(Event.Type.WIN, 3));
+        verify(listener2).event(new Event(Event.Type.LOSE, 2));
 
     }
 
@@ -904,8 +907,8 @@ public class GameTest {
                 "☼    ☼" +
                 "☼☼☼☼☼☼");
 
-        verify(listener1).event(new Event(Event.EventEnum.WIN, 2));
-        verify(listener2).event(new Event(Event.EventEnum.LOSE, 2));
+        verify(listener1).event(new Event(Event.Type.WIN, 2));
+        verify(listener2).event(new Event(Event.Type.LOSE, 2));
     }
 
     @Test
@@ -930,8 +933,8 @@ public class GameTest {
                 "☼  ♥ ☼" +
                 "☼☼☼☼☼☼");
 
-        verify(listener1).event(new Event(Event.EventEnum.LOSE, 1));
-        verify(listener2).event(new Event(Event.EventEnum.WIN, 1));
+        verify(listener1).event(new Event(Event.Type.LOSE, 1));
+        verify(listener2).event(new Event(Event.Type.WIN, 1));
     }
 
     // геймовер, когда оба игрока jump нули и анигизировались
@@ -962,8 +965,8 @@ public class GameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        verify(listener1).event(new Event(Event.EventEnum.LOSE, 1));
-        verify(listener2).event(new Event(Event.EventEnum.LOSE, 1));
+        verify(listener1).event(new Event(Event.Type.LOSE, 1));
+        verify(listener2).event(new Event(Event.Type.LOSE, 1));
 
         // when
         game.tick();
@@ -1032,8 +1035,8 @@ public class GameTest {
                 "☼  ☺ ☼" +
                 "☼☼☼☼☼☼");
 
-        verify(listener1).event(new Event(Event.EventEnum.WIN, 1));
-        verify(listener2).event(new Event(Event.EventEnum.WIN, 1));
+        verify(listener1).event(new Event(Event.Type.WIN, 1));
+        verify(listener2).event(new Event(Event.Type.WIN, 1));
     }
 
     // геймовер, когда некуда больше ходить

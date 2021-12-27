@@ -22,10 +22,12 @@ package com.codenjoy.dojo.collapse.model;
  * #L%
  */
 
-
-import com.codenjoy.dojo.collapse.services.Events;
+import com.codenjoy.dojo.collapse.TestGameSettings;
+import com.codenjoy.dojo.collapse.services.Event;
 import com.codenjoy.dojo.collapse.services.GameSettings;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.utils.TestUtils;
@@ -51,7 +53,7 @@ public class GameTest {
     @Before
     public void setup() {
         printerFactory = new PrinterFactoryImpl();
-        settings = new GameSettings();
+        settings = new TestGameSettings();
     }
 
     private void givenFl(String board) {
@@ -218,7 +220,7 @@ public class GameTest {
                 "☼333☼" +
                 "☼☼☼☼☼");
 
-        assertEvent(4, Events.SUCCESS);
+        assertEvent("Event[SUCCESS:4]");
 
         // when
         joystick.act(1, 3);
@@ -232,7 +234,7 @@ public class GameTest {
                 "☼   ☼" +
                 "☼☼☼☼☼");
 
-        assertEvent(4, Events.SUCCESS);
+        assertEvent("Event[SUCCESS:4]");
     }
 
     // если в ходе моих перемещений образуются конгломераты :)
@@ -257,15 +259,13 @@ public class GameTest {
                 "☼   ☼" +
                 "☼☼☼☼☼");
 
-        assertEvent(9, Events.SUCCESS);
+        assertEvent("Event[SUCCESS:9]");
     }
 
-    private void assertEvent(int expected, Events expectedType) {
-        ArgumentCaptor<Events> event = ArgumentCaptor.forClass(Events.class);
+    private void assertEvent(String expected) {
+        ArgumentCaptor<Event> event = ArgumentCaptor.forClass(Event.class);
         verify(listener).event(event.capture());
-        Events value = event.getValue();
-        assertEquals(expectedType, value);
-        assertEquals(expected, value.getCount());
+        assertEquals(expected, event.getValue().toString());
 
         Mockito.verifyNoMoreInteractions(listener);
         reset(listener);

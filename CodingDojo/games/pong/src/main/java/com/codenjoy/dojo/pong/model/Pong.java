@@ -22,7 +22,7 @@ package com.codenjoy.dojo.pong.model;
  * #L%
  */
 
-import com.codenjoy.dojo.pong.services.Events;
+import com.codenjoy.dojo.pong.services.Event;
 import com.codenjoy.dojo.pong.services.GameSettings;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
@@ -79,8 +79,8 @@ public class Pong implements Field {
 
         for (Player player : players) {
             if (playerPassedBall(player)) {
-                player.event(Events.LOSE);
-                allExcept(player).forEach(p -> p.event(Events.WIN));
+                player.event(Event.LOSE);
+                allExcept(player).forEach(p -> p.event(Event.WIN));
                 resetBall();
                 return;
             }

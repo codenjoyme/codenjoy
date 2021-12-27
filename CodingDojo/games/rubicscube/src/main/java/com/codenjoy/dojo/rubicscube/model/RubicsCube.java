@@ -23,7 +23,7 @@ package com.codenjoy.dojo.rubicscube.model;
  */
 
 
-import com.codenjoy.dojo.rubicscube.services.Events;
+import com.codenjoy.dojo.rubicscube.services.Event;
 import com.codenjoy.dojo.rubicscube.services.GameSettings;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
@@ -66,7 +66,7 @@ public class RubicsCube implements Field {
     private void checkIsWin() {
         if (cube.isSolved()) {
             gameOver = true;
-            player.event(Events.SUCCESS);
+            player.event(Event.SUCCESS);
         }
     }
 
@@ -105,7 +105,7 @@ public class RubicsCube implements Field {
 
     @Override
     public void gameOver() {
-        player.event(Events.FAIL);
+        player.event(Event.FAIL);
         gameOver = true;
     }
 

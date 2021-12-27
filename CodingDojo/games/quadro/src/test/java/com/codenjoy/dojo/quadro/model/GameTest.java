@@ -23,7 +23,8 @@ package com.codenjoy.dojo.quadro.model;
  */
 
 
-import com.codenjoy.dojo.quadro.services.Events;
+import com.codenjoy.dojo.quadro.TestGameSettings;
+import com.codenjoy.dojo.quadro.services.Event;
 import com.codenjoy.dojo.quadro.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
@@ -55,7 +56,7 @@ public class GameTest {
     public void setup() {
         dice = mock(Dice.class);
         printer = new PrinterFactoryImpl();
-        settings = new GameSettings();
+        settings = new TestGameSettings();
     }
 
     private void dice(int... ints) {
@@ -250,8 +251,8 @@ public class GameTest {
                 "    o    " +
                 "    o    ");
 
-        verify(listener1).event(Events.WIN);
-        verify(listener2).event(Events.LOSE);
+        verify(listener1).event(Event.WIN);
+        verify(listener2).event(Event.LOSE);
     }
 
     // Ничего, когда в ряд 4 фишки желтого игрока вертикально но есть между чужая фишка
@@ -313,8 +314,8 @@ public class GameTest {
                 " x       " +
                 "ox       ");
 
-        verify(listener1).event(Events.LOSE);
-        verify(listener2).event(Events.WIN);
+        verify(listener1).event(Event.LOSE);
+        verify(listener2).event(Event.WIN);
     }
 
     // Первым ходит желтый
@@ -499,8 +500,8 @@ public class GameTest {
                 "         " +
                 "         ");
 
-        verify(listener1).event(Events.LOSE);
-        verify(listener2).event(Events.WIN);
+        verify(listener1).event(Event.LOSE);
+        verify(listener2).event(Event.WIN);
     }
 
     // Нельзя положить фишку, когда столбик полностью забит
@@ -734,8 +735,8 @@ public class GameTest {
 
         game.tick();
 
-        verify(listener1).event(Events.DRAW);
-        verify(listener2).event(Events.DRAW);
+        verify(listener1).event(Event.DRAW);
+        verify(listener2).event(Event.DRAW);
     }
 
     // Начиная с третьего игрока идут спектаторы?, либо не добавлять?
@@ -771,8 +772,8 @@ public class GameTest {
         hero1.act(0);
         game.tick();
 
-        verify(listener1).event(Events.DRAW);
-        verify(listener2).event(Events.DRAW);
+        verify(listener1).event(Event.DRAW);
+        verify(listener2).event(Event.DRAW);
 
         for (int i = 0; i < Quadro.TIMEOUT_TICKS; i++) {
             game.tick();
@@ -805,8 +806,8 @@ public class GameTest {
         hero1.act(0);
         game.tick();
 
-        verify(listener1).event(Events.WIN);
-        verify(listener2).event(Events.LOSE);
+        verify(listener1).event(Event.WIN);
+        verify(listener2).event(Event.LOSE);
 
         for (int i = 0; i < Quadro.TIMEOUT_TICKS; i++) {
             game.tick();
@@ -851,8 +852,8 @@ public class GameTest {
                 " o       " +
                 "oxxxxxo  ");
 
-        verify(listener1).event(Events.LOSE);
-        verify(listener2).event(Events.WIN);
+        verify(listener1).event(Event.LOSE);
+        verify(listener2).event(Event.WIN);
     }
 
     private void hero1MakeSomeStep() {
@@ -888,8 +889,8 @@ public class GameTest {
                 "  xxo    " +
                 "oxooooo  ");
 
-        verify(listener1).event(Events.LOSE);
-        verify(listener2).event(Events.WIN);
+        verify(listener1).event(Event.LOSE);
+        verify(listener2).event(Event.WIN);
     }
 
     // Ничего, когда в ряд 4 фишки игрока по диагонали вправо вверх, но есть разрыв чужой фишкой
@@ -1048,8 +1049,8 @@ public class GameTest {
                 "  xxo    " +
                 "oxooooo  ");
 
-        verify(listener1).event(Events.LOSE);
-        verify(listener2).event(Events.WIN);
+        verify(listener1).event(Event.LOSE);
+        verify(listener2).event(Event.WIN);
     }
 
     // Игрок победил когда в ряд 4 его фишки по диагонали влево вверх
@@ -1080,8 +1081,8 @@ public class GameTest {
                 "  oxoox  " +
                 "oxooooox ");
 
-        verify(listener1).event(Events.LOSE);
-        verify(listener2).event(Events.WIN);
+        verify(listener1).event(Event.LOSE);
+        verify(listener2).event(Event.WIN);
     }
 
     // Игрок победил когда в ряд 4 его фишки по диагонали вправо вниз
@@ -1112,7 +1113,7 @@ public class GameTest {
                 "  oxoox  " +
                 "oxooooox ");
 
-        verify(listener1).event(Events.LOSE);
-        verify(listener2).event(Events.WIN);
+        verify(listener1).event(Event.LOSE);
+        verify(listener2).event(Event.WIN);
     }
 }

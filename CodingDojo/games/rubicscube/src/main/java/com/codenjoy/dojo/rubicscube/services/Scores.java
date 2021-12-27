@@ -23,43 +23,21 @@ package com.codenjoy.dojo.rubicscube.services;
  */
 
 
-import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.ScoresMap;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import static com.codenjoy.dojo.rubicscube.services.GameSettings.Keys.FAIL_PENALTY;
 import static com.codenjoy.dojo.rubicscube.services.GameSettings.Keys.SUCCESS_SCORE;
 
-public class Scores implements PlayerScores {
+public class Scores extends ScoresMap<Void> {
 
-    private volatile int score;
-    private GameSettings settings;
+    public Scores(SettingsReader settings) {
+        super(settings);
 
-    public Scores(int startScore, GameSettings settings) {
-        this.score = startScore;
-        this.settings = settings;
-    }
+        put(Event.FAIL,
+                value -> settings.integer(FAIL_PENALTY));
 
-    @Override
-    public int clear() {
-        return score = 0;
-    }
-
-    @Override
-    public Integer getScore() {
-        return score;
-    }
-
-    @Override
-    public void event(Object event) {
-        if (event.equals(Events.FAIL)) {
-            score -= settings.integer(FAIL_PENALTY);
-        } else if (event.equals(Events.SUCCESS)) {
-            score += settings.integer(SUCCESS_SCORE);
-        }
-        score = Math.max(0, score);
-    }
-
-    @Override
-    public void update(Object score) {
-        this.score = Integer.valueOf(score.toString());
+        put(Event.SUCCESS,
+                value -> settings.integer(SUCCESS_SCORE));
     }
 }

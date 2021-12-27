@@ -65,7 +65,7 @@ public class RestJoystickControllerTest extends AbstractRestControllerTest {
                         "☼    ☼\n" +
                         "☼☼☼☼☼☼\n")
                 .integer(WIN_SCORE, 30)
-                .integer(LOSE_PENALTY, 100);
+                .integer(LOSE_PENALTY, -100);
 
 
         Deal deal1 = with.login.register(player1, "ip", room, game);

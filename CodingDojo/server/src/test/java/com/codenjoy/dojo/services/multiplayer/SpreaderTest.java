@@ -55,7 +55,7 @@ public class SpreaderTest {
     private FieldService fieldService;
     private final String room = "room";
     private final MultiplayerType multiplayerType = MultiplayerType.MULTIPLE;
-    private final MultiplayerType levelsType = MultiplayerType.SINGLE_LEVELS.apply(5);
+    private final MultiplayerType levelsType = MultiplayerType.ALL_SINGLE.apply(5);
     private final Supplier<GameField> getField = () -> newField();
     private List<GameField> fields = new LinkedList<>();
     private List<Player> players = new LinkedList<>();

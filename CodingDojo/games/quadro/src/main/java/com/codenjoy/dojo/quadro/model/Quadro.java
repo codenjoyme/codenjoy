@@ -24,7 +24,7 @@ package com.codenjoy.dojo.quadro.model;
 
 
 import com.codenjoy.dojo.quadro.model.items.Chip;
-import com.codenjoy.dojo.quadro.services.Events;
+import com.codenjoy.dojo.quadro.services.Event;
 import com.codenjoy.dojo.quadro.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
@@ -165,19 +165,19 @@ public class Quadro implements Field {
 
     private void draw() {
         gameOver = 1;
-        players.get(0).event(Events.DRAW);
-        players.get(1).event(Events.DRAW);
+        players.get(0).event(Event.DRAW);
+        players.get(1).event(Event.DRAW);
     }
 
     private void win(boolean color) {
         gameOver = 1;
 
         if (color) {
-            players.get(0).event(Events.WIN);
-            players.get(1).event(Events.LOSE);
+            players.get(0).event(Event.WIN);
+            players.get(1).event(Event.LOSE);
         } else {
-            players.get(0).event(Events.LOSE);
-            players.get(1).event(Events.WIN);
+            players.get(0).event(Event.LOSE);
+            players.get(1).event(Event.WIN);
         }
     }
 

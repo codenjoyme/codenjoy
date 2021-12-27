@@ -73,7 +73,6 @@
         <module>collapse</module>
         <module>hex</module>
         <module>clifford</module>
-        <module>minesweeper</module>
         <module>rubicscube</module>
         <module>sudoku</module>
         <module>snake</module>

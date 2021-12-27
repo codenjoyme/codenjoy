@@ -22,9 +22,12 @@ package com.codenjoy.dojo.pong.model;
  * #L%
  */
 
-import com.codenjoy.dojo.pong.services.Events;
+import com.codenjoy.dojo.pong.TestGameSettings;
+import com.codenjoy.dojo.pong.services.Event;
 import com.codenjoy.dojo.pong.services.GameSettings;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.utils.TestUtils;
@@ -50,7 +53,7 @@ public class GameTest {
     public void setup() {
         dice = mock(Dice.class);
         printer = new PrinterFactoryImpl();
-        settings = new GameSettings();
+        settings = new TestGameSettings();
     }
 
     private void dice(int...ints) {
@@ -546,7 +549,7 @@ public class GameTest {
 
         game.tick();
 
-        verify(listener).event(Events.LOSE);
+        verify(listener).event(Event.LOSE);
 
         assertE("          " +
                 "----------" +

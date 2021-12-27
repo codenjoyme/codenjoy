@@ -23,7 +23,10 @@ package com.codenjoy.dojo.moebius.services;
  */
 
 
+import com.codenjoy.dojo.moebius.TestGameSettings;
 import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.Calculator;
+import com.codenjoy.dojo.services.event.ScoresImpl;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -37,23 +40,28 @@ public class ScoresTest {
     private GameSettings settings;
 
     public void gameOver() {
-        scores.event(new Events(Events.Event.GAME_OVER));
+        scores.event(new Event(Event.Type.GAME_OVER));
     }
 
     public void win(int lines) {
-        scores.event(new Events(Events.Event.WIN, lines));
+        scores.event(new Event(Event.Type.WIN, lines));
     }
 
     @Before
     public void setup() {
-        settings = new GameSettings();
-        scores = new Scores(0, settings);
+        settings = new TestGameSettings();
+    }
+
+    private void givenScores(int score) {
+        scores = new ScoresImpl<>(score, new Calculator<>(new Scores(settings)));
     }
 
     @Test
     public void shouldCollectScores() {
-        scores = new Scores(140, settings);
+        // given
+        givenScores(140);
 
+        // when
         win(1);
         win(2);
         win(3);
@@ -61,27 +69,66 @@ public class ScoresTest {
 
         gameOver();
 
+        // then
         assertEquals(140
-                + (1+2+3+4) * settings.integer(WIN_SCORE)
-                - settings.integer(LOSE_PENALTY),
+                    + (1 + 2 + 3 + 4) * settings.integer(WIN_SCORE)
+                    + settings.integer(LOSE_PENALTY),
                 scores.getScore());
     }
 
     @Test
     public void shouldStillZeroAfterDead() {
+        // given
+        givenScores(0);
+
+        // when
         gameOver();
 
+        // then
         assertEquals(0, scores.getScore());
     }
 
     @Test
     public void shouldClearScore() {
+        // given
+        givenScores(0);
         win(10);
 
+        // when
         scores.clear();
 
+        // then
         assertEquals(0, scores.getScore());
     }
 
+    @Test
+    public void shouldCollectScores_whenWin() {
+        // given
+        givenScores(140);
 
+        // when
+        win(1);
+        win(2);
+
+        // then
+        assertEquals(140
+                    + (1 + 2) * settings.integer(WIN_SCORE)
+                    + settings.integer(LOSE_PENALTY),
+                scores.getScore());
+    }
+
+    @Test
+    public void shouldCollectScores_whenGameOver() {
+        // given
+        givenScores(140);
+
+        // when
+        gameOver();
+        gameOver();
+
+        // then
+        assertEquals(140
+                    + 2 * settings.integer(LOSE_PENALTY),
+                scores.getScore());
+    }
 }

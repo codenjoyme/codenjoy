@@ -22,6 +22,7 @@ package com.codenjoy.dojo.a2048.services;
  * #L%
  */
 
+import com.codenjoy.dojo.client.Utils;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -30,10 +31,17 @@ public class GameSettingsTest {
 
     @Test
     public void shouldGetAllKeys() {
-        assertEquals("[SIZE, NEW_NUMBERS, NUMBERS_MODE, BREAKS_MODE, LEVEL_MAP, " +
-                        "NEW_NUMBERS_IN_CORNERS, NEW_NUMBERS_IN_RANDOM, " +
-                        "BREAKS_EXISTS, BREAKS_NOT_EXISTS]",
-                new GameSettings().allKeys().toString());
+        assertEquals("[SIZE, \n" +
+                        "NEW_NUMBERS, \n" +
+                        "NUMBERS_MODE, \n" +
+                        "BREAKS_MODE, \n" +
+                        "LEVEL_MAP, \n" +
+                        "SCORE_COUNTING_TYPE, \n" +
+                        "NEW_NUMBERS_IN_CORNERS, \n" +
+                        "NEW_NUMBERS_IN_RANDOM, \n" +
+                        "BREAKS_EXISTS, \n" +
+                        "BREAKS_NOT_EXISTS]",
+                Utils.split(new GameSettings().allKeys(), ", \n"));
     }
 
 }

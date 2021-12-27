@@ -23,47 +23,21 @@ package com.codenjoy.dojo.moebius.services;
  */
 
 
-import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.ScoresMap;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import static com.codenjoy.dojo.moebius.services.GameSettings.Keys.LOSE_PENALTY;
 import static com.codenjoy.dojo.moebius.services.GameSettings.Keys.WIN_SCORE;
 
-public class Scores implements PlayerScores {
+public class Scores extends ScoresMap<Integer> {
 
-    private volatile int score;
-    private GameSettings settings;
+    public Scores(SettingsReader settings) {
+        super(settings);
 
-    public Scores(int startScore, GameSettings settings) {
-        this.score = startScore;
-        this.settings = settings;
-    }
+        put(Event.Type.WIN,
+                value -> value * settings.integer(WIN_SCORE));
 
-    @Override
-    public int clear() {
-        return score = 0;
-    }
-
-    @Override
-    public Integer getScore() {
-        return score;
-    }
-
-    @Override
-    public void event(Object o) {
-        Events events = (Events) o;
-        switch (events.getType()) {
-            case WIN:
-                score += settings.integer(WIN_SCORE) * events.getLines();
-                break;
-            case GAME_OVER:
-                score -= settings.integer(LOSE_PENALTY);
-                break;
-        }
-        score = Math.max(0, score);
-    }
-
-    @Override
-    public void update(Object score) {
-        this.score = Integer.valueOf(score.toString());
+        put(Event.Type.GAME_OVER,
+                value -> settings.integer(LOSE_PENALTY));
     }
 }

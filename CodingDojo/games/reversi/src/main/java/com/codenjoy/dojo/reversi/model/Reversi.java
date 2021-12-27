@@ -25,7 +25,7 @@ package com.codenjoy.dojo.reversi.model;
 
 import com.codenjoy.dojo.reversi.model.items.Break;
 import com.codenjoy.dojo.reversi.model.items.Chip;
-import com.codenjoy.dojo.reversi.services.Events;
+import com.codenjoy.dojo.reversi.services.Event;
 import com.codenjoy.dojo.reversi.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
@@ -147,14 +147,14 @@ public class Reversi implements Field {
         long countBlack = chips(false).size();
 
         if (countWhite == countBlack) {
-            whitePlayer().event(Events.WIN());
-            blackPlayer().event(Events.WIN());
+            whitePlayer().event(Event.WIN);
+            blackPlayer().event(Event.WIN);
         } else if (countBlack < countWhite) {
-            whitePlayer().event(Events.WIN());
-            blackPlayer().event(Events.LOSE());
+            whitePlayer().event(Event.WIN);
+            blackPlayer().event(Event.LOSE);
         } else if (countBlack > countWhite) {
-            whitePlayer().event(Events.LOSE());
-            blackPlayer().event(Events.WIN());
+            whitePlayer().event(Event.LOSE);
+            blackPlayer().event(Event.WIN);
         }
     }
 
@@ -236,7 +236,7 @@ public class Reversi implements Field {
             Chip chip = new Chip(color, pt, this);
             int count = flipper.flip(chip);
             if (count > 0){
-                player(color).event(Events.FLIP(count));
+                player(color).event(Event.FLIP.apply(count));
                 chips.add(chip);
             }
         }

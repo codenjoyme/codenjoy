@@ -22,6 +22,7 @@ package com.codenjoy.dojo.fifteen.model;
  * #L%
  */
 
+import com.codenjoy.dojo.fifteen.TestGameSettings;
 import com.codenjoy.dojo.fifteen.services.GameSettings;
 import com.codenjoy.dojo.games.fifteen.Element;
 import com.codenjoy.dojo.services.Dice;
@@ -53,7 +54,7 @@ public class GameTest {
     public void setup() {
         dice = mock(Dice.class);
         printer = new PrinterFactoryImpl();
-        settings = new GameSettings();
+        settings = new TestGameSettings();
     }
 
     private void dice() {

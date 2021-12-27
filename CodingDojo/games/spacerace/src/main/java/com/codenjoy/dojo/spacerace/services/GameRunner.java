@@ -24,18 +24,20 @@ package com.codenjoy.dojo.spacerace.services;
 
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
+import com.codenjoy.dojo.games.spacerace.Board;
+import com.codenjoy.dojo.games.spacerace.Element;
 import com.codenjoy.dojo.services.AbstractGameType;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.ScoresImpl;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.CharElement;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.games.spacerace.Board;
-import com.codenjoy.dojo.games.spacerace.Element;
+import com.codenjoy.dojo.spacerace.model.Player;
+import com.codenjoy.dojo.spacerace.model.Spacerace;
 import com.codenjoy.dojo.spacerace.services.ai.AISolver;
-import com.codenjoy.dojo.spacerace.model.*;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
@@ -48,7 +50,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public PlayerScores getPlayerScores(Object score, GameSettings settings) {
-        return new Scores(Integer.valueOf(score.toString()), settings);
+        return new ScoresImpl<>(Integer.parseInt(score.toString()), settings.calculator());
     }
 
     @Override

@@ -23,7 +23,7 @@ package com.codenjoy.dojo.expansion.model;
  */
 
 
-import com.codenjoy.dojo.expansion.services.Events;
+import com.codenjoy.dojo.expansion.services.Event;
 import org.junit.Test;
 
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -506,7 +506,7 @@ public class SingleMultiplayerTest extends AbstractMultiplayerTest {
                 "-=#-=#-=#-=#-=#-=#-=#\n" +
                 "-=#-=#-=#-=#-=#-=#-=#\n", player);
 
-        verify(player).event(Events.WIN(0));
+        verify(player).event(Event.WIN(0));
         reset(player);
         verifyNoMoreInteractions(player);
 

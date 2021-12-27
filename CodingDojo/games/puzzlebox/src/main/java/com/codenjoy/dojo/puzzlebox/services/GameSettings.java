@@ -24,6 +24,7 @@ package com.codenjoy.dojo.puzzlebox.services;
 
 
 import com.codenjoy.dojo.puzzlebox.model.Level;
+import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
@@ -32,13 +33,13 @@ import java.util.List;
 
 import static com.codenjoy.dojo.puzzlebox.services.GameSettings.Keys.*;
 
-public final class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
+public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
 
     public enum Keys implements Key {
 
-        WIN_SCORE("Win score"),
-        FILL_SCORE("Fill score"),
-        LEVEL_MAP("Level map");
+        WIN_SCORE("[Score] Win score"),
+        FILL_SCORE("[Score] Fill score"),
+        LEVEL_MAP("[Level] Level map");
 
         private String key;
 
@@ -98,4 +99,7 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
         return new Level(string(LEVEL_MAP));
     }
 
+    public Calculator<Void> calculator() {
+        return new Calculator<>(new Scores(this));
+    }
 }

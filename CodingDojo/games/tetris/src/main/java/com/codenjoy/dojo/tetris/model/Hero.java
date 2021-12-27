@@ -26,7 +26,7 @@ package com.codenjoy.dojo.tetris.model;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import com.codenjoy.dojo.games.tetris.Element;
-import com.codenjoy.dojo.tetris.services.Events;
+import com.codenjoy.dojo.tetris.services.Event;
 
 import java.util.List;
 
@@ -55,7 +55,7 @@ public class Hero extends PlayerHero<Field> implements State<Element, Player> {
         glass.setListener(object -> {
             player.event(object);
 
-            Events event = (Events)object;
+            Event event = (Event)object;
             GlassEventListener listener = levelsListener();
             if (event.isLinesRemoved()) {
                 listener.linesRemoved(event.getRemovedLines());

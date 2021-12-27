@@ -24,6 +24,7 @@ package com.codenjoy.dojo.football.services;
 
 
 import com.codenjoy.dojo.football.model.Level;
+import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
@@ -32,14 +33,14 @@ import java.util.List;
 
 import static com.codenjoy.dojo.football.services.GameSettings.Keys.*;
 
-public final class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
+public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
 
     public enum Keys implements Key {
 
-        NUMBER_OF_PLAYERS("Number of players"),
-        IS_NEED_AI("Is need AI"),
-        WIN_SCORE("Win score"),
-        LEVEL_MAP("Level map");
+        NUMBER_OF_PLAYERS("[Game] Number of players"),
+        IS_NEED_AI("[Game] Is need AI"),
+        WIN_SCORE("[Score] Win score"),
+        LEVEL_MAP("[Level] Level map");
 
         private String key;
 
@@ -103,4 +104,7 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
         return new Level(string(LEVEL_MAP));
     }
 
+    public Calculator<Void> calculator() {
+        return new Calculator<>(new Scores(this));
+    }
 }

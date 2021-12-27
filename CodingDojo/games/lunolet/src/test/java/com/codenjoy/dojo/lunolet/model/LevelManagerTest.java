@@ -23,6 +23,7 @@ package com.codenjoy.dojo.lunolet.model;
  */
 
 
+import com.codenjoy.dojo.lunolet.TestGameSettings;
 import com.codenjoy.dojo.lunolet.services.GameSettings;
 import com.codenjoy.dojo.services.EventListener;
 import org.junit.Assert;
@@ -65,7 +66,7 @@ public class LevelManagerTest {
     public void initPlayerForEveryLevelTest() {
         LevelManager manager = new LevelManager();
         EventListener listener = mock(EventListener.class);
-        GameSettings settings = new GameSettings();
+        GameSettings settings = new TestGameSettings();
         Player player = new Player(listener, settings);
         Field field = mock(Field.class);
         when(field.getLevel(anyInt()))

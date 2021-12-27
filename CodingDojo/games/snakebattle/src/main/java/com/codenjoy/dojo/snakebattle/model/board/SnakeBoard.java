@@ -34,7 +34,7 @@ import com.codenjoy.dojo.snakebattle.model.Level;
 import com.codenjoy.dojo.snakebattle.model.Player;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 import com.codenjoy.dojo.snakebattle.model.objects.*;
-import com.codenjoy.dojo.snakebattle.services.Events;
+import com.codenjoy.dojo.snakebattle.services.Event;
 import com.codenjoy.dojo.snakebattle.services.GameSettings;
 
 import java.util.*;
@@ -44,6 +44,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.snakebattle.model.hero.Hero.NEXT_TICK;
+import static com.codenjoy.dojo.snakebattle.services.Event.Type.*;
 import static java.util.stream.Collectors.toList;
 
 public class SnakeBoard extends RoundField<Player> implements Field {
@@ -62,7 +63,7 @@ public class SnakeBoard extends RoundField<Player> implements Field {
     private GameSettings settings;
 
     public SnakeBoard(Level level, Dice dice, GameSettings settings) {
-        super(Events.START, Events.WIN, Events.DIE, settings);
+        super(Event.Type.START, Event.Type.WIN, Event.Type.DIE, settings);
         this.dice = dice;
         walls = level.walls();
         starts = level.startPoints();
@@ -229,7 +230,7 @@ public class SnakeBoard extends RoundField<Player> implements Field {
 
         info.forEach((attacker, pray, reduce) -> {
             if (attacker.isAlive()) {
-                attacker.event(Events.EAT.apply(reduce));
+                attacker.event(new Event(EAT, reduce));
             }
         });
     }
@@ -242,32 +243,32 @@ public class SnakeBoard extends RoundField<Player> implements Field {
 
             if (apples.contains(head)) {
                 apples.remove(head);
-                player.event(Events.APPLE);
+                player.event(new Event(APPLE));
             }
             if (stones.contains(head) && !hero.isFlying()) {
                 stones.remove(head);
                 if (player.isAlive()) {
-                    player.event(Events.STONE);
+                    player.event(new Event(STONE));
                 }
             }
             if (gold.contains(head)) {
                 gold.remove(head);
-                player.event(Events.GOLD);
+                player.event(new Event(GOLD));
             }
             if (flyingPills.contains(head)) {
                 flyingPills.remove(head);
-                player.event(Events.FLYING);
+                player.event(new Event(FLYING));
             }
             if (furyPills.contains(head)) {
                 furyPills.remove(head);
-                player.event(Events.FURY);
+                player.event(new Event(FURY));
             }
         }
     }
 
     private Stream<Hero> notFlyingHeroes() {
         return aliveActive().stream()
-                .map(player -> player.getHero())
+                .map(GamePlayer::getHero)
                 .filter(h -> !h.isFlying());
     }
 
@@ -361,13 +362,13 @@ public class SnakeBoard extends RoundField<Player> implements Field {
 
     private Stream<Hero> aliveEnemies(Hero me) {
         return aliveActive().stream()
-                .map(player -> player.getHero())
+                .map(GamePlayer::getHero)
                 .filter(h -> !h.equals(me));
     }
 
     private Hero enemyCrossedWith(Hero me) {
         return aliveEnemies(me)
-                .filter(h -> me.isHeadIntersect(h))
+                .filter(me::isHeadIntersect)
                 .findFirst()
                 .orElse(null);
     }

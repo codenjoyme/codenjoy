@@ -22,10 +22,12 @@ package com.codenjoy.dojo.kata.services;
  * #L%
  */
 
-
+import com.codenjoy.dojo.kata.TestGameSettings;
 import com.codenjoy.dojo.kata.services.events.NextAlgorithmEvent;
 import com.codenjoy.dojo.kata.services.events.PassTestEvent;
 import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.Calculator;
+import com.codenjoy.dojo.services.event.ScoresImpl;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -46,38 +48,83 @@ public class ScoresTest {
 
     @Before
     public void setup() {
-        settings = new GameSettings();
-        scores = new Scores(0, settings);
+        settings = new TestGameSettings();
     }
 
     @Test
     public void shouldCollectScores() {
-        scores = new Scores(140, settings);
+        // given
+        givenScores(140);
 
+        // when
         int complexity = 100;
         int testsCount = 10;
+        int time = 100;
 
         passTest(complexity, testsCount);
         passTest(complexity, testsCount);
         passTest(complexity, testsCount);
         passTest(complexity, testsCount);
 
-        nextAlgorithm(complexity, complexity);
+        nextAlgorithm(complexity, time);
 
+        // then
         assertEquals(140
-                + 10000
-                + 4*100, scores.getScore());
+                    + 100 * 100
+                    + 4*100,
+                scores.getScore());
+    }
+
+    private void givenScores(int score) {
+        scores = new ScoresImpl<>(score, new Calculator<>(new Scores(settings)));
     }
 
     @Test
     public void shouldClearScore() {
+        // given
+        givenScores(0);
         int complexity = 10;
         nextAlgorithm(complexity, complexity);
 
+        // when
         scores.clear();
 
+        // then
         assertEquals(0, scores.getScore());
     }
 
+    @Test
+    public void shouldCollectScores_whenPassTest() {
+        // given
+        givenScores(140);
 
+        // when
+        int complexity = 100;
+        int testsCount = 10;
+        passTest(complexity, testsCount);
+        passTest(complexity, testsCount);
+
+        // then
+        assertEquals(140
+                    + 2*100,
+                scores.getScore());
+    }
+
+    @Test
+    public void shouldCollectScores_when() {
+        // given
+        givenScores(140);
+
+        // when
+        int complexity = 100;
+        int time = 100;
+
+        nextAlgorithm(complexity, time);
+        nextAlgorithm(complexity, time);
+
+        // then
+        assertEquals(140
+                    + 2 * (100 * 100),
+                scores.getScore());
+    }
 }

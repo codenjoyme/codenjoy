@@ -24,11 +24,16 @@ package com.codenjoy.dojo.tetris.services.scores;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.tetris.services.Events;
+import com.codenjoy.dojo.services.event.Calculator;
+import com.codenjoy.dojo.services.event.ScoresImpl;
+import com.codenjoy.dojo.tetris.TestGameSettings;
+import com.codenjoy.dojo.tetris.services.Event;
 import com.codenjoy.dojo.tetris.services.GameSettings;
+import com.codenjoy.dojo.tetris.services.Scores;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.services.event.Mode.CUMULATIVELY;
 import static org.junit.Assert.assertEquals;
 
 public class CumulativeScoresTest {
@@ -36,26 +41,26 @@ public class CumulativeScoresTest {
     protected PlayerScores scores;
     protected GameSettings settings;
 
-    public void isLinesRemoved(int level, int lines) {
-        scores.event(Events.linesRemoved(level, lines));
+    public void linesRemoved(int level, int lines) {
+        scores.event(Event.linesRemoved(level, lines));
     }
 
     public void figuresDropped(int level, int figure) {
-        scores.event(Events.figuresDropped(level, figure));
+        scores.event(Event.figuresDropped(level, figure));
     }
 
     public void glassOverflown(int level) {
-        scores.event(Events.glassOverflown(level));
+        scores.event(Event.glassOverflown(level));
     }
 
     @Before
     public void setup() {
-        settings = new GameSettings();
-        scores = getScores(0);
+        settings = new TestGameSettings();
+        settings.initScore(CUMULATIVELY);
     }
 
-    public PlayerScores getScores(int score) {
-        return new CumulativeScores(score, settings);
+    protected void givenScores(int score) {
+        scores = new ScoresImpl<>(score, new Calculator<>(new Scores(settings)));
     }
 
     public void assertScore(int expected) {
@@ -64,37 +69,50 @@ public class CumulativeScoresTest {
 
     @Test
     public void shouldCollectScores() {
-        scores = getScores(140);
+        // given
+        givenScores(140);
 
-        isLinesRemoved(1, 1);
-        isLinesRemoved(1, 2);
-        isLinesRemoved(2, 1);
-        isLinesRemoved(2, 2);
+        // when
+        linesRemoved(1, 1);
+        linesRemoved(1, 2);
+        linesRemoved(2, 1);
+        linesRemoved(2, 2);
 
         figuresDropped(1, 1);
         figuresDropped(1, 2);
-        isLinesRemoved(2, 1);
-        isLinesRemoved(2, 2);
+        linesRemoved(2, 1);
+        linesRemoved(2, 2);
 
         glassOverflown(1);
         glassOverflown(2);
 
+        // then
         assertEquals(313, scores.getScore());
     }
 
     @Test
     public void shouldNotLessThanZero() {
+        // given
+        givenScores(0);
+
+        // when
         glassOverflown(1);
 
+        // then
         assertEquals(0, scores.getScore());
     }
 
     @Test
     public void shouldClearScore() {
-        isLinesRemoved(1, 1);
+        // given
+        givenScores(0);
 
+        linesRemoved(1, 1);
+
+        // when
         assertEquals(10, scores.clear());
 
+        // then
         assertEquals(0, scores.getScore());
     }
 }

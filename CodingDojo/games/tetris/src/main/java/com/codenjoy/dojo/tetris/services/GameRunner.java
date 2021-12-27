@@ -25,7 +25,10 @@ package com.codenjoy.dojo.tetris.services;
 
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
+import com.codenjoy.dojo.games.tetris.Board;
+import com.codenjoy.dojo.games.tetris.Element;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.event.ScoresImpl;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.LevelProgress;
@@ -35,19 +38,16 @@ import com.codenjoy.dojo.services.printer.CharElement;
 import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.games.tetris.Board;
-import com.codenjoy.dojo.games.tetris.Element;
-import com.codenjoy.dojo.tetris.services.ai.AISolver;
 import com.codenjoy.dojo.tetris.model.*;
 import com.codenjoy.dojo.tetris.model.levels.LevelsFactory;
-import com.codenjoy.dojo.tetris.services.scores.CumulativeScores;
-import com.codenjoy.dojo.tetris.services.scores.MaxScores;
+import com.codenjoy.dojo.tetris.services.ai.AISolver;
 import com.codenjoy.dojo.utils.LevelUtils;
 import org.json.JSONObject;
 
 import java.util.Arrays;
 
-import static com.codenjoy.dojo.tetris.services.GameSettings.Keys.*;
+import static com.codenjoy.dojo.tetris.services.GameSettings.Keys.GAME_LEVELS;
+import static com.codenjoy.dojo.tetris.services.GameSettings.Keys.GLASS_SIZE;
 
 public class GameRunner extends AbstractGameType<GameSettings> {
 
@@ -58,12 +58,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public PlayerScores getPlayerScores(Object score, GameSettings settings) {
-        Integer initial = Integer.valueOf(score.toString());
-        if (settings.bool(SCORE_MODE)) {
-            return new CumulativeScores(initial, settings);
-        } else {
-            return new MaxScores(initial, settings);
-        }
+        return new ScoresImpl<>(Integer.parseInt(score.toString()), settings.calculator());
     }
 
     @Override
@@ -99,7 +94,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
         String levelsType = settings.string(GAME_LEVELS);
         Levels levels = loadLevelsFor(NullFigureQueue.INSTANCE, levelsType);
 
-        return MultiplayerType.SINGLE_LEVELS.apply(levels.count());
+        return MultiplayerType.ALL_SINGLE.apply(levels.count());
     }
 
     @Override

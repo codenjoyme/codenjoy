@@ -23,7 +23,10 @@ package com.codenjoy.dojo.battlecity.services;
  */
 
 
+import com.codenjoy.dojo.battlecity.TestGameSettings;
 import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.Calculator;
+import com.codenjoy.dojo.services.event.ScoresImpl;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -36,27 +39,32 @@ public class ScoresTest {
     private GameSettings settings;
 
     public void killYourTank() {
-        scores.event(Events.KILL_YOUR_TANK);
+        scores.event(Event.KILL_YOUR_TANK);
     }
 
     public void killOtherAITank() {
-        scores.event(Events.KILL_OTHER_AI_TANK);
+        scores.event(Event.KILL_OTHER_AI_TANK);
     }
 
     public void killOtherHeroTank(int amount) {
-        scores.event(Events.KILL_OTHER_HERO_TANK.apply(amount));
+        scores.event(Event.KILL_OTHER_HERO_TANK.apply(amount));
     }
 
     @Before
     public void setup() {
-        settings = new GameSettings();
-        scores = new Scores(0, settings);
+        settings = new TestGameSettings();
+    }
+
+    private void givenScores(int score) {
+        scores = new ScoresImpl<>(score, new Calculator<>(new Scores(settings)));
     }
 
     @Test
     public void shouldCollectScores() {
-        scores = new Scores(140, settings);
+        // given
+        givenScores(140);
 
+        // when
         killOtherHeroTank(1);
         killOtherHeroTank(2);
         killOtherHeroTank(3);
@@ -66,28 +74,97 @@ public class ScoresTest {
 
         killYourTank();
 
+        // then
         assertEquals(140
                 + (1 + 2 + 3) * settings.integer(KILL_OTHER_HERO_TANK_SCORE)
                 + 2 * settings.integer(KILL_OTHER_AI_TANK_SCORE)
-                - settings.integer(KILL_YOUR_TANK_PENALTY),
+                + settings.integer(KILL_YOUR_TANK_PENALTY),
                 scores.getScore());
     }
 
     @Test
     public void shouldStillZeroAfterDead() {
+        // given
+        givenScores(0);
+
+        // when
         killYourTank();
 
+        // then
         assertEquals(0, scores.getScore());
     }
 
     @Test
     public void shouldClearScore() {
+        // given
+        givenScores(0);
+
         killOtherHeroTank(1);
 
+        // when
         scores.clear();
 
+        // then
         assertEquals(0, scores.getScore());
     }
 
+    @Test
+    public void shouldKillOtherTank() {
+        // given
+        givenScores(140);
 
+        // when
+        killOtherHeroTank(1);
+
+        // then
+        assertEquals(140
+                    + settings.integer(KILL_OTHER_HERO_TANK_SCORE),
+                scores.getScore());
+
+        // when
+        killOtherHeroTank(2);
+
+        // then
+        assertEquals(140
+                    + (1 + 2) * settings.integer(KILL_OTHER_HERO_TANK_SCORE),
+                scores.getScore());
+
+        // when
+        killOtherHeroTank(3);
+
+        // then
+        assertEquals(140
+                     + (1 + 2 + 3) * settings.integer(KILL_OTHER_HERO_TANK_SCORE),
+                scores.getScore());
+    }
+
+    @Test
+    public void shouldKillYourScore() {
+        // given
+        givenScores(140);
+
+        // when
+        killYourTank();
+        killYourTank();
+
+        // then
+        assertEquals(140
+                    + 2 * settings.integer(KILL_YOUR_TANK_PENALTY),
+                scores.getScore());
+    }
+
+    @Test
+    public void shouldOtherAITank() {
+        // given
+        givenScores(140);
+
+        // when
+        killOtherAITank();
+        killOtherAITank();
+
+        // then
+        assertEquals(140
+                    + 2 * settings.integer(KILL_OTHER_AI_TANK_SCORE),
+                scores.getScore());
+    }
 }

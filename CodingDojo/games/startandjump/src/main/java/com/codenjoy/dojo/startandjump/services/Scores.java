@@ -23,41 +23,21 @@ package com.codenjoy.dojo.startandjump.services;
  */
 
 
-import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.ScoresMap;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 
+import static com.codenjoy.dojo.startandjump.services.GameSettings.Keys.LOSE_PENALTY;
 import static com.codenjoy.dojo.startandjump.services.GameSettings.Keys.WIN_SCORE;
 
-public class Scores implements PlayerScores {
+public class Scores extends ScoresMap<Void> {
 
-    private volatile int score;
-    private GameSettings settings;
+    public Scores(SettingsReader settings) {
+        super(settings);
 
-    public Scores(int startScore, GameSettings settings) {
-        this.score = startScore;
+        put(Event.STILL_ALIVE,
+                value -> settings.integer(WIN_SCORE));
 
-        this.settings = settings;
-    }
-
-    @Override
-    public int clear() {
-        return score = 0;
-    }
-
-    @Override
-    public Integer getScore() {
-        return score;
-    }
-
-    @Override
-    public void event(Object event) {
-        if (event.equals(Events.STILL_ALIVE)) {
-            score += settings.integer(WIN_SCORE);
-        }
-        score = Math.max(0, score);
-    }
-
-    @Override
-    public void update(Object score) {
-        this.score = Integer.valueOf(score.toString());
+        put(Event.LOSE,
+                value -> settings.integer(LOSE_PENALTY));
     }
 }

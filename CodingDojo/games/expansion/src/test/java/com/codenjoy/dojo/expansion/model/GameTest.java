@@ -28,7 +28,7 @@ import com.codenjoy.dojo.expansion.model.levels.Levels;
 import com.codenjoy.dojo.expansion.model.levels.LevelsTest;
 import com.codenjoy.dojo.expansion.model.levels.items.Hero;
 import com.codenjoy.dojo.expansion.model.replay.GameLogger;
-import com.codenjoy.dojo.expansion.services.Events;
+import com.codenjoy.dojo.expansion.services.Event;
 import com.codenjoy.dojo.expansion.services.GameSettings;
 import com.codenjoy.dojo.games.expansion.Forces;
 import com.codenjoy.dojo.games.expansion.ForcesMoves;
@@ -728,7 +728,7 @@ public class GameTest {
         field.tick();
 
         // then
-        verify(listener).event(Events.WIN(0));
+        verify(listener).event(Event.WIN(0));
 
         assertE("-----" +
                 "-----" +
@@ -1626,7 +1626,7 @@ public class GameTest {
         field.tick();
 
         // then
-        verify(listener).event(Events.WIN(0));
+        verify(listener).event(Event.WIN(0));
 
         assertL("╔══┐" +
                 "║1E│" +

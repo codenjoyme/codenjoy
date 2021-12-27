@@ -23,57 +23,89 @@ package com.codenjoy.dojo.a2048.services;
  */
 
 
+import com.codenjoy.dojo.a2048.TestGameSettings;
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.Settings;
+import com.codenjoy.dojo.services.event.Calculator;
+import com.codenjoy.dojo.services.event.ScoresImpl;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.services.event.Mode.CUMULATIVELY;
 import static org.junit.Assert.assertEquals;
 
 public class ScoresTest {
+
     private PlayerScores scores;
+    private GameSettings settings;
 
     public void sum(int sum) {
-        scores.event(new Events(Events.Event.SUM, sum));
+        scores.event(new Event(Event.Type.SUM, sum));
     }
 
     @Before
     public void setup() {
-        scores = new Scores(0);
+        settings = new TestGameSettings();
+    }
+
+    private void givenScores(int score) {
+        scores = new ScoresImpl<>(score, new Calculator<>(new Scores(settings)));
     }
 
     @Test
     public void shouldCollectScores() {
-        scores = new Scores(0);
+        // given
+        givenScores(0);
 
+        // when
         sum(10);
         sum(20);
         sum(30);
 
+        // then
         assertEquals(30, scores.getScore());
     }
 
     @Test
-    public void shouldNoCollectWhenLessThenMax() {
-        scores = new Scores(40);
+    public void shouldNoCollect_whenLessThenMax() {
+        // given
+        givenScores(40);
 
+        // when
         sum(10);
         sum(20);
         sum(30);
 
+        // then
         assertEquals(40, scores.getScore());
     }
 
     @Test
-    public void shouldNoCollectWhenSame() {
-        scores = new Scores(0);
+    public void shouldCollect_whenCumulative() {
+        // given
+        settings.initScore(CUMULATIVELY);
 
-        sum(10);
-        sum(10);
-        sum(10);
+        givenScores(40);
 
-        assertEquals(10, scores.getScore());
+        // when
+        sum(10);
+        sum(20);
+        sum(30);
+
+        // then
+        assertEquals(100, scores.getScore());
     }
 
+    @Test
+    public void shouldNoCollect_whenSame() {
+        // given
+        givenScores(0);
 
+        // when
+        sum(10);
+        sum(10);
+        sum(10);
+
+        // then
+        assertEquals(10, scores.getScore());
+    }
 }

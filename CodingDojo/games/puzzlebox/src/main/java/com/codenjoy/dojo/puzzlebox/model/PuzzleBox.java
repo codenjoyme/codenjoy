@@ -23,7 +23,7 @@ package com.codenjoy.dojo.puzzlebox.model;
  */
 
 
-import com.codenjoy.dojo.puzzlebox.services.Events;
+import com.codenjoy.dojo.puzzlebox.services.Event;
 import com.codenjoy.dojo.puzzlebox.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
@@ -79,7 +79,7 @@ public class PuzzleBox implements Field {
     public boolean isTarget(int x, int y) {
         boolean result = targets.contains(pt(x, y));
         if (result) {
-            players.get(0).event(Events.FILL);
+            players.get(0).event(Event.FILL);
         }
         return result;
     }

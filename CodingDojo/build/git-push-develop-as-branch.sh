@@ -56,6 +56,7 @@ if [[ "$submodule_commit" == "y" ]]; then
 fi
 
 eval_echo "git checkout -B $BRANCH"
+eval_echo "git pull origin $BRANCH"
 eval_echo "git push origin $BRANCH"
 
 if [[ "$BRANCH" != "$CURRENT_BRANCH" ]]; then

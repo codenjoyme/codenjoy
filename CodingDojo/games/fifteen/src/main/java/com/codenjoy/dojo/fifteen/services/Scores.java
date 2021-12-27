@@ -22,47 +22,22 @@ package com.codenjoy.dojo.fifteen.services;
  * #L%
  */
 
-import com.codenjoy.dojo.fifteen.model.Bonus;
-import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.ScoresMap;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import static com.codenjoy.dojo.fifteen.services.GameSettings.Keys.BONUS_SCORE;
 import static com.codenjoy.dojo.fifteen.services.GameSettings.Keys.WIN_SCORE;
 
-public class Scores implements PlayerScores {
+public class Scores extends ScoresMap<Event> {
 
-    private volatile int score;
-    private GameSettings settings;
+    public Scores(SettingsReader settings) {
+        super(settings);
 
-    public Scores(int startScore, GameSettings settings) {
-        this.score = startScore;
-        this.settings = settings;
-    }
+        put(Event.Type.BONUS,
+                event -> (int) (1d * event.number() / event.moveCount()
+                        * settings.integer(BONUS_SCORE)));
 
-    @Override
-    public int clear() {
-        return score = 0;
-    }
-
-    @Override
-    public Integer getScore() {
-        return score;
-    }
-
-    @Override
-    public void event(Object event) {
-        if (event instanceof Bonus) {
-            Bonus bonus = (Bonus) event;
-            score += settings.integer(BONUS_SCORE)
-                    * bonus.getNumber() / bonus.getMoveCount();
-        } else if (event.equals(Events.WIN)) {
-            score += settings.integer(WIN_SCORE);
-        }
-
-        score = Math.max(0, score);
-    }
-
-    @Override
-    public void update(Object score) {
-        this.score = Integer.valueOf(score.toString());
+        put(Event.Type.WIN,
+                event -> settings.integer(WIN_SCORE));
     }
 }

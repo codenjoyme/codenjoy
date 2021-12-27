@@ -26,7 +26,9 @@ package com.codenjoy.dojo.battlecity.services;
 import com.codenjoy.dojo.battlecity.model.levels.Level;
 import com.codenjoy.dojo.games.battlecity.Element;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.incativity.InactivitySettings;
+import com.codenjoy.dojo.services.multiplayer.MultiplayerSettings;
 import com.codenjoy.dojo.services.round.RoundSettings;
 import com.codenjoy.dojo.services.semifinal.SemifinalSettings;
 import com.codenjoy.dojo.services.settings.Chance;
@@ -44,7 +46,8 @@ public class GameSettings extends SettingsImpl
         implements SettingsReader<GameSettings>,
                 RoundSettings<GameSettings>,
                 SemifinalSettings<GameSettings>,
-                InactivitySettings<GameSettings> {
+                InactivitySettings<GameSettings>,
+                MultiplayerSettings<GameSettings> {
 
     public enum Keys implements Key {
 
@@ -124,7 +127,7 @@ public class GameSettings extends SettingsImpl
         integer(CHANCE_VISIBILITY, 20);
         integer(CHANCE_NO_SLIDING, 20);
 
-        integer(KILL_YOUR_TANK_PENALTY, 0);
+        integer(KILL_YOUR_TANK_PENALTY, -0);
         integer(KILL_OTHER_HERO_TANK_SCORE, 50);
         integer(KILL_OTHER_AI_TANK_SCORE, 25);
 
@@ -180,4 +183,7 @@ public class GameSettings extends SettingsImpl
         return new Level(string(LEVEL_MAP), dice);
     }
 
+    public Calculator<Integer> calculator() {
+        return new Calculator<>(new Scores(this));
+    }
 }

@@ -23,9 +23,12 @@ package com.codenjoy.dojo.moebius.model;
  */
 
 
-import com.codenjoy.dojo.moebius.services.Events;
+import com.codenjoy.dojo.moebius.TestGameSettings;
+import com.codenjoy.dojo.moebius.services.Event;
 import com.codenjoy.dojo.moebius.services.GameSettings;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.utils.TestUtils;
@@ -34,10 +37,7 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.stubbing.OngoingStubbing;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
@@ -55,7 +55,7 @@ public class GameTest {
     public void setup() {
         dice = mock(Dice.class);
         printer = new PrinterFactoryImpl();
-        settings = new GameSettings();
+        settings = new TestGameSettings();
     }
 
     private void dice(int...ints) {
@@ -393,7 +393,7 @@ public class GameTest {
         dice(1, 1, 1);
         game.tick();
 
-        verifyEvent(new Events(Events.Event.WIN, 4));
+        verifyEvent(new Event(Event.Type.WIN, 4));
 
         assertE("╔═══╗" +
                 "║   ║" +
@@ -402,12 +402,12 @@ public class GameTest {
                 "╚═══╝");
     }
 
-    private void verifyEvent(Events expected) {
-        ArgumentCaptor<Events> event = ArgumentCaptor.forClass(Events.class);
+    private void verifyEvent(Event expected) {
+        ArgumentCaptor<Event> event = ArgumentCaptor.forClass(Event.class);
         verify(listener).event(event.capture());
-        Events actual = event.getValue();
-        assertEquals(expected.getType(), actual.getType());
-        assertEquals(expected.getLines(), actual.getLines());
+        Event actual = event.getValue();
+        assertEquals(expected.type(), actual.type());
+        assertEquals(expected.value(), actual.value());
     }
 
     @Test
@@ -422,7 +422,7 @@ public class GameTest {
         dice(1, 1, 1);
         game.tick();
 
-        verifyEvent(new Events(Events.Event.WIN, 8));
+        verifyEvent(new Event(Event.Type.WIN, 8));
 
         assertE("╔═══╗" +
                 "║   ║" +
@@ -444,7 +444,7 @@ public class GameTest {
         dice(1, 1, 1);
         game.tick();
 
-        verifyEvent(new Events(Events.Event.WIN, 16));
+        verifyEvent(new Event(Event.Type.WIN, 16));
 
         assertE("╔════╗" +
                 "║    ║" +
@@ -469,7 +469,7 @@ public class GameTest {
         dice(2, 2, 1);
         game.tick();
 
-        verifyEvent(new Events(Events.Event.WIN, 12));
+        verifyEvent(new Event(Event.Type.WIN, 12));
 
         assertE("╔══════╗" +
                 "║╔═╔║══║" +
@@ -494,7 +494,7 @@ public class GameTest {
 
         game.tick();
 
-        verifyEvent(new Events(Events.Event.GAME_OVER));
+        verifyEvent(new Event(Event.Type.GAME_OVER));
 
         assertFalse(player.isAlive());
     }
@@ -514,7 +514,7 @@ public class GameTest {
         dice(1, 1, 1);
         game.tick();
 
-        verifyEvent(new Events(Events.Event.WIN, 15));
+        verifyEvent(new Event(Event.Type.WIN, 15));
 
         assertE("╔═════╗" +
                 "║     ║" +
@@ -540,7 +540,7 @@ public class GameTest {
         dice(1, 1, 1);
         game.tick();
 
-        verifyEvent(new Events(Events.Event.WIN, 12));
+        verifyEvent(new Event(Event.Type.WIN, 12));
 
         assertE("╔═════╗" +
                 "║     ║" +
@@ -565,7 +565,7 @@ public class GameTest {
         dice(1, 1, 1);
         game.tick();
 
-        verifyEvent(new Events(Events.Event.WIN, 12));
+        verifyEvent(new Event(Event.Type.WIN, 12));
 
         assertE("╔═════╗" +
                 "║     ║" +

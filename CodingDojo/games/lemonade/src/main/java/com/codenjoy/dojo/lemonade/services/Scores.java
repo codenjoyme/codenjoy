@@ -23,56 +23,41 @@ package com.codenjoy.dojo.lemonade.services;
  */
 
 
-import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.Answer;
+import com.codenjoy.dojo.services.event.Manual;
+import com.codenjoy.dojo.services.event.ScoresMap;
 
 import static com.codenjoy.dojo.lemonade.services.GameSettings.Keys.BANKRUPT_PENALTY;
 
-public class Scores implements PlayerScores {
+public class Scores extends ScoresMap {
 
-    private volatile int score;
-    private GameSettings settings;
+    public Scores(GameSettings settings) {
+        super(settings);
 
-    public Scores(int startScore, GameSettings settings) {
-        this.score = startScore;
-        this.settings = settings;
-    }
+        put(new Manual(Event.Type.WIN),
+                answer -> win(settings, (Answer)answer));
 
-    @Override
-    public int clear() {
-        return score = 0;
-    }
-
-    @Override
-    public Integer getScore() {
-        return score;
-    }
-
-    @Override
-    public void event(Object event) {
-        EventArgs eventArgs = (EventArgs) event;
-        ScoreMode mode = settings.scoreMode();
-        switch (eventArgs.type) {
-            case WIN:
-                if (mode == ScoreMode.SUM_OF_PROFITS)
-                    score += toScore(eventArgs.profit);
-                if (mode == ScoreMode.LAST_DAY_ASSETS)
-                    score = Math.max(score, toScore(eventArgs.assetsAfter));
-                break;
-            case LOSE:
-                if (mode == ScoreMode.SUM_OF_PROFITS)
-                    score -= settings.integer(BANKRUPT_PENALTY);
-                break;
-        }
-        score = Math.max(0, score);
+        put(Event.Type.LOSE,
+                event -> (settings.scoreMode() == ScoreMode.SUM_OF_PROFITS)
+                        ? settings.integer(BANKRUPT_PENALTY)
+                        : 0);
     }
 
     private int toScore(double value) {
         return (int) (100 * value);
     }
 
-    @Override
-    public void update(Object score) {
-        this.score = Integer.valueOf(score.toString());
-    }
+    private int win(GameSettings settings, Answer answer) {
+        if (settings.scoreMode() == ScoreMode.SUM_OF_PROFITS) {
+            return toScore(answer.value(Event.class).profit());
+        }
 
+        if (settings.scoreMode() == ScoreMode.LAST_DAY_ASSETS) {
+            int amount = toScore(answer.value(Event.class).assetsAfter());
+            answer.score(Math.max(answer.score(), amount));
+            return 0;
+        }
+
+        return 0;
+    }
 }

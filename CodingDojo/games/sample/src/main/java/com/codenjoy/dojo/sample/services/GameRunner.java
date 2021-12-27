@@ -27,9 +27,15 @@ import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.games.sample.Board;
 import com.codenjoy.dojo.games.sample.Element;
+import com.codenjoy.dojo.sample.model.Level;
+import com.codenjoy.dojo.sample.model.Player;
+import com.codenjoy.dojo.sample.model.Sample;
 import com.codenjoy.dojo.sample.services.ai.AISolver;
-import com.codenjoy.dojo.sample.model.*;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.AbstractGameType;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.GameType;
+import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.ScoresImpl;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.LevelProgress;
@@ -54,19 +60,19 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public PlayerScores getPlayerScores(Object score, GameSettings settings) {
-        return new Scores(Integer.valueOf(score.toString()), settings);
+        return new ScoresImpl<>(Integer.parseInt(score.toString()), settings.calculator());
     }
 
     @Override
     public GameField createGame(int levelNumber, GameSettings settings) {
-        Level level = settings.level(levelNumber, getDice());
+        Level level = settings.level(levelNumber, getDice(), Level::new);
         return new Sample(getDice(), level, settings);
     }
 
     @Override
     public Parameter<Integer> getBoardSize(GameSettings settings) {
         // TODO решить что-то с этим наконец
-        return v(settings.level(LevelProgress.levelsStartsFrom1, getDice()).size());
+        return v(settings.level(LevelProgress.levelsStartsFrom1, getDice(), Level::new).size());
     }
 
     @Override
@@ -91,7 +97,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public MultiplayerType getMultiplayerType(GameSettings settings) {
-        return MultiplayerType.MULTIPLE;
+        return settings.multiplayerType(settings.getLevelsCount());
     }
 
     @Override

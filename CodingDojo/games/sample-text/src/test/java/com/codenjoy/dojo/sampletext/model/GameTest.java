@@ -23,6 +23,7 @@ package com.codenjoy.dojo.sampletext.model;
  */
 
 
+import com.codenjoy.dojo.sampletext.TestGameSettings;
 import com.codenjoy.dojo.sampletext.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
@@ -50,7 +51,7 @@ public class GameTest {
     @Before
     public void setup() {
         dice = mock(Dice.class);
-        settings = new GameSettings();
+        settings = new TestGameSettings();
     }
 
     private void dice(int...ints) {

@@ -23,7 +23,7 @@ package com.codenjoy.dojo.puzzlebox.model;
  */
 
 
-import com.codenjoy.dojo.puzzlebox.services.Events;
+import com.codenjoy.dojo.puzzlebox.services.Event;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
 import java.util.LinkedList;
@@ -98,7 +98,7 @@ public class Hero extends PlayerHero<Field> {
 
     public Box getBox() {
         if (boxes.size() == 0){
-            player.event(Events.WIN);
+            player.event(Event.WIN);
             this.move(-1, -1);
             return null;
         }

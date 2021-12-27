@@ -29,6 +29,9 @@ import static com.codenjoy.dojo.snakebattle.services.GameSettings.Keys.*;
 
 public class TestGameSettings extends GameSettings {
 
+    /**
+     * Here you can override the settings for all tests.
+     */
     public TestGameSettings() {
         bool(ROUNDS_ENABLED, true);
         integer(ROUNDS_PER_MATCH, 5);
