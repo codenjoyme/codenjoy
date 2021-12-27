@@ -403,8 +403,8 @@ public class Spacerace implements Field {
     }
 
     @Override
-    public BoardReader reader() {
-        return new BoardReader<Player>() {
+    public BoardReader<Player> reader() {
+        return new BoardReader<>() {
             private int size = Spacerace.this.size;
 
             @Override

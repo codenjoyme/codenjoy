@@ -29,10 +29,11 @@ import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.snake.model.BodyDirection;
 import com.codenjoy.dojo.games.snake.Element;
 import com.codenjoy.dojo.snake.model.Hero;
+import com.codenjoy.dojo.snake.model.Player;
 
 import static com.codenjoy.dojo.games.snake.Element.*;
 
-public class Tail extends PointImpl implements State<Element, Object> {
+public class Tail extends PointImpl implements State<Element, Player> {
 
     private Hero snake;
 
@@ -74,7 +75,7 @@ public class Tail extends PointImpl implements State<Element, Object> {
     }
 
     @Override
-    public Element state(Object player, Object... alsoAtPoint) {
+    public Element state(Player player, Object... alsoAtPoint) {
         if (snake.itsMyHead(this)) {
             return getHead(snake.getDirection());
         }

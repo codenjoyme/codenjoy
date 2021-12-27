@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.round.RoundPlayerHero;
 import com.codenjoy.dojo.snakebattle.model.Player;
 import com.codenjoy.dojo.snakebattle.model.board.Field;
+import com.codenjoy.dojo.snakebattle.services.Event;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -177,6 +178,11 @@ public class Hero extends RoundPlayerHero<Field> implements State<LinkedList<Tai
                 stonesCount--;
             }
         }
+    }
+
+    @Override
+    public void die() {
+        die(Event.Type.DIE);
     }
 
     Direction getDirection() {

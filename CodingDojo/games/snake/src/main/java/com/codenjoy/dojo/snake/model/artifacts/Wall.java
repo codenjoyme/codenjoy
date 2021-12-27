@@ -28,8 +28,9 @@ import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.games.snake.Element;
 import com.codenjoy.dojo.snake.model.Hero;
+import com.codenjoy.dojo.snake.model.Player;
 
-public class Wall extends PointImpl implements Affectable, State<Element, Object> {
+public class Wall extends PointImpl implements Affectable, State<Element, Player> {
 
     public Wall(Point point) {
         super(point);
@@ -45,7 +46,7 @@ public class Wall extends PointImpl implements Affectable, State<Element, Object
     }
 
     @Override
-    public Element state(Object player, Object... alsoAtPoint) {
+    public Element state(Player player, Object... alsoAtPoint) {
         return Element.BREAK;
     }
 }

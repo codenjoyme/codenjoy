@@ -70,7 +70,7 @@ public class SampleText implements Field {
     }
 
     @Override
-    public BoardReader reader() {
+    public BoardReader<Player> reader() {
         return null;
     }
 

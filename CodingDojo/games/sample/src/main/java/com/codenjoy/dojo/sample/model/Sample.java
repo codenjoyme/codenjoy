@@ -67,7 +67,7 @@ public class Sample extends RoundField<Player> implements Field {
     }
 
     public Sample(Dice dice, Level level, GameSettings settings) {
-        super(Event.START_ROUND, Event.WIN_ROUND, Event.LOSE, settings);
+        super(Event.START_ROUND, Event.WIN_ROUND, settings);
 
         this.level = level;
         this.dice = dice;
@@ -183,7 +183,7 @@ public class Sample extends RoundField<Player> implements Field {
      *
      */
     @Override
-    public BoardReader reader() {
+    public BoardReader<Player> reader() {
         /**
          * Внимание! Порядок важен.
          * В этом порядке будут опрашиваться состояния через метод

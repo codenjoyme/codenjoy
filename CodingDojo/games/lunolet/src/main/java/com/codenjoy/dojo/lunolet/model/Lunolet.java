@@ -51,7 +51,7 @@ public class Lunolet implements Field {
     }
 
     @Override
-    public BoardReader reader() {
+    public BoardReader<Player> reader() {
         return null; // do nothing, because this game use custom Printer
     }
 

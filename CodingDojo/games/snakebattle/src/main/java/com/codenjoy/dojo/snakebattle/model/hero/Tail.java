@@ -35,7 +35,7 @@ import java.util.List;
 
 import static com.codenjoy.dojo.games.snakebattle.Element.*;
 
-public class Tail extends PointImpl implements State<Element, Object> {
+public class Tail extends PointImpl implements State<Element, Player> {
 
     private Hero snake;
 
@@ -169,9 +169,8 @@ public class Tail extends PointImpl implements State<Element, Object> {
     }
 
     @Override
-    public Element state(Object player, Object... alsoAtPoint) {
-        Hero hero = ((Player) player).getHero();
-
+    public Element state(Player player, Object... alsoAtPoint) {
+        Hero hero = player.getHero();
         return snakePart(hero, Arrays.asList(alsoAtPoint));
     }
 

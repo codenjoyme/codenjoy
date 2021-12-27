@@ -173,8 +173,8 @@ public class Sudoku implements Field {
         return levelNumber;
     }
 
-    public BoardReader reader() {
-        return new BoardReader<Player>() {
+    public BoardReader<Player> reader() {
+        return new BoardReader<>() {
             private int size = Sudoku.this.size;
 
             @Override

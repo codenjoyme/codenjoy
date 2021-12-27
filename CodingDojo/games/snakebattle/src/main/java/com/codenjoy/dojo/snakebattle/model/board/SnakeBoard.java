@@ -63,7 +63,7 @@ public class SnakeBoard extends RoundField<Player> implements Field {
     private GameSettings settings;
 
     public SnakeBoard(Level level, Dice dice, GameSettings settings) {
-        super(Event.Type.START, Event.Type.WIN, Event.Type.DIE, settings);
+        super(Event.Type.START, Event.Type.WIN, settings);
         this.dice = dice;
         walls = level.walls();
         starts = level.startPoints();
@@ -470,8 +470,8 @@ public class SnakeBoard extends RoundField<Player> implements Field {
         return stones;
     }
 
-    public BoardReader reader() {
-        return new BoardReader<Player>() {
+    public BoardReader<Player> reader() {
+        return new BoardReader<>() {
             private int size = SnakeBoard.this.size;
 
             @Override

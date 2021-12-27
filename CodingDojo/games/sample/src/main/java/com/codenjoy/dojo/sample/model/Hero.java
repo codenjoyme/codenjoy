@@ -24,6 +24,7 @@ package com.codenjoy.dojo.sample.model;
 
 
 import com.codenjoy.dojo.games.sample.Element;
+import com.codenjoy.dojo.sample.services.Event;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.round.RoundPlayerHero;
 
@@ -102,6 +103,11 @@ public class Hero extends RoundPlayerHero<Field> implements State<Element, Playe
         if (!isActiveAndAlive()) return;
 
         bomb = true;
+    }
+
+    @Override
+    public void die() {
+        die(Event.LOSE);
     }
 
     /**

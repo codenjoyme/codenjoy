@@ -218,8 +218,8 @@ public class Quadro implements Field {
     }
 
     @Override
-    public BoardReader reader() {
-        return new BoardReader<Player>() {
+    public BoardReader<Player> reader() {
+        return new BoardReader<>() {
             private int size = Quadro.this.size;
 
             @Override
