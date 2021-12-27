@@ -138,6 +138,11 @@ public class Tank extends RoundPlayerHero<Field> implements State<Element, Playe
         fire = true;
     }
 
+    @Override
+    public void die() {
+        die(Event.KILL_YOUR_TANK);
+    }
+
     public Collection<Bullet> getBullets() {
         return new LinkedList<>(bullets);
     }

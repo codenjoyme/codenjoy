@@ -63,7 +63,7 @@ public class Battlecity extends RoundField<Player> implements Field {
     private GameSettings settings;
 
     public Battlecity(int size, Dice dice, GameSettings settings) {
-        super(Event.START_ROUND, Event.WIN_ROUND, Event.KILL_YOUR_TANK, settings);
+        super(Event.START_ROUND, Event.WIN_ROUND, settings);
         this.size = size;
         this.dice = dice;
         this.settings = settings;
