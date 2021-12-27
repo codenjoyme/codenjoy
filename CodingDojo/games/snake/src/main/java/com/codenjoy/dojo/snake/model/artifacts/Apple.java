@@ -27,8 +27,9 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.games.snake.Element;
 import com.codenjoy.dojo.snake.model.Hero;
+import com.codenjoy.dojo.snake.model.Player;
 
-public class Apple extends EateablePoint implements Affectable, State<Element, Object> {
+public class Apple extends EateablePoint implements Affectable, State<Element, Player> {
 
     public Apple(Point pt) {
         super(pt);
@@ -45,7 +46,7 @@ public class Apple extends EateablePoint implements Affectable, State<Element, O
     }
 
     @Override
-    public Element state(Object player, Object... alsoAtPoint) {
+    public Element state(Player player, Object... alsoAtPoint) {
         return Element.GOOD_APPLE;
     }
 }
