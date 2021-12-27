@@ -100,8 +100,8 @@ public class PuzzleBox implements Field {
         players.remove(player);
     }
 
-    public BoardReader reader() {
-        return new BoardReader<Player>() {
+    public BoardReader<Player> reader() {
+        return new BoardReader<>() {
             private int size = PuzzleBox.this.size;
 
             @Override

@@ -183,7 +183,7 @@ public class Sample extends RoundField<Player> implements Field {
      *
      */
     @Override
-    public BoardReader reader() {
+    public BoardReader<Player> reader() {
         /**
          * Внимание! Порядок важен.
          * В этом порядке будут опрашиваться состояния через метод

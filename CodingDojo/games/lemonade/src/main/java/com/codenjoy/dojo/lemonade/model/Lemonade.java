@@ -90,7 +90,7 @@ public class Lemonade implements GameField<Player> {
     }
 
     @Override
-    public BoardReader reader() {
+    public BoardReader<Player> reader() {
         return null;
     }
 

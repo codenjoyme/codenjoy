@@ -237,8 +237,8 @@ public class Quake2D implements Field {
         return bullets;
     }
 
-    public BoardReader reader() {
-        return new BoardReader<Player>() {
+    public BoardReader<Player> reader() {
+        return new BoardReader<>() {
             private int size = Quake2D.this.size;
 
             @Override

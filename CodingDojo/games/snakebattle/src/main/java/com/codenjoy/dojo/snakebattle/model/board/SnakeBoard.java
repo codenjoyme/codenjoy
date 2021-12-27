@@ -470,8 +470,8 @@ public class SnakeBoard extends RoundField<Player> implements Field {
         return stones;
     }
 
-    public BoardReader reader() {
-        return new BoardReader<Player>() {
+    public BoardReader<Player> reader() {
+        return new BoardReader<>() {
             private int size = SnakeBoard.this.size;
 
             @Override

@@ -59,7 +59,7 @@ public class Kata implements Field {
     }
 
     @Override
-    public BoardReader reader() {
+    public BoardReader<Player> reader() {
         // do nothing, this is text game
         return null;
     }

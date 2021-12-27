@@ -584,8 +584,8 @@ public class Expansion implements Tickable, IField {
     }
 
     @Override
-    public BoardReader reader() {
-        return new BoardReader<Player>() {
+    public BoardReader<Player> reader() {
+        return new BoardReader<>() {
             @Override
             public int size() {
                 return Expansion.this.size();

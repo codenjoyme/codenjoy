@@ -76,8 +76,8 @@ public abstract class FakeGameType extends AbstractGameType<Settings> {
         }
 
         @Override
-        public BoardReader reader() {
-            return new BoardReader<Player>() {
+        public BoardReader<Player> reader() {
+            return new BoardReader<>() {
                 @Override
                 public int size() {
                     return getBoardSize(settings).getValue();

@@ -58,7 +58,7 @@ public interface IField extends GameField<Player>  {
 
     int regionsCount(Hero hero);
 
-    default BoardReader reader() {
+    default BoardReader<Player> reader() {
         return null;
     }
 
