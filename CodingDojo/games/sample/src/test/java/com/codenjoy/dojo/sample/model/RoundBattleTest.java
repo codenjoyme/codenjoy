@@ -22,13 +22,12 @@ package com.codenjoy.dojo.sample.model;
  * #L%
  */
 
-import com.codenjoy.dojo.sample.model.check.AbstractGameCheckTest;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.sample.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.*;
 
-public class RoundBattleTest extends AbstractGameCheckTest {
+public class RoundBattleTest extends AbstractGameTest {
 
     @Override
     protected void setupSettings() {

@@ -23,10 +23,9 @@ package com.codenjoy.dojo.sample.model;
  */
 
 
-import com.codenjoy.dojo.sample.model.check.AbstractGameCheckTest;
 import org.junit.Test;
 
-public class GameTest extends AbstractGameCheckTest {
+public class GameTest extends AbstractGameTest {
 
     @Test
     public void heroOnTheField() {

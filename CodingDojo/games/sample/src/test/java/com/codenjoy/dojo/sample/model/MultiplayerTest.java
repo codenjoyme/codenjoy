@@ -23,10 +23,9 @@ package com.codenjoy.dojo.sample.model;
  */
 
 
-import com.codenjoy.dojo.sample.model.check.AbstractGameCheckTest;
 import org.junit.Test;
 
-public class MultiplayerTest extends AbstractGameCheckTest {
+public class MultiplayerTest extends AbstractGameTest {
 
     @Test
     public void severalHeroesCanAppearOnTheMap() {
