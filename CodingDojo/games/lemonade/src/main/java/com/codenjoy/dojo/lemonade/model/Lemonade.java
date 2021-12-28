@@ -24,7 +24,7 @@ package com.codenjoy.dojo.lemonade.model;
 
 
 import com.codenjoy.dojo.lemonade.services.GameSettings;
-import com.codenjoy.dojo.services.RandomDice;
+import com.codenjoy.dojo.services.dice.RandomDice;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
