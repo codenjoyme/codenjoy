@@ -27,7 +27,7 @@ import com.codenjoy.dojo.games.sample.Element;
 import com.codenjoy.dojo.sample.model.items.Bomb;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.joystick.Act;
-import com.codenjoy.dojo.services.joystick.RoundsDirectionJoystick;
+import com.codenjoy.dojo.services.joystick.RoundsDirectionActJoystick;
 import com.codenjoy.dojo.services.round.RoundPlayerHero;
 
 import java.util.List;
@@ -49,7 +49,7 @@ import static com.codenjoy.dojo.sample.services.Event.*;
  * переключения раундов.
  */
 public class Hero extends RoundPlayerHero<Field>
-        implements RoundsDirectionJoystick, State<Element, Player> {
+        implements RoundsDirectionActJoystick, State<Element, Player> {
 
     private int score;
     private Direction direction;
@@ -83,11 +83,7 @@ public class Hero extends RoundPlayerHero<Field>
     }
 
     @Override
-    public void act(int... p) {
-        if (!isActiveAndAlive()) return;
-
-        Act is = new Act(p);
-
+    public void act(Act is) {
         if (is.act()) {
             bomb = true;
             return;
