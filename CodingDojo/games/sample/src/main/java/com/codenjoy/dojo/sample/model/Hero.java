@@ -83,13 +83,13 @@ public class Hero extends RoundPlayerHero<Field>
     }
 
     @Override
-    public void act(Act is) {
-        if (is.act()) {
+    public void act(Act act) {
+        if (act.is()) {
             bomb = true;
             return;
         }
 
-        // if (is.act(OTHER_VALUE)) {
+        // if (act.is(OTHER_VALUE)) {
         //     someAction = true;
         //     return;
         // }
