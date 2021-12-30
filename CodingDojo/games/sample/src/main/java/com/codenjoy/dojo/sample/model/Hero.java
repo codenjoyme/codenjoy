@@ -27,12 +27,12 @@ import com.codenjoy.dojo.games.sample.Element;
 import com.codenjoy.dojo.sample.model.items.Bomb;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.joystick.Act;
+import com.codenjoy.dojo.services.joystick.RoundsDirectionJoystick;
 import com.codenjoy.dojo.services.round.RoundPlayerHero;
 
 import java.util.List;
 
 import static com.codenjoy.dojo.sample.services.Event.*;
-import static com.codenjoy.dojo.services.Direction.*;
 
 /**
  * Это реализация героя. Обрати внимание, что он реализует интерфейс
@@ -48,7 +48,8 @@ import static com.codenjoy.dojo.services.Direction.*;
  * вместе с {@link com.codenjoy.dojo.services.round.RoundField} отвечает за логику
  * переключения раундов.
  */
-public class Hero extends RoundPlayerHero<Field> implements State<Element, Player> {
+public class Hero extends RoundPlayerHero<Field>
+        implements RoundsDirectionJoystick, State<Element, Player> {
 
     private int score;
     private Direction direction;
@@ -72,36 +73,13 @@ public class Hero extends RoundPlayerHero<Field> implements State<Element, Playe
     }
 
     /**
-     * Один из методов {@link Joystick}. Реагируй на них только,
+     * Вызов методов направлений {@link Joystick} откликается тут только
      * если герой жив и активен. Обычно тут сохраняется намерение и
      * лишь затем оно реализуется в методе {@link #tick()}.
      */
     @Override
-    public void down() {
-        if (!isActiveAndAlive()) return;
-
-        direction = DOWN;
-    }
-
-    @Override
-    public void up() {
-        if (!isActiveAndAlive()) return;
-
-        direction = UP;
-    }
-
-    @Override
-    public void left() {
-        if (!isActiveAndAlive()) return;
-
-        direction = LEFT;
-    }
-
-    @Override
-    public void right() {
-        if (!isActiveAndAlive()) return;
-
-        direction = RIGHT;
+    public void change(Direction direction) {
+        this.direction = direction;
     }
 
     @Override
@@ -121,6 +99,10 @@ public class Hero extends RoundPlayerHero<Field> implements State<Element, Playe
         // }
     }
 
+    /**
+     * Этот метод используется в тестах для улучшения читабельности.
+     * Куда понятнее bomb нежели act().
+     */
     public void bomb() {
         act();
     }
