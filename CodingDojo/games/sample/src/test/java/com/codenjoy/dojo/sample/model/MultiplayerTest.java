@@ -73,9 +73,11 @@ public class MultiplayerTest extends AbstractGameTest {
                 "☼☼☼☼☼☼\n");
 
         // when
-        hero(0).act();
+        hero(0).bomb();
         hero(0).down();
+
         hero(1).down();
+
         hero(2).right();
 
         tick();
@@ -155,7 +157,8 @@ public class MultiplayerTest extends AbstractGameTest {
                 "☼☼☼☼☼☼\n");
 
         hero(0).down();
-        hero(0).act();
+        hero(0).bomb();
+
         hero(1).left();
 
         tick();
@@ -280,10 +283,10 @@ public class MultiplayerTest extends AbstractGameTest {
         hero(3).up();
         tick();
 
-        hero(0).act();
+        hero(0).bomb();
         hero(0).up();
 
-        hero(3).act();
+        hero(3).bomb();
         hero(3).down();
         tick();
 
@@ -379,10 +382,10 @@ public class MultiplayerTest extends AbstractGameTest {
         hero(3).up();
         tick();
 
-        hero(0).act();
+        hero(0).bomb();
         hero(0).up();
 
-        hero(3).act();
+        hero(3).bomb();
         hero(3).down();
         tick();
 

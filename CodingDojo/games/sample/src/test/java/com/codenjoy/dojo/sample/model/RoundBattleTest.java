@@ -276,7 +276,7 @@ public class RoundBattleTest extends AbstractGameTest {
 
         // when
         // когда я выношу одного игрока
-        hero(0).act();
+        hero(0).bomb();
         tick();
 
         hero(0).right();
@@ -427,7 +427,7 @@ public class RoundBattleTest extends AbstractGameTest {
 
         // when
         // расставляю бомбы и подбираю золото
-        hero(0).act();
+        hero(0).bomb();
         hero(0).right();
         tick();
 
@@ -441,7 +441,7 @@ public class RoundBattleTest extends AbstractGameTest {
 
         // when
         // расставляю бомбы и подбираю золото
-        hero(0).act();
+        hero(0).bomb();
         hero(0).right();
         tick();
 

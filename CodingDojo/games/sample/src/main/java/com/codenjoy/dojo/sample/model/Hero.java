@@ -109,6 +109,10 @@ public class Hero extends RoundPlayerHero<Field> implements State<Element, Playe
         bomb = true;
     }
 
+    public void bomb() {
+        act();
+    }
+
     @Override
     public void die() {
         die(LOSE);

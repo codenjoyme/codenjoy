@@ -251,7 +251,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼\n");
 
         // when
-        hero().act();
+        hero().bomb();
         tick();
 
         // then
@@ -282,7 +282,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼\n");
 
         // when
-        hero().act();
+        hero().bomb();
         hero().down();
         tick();
 
@@ -305,7 +305,7 @@ public class GameTest extends AbstractGameTest {
 
         // when
         hero().down(); // different order than in the previous test
-        hero().act();
+        hero().bomb();
         tick();
 
         // then
@@ -353,7 +353,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼\n");
 
         // when
-        hero().act();
+        hero().bomb();
         hero().down();
         tick();
 
@@ -364,7 +364,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼\n");
 
         // when
-        hero().act();
+        hero().bomb();
         hero().right();
         tick();
 
@@ -386,10 +386,10 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼\n");
 
         // when
-        hero().act();
+        hero().bomb();
         tick();
 
-        hero().act();
+        hero().bomb();
         hero().down();
         tick();
 
@@ -489,7 +489,7 @@ public class GameTest extends AbstractGameTest {
 
     private void assertWalkThenClearScores() {
         hero().right();
-        hero().act();
+        hero().bomb();
         dice(1, 1);
         tick();
 
