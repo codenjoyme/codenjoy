@@ -36,9 +36,10 @@ package com.codenjoy.dojo.sample.services;
  * чтобы произвести подсчет очков.
  */
 public enum Event {
-    WIN,
-    LOSE,
 
     START_ROUND,
-    WIN_ROUND;
+    WIN_ROUND,
+
+    WIN,
+    LOSE,
 }
