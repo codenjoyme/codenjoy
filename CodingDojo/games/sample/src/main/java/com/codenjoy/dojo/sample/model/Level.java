@@ -54,7 +54,7 @@ public class Level extends AbstractLevel {
     }
 
     public List<Bomb> bombs() {
-        return find(Bomb::new, BOMB);
+        return find(pt -> new Bomb(pt, null), BOMB);
     }
 
     public List<Wall> walls() {

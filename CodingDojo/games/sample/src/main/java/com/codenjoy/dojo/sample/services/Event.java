@@ -40,6 +40,9 @@ public enum Event {
     START_ROUND,
     WIN_ROUND,
 
+    KILL_OTHER_HERO,
+    KILL_ENEMY_HERO,
+
     WIN,
     LOSE,
 }

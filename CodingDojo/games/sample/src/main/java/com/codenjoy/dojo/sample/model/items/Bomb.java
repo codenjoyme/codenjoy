@@ -24,6 +24,7 @@ package com.codenjoy.dojo.sample.model.items;
 
 
 import com.codenjoy.dojo.games.sample.Element;
+import com.codenjoy.dojo.sample.model.Hero;
 import com.codenjoy.dojo.sample.model.Player;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
@@ -38,8 +39,15 @@ import com.codenjoy.dojo.services.State;
  */
 public class Bomb extends PointImpl implements State<Element, Player> {
 
-    public Bomb(Point pt) {
+    private Hero owner;
+
+    public Bomb(Point pt, Hero owner) {
         super(pt);
+        this.owner = owner;
+    }
+
+    public Hero owner() {
+        return owner;
     }
 
     @Override

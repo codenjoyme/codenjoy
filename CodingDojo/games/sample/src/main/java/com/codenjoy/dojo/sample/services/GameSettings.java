@@ -40,6 +40,8 @@ public class GameSettings extends SettingsImpl implements AllSettings<GameSettin
         WIN_SCORE("[Score] Win score"),
         WIN_ROUND_SCORE("[Score] Win round score"),
         LOSE_PENALTY("[Score] Lose penalty"),
+        KILL_OTHER_HERO_SCORE("[Score] Kill other hero score"),
+        KILL_ENEMY_HERO_SCORE("[Score] Kill enemy hero score"),
         SCORE_COUNTING_TYPE(ScoresImpl.SCORE_COUNTING_TYPE.key());
 
         private String key;
@@ -65,6 +67,8 @@ public class GameSettings extends SettingsImpl implements AllSettings<GameSettin
         integer(WIN_SCORE, 30);
         integer(WIN_ROUND_SCORE, 100);
         integer(LOSE_PENALTY, -20);
+        integer(KILL_OTHER_HERO_SCORE, 5);
+        integer(KILL_ENEMY_HERO_SCORE, 10);
 
         Levels.setup(this);
     }

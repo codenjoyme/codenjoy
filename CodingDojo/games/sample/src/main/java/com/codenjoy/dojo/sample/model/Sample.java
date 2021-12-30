@@ -161,9 +161,9 @@ public class Sample extends RoundField<Player> implements Field {
     }
 
     @Override
-    public void setBomb(Point pt) {
-        if (!bombs().contains(pt)) {
-            bombs().add(new Bomb(pt));
+    public void setBomb(Hero owner) {
+        if (!bombs().contains(owner)) {
+            bombs().add(new Bomb(owner, owner));
         }
     }
 

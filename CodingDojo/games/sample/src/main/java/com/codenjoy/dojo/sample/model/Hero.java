@@ -24,10 +24,13 @@ package com.codenjoy.dojo.sample.model;
 
 
 import com.codenjoy.dojo.games.sample.Element;
+import com.codenjoy.dojo.sample.model.items.Bomb;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.round.RoundPlayerHero;
 
-import static com.codenjoy.dojo.sample.services.Event.LOSE;
+import java.util.List;
+
+import static com.codenjoy.dojo.sample.services.Event.*;
 
 /**
  * Это реализация героя. Обрати внимание, что он реализует интерфейс
@@ -126,8 +129,14 @@ public class Hero extends RoundPlayerHero<Field> implements State<Element, Playe
         if (direction != null) {
             Point to = direction.change(this.copy());
 
-            if (field.bombs().contains(to)) {
+            List<Bomb> bombs = field.bombs().getAt(to);
+            if (!bombs.isEmpty()) {
                 die();
+                bombs.forEach(bomb -> {
+                    if (bomb.owner() != null && bomb.owner() != this) {
+                        bomb.owner().fireKillHero(this);
+                    }
+                });
                 field.bombs().removeAt(to);
             }
 
@@ -177,5 +186,17 @@ public class Hero extends RoundPlayerHero<Field> implements State<Element, Playe
 
     public void addScore(int added) {
         score = Math.max(0, score + added);
+    }
+
+    public int getTeamId() {
+        return getPlayer().getTeamId();
+    }
+
+    public void fireKillHero(Hero prey) {
+        if (getTeamId() == prey.getTeamId()) {
+            event(KILL_OTHER_HERO);
+        } else {
+            event(KILL_ENEMY_HERO);
+        }
     }
 }
