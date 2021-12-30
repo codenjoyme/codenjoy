@@ -103,7 +103,7 @@ public class Hero extends RoundPlayerHero<Field>
      * Этот метод используется в тестах для улучшения читабельности.
      * Куда понятнее bomb нежели act().
      */
-    public void bomb() {
+    void bomb() {
         act();
     }
 
