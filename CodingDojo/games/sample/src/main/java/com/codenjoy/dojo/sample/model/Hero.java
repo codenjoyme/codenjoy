@@ -26,6 +26,7 @@ package com.codenjoy.dojo.sample.model;
 import com.codenjoy.dojo.games.sample.Element;
 import com.codenjoy.dojo.sample.model.items.Bomb;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.joystick.Act;
 import com.codenjoy.dojo.services.round.RoundPlayerHero;
 
 import java.util.List;
@@ -106,7 +107,17 @@ public class Hero extends RoundPlayerHero<Field> implements State<Element, Playe
     public void act(int... p) {
         if (!isActiveAndAlive()) return;
 
-        bomb = true;
+        Act is = new Act(p);
+
+        if (is.act()) {
+            bomb = true;
+            return;
+        }
+
+        // if (is.act(OTHER_VALUE)) {
+        //     someAction = true;
+        //     return;
+        // }
     }
 
     public void bomb() {
