@@ -23,10 +23,9 @@ package com.codenjoy.dojo.sample.model;
  */
 
 
-import com.codenjoy.dojo.sample.model.check.AbstractGameCheckTest;
 import org.junit.Test;
 
-public class MultiplayerTest extends AbstractGameCheckTest {
+public class MultiplayerTest extends AbstractGameTest {
 
     @Test
     public void severalHeroesCanAppearOnTheMap() {
@@ -59,6 +58,8 @@ public class MultiplayerTest extends AbstractGameCheckTest {
                 "☼ ☺  ☼\n" +
                 "☼    ☼\n" +
                 "☼☼☼☼☼☼\n", 2);
+
+        assertScores("");
     }
 
     @Test
@@ -86,6 +87,8 @@ public class MultiplayerTest extends AbstractGameCheckTest {
                 "☼  ☻ ☼\n" +
                 "☼    ☼\n" +
                 "☼☼☼☼☼☼\n", 0);
+
+        assertScores("");
     }
 
     @Test
@@ -110,6 +113,8 @@ public class MultiplayerTest extends AbstractGameCheckTest {
                 "☼ ☻  ☼\n" +
                 "☼    ☼\n" +
                 "☼☼☼☼☼☼\n", 0);
+
+        assertScores("");
     }
 
     @Test
@@ -135,6 +140,8 @@ public class MultiplayerTest extends AbstractGameCheckTest {
                 "☼ ☻  ☼\n" +
                 "☼   ☻☼\n" +
                 "☼☼☼☼☼☼\n", 0);
+
+        assertScores("");
     }
 
     @Test
@@ -175,6 +182,8 @@ public class MultiplayerTest extends AbstractGameCheckTest {
         verifyAllEvents(
                 "listener(1) => [LOSE]\n");
 
+        assertScores("");
+
         assertEquals(true, game(1).isGameOver());
 
         dice(4, 1);
@@ -188,6 +197,8 @@ public class MultiplayerTest extends AbstractGameCheckTest {
                 "☼ ☻  ☼\n" +
                 "☼   ☻☼\n" +
                 "☼☼☼☼☼☼\n", 0);
+
+        assertScores("");
     }
 
     @Test
@@ -217,6 +228,8 @@ public class MultiplayerTest extends AbstractGameCheckTest {
 
         verifyAllEvents(
                 "listener(1) => [WIN]\n");
+
+        assertScores("hero(1)=30");
     }
 
     @Test
@@ -242,5 +255,7 @@ public class MultiplayerTest extends AbstractGameCheckTest {
                 "☼ ☻  ☼\n" +
                 "☼    ☼\n" +
                 "☼☼☼☼☼☼\n", 0);
+
+        assertScores("");
     }
 }

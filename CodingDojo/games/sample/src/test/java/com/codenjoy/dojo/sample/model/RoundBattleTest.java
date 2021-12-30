@@ -22,13 +22,12 @@ package com.codenjoy.dojo.sample.model;
  * #L%
  */
 
-import com.codenjoy.dojo.sample.model.check.AbstractGameCheckTest;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.sample.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.*;
 
-public class RoundBattleTest extends AbstractGameCheckTest {
+public class RoundBattleTest extends AbstractGameTest {
 
     @Override
     protected void setupSettings() {
@@ -75,6 +74,8 @@ public class RoundBattleTest extends AbstractGameCheckTest {
                 "☼ Y  ☼\n" +
                 "☼YX  ☼\n" +
                 "☼☼☼☼☼☼\n", 2);
+
+        assertScores("");
     }
 
     // после старта идет отсчет обратного времени
@@ -120,6 +121,8 @@ public class RoundBattleTest extends AbstractGameCheckTest {
                 "listener(0) => [[.1.]]\n" +
                 "listener(1) => [[.1.]]\n" +
                 "listener(2) => [[.1.]]\n");
+
+        assertScores("");
     }
 
     // пока идет обратный отсчет я не могу ничего предпринимать,
@@ -166,6 +169,8 @@ public class RoundBattleTest extends AbstractGameCheckTest {
                 "listener(0) => [START_ROUND, [Round 1]]\n" +
                 "listener(1) => [START_ROUND, [Round 1]]\n" +
                 "listener(2) => [START_ROUND, [Round 1]]\n");
+
+        assertScores("");
 
         // можно играть - игроки видны как активные
         assertF("☼☼☼☼☼☼\n" +
@@ -218,6 +223,8 @@ public class RoundBattleTest extends AbstractGameCheckTest {
                 "☼☻   ☼\n" +
                 "☼  ☺ ☼\n" +
                 "☼☼☼☼☼☼\n", 2);
+
+        assertScores("");
     }
 
     // если один игрок вынесет другого, но на поле есть еще игроки,
@@ -265,6 +272,8 @@ public class RoundBattleTest extends AbstractGameCheckTest {
                 "☼☻☺  ☼\n" +
                 "☼☼☼☼☼☼\n", 2);
 
+        assertScores("");
+
         // when
         // когда я выношу одного игрока
         hero(0).act();
@@ -292,6 +301,8 @@ public class RoundBattleTest extends AbstractGameCheckTest {
         assertEquals(true, player(2).wantToStay());
         assertEquals(false, player(2).shouldLeave());
 
+        assertScores("");
+
         // when
         hero(2).up();
         tick();
@@ -314,6 +325,8 @@ public class RoundBattleTest extends AbstractGameCheckTest {
         verifyAllEvents(
                 "listener(2) => [LOSE]\n");
 
+        assertScores("");
+
         // when
         tick();
 
@@ -335,6 +348,8 @@ public class RoundBattleTest extends AbstractGameCheckTest {
                 "☼    ☼\n" +
                 "☼☻   ☼\n" +
                 "☼☼☼☼☼☼\n", 0);
+
+        assertScores("");
     }
 
     // если один игрок вынесет обоих, то должен получить за это очки
@@ -354,9 +369,16 @@ public class RoundBattleTest extends AbstractGameCheckTest {
                 "☼☺☺  ☼\n" +
                 "☼☼☼☼☼☼\n");
 
+        assertScores("");
+
         hero(0).addScore(100);
         hero(1).addScore(100);
         hero(2).addScore(100);
+
+        assertScores(
+                "hero(0)=100\n" +
+                "hero(1)=100\n" +
+                "hero(2)=100");
 
         // when
         tick();
@@ -388,19 +410,19 @@ public class RoundBattleTest extends AbstractGameCheckTest {
                 "☼☻☺  ☼\n" +
                 "☼☼☼☼☼☼\n", 2);
 
+
         // cleaned after new round
-        assertEquals(0, hero(0).scores());
-        assertEquals(0, hero(1).scores());
-        assertEquals(0, hero(2).scores());
+        assertScores("");
 
         // but we want to change heroes scores
         hero(0).addScore(100);
         hero(1).addScore(100);
         hero(2).addScore(100);
 
-        assertEquals(100, hero(0).scores());
-        assertEquals(100, hero(1).scores());
-        assertEquals(100, hero(2).scores());
+        assertScores(
+                "hero(0)=100\n" +
+                "hero(1)=100\n" +
+                "hero(2)=100");
 
         // when
         // расставляю бомбы и подбираю золото
@@ -411,9 +433,10 @@ public class RoundBattleTest extends AbstractGameCheckTest {
         verifyAllEvents(
                 "listener(0) => [WIN]\n");
 
-        assertEquals(110, hero(0).scores());
-        assertEquals(100, hero(1).scores());
-        assertEquals(100, hero(2).scores());
+        assertScores(
+                "hero(0)=110\n" +
+                "hero(1)=100\n" +
+                "hero(2)=100");
 
         // when
         // расставляю бомбы и подбираю золото
@@ -424,9 +447,10 @@ public class RoundBattleTest extends AbstractGameCheckTest {
         verifyAllEvents(
                 "listener(0) => [WIN]\n");
 
-        assertEquals(120, hero(0).scores());
-        assertEquals(100, hero(1).scores());
-        assertEquals(100, hero(2).scores());
+        assertScores(
+                "hero(0)=120\n" +
+                "hero(1)=100\n" +
+                "hero(2)=100");
 
         // then
         assertF("☼☼☼☼☼☼\n" +
@@ -465,9 +489,10 @@ public class RoundBattleTest extends AbstractGameCheckTest {
         verifyAllEvents(
                 "listener(1) => [LOSE]\n");
 
-        assertEquals(120, hero(0).scores());
-        assertEquals(50, hero(1).scores());
-        assertEquals(100, hero(2).scores());
+        assertScores(
+                "hero(0)=120\n" +
+                "hero(1)=50\n" +
+                "hero(2)=100");
 
         // when
         hero(2).up();
@@ -499,8 +524,9 @@ public class RoundBattleTest extends AbstractGameCheckTest {
                 "listener(0) => [WIN_ROUND]\n" +
                 "listener(2) => [LOSE]\n");
 
-        assertEquals(220, hero(0).scores());
-        assertEquals(50, hero(1).scores());
-        assertEquals(50, hero(2).scores());
+        assertScores(
+                "hero(0)=220\n" +
+                "hero(1)=50\n" +
+                "hero(2)=50");
     }
 }

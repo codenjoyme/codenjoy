@@ -218,7 +218,7 @@ public abstract class FakeGameType extends AbstractGameType<Settings> {
         public boolean isAlive() {
             return true;
         }
-    };
+    }
 
     @Override
     public GamePlayer createPlayer(EventListener listener, int teamId, String playerId, Settings settings) {
