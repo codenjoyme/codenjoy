@@ -47,5 +47,11 @@ public class Scores extends ScoresMap<Void> {
 
         put(Event.LOSE,
                 value -> heroDie(LOSE_PENALTY));
+
+        put(Event.KILL_OTHER_HERO,
+                value -> heroDie(KILL_OTHER_HERO_SCORE));
+
+        put(Event.KILL_ENEMY_HERO,
+                value -> heroDie(KILL_ENEMY_HERO_SCORE));
     }
 }

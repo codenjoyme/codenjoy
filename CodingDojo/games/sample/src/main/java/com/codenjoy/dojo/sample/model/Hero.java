@@ -24,9 +24,15 @@ package com.codenjoy.dojo.sample.model;
 
 
 import com.codenjoy.dojo.games.sample.Element;
-import com.codenjoy.dojo.sample.services.Event;
+import com.codenjoy.dojo.sample.model.items.Bomb;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.joystick.Act;
+import com.codenjoy.dojo.services.joystick.RoundsDirectionActJoystick;
 import com.codenjoy.dojo.services.round.RoundPlayerHero;
+
+import java.util.List;
+
+import static com.codenjoy.dojo.sample.services.Event.*;
 
 /**
  * Это реализация героя. Обрати внимание, что он реализует интерфейс
@@ -42,7 +48,8 @@ import com.codenjoy.dojo.services.round.RoundPlayerHero;
  * вместе с {@link com.codenjoy.dojo.services.round.RoundField} отвечает за логику
  * переключения раундов.
  */
-public class Hero extends RoundPlayerHero<Field> implements State<Element, Player> {
+public class Hero extends RoundPlayerHero<Field>
+        implements RoundsDirectionActJoystick, State<Element, Player> {
 
     private int score;
     private Direction direction;
@@ -66,48 +73,39 @@ public class Hero extends RoundPlayerHero<Field> implements State<Element, Playe
     }
 
     /**
-     * Один из методов {@link Joystick}. Реагируй на них только,
+     * Вызов методов направлений {@link Joystick} откликается тут только
      * если герой жив и активен. Обычно тут сохраняется намерение и
      * лишь затем оно реализуется в методе {@link #tick()}.
      */
     @Override
-    public void down() {
-        if (!isActiveAndAlive()) return;
-
-        direction = Direction.DOWN;
+    public void change(Direction direction) {
+        this.direction = direction;
     }
 
     @Override
-    public void up() {
-        if (!isActiveAndAlive()) return;
+    public void act(Act act) {
+        if (act.is()) {
+            bomb = true;
+            return;
+        }
 
-        direction = Direction.UP;
+        // if (act.is(OTHER_VALUE)) {
+        //     someAction = true;
+        //     return;
+        // }
     }
 
-    @Override
-    public void left() {
-        if (!isActiveAndAlive()) return;
-
-        direction = Direction.LEFT;
-    }
-
-    @Override
-    public void right() {
-        if (!isActiveAndAlive()) return;
-
-        direction = Direction.RIGHT;
-    }
-
-    @Override
-    public void act(int... p) {
-        if (!isActiveAndAlive()) return;
-
-        bomb = true;
+    /**
+     * Этот метод используется в тестах для улучшения читабельности.
+     * Куда понятнее bomb нежели act().
+     */
+    void bomb() {
+        act();
     }
 
     @Override
     public void die() {
-        die(Event.LOSE);
+        die(LOSE);
     }
 
     /**
@@ -125,8 +123,14 @@ public class Hero extends RoundPlayerHero<Field> implements State<Element, Playe
         if (direction != null) {
             Point to = direction.change(this.copy());
 
-            if (field.bombs().contains(to)) {
+            List<Bomb> bombs = field.bombs().getAt(to);
+            if (!bombs.isEmpty()) {
                 die();
+                bombs.forEach(bomb -> {
+                    if (bomb.owner() != null && bomb.owner() != this) {
+                        bomb.owner().fireKillHero(this);
+                    }
+                });
                 field.bombs().removeAt(to);
             }
 
@@ -176,5 +180,17 @@ public class Hero extends RoundPlayerHero<Field> implements State<Element, Playe
 
     public void addScore(int added) {
         score = Math.max(0, score + added);
+    }
+
+    public int getTeamId() {
+        return getPlayer().getTeamId();
+    }
+
+    public void fireKillHero(Hero prey) {
+        if (getTeamId() == prey.getTeamId()) {
+            event(KILL_OTHER_HERO);
+        } else {
+            event(KILL_ENEMY_HERO);
+        }
     }
 }

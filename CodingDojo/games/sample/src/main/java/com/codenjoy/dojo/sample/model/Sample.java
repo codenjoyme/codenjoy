@@ -26,7 +26,6 @@ package com.codenjoy.dojo.sample.model;
 import com.codenjoy.dojo.sample.model.items.Bomb;
 import com.codenjoy.dojo.sample.model.items.Gold;
 import com.codenjoy.dojo.sample.model.items.Wall;
-import com.codenjoy.dojo.sample.services.Event;
 import com.codenjoy.dojo.sample.services.GameSettings;
 import com.codenjoy.dojo.services.BoardUtils;
 import com.codenjoy.dojo.services.Dice;
@@ -40,6 +39,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
+
+import static com.codenjoy.dojo.sample.services.Event.*;
 
 /**
  * О! Это самое сердце игры - борда, на которой все происходит.
@@ -67,7 +68,7 @@ public class Sample extends RoundField<Player> implements Field {
     }
 
     public Sample(Dice dice, Level level, GameSettings settings) {
-        super(Event.START_ROUND, Event.WIN_ROUND, settings);
+        super(START_ROUND, WIN_ROUND, settings);
 
         this.level = level;
         this.dice = dice;
@@ -127,7 +128,7 @@ public class Sample extends RoundField<Player> implements Field {
             if (gold().contains(hero)) {
                 gold().removeAt(hero);
 
-                player.event(Event.WIN);
+                player.event(WIN);
 
                 freeRandom(null)
                         .ifPresent(point -> field.add(new Gold(point)));
@@ -160,9 +161,9 @@ public class Sample extends RoundField<Player> implements Field {
     }
 
     @Override
-    public void setBomb(Point pt) {
-        if (!bombs().contains(pt)) {
-            bombs().add(new Bomb(pt));
+    public void setBomb(Hero owner) {
+        if (!bombs().contains(owner)) {
+            bombs().add(new Bomb(owner, owner));
         }
     }
 

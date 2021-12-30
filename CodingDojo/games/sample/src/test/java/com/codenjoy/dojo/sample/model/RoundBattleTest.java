@@ -276,7 +276,7 @@ public class RoundBattleTest extends AbstractGameTest {
 
         // when
         // когда я выношу одного игрока
-        hero(0).act();
+        hero(0).bomb();
         tick();
 
         hero(0).right();
@@ -323,9 +323,10 @@ public class RoundBattleTest extends AbstractGameTest {
                 "☼☼☼☼☼☼\n", 0);
 
         verifyAllEvents(
+                "listener(0) => [KILL_OTHER_HERO]\n" +
                 "listener(2) => [LOSE]\n");
 
-        assertScores("");
+        assertScores("hero(0)=5");
 
         // when
         tick();
@@ -349,7 +350,7 @@ public class RoundBattleTest extends AbstractGameTest {
                 "☼☻   ☼\n" +
                 "☼☼☼☼☼☼\n", 0);
 
-        assertScores("");
+        assertScores("hero(0)=5");
     }
 
     // если один игрок вынесет обоих, то должен получить за это очки
@@ -426,7 +427,7 @@ public class RoundBattleTest extends AbstractGameTest {
 
         // when
         // расставляю бомбы и подбираю золото
-        hero(0).act();
+        hero(0).bomb();
         hero(0).right();
         tick();
 
@@ -440,7 +441,7 @@ public class RoundBattleTest extends AbstractGameTest {
 
         // when
         // расставляю бомбы и подбираю золото
-        hero(0).act();
+        hero(0).bomb();
         hero(0).right();
         tick();
 
@@ -487,10 +488,11 @@ public class RoundBattleTest extends AbstractGameTest {
                 "☼☼☼☼☼☼\n", 2);
 
         verifyAllEvents(
+                "listener(0) => [KILL_OTHER_HERO]\n" +
                 "listener(1) => [LOSE]\n");
 
         assertScores(
-                "hero(0)=120\n" +
+                "hero(0)=125\n" +
                 "hero(1)=50\n" +
                 "hero(2)=100");
 
@@ -521,11 +523,11 @@ public class RoundBattleTest extends AbstractGameTest {
                 "☼☼☼☼☼☼\n", 2);
 
         verifyAllEvents(
-                "listener(0) => [WIN_ROUND]\n" +
+                "listener(0) => [KILL_OTHER_HERO, WIN_ROUND]\n" +
                 "listener(2) => [LOSE]\n");
 
         assertScores(
-                "hero(0)=220\n" +
+                "hero(0)=230\n" +
                 "hero(1)=50\n" +
                 "hero(2)=50");
     }

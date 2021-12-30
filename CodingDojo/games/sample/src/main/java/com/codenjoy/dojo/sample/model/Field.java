@@ -44,7 +44,7 @@ public interface Field extends RoundGameField<Player> {
 
     boolean isFree(Point pt);
 
-    void setBomb(Point pt);
+    void setBomb(Hero hero);
 
     Accessor<Gold> gold();
 
