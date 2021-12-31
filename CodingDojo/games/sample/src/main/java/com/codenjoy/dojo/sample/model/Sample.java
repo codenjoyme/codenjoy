@@ -82,6 +82,8 @@ public class Sample extends RoundField<Player> implements Field {
 
     @Override
     public void clearScore() {
+        if (level == null) return;
+
         level.saveTo(field);
         field.init(this);
 
@@ -202,11 +204,10 @@ public class Sample extends RoundField<Player> implements Field {
      * @param player Метод создающий объекты-игроков для этих целей.
      * @return Список созданных игроков в новом измененном поле.
      */
-    // TODO test me
     @Override
     public List<Player> load(String board, Supplier<Player> player) {
         level = new Level(board);
-        return WhatsNextUtils.load(field, level, level.heroes(), player);
+        return WhatsNextUtils.load(this, level.heroes(), player);
     }
 
     /**

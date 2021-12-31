@@ -30,13 +30,14 @@ import com.codenjoy.dojo.sample.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.LevelProgress;
-import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.utils.TestUtils;
 import com.codenjoy.dojo.utils.events.EventsListenersAssert;
 import com.codenjoy.dojo.utils.smart.SmartAssert;
+import com.codenjoy.dojo.whatsnext.WhatsNextUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.mockito.stubbing.OngoingStubbing;
@@ -44,6 +45,8 @@ import org.mockito.stubbing.OngoingStubbing;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.utils.TestUtils.asArray;
+import static java.util.Arrays.asList;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -81,6 +84,7 @@ public abstract class AbstractGameTest {
     }
 
     public void dice(int... ints) {
+        if (ints.length == 0) return;
         OngoingStubbing<Integer> when = when(dice.next(anyInt()));
         for (int i : ints) {
             when = when.thenReturn(i);
@@ -92,15 +96,23 @@ public abstract class AbstractGameTest {
         settings.setLevelMaps(levelNumber, maps);
         level = settings.level(levelNumber, dice, Level::new);
 
-        beforeCrateField();
+        beforeCreateField();
 
-        field = new Sample(dice, level, settings);
-        level.heroes().forEach(this::givenPlayer);
+        field = new Sample(dice, null, settings);
+        field.load(level.map(), this::givenPlayer);
+
+        setupHeroesDice();
+
+        games = WhatsNextUtils.newGameForAll(players, printer, field);
 
         afterCreateField();
     }
 
-    private void beforeCrateField() {
+    private void setupHeroesDice() {
+        dice(asArray(level.heroes()));
+    }
+
+    private void beforeCreateField() {
         // settings / level pre-processing
     }
 
@@ -108,19 +120,23 @@ public abstract class AbstractGameTest {
         // settings / field post-processing
     }
 
-    protected void givenPlayer(Hero hero) {
+    protected Player givenPlayer() {
         EventListener listener = mock(EventListener.class);
         listeners.add(listener);
 
         Player player = new Player(listener, settings);
         players.add(player);
+        return player;
+    }
 
-        Game game = new Single(player, printer);
+    public Player givenPlayer(Point pt) {
+        Player player = givenPlayer();
+
+        dice(asArray(asList(pt)));
+        Game game = WhatsNextUtils.newGame(player, printer, field);
         games.add(game);
 
-        dice(hero.getX(), hero.getY());
-        game.on(field);
-        game.newGame();
+        return players.get(players.size() - 1);
     }
 
     public void assertEquals(Object expected, Object actual) {
