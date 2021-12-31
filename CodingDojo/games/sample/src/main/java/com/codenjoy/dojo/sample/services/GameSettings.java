@@ -37,9 +37,9 @@ public class GameSettings extends SettingsImpl implements AllSettings<GameSettin
 
     public enum Keys implements Key {
 
-        WIN_SCORE("[Score] Win score"),
+        GET_GOLD_SCORE("[Score] Pick gold score"),
         WIN_ROUND_SCORE("[Score] Win round score"),
-        LOSE_PENALTY("[Score] Lose penalty"),
+        HERO_DIED_PENALTY("[Score] Hero died penalty"),
         KILL_OTHER_HERO_SCORE("[Score] Kill other hero score"),
         KILL_ENEMY_HERO_SCORE("[Score] Kill enemy hero score"),
         SCORE_COUNTING_TYPE(ScoresImpl.SCORE_COUNTING_TYPE.key());
@@ -64,9 +64,9 @@ public class GameSettings extends SettingsImpl implements AllSettings<GameSettin
     public GameSettings() {
         initAll();
 
-        integer(WIN_SCORE, 30);
+        integer(GET_GOLD_SCORE, 30);
         integer(WIN_ROUND_SCORE, 100);
-        integer(LOSE_PENALTY, -20);
+        integer(HERO_DIED_PENALTY, -20);
         integer(KILL_OTHER_HERO_SCORE, 5);
         integer(KILL_ENEMY_HERO_SCORE, 10);
 

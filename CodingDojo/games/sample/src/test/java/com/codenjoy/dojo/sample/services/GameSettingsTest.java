@@ -31,9 +31,9 @@ public class GameSettingsTest {
 
     @Test
     public void shouldGetAllKeys() {
-        assertEquals("[WIN_SCORE, \n" +
+        assertEquals("[GET_GOLD_SCORE, \n" +
                         "WIN_ROUND_SCORE, \n" +
-                        "LOSE_PENALTY, \n" +
+                        "HERO_DIED_PENALTY, \n" +
                         "KILL_OTHER_HERO_SCORE, \n" +
                         "KILL_ENEMY_HERO_SCORE, \n" +
                         "SCORE_COUNTING_TYPE]",

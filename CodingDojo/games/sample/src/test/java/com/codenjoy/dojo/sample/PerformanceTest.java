@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.sample.model;
+package com.codenjoy.dojo.sample;
 
 /*-
  * #%L

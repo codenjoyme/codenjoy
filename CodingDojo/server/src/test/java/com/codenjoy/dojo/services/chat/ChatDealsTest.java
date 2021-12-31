@@ -44,8 +44,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static com.codenjoy.dojo.sample.services.GameSettings.Keys.LOSE_PENALTY;
-import static com.codenjoy.dojo.sample.services.GameSettings.Keys.WIN_SCORE;
+import static com.codenjoy.dojo.sample.services.GameSettings.Keys.GET_GOLD_SCORE;
+import static com.codenjoy.dojo.sample.services.GameSettings.Keys.HERO_DIED_PENALTY;
 import static com.codenjoy.dojo.utils.smart.SmartAssert.assertEquals;
 
 @RunWith(SpringRunner.class)
@@ -100,8 +100,8 @@ public class ChatDealsTest {
                         "☼ $$ ☼\n" +
                         "☼    ☼\n" +
                         "☼☼☼☼☼☼\n")
-                .integer(WIN_SCORE, 30)
-                .integer(LOSE_PENALTY, -100);
+                .integer(GET_GOLD_SCORE, 30)
+                .integer(HERO_DIED_PENALTY, -100);
 
 
         with.time.nowIs(12345L);

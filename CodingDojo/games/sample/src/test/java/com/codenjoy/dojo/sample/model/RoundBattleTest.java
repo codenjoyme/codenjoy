@@ -324,7 +324,7 @@ public class RoundBattleTest extends AbstractGameTest {
 
         verifyAllEvents(
                 "listener(0) => [KILL_OTHER_HERO]\n" +
-                "listener(2) => [LOSE]\n");
+                "listener(2) => [HERO_DIED]\n");
 
         assertScores("hero(0)=5");
 
@@ -359,8 +359,8 @@ public class RoundBattleTest extends AbstractGameTest {
         // given
         settings().integer(ROUNDS_PLAYERS_PER_ROOM, 3)
                 .integer(ROUNDS_TIME_BEFORE_START, 1)
-                .integer(WIN_SCORE, 10)
-                .integer(LOSE_PENALTY, -50)
+                .integer(GET_GOLD_SCORE, 10)
+                .integer(HERO_DIED_PENALTY, -50)
                 .integer(WIN_ROUND_SCORE, 100);
 
         givenFl("☼☼☼☼☼☼\n" +
@@ -432,7 +432,7 @@ public class RoundBattleTest extends AbstractGameTest {
         tick();
 
         verifyAllEvents(
-                "listener(0) => [WIN]\n");
+                "listener(0) => [GET_GOLD]\n");
 
         assertScores(
                 "hero(0)=110\n" +
@@ -446,7 +446,7 @@ public class RoundBattleTest extends AbstractGameTest {
         tick();
 
         verifyAllEvents(
-                "listener(0) => [WIN]\n");
+                "listener(0) => [GET_GOLD]\n");
 
         assertScores(
                 "hero(0)=120\n" +
@@ -489,7 +489,7 @@ public class RoundBattleTest extends AbstractGameTest {
 
         verifyAllEvents(
                 "listener(0) => [KILL_OTHER_HERO]\n" +
-                "listener(1) => [LOSE]\n");
+                "listener(1) => [HERO_DIED]\n");
 
         assertScores(
                 "hero(0)=125\n" +
@@ -524,7 +524,7 @@ public class RoundBattleTest extends AbstractGameTest {
 
         verifyAllEvents(
                 "listener(0) => [KILL_OTHER_HERO, WIN_ROUND]\n" +
-                "listener(2) => [LOSE]\n");
+                "listener(2) => [HERO_DIED]\n");
 
         assertScores(
                 "hero(0)=230\n" +

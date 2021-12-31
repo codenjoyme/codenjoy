@@ -128,7 +128,7 @@ public class Sample extends RoundField<Player> implements Field {
             if (gold().contains(hero)) {
                 gold().removeAt(hero);
 
-                player.event(WIN);
+                player.event(GET_GOLD);
 
                 freeRandom(null)
                         .ifPresent(point -> field.add(new Gold(point)));
@@ -164,13 +164,6 @@ public class Sample extends RoundField<Player> implements Field {
     public void setBomb(Hero owner) {
         if (!bombs().contains(owner)) {
             bombs().add(new Bomb(owner, owner));
-        }
-    }
-
-    @Override
-    public void remove(Player player) {
-        if (players.remove(player)) {
-            heroes().removeExact(player.getHero());
         }
     }
 

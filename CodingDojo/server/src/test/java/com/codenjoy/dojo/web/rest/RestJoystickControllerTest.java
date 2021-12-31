@@ -28,8 +28,8 @@ import com.codenjoy.dojo.services.Deal;
 import org.junit.Test;
 import org.springframework.context.annotation.Import;
 
-import static com.codenjoy.dojo.sample.services.GameSettings.Keys.LOSE_PENALTY;
-import static com.codenjoy.dojo.sample.services.GameSettings.Keys.WIN_SCORE;
+import static com.codenjoy.dojo.sample.services.GameSettings.Keys.GET_GOLD_SCORE;
+import static com.codenjoy.dojo.sample.services.GameSettings.Keys.HERO_DIED_PENALTY;
 import static com.codenjoy.dojo.utils.smart.SmartAssert.assertEquals;
 
 @Import(RealGameConfiguration.class)
@@ -64,8 +64,8 @@ public class RestJoystickControllerTest extends AbstractRestControllerTest {
                         "☼ $$ ☼\n" +
                         "☼    ☼\n" +
                         "☼☼☼☼☼☼\n")
-                .integer(WIN_SCORE, 30)
-                .integer(LOSE_PENALTY, -100);
+                .integer(GET_GOLD_SCORE, 30)
+                .integer(HERO_DIED_PENALTY, -100);
 
 
         Deal deal1 = with.login.register(player1, "ip", room, game);

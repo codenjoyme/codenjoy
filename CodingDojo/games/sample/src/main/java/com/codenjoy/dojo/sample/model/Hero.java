@@ -105,7 +105,7 @@ public class Hero extends RoundPlayerHero<Field>
 
     @Override
     public void die() {
-        die(LOSE);
+        die(HERO_DIED);
     }
 
     /**

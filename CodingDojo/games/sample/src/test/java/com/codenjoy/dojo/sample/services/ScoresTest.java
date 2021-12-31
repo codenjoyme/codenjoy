@@ -38,16 +38,24 @@ public class ScoresTest {
     private PlayerScores scores;
     private GameSettings settings;
 
-    public void lose() {
-        scores.event(Event.LOSE);
+    public void heroDied() {
+        scores.event(Event.HERO_DIED);
     }
 
-    public void win() {
-        scores.event(Event.WIN);
+    public void getGold() {
+        scores.event(Event.GET_GOLD);
     }
 
     public void winRound() {
         scores.event(Event.WIN_ROUND);
+    }
+
+    public void killOtherHero() {
+        scores.event(Event.KILL_OTHER_HERO);
+    }
+
+    public void killEnemyHero() {
+        scores.event(Event.KILL_ENEMY_HERO);
     }
 
     @Before
@@ -61,21 +69,33 @@ public class ScoresTest {
         givenScores(140);
 
         // when
-        win();
-        win();
-        win();
-        win();
+        getGold();
+        getGold();
+        getGold();
+        getGold();
 
-        lose();
+        heroDied();
 
         winRound();
         winRound();
+
+        killEnemyHero();
+        killEnemyHero();
+        killEnemyHero();
+
+        killOtherHero();
+        killOtherHero();
+        killOtherHero();
+        killOtherHero();
+        killOtherHero();
 
         // then
         assertEquals(140
-                + 4 * settings.integer(WIN_SCORE)
-                + 1 * settings.integer(LOSE_PENALTY)
-                + 2 * settings.integer(WIN_ROUND_SCORE),
+                + 4 * settings.integer(GET_GOLD_SCORE)
+                + 1 * settings.integer(HERO_DIED_PENALTY)
+                + 2 * settings.integer(WIN_ROUND_SCORE)
+                + 3 * settings.integer(KILL_ENEMY_HERO_SCORE)
+                + 5 * settings.integer(KILL_OTHER_HERO_SCORE),
                 scores.getScore());
     }
 
@@ -89,7 +109,7 @@ public class ScoresTest {
         givenScores(0);
 
         // when
-        lose();
+        heroDied();
 
         // then
         assertEquals(0, scores.getScore());
@@ -99,7 +119,7 @@ public class ScoresTest {
     public void shouldClearScore() {
         // given
         givenScores(0);
-        win();
+        getGold();
 
         // when
         scores.clear();
@@ -109,32 +129,32 @@ public class ScoresTest {
     }
 
     @Test
-    public void shouldCollectScores_whenWin() {
+    public void shouldCollectScores_whenGetGold() {
         // given
         givenScores(140);
 
         // when
-        win();
-        win();
+        getGold();
+        getGold();
 
         // then
         assertEquals(140
-                    + 2 * settings.integer(WIN_SCORE),
+                    + 2 * settings.integer(GET_GOLD_SCORE),
                 scores.getScore());
     }
 
     @Test
-    public void shouldCollectScores_whenLose() {
+    public void shouldCollectScores_whenHeroDied() {
         // given
         givenScores(140);
 
         // when
-        lose();
-        lose();
+        heroDied();
+        heroDied();
 
         // then
         assertEquals(140
-                    + 2 * settings.integer(LOSE_PENALTY),
+                    + 2 * settings.integer(HERO_DIED_PENALTY),
                 scores.getScore());
     }
 
@@ -150,6 +170,36 @@ public class ScoresTest {
         // then
         assertEquals(140
                     + 2 * settings.integer(WIN_ROUND_SCORE),
+                scores.getScore());
+    }
+
+    @Test
+    public void shouldCollectScores_whenKillOtherHero() {
+        // given
+        givenScores(140);
+
+        // when
+        killOtherHero();
+        killOtherHero();
+
+        // then
+        assertEquals(140
+                    + 2 * settings.integer(KILL_OTHER_HERO_SCORE),
+                scores.getScore());
+    }
+
+    @Test
+    public void shouldCollectScores_whenKillEnemyHero() {
+        // given
+        givenScores(140);
+
+        // when
+        killEnemyHero();
+        killEnemyHero();
+
+        // then
+        assertEquals(140
+                    + 2 * settings.integer(KILL_ENEMY_HERO_SCORE),
                 scores.getScore());
     }
 }

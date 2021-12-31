@@ -39,19 +39,20 @@ public class Scores extends ScoresMap<Void> {
     public Scores(SettingsReader settings) {
         super(settings);
 
-        put(Event.WIN,
-                value -> settings.integer(WIN_SCORE));
+        put(Event.GET_GOLD,
+                value -> settings.integer(GET_GOLD_SCORE));
 
         put(Event.WIN_ROUND,
                 value -> settings.integer(WIN_ROUND_SCORE));
 
-        put(Event.LOSE,
-                value -> heroDie(LOSE_PENALTY));
+        put(Event.HERO_DIED,
+                value -> heroDie(HERO_DIED_PENALTY));
 
         put(Event.KILL_OTHER_HERO,
                 value -> heroDie(KILL_OTHER_HERO_SCORE));
 
         put(Event.KILL_ENEMY_HERO,
                 value -> heroDie(KILL_ENEMY_HERO_SCORE));
+
     }
 }
