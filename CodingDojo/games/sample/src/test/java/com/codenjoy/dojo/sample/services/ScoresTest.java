@@ -39,11 +39,11 @@ public class ScoresTest {
     private GameSettings settings;
 
     public void lose() {
-        scores.event(Event.LOSE);
+        scores.event(Event.HERO_DIED);
     }
 
     public void win() {
-        scores.event(Event.WIN);
+        scores.event(Event.GET_GOLD);
     }
 
     public void winRound() {
@@ -73,8 +73,8 @@ public class ScoresTest {
 
         // then
         assertEquals(140
-                + 4 * settings.integer(WIN_SCORE)
-                + 1 * settings.integer(LOSE_PENALTY)
+                + 4 * settings.integer(GET_GOLD_SCORE)
+                + 1 * settings.integer(HERO_DIED_PENALTY)
                 + 2 * settings.integer(WIN_ROUND_SCORE),
                 scores.getScore());
     }
@@ -119,7 +119,7 @@ public class ScoresTest {
 
         // then
         assertEquals(140
-                    + 2 * settings.integer(WIN_SCORE),
+                    + 2 * settings.integer(GET_GOLD_SCORE),
                 scores.getScore());
     }
 
@@ -134,7 +134,7 @@ public class ScoresTest {
 
         // then
         assertEquals(140
-                    + 2 * settings.integer(LOSE_PENALTY),
+                    + 2 * settings.integer(HERO_DIED_PENALTY),
                 scores.getScore());
     }
 

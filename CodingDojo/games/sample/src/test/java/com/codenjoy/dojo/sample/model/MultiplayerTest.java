@@ -116,7 +116,7 @@ public class MultiplayerTest extends AbstractGameTest {
                 "☼    ☼\n" +
                 "☼☼☼☼☼☼\n", 0);
 
-        verifyAllEvents("listener(1) => [LOSE]\n");
+        verifyAllEvents("listener(1) => [HERO_DIED]\n");
 
         assertScores("");
     }
@@ -186,7 +186,7 @@ public class MultiplayerTest extends AbstractGameTest {
 
         verifyAllEvents(
                 "listener(0) => [KILL_OTHER_HERO]\n" +
-                "listener(1) => [LOSE]\n");
+                "listener(1) => [HERO_DIED]\n");
 
         assertScores("hero(0)=5");
 
@@ -233,7 +233,7 @@ public class MultiplayerTest extends AbstractGameTest {
                 "☼☼☼☼☼☼\n", 0);
 
         verifyAllEvents(
-                "listener(1) => [WIN]\n");
+                "listener(1) => [GET_GOLD]\n");
 
         assertScores("hero(1)=30");
     }
@@ -355,8 +355,8 @@ public class MultiplayerTest extends AbstractGameTest {
 
         verifyAllEvents(
                 "listener(0) => [KILL_ENEMY_HERO]\n" +
-                "listener(1) => [LOSE]\n" +
-                "listener(2) => [LOSE]\n" +
+                "listener(1) => [HERO_DIED]\n" +
+                "listener(2) => [HERO_DIED]\n" +
                 "listener(3) => [KILL_ENEMY_HERO]\n");
 
         assertScores(
@@ -454,8 +454,8 @@ public class MultiplayerTest extends AbstractGameTest {
 
         verifyAllEvents(
                 "listener(0) => [KILL_OTHER_HERO]\n" +
-                "listener(1) => [LOSE]\n" +
-                "listener(2) => [LOSE]\n" +
+                "listener(1) => [HERO_DIED]\n" +
+                "listener(2) => [HERO_DIED]\n" +
                 "listener(3) => [KILL_OTHER_HERO]\n");
 
         assertScores(

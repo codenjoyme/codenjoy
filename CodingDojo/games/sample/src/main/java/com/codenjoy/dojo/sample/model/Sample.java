@@ -128,7 +128,7 @@ public class Sample extends RoundField<Player> implements Field {
             if (gold().contains(hero)) {
                 gold().removeAt(hero);
 
-                player.event(WIN);
+                player.event(GET_GOLD);
 
                 freeRandom(null)
                         .ifPresent(point -> field.add(new Gold(point)));

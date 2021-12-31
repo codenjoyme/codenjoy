@@ -42,7 +42,7 @@ public enum Event {
 
     KILL_OTHER_HERO,
     KILL_ENEMY_HERO,
+    HERO_DIED,
 
-    WIN,
-    LOSE,
+    GET_GOLD,
 }
