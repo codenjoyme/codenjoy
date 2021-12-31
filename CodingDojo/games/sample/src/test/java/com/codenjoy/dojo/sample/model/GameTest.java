@@ -499,8 +499,7 @@ public class GameTest extends AbstractGameTest {
                 "☼$  ☼\n" +
                 "☼☼☼☼☼\n");
 
-        verifyAllEvents(
-                "[WIN]");
+        verifyAllEvents("[WIN]");
 
         assertEquals(30, hero(0).scores());
 
@@ -547,8 +546,7 @@ public class GameTest extends AbstractGameTest {
                 "☼   ☼\n" +
                 "☼☼☼☼☼\n");
 
-        verifyAllEvents(
-                "[WIN]");
+        verifyAllEvents("[WIN]");
     }
 
     @Test

@@ -116,6 +116,8 @@ public class MultiplayerTest extends AbstractGameTest {
                 "☼    ☼\n" +
                 "☼☼☼☼☼☼\n", 0);
 
+        verifyAllEvents("listener(1) => [LOSE]\n");
+
         assertScores("");
     }
 

@@ -168,13 +168,6 @@ public class Sample extends RoundField<Player> implements Field {
     }
 
     @Override
-    public void remove(Player player) {
-        if (players.remove(player)) {
-            heroes().removeExact(player.getHero());
-        }
-    }
-
-    @Override
     public GameSettings settings() {
         return settings;
     }
