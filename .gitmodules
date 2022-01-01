@@ -103,3 +103,6 @@
 [submodule "CodingDojo/games/rawelbbub"]
 	path = CodingDojo/games/rawelbbub
 	url = https://github.com/codenjoyme/codenjoy-rawelbbub.git
+[submodule "CodingDojo/games/namdreab"]
+	path = CodingDojo/games/namdreab
+	url = https://github.com/codenjoyme/codenjoy-namdreab.git
