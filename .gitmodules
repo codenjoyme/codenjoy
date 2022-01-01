@@ -76,3 +76,27 @@
 [submodule "CodingDojo/games/icancode"]
 	path = CodingDojo/games/icancode
 	url = https://github.com/codenjoyme/codenjoy-icancode.git
+[submodule "CodingDojo/games/kata"]
+	path = CodingDojo/games/kata
+	url = https://github.com/codenjoyme/codenjoy-kata.git
+[submodule "CodingDojo/games/lemonade"]
+	path = CodingDojo/games/lemonade
+	url = https://github.com/codenjoyme/codenjoy-lemonade.git
+[submodule "CodingDojo/games/lunolet"]
+	path = CodingDojo/games/lunolet
+	url = https://github.com/codenjoyme/codenjoy-lunolet.git
+[submodule "CodingDojo/games/reversi"]
+	path = CodingDojo/games/reversi
+	url = https://github.com/codenjoyme/codenjoy-reversi.git
+[submodule "CodingDojo/games/rubicscube"]
+	path = CodingDojo/games/rubicscube
+	url = https://github.com/codenjoyme/codenjoy-rubicscube.git
+[submodule "CodingDojo/games/sample"]
+	path = CodingDojo/games/sample
+	url = https://github.com/codenjoyme/codenjoy-sample.git
+[submodule "CodingDojo/games/sudoku"]
+	path = CodingDojo/games/sudoku
+	url = https://github.com/codenjoyme/codenjoy-sudoku.git
+[submodule "CodingDojo/games/sampletext"]
+	path = CodingDojo/games/sampletext
+	url = https://github.com/codenjoyme/codenjoy-sampletext.git

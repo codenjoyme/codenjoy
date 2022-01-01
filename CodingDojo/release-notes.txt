@@ -207,7 +207,7 @@
     Убил копирование библиотек из libs для игрушек - это уже не используется
     Обновил этот release notes файл
     Engine.pom теперь так же собирает в zip с либами и games.pom
-    Протестил проект на mollymage, kata, 2048 и sample-text
+    Протестил проект на mollymage, kata, 2048 и sampletext
     KataCodenjoy: Исправил клиента, а то by default выдает исключение
     SampleText: Исправил папку с ресурсами чтобы pom.xml копировал сырцы
     KataCodenjoy: Исправил описание игры kata.html

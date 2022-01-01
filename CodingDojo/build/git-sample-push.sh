@@ -20,7 +20,7 @@ eval_echo "mv .gitignore_ .gitignore"
 
 eval_echo "git add pom.xml"
 eval_echo "git add sample"
-eval_echo "git add sample-text"
+eval_echo "git add sampletext"
 eval_echo "git commit -m'New release'"
 eval_echo "git push origin master"
 
