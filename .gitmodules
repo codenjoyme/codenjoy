@@ -82,3 +82,6 @@
 [submodule "CodingDojo/games/lemonade"]
 	path = CodingDojo/games/lemonade
 	url = https://github.com/codenjoyme/codenjoy-lemonade.git
+[submodule "CodingDojo/games/lunolet"]
+	path = CodingDojo/games/lunolet
+	url = https://github.com/codenjoyme/codenjoy-lunolet.git
