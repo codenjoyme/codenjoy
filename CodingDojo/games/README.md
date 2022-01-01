@@ -36,6 +36,7 @@ Java version: 11, vendor: Oracle Corporation
 Java home: C:\java\jdk11
 Default locale: xxxxx, platform encoding: xxxxxxx
 OS name: "xxxxxxxxxx", version: "xxx", arch: "xxxxx", family: "xxxxxxx"
+OS name: "xxxxxxxxxx", version: "xxx", arch: "xxxxx", family: "xxxxxxx"
 C:\Users\user>
 ```
 - download and install [IntelliJ IDEA](https://www.jetbrains.com/idea/download/)
@@ -98,19 +99,19 @@ You should find out how to fork a project, how to commit in git.
 Sample
 --------------
 
-Project [Sample](https://github.com/codenjoyme/codenjoy-game/tree/master/sample) 
+Project [Sample](https://github.com/codenjoyme/codenjoy-sample/tree/master/) 
 is a sample of a one-board game with all requisite artefacts. 
 Learn how a project operates.
 
 - import the `sample` project as `maven project` to Idea
 - run all tests; as they progress, you should observe the green bar
-- get [sample/src/test/java/com/codenjoy/dojo/sample/model/GameTest.java](https://github.com/codenjoyme/codenjoy-game/blob/master/sample/src/test/java/com/codenjoy/dojo/sample/model/GameTest.java)
+- get [sample/src/test/java/com/codenjoy/dojo/sample/model/GameTest.java](https://github.com/codenjoyme/codenjoy-sample/blob/master/src/test/java/com/codenjoy/dojo/sample/model/GameTest.java)
 and see how tests for games are written.
-- get [sample/src/main/java/com/codenjoy/dojo/sample](https://github.com/codenjoyme/codenjoy-game/blob/master/sample/src/main/java/com/codenjoy/dojo/sample)
+- get [sample/src/main/java/com/codenjoy/dojo/sample](https://github.com/codenjoyme/codenjoy-sample/blob/master/src/main/java/com/codenjoy/dojo/sample)
 and see what are the minimum code requirements for a new game.
 - the package here [clients/java/src/main/java/com/codenjoy/dojo/games/sample](https://github.com/codenjoyme/codenjoy-java-client/tree/master/src/main/java/com/codenjoy/dojo/games/sample)
 has client code, with a part of it to be sent to the player as a game template
-- the package [sample/src/main/java/com/codenjoy/dojo/sample/services/ai](https://github.com/codenjoyme/codenjoy-game/blob/master/sample/src/main/java/com/codenjoy/dojo/sample/services/ai)
+- the package [sample/src/main/java/com/codenjoy/dojo/sample/services/ai](https://github.com/codenjoyme/codenjoy-sample/blob/master/src/main/java/com/codenjoy/dojo/sample/services/ai)
 has your AI algorithm that will automatically connect to the player and play with him or her.
 - all the rest is the game engine.
 - before you can implement your new game, take some time to familiarize
@@ -152,8 +153,8 @@ can trust it. That's why you should develop the game using TDD.
 If this is an unfamiliar concept,
 [we recommend this book by Ken Beck](http://www.ozon.ru/context/detail/id/1501671/).
 - write a manual for the game, see an example here:
-  * for Russian [sample/src/main/webapp/resources/sample/help/index.md](https://github.com/codenjoyme/codenjoy-game/blob/master/sample/src/main/webapp/resources/sample/help/index.md)
-  * for English [sample/src/main/webapp/resources/sample/help/index-en.md](https://github.com/codenjoyme/codenjoy-game/blob/master/sample/src/main/webapp/resources/sample/help/index-en.md)
+  * for Russian [sample/src/main/webapp/resources/sample/help/index.md](https://github.com/codenjoyme/codenjoy-sample/blob/master/src/main/webapp/resources/sample/help/index.md)
+  * for English [sample/src/main/webapp/resources/sample/help/index-en.md](https://github.com/codenjoyme/codenjoy-sample/blob/master/src/main/webapp/resources/sample/help/index-en.md)
 - draw sprites - square-like pictures that will serve as the basis for
 rendering the game in the browser. Normally, they are freely available on the net.
 Png files with sprites can be found in the folder [sample/src/main/webapp/resources/sample/sprite/](https://github.com/codenjoyme/codenjoy-game/tree/master/sample/src/main/webapp/resources/sample/sprite).
@@ -161,8 +162,8 @@ Important! Sprite names are not random, they should be associated with enum fiel
 [clients/java/src/main/java/com/codenjoy/dojo/games/sample/Element.java](https://github.com/codenjoyme/codenjoy-java-client/blob/master/src/main/java/com/codenjoy/dojo/games/sample/Element.java).
 All names should be lowercase
 - then implement your bot by analogy with
-[sample/src/main/java/com/codenjoy/dojo/sample/services/ai/AISolver.java](https://github.com/codenjoyme/codenjoy-game/blob/master/sample/src/main/java/com/codenjoy/dojo/sample/services/ai/AISolver.java)
-- run [sample/src/main/java/com/codenjoy/dojo/sample/DryRunGame.java](https://github.com/codenjoyme/codenjoy-game/blob/master/sample/src/main/java/com/codenjoy/dojo/sample/DryRunGame.java) 
+[sample/src/main/java/com/codenjoy/dojo/sample/services/ai/AISolver.java](https://github.com/codenjoyme/codenjoy-sample/blob/master/src/main/java/com/codenjoy/dojo/sample/services/ai/AISolver.java)
+- run [sample/src/main/java/com/codenjoy/dojo/sample/DryRunGame.java](https://github.com/codenjoyme/codenjoy-sample/blob/master/src/main/java/com/codenjoy/dojo/sample/DryRunGame.java) 
   class to see how your game works. You can check your bot also.
 ```
 public class DryRunGame {
@@ -176,7 +177,7 @@ public class DryRunGame {
     }
 }
 ```
-- another way to check how it's works is run [sample/src/test/java/com/codenjoy/dojo/sample/SmokeTest.java](https://github.com/codenjoyme/codenjoy-game/blob/master/sample/src/test/java/com/codenjoy/dojo/sample/SmokeTest.java)
+- another way to check how it's works is run [sample/src/test/java/com/codenjoy/dojo/sample/SmokeTest.java](https://github.com/codenjoyme/codenjoy-sample/blob/master/src/test/java/com/codenjoy/dojo/sample/SmokeTest.java)
 - assemble a jar file by running the `mvn package` command in the sample folder root
 - the jar file will be `sample\target\sample-engine.jar`
 - email it to us at [apofig@gmail.com](mailto:apofig@gmail.com) with the `New game for codenjoy` subject
