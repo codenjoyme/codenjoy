@@ -79,3 +79,6 @@
 [submodule "CodingDojo/games/kata"]
 	path = CodingDojo/games/kata
 	url = https://github.com/codenjoyme/codenjoy-kata.git
+[submodule "CodingDojo/games/lemonade"]
+	path = CodingDojo/games/lemonade
+	url = https://github.com/codenjoyme/codenjoy-lemonade.git
