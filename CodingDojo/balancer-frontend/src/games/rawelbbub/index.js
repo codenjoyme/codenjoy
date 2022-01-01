@@ -1,5 +1,5 @@
 import Elements from "./elements";
-import RulesContainer from './../../containers/RulesContainer/battlecity';
+import RulesContainer from './../../containers/RulesContainer/rawelbbub';
 import battleComplete from './images/battle-complete.jpg';
 import logo from './images/game-logo.png';
 import boardSample from './images/field-sample.png';
@@ -8,7 +8,7 @@ import stepBattleHeader from './images/battle.jpg';
 import stepCreateHeader from './images/create.jpg';
 import dark from './images/dark.jpg';
 
-const name = 'battlecity';
+const name = 'rawelbbub';
 
 export default {
     name,

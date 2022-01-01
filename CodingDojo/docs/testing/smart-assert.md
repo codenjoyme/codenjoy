@@ -21,21 +21,21 @@
     @Test
     public void shouldTeleport_whenTurnLeft() {
         Walls walls = new Walls();
-        Snake board = new Snake(generator, walls, BOARD_SIZE, printerFactory);
-        snake = board.getSnake();
+        Knibert board = new Knibert(generator, walls, BOARD_SIZE, printerFactory);
+        hero = board.getHero();
         stone = board.getStone();
-            
-        snake.left();
-        assertEquals("позиция X змейки", 4, snake.getX());
-        assertEquals("позиция Y змейки", 4, snake.getY());
+
+        hero.left();
+        assertEquals("позиция X змейки", 4, hero.getX());
+        assertEquals("позиция Y змейки", 4, hero.getY());
     
         for (int count = 0; count < BOARD_SIZE; count++) {
             board.tick();
         }
     
-        assertEquals("позиция X змейки", 4, snake.getX());
-        assertEquals("позиция Y змейки", 4, snake.getY());
-        assertSnakeDirection(Direction.LEFT);
+        assertEquals("позиция X змейки", 4, hero.getX());
+        assertEquals("позиция Y змейки", 4, hero.getY());
+        assertHeroDirection(Direction.LEFT);
     }
 ```
 

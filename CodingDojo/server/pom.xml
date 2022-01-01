@@ -129,7 +129,7 @@
             </dependencies>
         </profile>
         <profile>
-            <id>battlecity</id>
+            <id>rawelbbub</id>
             <activation>
                 <property>
                     <name>allGames</name>
@@ -138,7 +138,7 @@
             <dependencies>
                 <dependency>
                     <groupId>${project.groupId}</groupId>
-                    <artifactId>battlecity-engine</artifactId>
+                    <artifactId>rawelbbub-engine</artifactId>
                     <version>${project.version}</version>
                 </dependency>
             </dependencies>
@@ -249,7 +249,7 @@
             </dependencies>
         </profile>
         <profile>
-            <id>snake</id>
+            <id>knibert</id>
             <activation>
                 <property>
                     <name>allGames</name>
@@ -258,13 +258,13 @@
             <dependencies>
                 <dependency>
                     <groupId>${project.groupId}</groupId>
-                    <artifactId>snake-engine</artifactId>
+                    <artifactId>knibert-engine</artifactId>
                     <version>${project.version}</version>
                 </dependency>
             </dependencies>
         </profile>
         <profile>
-            <id>snakebattle</id>
+            <id>namdreab</id>
             <activation>
                 <property>
                     <name>allGames</name>
@@ -273,7 +273,7 @@
             <dependencies>
                 <dependency>
                     <groupId>${project.groupId}</groupId>
-                    <artifactId>snakebattle-engine</artifactId>
+                    <artifactId>namdreab-engine</artifactId>
                     <version>${project.version}</version>
                 </dependency>
             </dependencies>

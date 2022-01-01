@@ -448,7 +448,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
     function showScoreInformation(playerId, information) {
         var infoPool = infoPools[playerId];
 
-        // TODO это костыль, а возникает оно в момент переходов с поле на поле для игры http://127.0.0.1:8080/codenjoy-contest/board/game/snakebattle
+        // TODO это костыль, а возникает оно в момент переходов с поле на поле для игры http://127.0.0.1:8080/codenjoy-contest/board/game/namdreab
         if (typeof infoPool == 'undefined') {
             infoPools[playerId] = [];
             infoPool = infoPools[playerId];

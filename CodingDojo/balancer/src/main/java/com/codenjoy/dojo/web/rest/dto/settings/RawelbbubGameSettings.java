@@ -27,7 +27,7 @@ import com.codenjoy.dojo.services.entity.server.PParameters;
 
 import java.util.List;
 
-public class BattleCityGameSettings extends AbstractSettings {
+public class RawelbbubGameSettings extends AbstractSettings {
 
     public static final String AI_TICKS_PER_SHOOT = "[Game] Ticks until the next AI Tank shoot";
     public static final String TANK_TICKS_PER_SHOOT = "[Game] Ticks until the next Tank shoot";
@@ -150,7 +150,7 @@ public class BattleCityGameSettings extends AbstractSettings {
     }
 
 
-    public BattleCityGameSettings(PParameters parameters) {
+    public RawelbbubGameSettings(PParameters parameters) {
         super(parameters);
     }
 

@@ -1,19 +1,17 @@
 ﻿// vendor
-import React, {  Component  } from 'react';
-import {  connect  } from 'react-redux';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
 // import classnames from 'classnames';
-import {  Link  } from 'react-router-dom';
-import {  CopyToClipboard  } from 'react-copy-to-clipboard';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-    faPowerOff,
-} from '@fortawesome/free-solid-svg-icons';
+import {Link} from 'react-router-dom';
+import {CopyToClipboard} from 'react-copy-to-clipboard';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faPowerOff,} from '@fortawesome/free-solid-svg-icons';
 
 // proj
-import {  GameElements  } from '../../components';
-import {  getGameConnectionString, getJavaClient  } from '../../utils';
-import { requestSettingsStart } from '../../redux/settings';
-import {  book  } from '../../routes';
+import {GameElements} from '../../components';
+import {getGameConnectionString, getJavaClient} from '../../utils';
+import {requestSettingsStart} from '../../redux/settings';
+import {book} from '../../routes';
 import Icon from '../../styles/images/icons/rules.svg';
 import Game from '../../games';
 

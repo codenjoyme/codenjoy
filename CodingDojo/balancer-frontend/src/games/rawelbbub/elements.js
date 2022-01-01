@@ -1,5 +1,5 @@
 // vendor
-import React, { Component } from 'react';
+import React from 'react';
 
 import ai_tank_down from './images/sprite/ai_tank_down.png';
 import ai_tank_left from './images/sprite/ai_tank_left.png';
