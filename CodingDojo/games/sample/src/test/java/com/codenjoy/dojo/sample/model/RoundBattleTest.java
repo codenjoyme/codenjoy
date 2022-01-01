@@ -22,6 +22,7 @@ package com.codenjoy.dojo.sample.model;
  * #L%
  */
 
+import com.codenjoy.dojo.sample.services.GameSettings;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.sample.services.GameSettings.Keys.*;
@@ -30,8 +31,9 @@ import static com.codenjoy.dojo.services.round.RoundSettings.Keys.*;
 public class RoundBattleTest extends AbstractGameTest {
 
     @Override
-    protected void setupSettings() {
-        settings().bool(ROUNDS_ENABLED, true)
+    protected GameSettings setupSettings() {
+        return super.setupSettings()
+                .bool(ROUNDS_ENABLED, true)
                 .integer(ROUNDS_TIME_BEFORE_START, 5)
                 .integer(ROUNDS_PER_MATCH, 3)
                 .integer(ROUNDS_MIN_TICKS_FOR_WIN, 1)

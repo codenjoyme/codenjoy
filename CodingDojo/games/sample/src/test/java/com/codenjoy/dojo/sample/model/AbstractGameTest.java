@@ -4,7 +4,7 @@ package com.codenjoy.dojo.sample.model;
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2022 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,189 +22,63 @@ package com.codenjoy.dojo.sample.model;
  * #L%
  */
 
-
-import com.codenjoy.dojo.games.sample.Element;
 import com.codenjoy.dojo.sample.TestGameSettings;
 import com.codenjoy.dojo.sample.services.Event;
 import com.codenjoy.dojo.sample.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.Game;
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.multiplayer.LevelProgress;
-import com.codenjoy.dojo.services.printer.PrinterFactory;
-import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-import com.codenjoy.dojo.utils.TestUtils;
-import com.codenjoy.dojo.utils.events.EventsListenersAssert;
-import com.codenjoy.dojo.utils.smart.SmartAssert;
-import com.codenjoy.dojo.whatsnext.WhatsNextUtils;
+import com.codenjoy.dojo.services.multiplayer.TriFunction;
+import com.codenjoy.dojo.utils.gametest.AbstractBaseGameTest;
 import org.junit.After;
 import org.junit.Before;
-import org.mockito.stubbing.OngoingStubbing;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import static com.codenjoy.dojo.utils.TestUtils.asArray;
-import static java.util.Arrays.asList;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
-public abstract class AbstractGameTest {
-
-    private List<EventListener> listeners;
-    private List<Game> games;
-    private List<Player> players;
-
-    private Dice dice;
-    private PrinterFactory<Element, Player> printer;
-    private Sample field;
-    private GameSettings settings;
-    private EventsListenersAssert events;
-    private Level level;
+public abstract class AbstractGameTest
+        extends AbstractBaseGameTest<Player, Sample, GameSettings, Level, Hero> {
 
     @Before
     public void setup() {
-        listeners = new LinkedList<>();
-        players = new LinkedList<>();
-        games = new LinkedList<>();
-
-        dice = mock(Dice.class);
-        settings = new TestGameSettings();
-        setupSettings();
-        printer = new PrinterFactoryImpl<>();
-        events = new EventsListenersAssert(() -> listeners, Event.class);
+        super.setup();
     }
 
     @After
     public void after() {
-        verifyAllEvents("");
-        SmartAssert.checkResult();
+        super.after();
     }
 
-    public void dice(int... ints) {
-        if (ints.length == 0) return;
-        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
-        for (int i : ints) {
-            when = when.thenReturn(i);
-        }
+    @Override
+    protected void setupHeroesDice() {
+        dice(asArray(level().heroes()));
     }
 
-    public void givenFl(String... maps) {
-        int levelNumber = LevelProgress.levelsStartsFrom1;
-        settings.setLevelMaps(levelNumber, maps);
-        level = settings.level(levelNumber, dice, Level::new);
-
-        beforeCreateField();
-
-        field = new Sample(dice, null, settings);
-        field.load(level.map(), this::givenPlayer);
-
-        setupHeroesDice();
-
-        games = WhatsNextUtils.newGameForAll(players, printer, field);
-
-        afterCreateField();
+    @Override
+    protected GameSettings setupSettings() {
+        return new TestGameSettings();
     }
 
-    private void setupHeroesDice() {
-        dice(asArray(level.heroes()));
+    @Override
+    protected Function<String, Level> createLevel() {
+        return Level::new;
     }
 
-    private void beforeCreateField() {
-        // settings / level pre-processing
+    @Override
+    protected BiFunction<EventListener, GameSettings, Player> createPlayer() {
+        return Player::new;
     }
 
-    private void afterCreateField() {
-        // settings / field post-processing
+    @Override
+    protected TriFunction<Dice, Level, GameSettings, Sample> createField() {
+        return Sample::new;
     }
 
-    protected Player givenPlayer() {
-        EventListener listener = mock(EventListener.class);
-        listeners.add(listener);
-
-        Player player = new Player(listener, settings);
-        players.add(player);
-        return player;
+    @Override
+    protected Class<?> eventClass() {
+        return Event.class;
     }
 
-    public Player givenPlayer(Point pt) {
-        Player player = givenPlayer();
-
-        dice(asArray(asList(pt)));
-        Game game = WhatsNextUtils.newGame(player, printer, field);
-        games.add(game);
-
-        return players.get(players.size() - 1);
-    }
-
-    public void assertEquals(Object expected, Object actual) {
-        SmartAssert.assertEquals(expected, actual);
-    }
-
-    protected void setupSettings() {
-        // do something with settings
-    }
-
-    public void tick() {
-        field.tick();
-    }
-
-    // getters & asserts
-
-    public void verifyAllEvents(String expected) {
-        assertEquals(expected, events().getEvents());
-    }
-
-    public void assertScores(String expected) {
-        assertEquals(expected,
-                TestUtils.collectHeroesData(players, "scores", true));
-    }
-
-    public GameSettings settings() {
-        return settings;
-    }
-
-    public Sample field() {
-        return field;
-    }
-
-    public EventsListenersAssert events() {
-        return events;
-    }
-
-    public void assertF(String expected, int index) {
-        assertEquals(expected, game(index).getBoardAsString());
-    }
-
-    public Game game(int index) {
-        return games.get(index);
-    }
-
-    public Player player(int index) {
-        return players.get(index);
-    }
-
-    public Hero hero(int index) {
-        return (Hero) game(index).getPlayer().getHero();
-    }
-
-    // getters, if only one player
-
-    public void assertF(String expected) {
-        assertF(expected, 0);
-    }
-
-    public Game game() {
-        return game(0);
-    }
-
-    public Player player() {
-        return player(0);
-    }
-
-    public Hero hero() {
-        return hero(0);
-    }
+    // other methods
 }
