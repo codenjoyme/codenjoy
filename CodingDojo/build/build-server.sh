@@ -7,7 +7,7 @@ export ROOT=$PWD
 if [ "$GAMES_TO_RUN" == "" ] ; then
 	# export GAMES_TO_RUN=all
 	export GAMES_TO_RUN=mollymage
-	# export GAMES_TO_RUN=tetris,snake,mollymage
+	# export GAMES_TO_RUN=tetris,knibert,mollymage
 fi
 
 echo Building server with [$GAMES_TO_RUN]

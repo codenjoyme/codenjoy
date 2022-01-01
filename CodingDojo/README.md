@@ -69,7 +69,7 @@ To run a project with your game, do the following:
   * If you want to run all games just run `mvn clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,debug -Dcontext=/codenjoy-contest -Dserver.port=8080 -DallGames`
 - if maven is not installed on you machine, try `mvnw` instead of `mvn`
 - a simpler way of launching Codenjoy with all games is by running a script in the root `\CodingDojo\build-server.bat` then `\CodingDojo\start-server.bat`
-  * please change `set GAMES_TO_RUN=tetris,snake,mollymage` before run `\CodingDojo\build-server.bat`
+  * please change `set GAMES_TO_RUN=tetris,knibert,mollymage` before run `\CodingDojo\build-server.bat`
   * also you can change properties `--spring.profiles.active=sqlite,debug --context=/codenjoy-contest --server.port=8080` inside `\CodingDojo\start-server.bat`
     * `context` changes link to the application
     [http://127.0.0.1:8080/codenjoy-contest](http://127.0.0.1:8080/codenjoy-contest)
