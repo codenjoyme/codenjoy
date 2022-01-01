@@ -76,3 +76,6 @@
 [submodule "CodingDojo/games/icancode"]
 	path = CodingDojo/games/icancode
 	url = https://github.com/codenjoyme/codenjoy-icancode.git
+[submodule "CodingDojo/games/kata"]
+	path = CodingDojo/games/kata
+	url = https://github.com/codenjoyme/codenjoy-kata.git

@@ -18,7 +18,7 @@ git_add_game_submodule() {
     eval_echo "rm -rf $ROOT/CodingDojo/games/$GAME"
 	eval_echo "git add ."
 	eval_echo "git commit -m '[$GAME] Removed game.'"
-    eval_echo "git submodule add --force https://github.com/codenjoyme/codenjoy-$GAME.git $ROOT/CodingDojo/games/$GAME"
+    eval_echo "git submodule add --force https://github.com/codenjoyme/codenjoy-$GAME.git ./CodingDojo/games/$GAME"
 	eval_echo "git add ."
 	eval_echo "git commit -m '[$GAME] Added game as submodule.'"
 }
