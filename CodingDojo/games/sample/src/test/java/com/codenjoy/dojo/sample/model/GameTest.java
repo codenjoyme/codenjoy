@@ -415,7 +415,7 @@ public class GameTest extends AbstractGameTest {
         verifyAllEvents("[HERO_DIED]");
 
         // when
-        field().newGame(player());
+        game().newGame();
         tick();
 
         // then

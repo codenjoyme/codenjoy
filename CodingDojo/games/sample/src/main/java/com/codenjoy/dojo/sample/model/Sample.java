@@ -34,6 +34,7 @@ import com.codenjoy.dojo.services.field.Accessor;
 import com.codenjoy.dojo.services.field.PointField;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.round.RoundField;
+import com.codenjoy.dojo.whatsnext.WhatsNextUtils;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -81,6 +82,8 @@ public class Sample extends RoundField<Player> implements Field {
 
     @Override
     public void clearScore() {
+        if (level == null) return;
+
         level.saveTo(field);
         field.init(this);
 
@@ -178,7 +181,7 @@ public class Sample extends RoundField<Player> implements Field {
      */
     @Override
     public BoardReader<Player> reader() {
-        /**
+        /*
          * Внимание! Порядок важен.
          * В этом порядке будут опрашиваться состояния через метод
          * {@link com.codenjoy.dojo.services.State#state(Object, Object...)}
@@ -191,28 +194,20 @@ public class Sample extends RoundField<Player> implements Field {
     }
 
     /**
-     * Метод для быстрой инициализации текущего поля из строкового представления.
+     * Метод для быстрой инициализации текущего поля из строкового представления
+     * поля, указанного в .
+     *
      *
      * Актуально для сервиса, отвечающего на вопрос - каким будет следующий тик
      * при такой конфигурации поля.
      *
-     * @param board Текстовое представление поля.
-     * @param creator Метод создающий объекты-игроков для этих целей.
+     * @param player Метод создающий объекты-игроков для этих целей.
      * @return Список созданных игроков в новом измененном поле.
      */
-    // TODO test me
     @Override
-    public List<Player> load(String board, Supplier<Player> creator) {
-        Level level = new Level(board);
-        List<Player> result = new LinkedList<>();
-        level.heroes().forEach(hero -> {
-            Player player = creator.get();
-            player.setHero(hero);
-            result.add(player);
-
-        });
-        level.saveTo(field);
-        return result;
+    public List<Player> load(String board, Supplier<Player> player) {
+        level = new Level(board);
+        return WhatsNextUtils.load(this, level.heroes(), player);
     }
 
     /**
