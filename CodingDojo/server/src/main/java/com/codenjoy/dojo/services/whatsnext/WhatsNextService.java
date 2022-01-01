@@ -40,7 +40,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.codenjoy.dojo.services.multiplayer.GamePlayer.DEFAULT_TEAM_ID;
-import static com.codenjoy.dojo.whatsnext.WhatsNextUtils.newGameForAll;
+import static com.codenjoy.dojo.utils.whatsnext.WhatsNextUtils.newGameForAll;
 
 @Component
 public class WhatsNextService {
