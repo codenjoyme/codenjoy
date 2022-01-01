@@ -48,6 +48,8 @@ git push origin master
 cd <codenjoy>
 
 # удаляю старую папку и подключаю новый сабрепо
+git checkout develop
+git pull origin develop
 rm -rf ./CodingDojo/clients/scala
 git submodule add https://github.com/codenjoyme/codenjoy-scala-client.git ./CodingDojo/clients/scala
 ```
