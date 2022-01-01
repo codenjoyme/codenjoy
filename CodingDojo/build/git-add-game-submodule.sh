@@ -31,6 +31,11 @@ do
     color "Please enter game name"
     read GAME
 
+    if [[ "$GAME" == "" ]]; then
+        color "Game is empty"
+        continue
+    fi
+
     if [[ ! -d "$ROOT/CodingDojo/games/$GAME" ]]; then
         color "Game not exists"
         continue
