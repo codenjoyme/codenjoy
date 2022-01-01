@@ -73,3 +73,6 @@
 [submodule "CodingDojo/games/verland"]
 	path = CodingDojo/games/verland
 	url = https://github.com/codenjoyme/codenjoy-verland.git
+[submodule "CodingDojo/games/icancode"]
+	path = CodingDojo/games/icancode
+	url = https://github.com/codenjoyme/codenjoy-icancode.git
