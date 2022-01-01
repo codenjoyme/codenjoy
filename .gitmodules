@@ -85,3 +85,6 @@
 [submodule "CodingDojo/games/lunolet"]
 	path = CodingDojo/games/lunolet
 	url = https://github.com/codenjoyme/codenjoy-lunolet.git
+[submodule "CodingDojo/games/reversi"]
+	path = CodingDojo/games/reversi
+	url = https://github.com/codenjoyme/codenjoy-reversi.git
