@@ -27,7 +27,7 @@ import com.codenjoy.dojo.games.moebius.Element;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 
-public interface Field extends GameField<Player> {
+public interface Field extends GameField<Player, Hero> {
 
     boolean isFree(Point pt);
 

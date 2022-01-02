@@ -33,7 +33,9 @@ import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.CharElement;
-import com.codenjoy.dojo.services.settings.*;
+import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.settings.Settings;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 import lombok.Getter;
 import lombok.Setter;
 import org.mockito.Mockito;
@@ -65,7 +67,7 @@ public abstract class FakeGameType extends AbstractGameType<Settings> {
         return fields;
     }
 
-    public class Field implements GameField<Player> {
+    public class Field implements GameField<Player, Hero> {
 
         @Getter
         private Player player;
