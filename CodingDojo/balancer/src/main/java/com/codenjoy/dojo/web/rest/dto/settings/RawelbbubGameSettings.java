@@ -32,7 +32,7 @@ public class RawelbbubGameSettings extends AbstractSettings {
     public static final String AI_TICKS_PER_SHOOT = "[Game] Ticks until the next AI Tank shoot";
     public static final String TANK_TICKS_PER_SHOOT = "[Game] Ticks until the next Tank shoot";
     public static final String SLIPPERINESS = "[Game] Value of tank sliding on ice";
-    public static final String PENALTY_WALKING_ON_WATER = "[Game] Penalty time when walking on water";
+    public static final String PENALTY_WALKING_ON_FISHNET = "[Game] Penalty time when walking on water";
     public static final String SHOW_MY_TANK_UNDER_TREE = "[Game] Show my tank under tree";
 
     public static final String SPAWN_AI_PRIZE = "[Prize] Count spawn for AI Tank with prize";
@@ -94,7 +94,7 @@ public class RawelbbubGameSettings extends AbstractSettings {
     }
 
     public Integer getPenaltyWalkingOnWater() {
-        return getInteger(PENALTY_WALKING_ON_WATER);
+        return getInteger(PENALTY_WALKING_ON_FISHNET);
     }
 
     public void setShowMyTankUnderTree(Boolean input) {
@@ -146,7 +146,7 @@ public class RawelbbubGameSettings extends AbstractSettings {
     }
 
     public void setPenaltyWalkingOnWater(Integer input) {
-        add(PENALTY_WALKING_ON_WATER, input);
+        add(PENALTY_WALKING_ON_FISHNET, input);
     }
 
 
@@ -167,7 +167,7 @@ public class RawelbbubGameSettings extends AbstractSettings {
         update(parameters, TANK_TICKS_PER_SHOOT);
         update(parameters, SLIPPERINESS);
         update(parameters, AI_PRIZE_LIMIT);
-        update(parameters, PENALTY_WALKING_ON_WATER);
+        update(parameters, PENALTY_WALKING_ON_FISHNET);
         update(parameters, SHOW_MY_TANK_UNDER_TREE);
     }
 }
