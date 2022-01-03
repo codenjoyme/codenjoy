@@ -29,6 +29,7 @@ import java.util.List;
 
 public class ICanCodeGameSettings extends AbstractSettings {
 
+    // TODO тут настройки могут не соответствовать реальным, у codenjoy есть апи на этот счет, можно отсюда это все убирать
     public static final String WIN_SCORE = "Win score";
     public static final String GOLD_SCORE = "Gold score";
     public static final String KILL_ZOMBIE_SCORE = "Kill zombie score";

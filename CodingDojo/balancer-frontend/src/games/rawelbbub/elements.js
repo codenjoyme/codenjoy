@@ -3,7 +3,7 @@ import React from 'react';
 
 import ai_tank_down from './images/sprite/ai_tank_down.png';
 import ai_tank_left from './images/sprite/ai_tank_left.png';
-import ai_tank_prize from './images/sprite/ai_tank_prize.png';
+import ai_prize from './images/sprite/ai_prize.png';
 import ai_tank_right from './images/sprite/ai_tank_right.png';
 import ai_tank_up from './images/sprite/ai_tank_up.png';
 import bang from './images/sprite/bang.png';
@@ -18,7 +18,7 @@ import other_tank_up from './images/sprite/other_tank_up.png';
 import prize from './images/sprite/prize.png';
 import prize_breaking_walls from './images/sprite/prize_breaking_walls.png';
 import prize_immortality from './images/sprite/prize_immortality.png';
-import prize_walking_on_water from './images/sprite/prize_walking_on_water.png';
+import prize_walking_on_fishnet from './images/sprite/prize_walking_on_fishnet.png';
 import river from './images/sprite/river.png';
 import tank_down from './images/sprite/tank_down.png';
 import tank_left from './images/sprite/tank_left.png';
@@ -218,8 +218,8 @@ export default [
 		description: `AI-танк. Дивиться вліво`,
 	},
 	{
-		image: ai_tank_prize,
-		title: `AI_TANK_PRIZE('◘')`,
+		image: ai_prize,
+		title: `AI_PRIZE('◘')`,
 		description: `Призовий AI-танк`,
 	},
 	{
@@ -238,8 +238,8 @@ export default [
 		description: `Приз, який дає можливість руйнувати стіни`,
 	},
 	{
-		image: prize_walking_on_water,
-		title: `PRIZE_WALKING_ON_WATER('3')`,
+		image: prize_walking_on_fishnet,
+		title: `PRIZE_WALKING_ON_FISHNET('3')`,
 		description: `Приз, який дозволяє рухатися по воді`,
 	},
 	{

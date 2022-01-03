@@ -29,88 +29,59 @@ import java.util.List;
 
 public class RawelbbubGameSettings extends AbstractSettings {
 
-    public static final String AI_TICKS_PER_SHOOT = "[Game] Ticks until the next AI Tank shoot";
-    public static final String TANK_TICKS_PER_SHOOT = "[Game] Ticks until the next Tank shoot";
-    public static final String SLIPPERINESS = "[Game] Value of tank sliding on ice";
-    public static final String PENALTY_WALKING_ON_FISHNET = "[Game] Penalty time when walking on water";
-    public static final String SHOW_MY_TANK_UNDER_TREE = "[Game] Show my tank under tree";
+    // TODO тут настройки могут не соответствовать реальным, у codenjoy есть апи на этот счет, можно отсюда это все убирать
+    public static final String AI_TICKS_PER_SHOOT = "[Game] Ticks until the next AI shoot";
+    public static final String HERO_TICKS_PER_SHOOT = "[Game] Ticks until the next hero shoot";
+    public static final String OIL_SLIPPERINESS = "[Game] The amount of leaked oil. The more - the more naughty the submarine.";
+    public static final String PENALTY_WALKING_ON_FISHNET = "[Game] Penalty time when walking on fishnet";
+    public static final String SHOW_MY_HERO_UNDER_SEAWEED = "[Game] Show my tank under tree";
+    public static final String ICEBERG_REGENERATE_TIME = "[Game] Iceberg regenerate time";
+    public static final String TICKS_STUCK_BY_FISHNET = "[Game] Ticks AI gets stuck by fishnet";
 
-    public static final String SPAWN_AI_PRIZE = "[Prize] Count spawn for AI Tank with prize";
-    public static final String KILL_HITS_AI_PRIZE = "[Prize] Hits to kill AI Tank with prize";
+    public static final String SPAWN_AI_PRIZE = "[Prize] Count spawn for AI with prize";
+    public static final String KILL_HITS_AI_PRIZE = "[Prize] Hits to kill AI with prize";
     public static final String PRIZE_ON_FIELD = "[Prize] The period of prize validity on the field after the appearance";
     public static final String PRIZE_WORKING = "[Prize] Working time of the prize after catch up";
-    public static final String AI_PRIZE_LIMIT = "[Prize] The total number of prize tanks and prizes on the board";
+    public static final String AI_PRIZE_LIMIT = "[Prize] The total number of prize AI and prizes on the board";
+    public static final String AI_PRIZE_SPRITE_CHANGE_TICKS = "[Prize] AI sprite changes every ticks";
+    public static final String PRIZE_SPRITE_CHANGE_TICKS = "[Prize] Prize sprite changes every ticks";
 
-    public static final String KILL_YOUR_TANK_PENALTY = "[Score] Kill your tank penalty";
-    public static final String KILL_OTHER_HERO_TANK_SCORE = "[Score] Kill other hero tank score";
-    public static final String KILL_OTHER_AI_TANK_SCORE = "[Score] Kill other AI tank score";
+    public static final String CHANCE_IMMORTALITY = "[Chance] Prize immortality";
+    public static final String CHANCE_BREAKING_BAD = "[Chance] Prize breaking bad";
+    public static final String CHANCE_WALKING_ON_FISHNET = "[Chance] Prize walking on fishnet";
+    public static final String CHANCE_VISIBILITY = "[Chance] Prize visibility";
+    public static final String CHANCE_NO_SLIDING = "[Chance] Prize no sliding";
 
-    public Boolean isShowMyTankUnderTree() {
-        return getBoolean(SHOW_MY_TANK_UNDER_TREE);
+    public static final String HERO_DIED_PENALTY = "[Score] Kill your hero penalty";
+    public static final String KILL_OTHER_HERO_SCORE = "[Score] Kill other hero score";
+    public static final String KILL_AI_SCORE = "[Score] Kill other AI score";
+    
+    public void setAiTicksPerShoot(Integer input) {
+        add(AI_TICKS_PER_SHOOT, input);
     }
 
-    public Integer getKillYourTankPenalty() {
-        return getInteger(KILL_YOUR_TANK_PENALTY);
+    public void setHeroTicksPerShoot(Integer input) {
+        add(HERO_TICKS_PER_SHOOT, input);
     }
 
-    public Integer getKillOtherHeroTankScore() {
-        return getInteger(KILL_OTHER_HERO_TANK_SCORE);
+    public void setOilSlipperiness(Integer input) {
+        add(OIL_SLIPPERINESS, input);
     }
 
-    public Integer getKillOtherAiTankScore() {
-        return getInteger(KILL_OTHER_AI_TANK_SCORE);
+    public void setPenaltyWalkingOnFishnet(Integer input) {
+        add(PENALTY_WALKING_ON_FISHNET, input);
     }
 
-    public Integer getSpawnAiPrize() {
-        return getInteger(SPAWN_AI_PRIZE);
+    public void setShowMyHeroUnderSeaweed(Integer input) {
+        add(SHOW_MY_HERO_UNDER_SEAWEED, input);
     }
 
-    public Integer getKillHitsAiPrize() {
-        return getInteger(KILL_HITS_AI_PRIZE);
+    public void setIcebergRegenerateTime(Integer input) {
+        add(ICEBERG_REGENERATE_TIME, input);
     }
 
-    public Integer getPrizeOnField() {
-        return getInteger(PRIZE_ON_FIELD);
-    }
-
-    public Integer getPrizeWorking() {
-        return getInteger(PRIZE_WORKING);
-    }
-
-    public Integer getAiTicksPerShoot() {
-        return getInteger(AI_TICKS_PER_SHOOT);
-    }
-
-    public Integer getTankTicksPerShoot() {
-        return getInteger(TANK_TICKS_PER_SHOOT);
-    }
-
-    public Integer getSlipperiness() {
-        return getInteger(SLIPPERINESS);
-    }
-
-    public Integer getAiPrizeLimit() {
-        return getInteger(AI_PRIZE_LIMIT);
-    }
-
-    public Integer getPenaltyWalkingOnWater() {
-        return getInteger(PENALTY_WALKING_ON_FISHNET);
-    }
-
-    public void setShowMyTankUnderTree(Boolean input) {
-        add(SHOW_MY_TANK_UNDER_TREE, input);
-    }
-
-    public void setKillYourTankPenalty(Integer input) {
-        add(KILL_YOUR_TANK_PENALTY, input);
-    }
-
-    public void setKillOtherHeroTankScore(Integer input) {
-        add(KILL_OTHER_HERO_TANK_SCORE, input);
-    }
-
-    public void setKillOtherAiTankScore(Integer input) {
-        add(KILL_OTHER_AI_TANK_SCORE, input);
+    public void setTicksStuckByFishnet(Integer input) {
+        add(TICKS_STUCK_BY_FISHNET, input);
     }
 
     public void setSpawnAiPrize(Integer input) {
@@ -129,26 +100,49 @@ public class RawelbbubGameSettings extends AbstractSettings {
         add(PRIZE_WORKING, input);
     }
 
-    public void setAiTicksPerShoot(Integer input) {
-        add(AI_TICKS_PER_SHOOT, input);
-    }
-
-    public void setTankTicksPerShoot(Integer input) {
-        add(TANK_TICKS_PER_SHOOT, input);
-    }
-
-    public void setSlipperiness(Integer input) {
-        add(SLIPPERINESS, input);
-    }
-
     public void setAiPrizeLimit(Integer input) {
         add(AI_PRIZE_LIMIT, input);
     }
 
-    public void setPenaltyWalkingOnWater(Integer input) {
-        add(PENALTY_WALKING_ON_FISHNET, input);
+    public void setAiPrizeSpriteChangeTicks(Integer input) {
+        add(AI_PRIZE_SPRITE_CHANGE_TICKS, input);
     }
 
+    public void setPrizeSpriteChangeTicks(Integer input) {
+        add(PRIZE_SPRITE_CHANGE_TICKS, input);
+    }
+
+    public void setChanceImmortality(Integer input) {
+        add(CHANCE_IMMORTALITY, input);
+    }
+
+    public void setChanceBreakingBad(Integer input) {
+        add(CHANCE_BREAKING_BAD, input);
+    }
+
+    public void setChanceWalkingOnFishnet(Integer input) {
+        add(CHANCE_WALKING_ON_FISHNET, input);
+    }
+
+    public void setChanceVisibility(Integer input) {
+        add(CHANCE_VISIBILITY, input);
+    }
+
+    public void setChanceNoSliding(Integer input) {
+        add(CHANCE_NO_SLIDING, input);
+    }
+
+    public void setHeroDiedPenalty(Integer input) {
+        add(HERO_DIED_PENALTY, input);
+    }
+
+    public void setKillOtherHeroScore(Integer input) {
+        add(KILL_OTHER_HERO_SCORE, input);
+    }
+
+    public void setKillAiScore(Integer input) {
+        add(KILL_AI_SCORE, input);
+    }
 
     public RawelbbubGameSettings(PParameters parameters) {
         super(parameters);
@@ -156,18 +150,27 @@ public class RawelbbubGameSettings extends AbstractSettings {
 
     @Override
     public void update(List<PParameter> parameters) {
-        update(parameters, KILL_YOUR_TANK_PENALTY);
-        update(parameters, KILL_OTHER_HERO_TANK_SCORE);
-        update(parameters, KILL_OTHER_AI_TANK_SCORE);
+        update(parameters, AI_TICKS_PER_SHOOT);
+        update(parameters, HERO_TICKS_PER_SHOOT);
+        update(parameters, OIL_SLIPPERINESS);
+        update(parameters, PENALTY_WALKING_ON_FISHNET);
+        update(parameters, SHOW_MY_HERO_UNDER_SEAWEED);
+        update(parameters, ICEBERG_REGENERATE_TIME);
+        update(parameters, TICKS_STUCK_BY_FISHNET);
         update(parameters, SPAWN_AI_PRIZE);
         update(parameters, KILL_HITS_AI_PRIZE);
         update(parameters, PRIZE_ON_FIELD);
         update(parameters, PRIZE_WORKING);
-        update(parameters, AI_TICKS_PER_SHOOT);
-        update(parameters, TANK_TICKS_PER_SHOOT);
-        update(parameters, SLIPPERINESS);
         update(parameters, AI_PRIZE_LIMIT);
-        update(parameters, PENALTY_WALKING_ON_FISHNET);
-        update(parameters, SHOW_MY_TANK_UNDER_TREE);
+        update(parameters, AI_PRIZE_SPRITE_CHANGE_TICKS);
+        update(parameters, PRIZE_SPRITE_CHANGE_TICKS);
+        update(parameters, CHANCE_IMMORTALITY);
+        update(parameters, CHANCE_BREAKING_BAD);
+        update(parameters, CHANCE_WALKING_ON_FISHNET);
+        update(parameters, CHANCE_VISIBILITY);
+        update(parameters, CHANCE_NO_SLIDING);
+        update(parameters, HERO_DIED_PENALTY);
+        update(parameters, KILL_OTHER_HERO_SCORE);
+        update(parameters, KILL_AI_SCORE);
     }
 }
