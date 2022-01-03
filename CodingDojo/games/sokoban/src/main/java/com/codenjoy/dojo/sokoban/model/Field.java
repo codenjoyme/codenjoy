@@ -25,8 +25,9 @@ package com.codenjoy.dojo.sokoban.model;
 
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.sokoban.model.items.Hero;
 
-public interface Field extends GameField<Player> {
+public interface Field extends GameField<Player, Hero> {
 
     boolean isBarrier(Point pt);
 

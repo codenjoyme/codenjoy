@@ -22,6 +22,7 @@ package com.codenjoy.dojo.services.whatsnext;
  * #L%
  */
 
+import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.PlayerCommand;
 import com.codenjoy.dojo.services.PlayerScores;
@@ -30,7 +31,7 @@ import com.codenjoy.dojo.services.info.ScoresCollector;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.LevelProgress;
-import com.codenjoy.dojo.services.multiplayer.Single;
+import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import com.codenjoy.dojo.services.settings.Settings;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
@@ -40,6 +41,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.codenjoy.dojo.services.multiplayer.GamePlayer.DEFAULT_TEAM_ID;
+import static com.codenjoy.dojo.utils.whatsnext.WhatsNextUtils.newGameForAll;
 
 @Component
 public class WhatsNextService {
@@ -48,46 +50,41 @@ public class WhatsNextService {
     // что делает сервер для создания игры.
     public String calculate(GameType gameType, String board, String allActions) {
         Settings settings = gameType.getSettings();
-        GameField game = gameType.createGame(LevelProgress.levelsStartsFrom1, settings);
+        GameField<GamePlayer, PlayerHero> field = gameType.createGame(LevelProgress.levelsStartsFrom1, settings);
         List<Information> infos = new LinkedList<>();
-        List<GamePlayer> players  = game.load(board, () -> {
+        List<GamePlayer> players  = field.load(board, hero -> {
             PlayerScores scores = gameType.getPlayerScores(1000, settings);
             Information listener = new ScoresCollector(null, scores);
             infos.add(listener);
             GamePlayer player = gameType.createPlayer(
                     listener, DEFAULT_TEAM_ID,
                     StringUtils.EMPTY, settings);
+            player.setHero(hero);
             return player;
         });
 
-        List<Single> singles = new LinkedList<>();
-        players.forEach(player -> {
-            Single single = new Single(player, gameType.getPrinterFactory());
-            single.on(game);
-            single.newGame();
-            singles.add(single);
-        });
+        List<Game> games = newGameForAll(players, gameType.getPrinterFactory(), field);
 
-        ResultPrinter printer = new ResultPrinter(game.reader().size());
+        ResultPrinter printer = new ResultPrinter(field.reader().size());
         printer.initialHeader();
-        printer.board(infos, singles);
+        printer.board(infos, games);
 
         ActionsParser parser = new ActionsParser(allActions);
         List<Map<Integer, String>> ticksActions = parser.getTicksActions();
         for (int tick = 0; tick < ticksActions.size(); tick++) {
             Map<Integer, String> actions = ticksActions.get(tick);
-            for (int index = 0; index < singles.size(); index++) {
-                Single single = singles.get(index);
+            for (int index = 0; index < games.size(); index++) {
+                Game game = games.get(index);
                 String action = actions.get(countFromOne(index));
                 if (StringUtils.isNotEmpty(action)) {
-                    new PlayerCommand(single.getJoystick(), action).execute();
+                    new PlayerCommand(game.getJoystick(), action).execute();
                 }
             }
 
-            game.tick();
+            field.tick();
 
             printer.tickHeader(tick);
-            printer.board(infos, singles);
+            printer.board(infos, games);
         }
         printer.breakLine();
         return printer.toString();

@@ -25,7 +25,7 @@ package com.codenjoy.dojo.collapse.model;
 
 import com.codenjoy.dojo.services.multiplayer.GameField;
 
-public interface Field extends GameField<Player> {
+public interface Field extends GameField<Player, Hero> {
     boolean isGameOver();
 
     int size();

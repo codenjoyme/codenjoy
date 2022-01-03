@@ -22,8 +22,8 @@ package com.codenjoy.dojo.services.whatsnext;
  * #L%
  */
 
+import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.info.Information;
-import com.codenjoy.dojo.services.multiplayer.Single;
 
 import java.util.Arrays;
 import java.util.List;
@@ -43,15 +43,15 @@ public class ResultPrinter {
         breakLine = "+" + repeat('-', width - 1) + "\n";
     }
 
-    public void board(List<Information> infos, List<Single> singles) {
-        for (int index = 0; index < singles.size(); index++) {
+    public void board(List<Information> infos, List<Game> games) {
+        for (int index = 0; index < games.size(); index++) {
             boardSeparator();
 
-            Single single = singles.get(index);
+            Game game = games.get(index);
             String info = infos.get(index).getAllMessages();
             String prefix = String.format("| (%s) ", countFromOne(index));
 
-            String board = single.getBoardAsString().toString();
+            String board = game.getBoardAsString().toString();
             List<String> lines = Arrays.asList(board.split("\n"));
 
             printLine(() -> result.append(prefix).append("Board:"));

@@ -35,7 +35,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public interface IField extends GameField<Player>  {
+public interface IField extends GameField<Player, Hero> {
 
     void increase(Hero hero, List<ForcesMoves> increase);
 
@@ -58,7 +58,7 @@ public interface IField extends GameField<Player>  {
 
     int regionsCount(Hero hero);
 
-    default BoardReader reader() {
+    default BoardReader<Player> reader() {
         return null;
     }
 

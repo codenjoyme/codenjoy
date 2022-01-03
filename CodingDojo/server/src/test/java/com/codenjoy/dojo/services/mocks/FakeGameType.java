@@ -33,7 +33,9 @@ import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.CharElement;
-import com.codenjoy.dojo.services.settings.*;
+import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.settings.Settings;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 import lombok.Getter;
 import lombok.Setter;
 import org.mockito.Mockito;
@@ -65,7 +67,7 @@ public abstract class FakeGameType extends AbstractGameType<Settings> {
         return fields;
     }
 
-    public class Field implements GameField<Player> {
+    public class Field implements GameField<Player, Hero> {
 
         @Getter
         private Player player;
@@ -76,8 +78,8 @@ public abstract class FakeGameType extends AbstractGameType<Settings> {
         }
 
         @Override
-        public BoardReader reader() {
-            return new BoardReader<Player>() {
+        public BoardReader<Player> reader() {
+            return new BoardReader<>() {
                 @Override
                 public int size() {
                     return getBoardSize(settings).getValue();
@@ -218,7 +220,7 @@ public abstract class FakeGameType extends AbstractGameType<Settings> {
         public boolean isAlive() {
             return true;
         }
-    };
+    }
 
     @Override
     public GamePlayer createPlayer(EventListener listener, int teamId, String playerId, Settings settings) {

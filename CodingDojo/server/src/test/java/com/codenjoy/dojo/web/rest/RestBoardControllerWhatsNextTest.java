@@ -85,7 +85,7 @@ public class RestBoardControllerWhatsNextTest extends AbstractRestControllerTest
                         "| (1) ☼ ☺$ ☼      \n" +
                         "| (1) ☼$x ☻☼      \n" +
                         "| (1) ☼☼☼☼☼☼      \n" +
-                        "| (1) Events:[WIN => +30]\n" +
+                        "| (1) Events:[GET_GOLD => +30]\n" +
                         "|                 \n" +
                         "| (2) Board:      \n" +
                         "| (2) ☼☼☼☼☼☼      \n" +
@@ -107,7 +107,7 @@ public class RestBoardControllerWhatsNextTest extends AbstractRestControllerTest
                         "| (1) ☼  $☻☼      \n" +
                         "| (1) ☼$x  ☼      \n" +
                         "| (1) ☼☼☼☼☼☼      \n" +
-                        "| (1) Events:[WIN => +30]\n" +
+                        "| (1) Events:[GET_GOLD => +30]\n" +
                         "|                 \n" +
                         "| (2) Board:      \n" +
                         "| (2) ☼☼☼☼☼☼      \n" +

@@ -44,8 +44,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static com.codenjoy.dojo.sample.services.GameSettings.Keys.LOSE_PENALTY;
-import static com.codenjoy.dojo.sample.services.GameSettings.Keys.WIN_SCORE;
+import static com.codenjoy.dojo.sample.services.GameSettings.Keys.GET_GOLD_SCORE;
+import static com.codenjoy.dojo.sample.services.GameSettings.Keys.HERO_DIED_PENALTY;
 import static com.codenjoy.dojo.utils.smart.SmartAssert.assertEquals;
 
 @RunWith(SpringRunner.class)
@@ -100,8 +100,8 @@ public class ChatDealsTest {
                         "☼ $$ ☼\n" +
                         "☼    ☼\n" +
                         "☼☼☼☼☼☼\n")
-                .integer(WIN_SCORE, 30)
-                .integer(LOSE_PENALTY, -100);
+                .integer(GET_GOLD_SCORE, 30)
+                .integer(HERO_DIED_PENALTY, -100);
 
 
         with.time.nowIs(12345L);
@@ -160,8 +160,8 @@ public class ChatDealsTest {
                 with.rooms.board(player1));
 
         with.chat.checkField(player1, room,
-                "[PMessage(id=3, text=WIN => +30, room=room, type=3, topicId=1, \n" +
-                "    playerId=player1, playerName=player1-name, time=12346)]");
+                "[PMessage(id=3, text=GET_GOLD => +30, room=room, type=3, topicId=1, \n" +
+                        "    playerId=player1, playerName=player1-name, time=12346)]");
 
         with.chat.checkField(player2, room,
                 "[]");
@@ -188,8 +188,8 @@ public class ChatDealsTest {
                 "[]");
 
         with.chat.checkField(player2, room,
-                "[PMessage(id=4, text=LOSE => 0, room=room, type=3, topicId=1, \n" +
-                "    playerId=player2, playerName=player2-name, time=12346)]");
+                "[PMessage(id=4, text=HERO_DIED => 0, room=room, type=3, topicId=1, \n" +
+                        "    playerId=player2, playerName=player2-name, time=12346)]");
 
         with.chat.cleanField(player1, room);
         with.chat.cleanField(player2, room);

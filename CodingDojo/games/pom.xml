@@ -65,18 +65,18 @@
     <modules>
         <module>engine</module>
         <module>sample</module>
-        <module>sample-text</module>
+        <module>sampletext</module>
         <module>a2048</module>
         <module>mollymage</module>
-        <module>battlecity</module>
+        <module>rawelbbub</module>
         <module>chess</module>
         <module>collapse</module>
         <module>hex</module>
         <module>clifford</module>
         <module>rubicscube</module>
         <module>sudoku</module>
-        <module>snake</module>
-        <module>snakebattle</module>
+        <module>knibert</module>
+        <module>namdreab</module>
         <module>moebius</module>
         <module>football</module>
         <module>startandjump</module>

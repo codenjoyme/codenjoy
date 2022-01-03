@@ -1,2 +1,0 @@
-call mvn install:install-file -Dfile=ApprovalTests-013.jar -Dsources=ApprovalTests-013.jar -DpomFile=pom.xml -DgroupId=org.approvaltests -DartifactId=approvaltests -Dversion=0.13 -Dpackaging=jar
-pause >nul

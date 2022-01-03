@@ -35,7 +35,6 @@ import com.codenjoy.dojo.utils.smart.SmartAssert;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -148,7 +147,7 @@ public abstract class AbstractControllerTest<TData, TControl> {
         clients.forEach(WebSocketRunnerMock::stop);
         clients.clear();
         receivedOnServer.clear();
-        SmartAssert.checkResult(getClass());
+        SmartAssert.checkResult();
     }
 
     protected void waitForServerReceived() {

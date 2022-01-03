@@ -191,8 +191,8 @@ public class Collapse implements Field {
         return walls.values();
     }
 
-    public BoardReader reader() {
-        return new BoardReader<Player>() {
+    public BoardReader<Player> reader() {
+        return new BoardReader<>() {
             private int size = Collapse.this.size;
 
             @Override

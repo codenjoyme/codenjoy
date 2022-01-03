@@ -31,7 +31,7 @@ import com.codenjoy.dojo.services.entity.server.Disqualified;
 import com.codenjoy.dojo.services.entity.server.PParameters;
 import com.codenjoy.dojo.services.entity.server.PlayerInfo;
 import com.codenjoy.dojo.web.rest.dto.settings.AbstractSettings;
-import com.codenjoy.dojo.web.rest.dto.settings.BattleCityGameSettings;
+import com.codenjoy.dojo.web.rest.dto.settings.RawelbbubGameSettings;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -394,7 +394,7 @@ public class Dispatcher {
     public List<AbstractSettings> getGameSettings() {
         // TODO move it to .env settings
         return gameServers.stream()
-                .map(server -> new BattleCityGameSettings(game.getGameSettings(server)))
+                .map(server -> new RawelbbubGameSettings(game.getGameSettings(server)))
                 .collect(toList());
     }
 
