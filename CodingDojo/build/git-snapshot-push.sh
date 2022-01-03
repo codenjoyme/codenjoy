@@ -8,14 +8,19 @@ eval_echo() {
     eval $command
 }
 
+eval_echo "OUT=$(pwd)/out"
 eval_echo "cd .."
+eval_echo "PROJECT_ROOT=$(pwd)"
+eval_echo "cd .."
+eval_echo "GIT_ROOT=$(pwd)"
+eval_echo "REPO=$GIT_ROOT/repo"
 
 eval_echo "`ssh-agent -s`"
 eval_echo "ssh-add ~/.ssh/*_rsa"
 
-eval_echo "./mvnw -DaltDeploymentRepository=snapshots::default::file:repo/snapshots clean deploy -DskipTests=true -DgitDir=./../ 2>&1 | tee snapshot-deploy.log" 
+eval_echo "$PROJECT_ROOT/mvnw -f $PROJECT_ROOT/pom.xml -DaltDeploymentRepository=snapshots::default::file:$REPO/snapshots clean deploy -DskipTests=true -DgitDir=$GIT_ROOT 2>&1 | tee $OUT/snapshot-deploy.log" 
 
-eval_echo "cd repo"
+eval_echo "cd ../repo"
 
 eval_echo "mv .git_ .git"
 eval_echo "mv .gitignore_ .gitignore"
