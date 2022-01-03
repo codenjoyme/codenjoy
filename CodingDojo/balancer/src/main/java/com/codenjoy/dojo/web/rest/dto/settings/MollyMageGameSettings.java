@@ -29,6 +29,7 @@ import java.util.List;
 
 public class MollyMageGameSettings extends AbstractSettings {
 
+    // TODO тут настройки могут не соответствовать реальным, у codenjoy есть апи на этот счет, можно отсюда это все убирать
     public static final String GAME_IS_MULTIPLE_OR_DISPOSABLE = "[Game] Is multiple or disposable";
     public static final String GAME_PLAYERS_PER_ROOM_FOR_DISPOSABLE = "[Game] Players per room for disposable";
     public static final String SCORE_KILL_WALL_SCORE = "[Score] Kill wall score";

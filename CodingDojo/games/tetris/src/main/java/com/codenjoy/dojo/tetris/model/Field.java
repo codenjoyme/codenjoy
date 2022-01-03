@@ -27,7 +27,7 @@ import com.codenjoy.dojo.services.multiplayer.GameField;
 
 import java.util.List;
 
-public interface Field extends GameField<Player> {
+public interface Field extends GameField<Player, Hero> {
 
     int size();
 

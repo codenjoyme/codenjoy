@@ -24,7 +24,7 @@ package com.codenjoy.dojo.puzzlebox.model;
 
 import com.codenjoy.dojo.services.multiplayer.GameField;
 
-public interface Field extends GameField<Player> {
+public interface Field extends GameField<Player, Hero> {
     boolean isBarrier(int x, int y);
 
     boolean isTarget(int x, int y);

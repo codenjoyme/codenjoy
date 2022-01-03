@@ -31,6 +31,7 @@ import com.codenjoy.dojo.services.info.ScoresCollector;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.LevelProgress;
+import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import com.codenjoy.dojo.services.settings.Settings;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
@@ -49,15 +50,16 @@ public class WhatsNextService {
     // что делает сервер для создания игры.
     public String calculate(GameType gameType, String board, String allActions) {
         Settings settings = gameType.getSettings();
-        GameField field = gameType.createGame(LevelProgress.levelsStartsFrom1, settings);
+        GameField<GamePlayer, PlayerHero> field = gameType.createGame(LevelProgress.levelsStartsFrom1, settings);
         List<Information> infos = new LinkedList<>();
-        List<GamePlayer> players  = field.load(board, () -> {
+        List<GamePlayer> players  = field.load(board, hero -> {
             PlayerScores scores = gameType.getPlayerScores(1000, settings);
             Information listener = new ScoresCollector(null, scores);
             infos.add(listener);
             GamePlayer player = gameType.createPlayer(
                     listener, DEFAULT_TEAM_ID,
                     StringUtils.EMPTY, settings);
+            player.setHero(hero);
             return player;
         });
 

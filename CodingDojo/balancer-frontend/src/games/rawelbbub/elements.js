@@ -1,45 +1,45 @@
 // vendor
 import React from 'react';
 
-import ai_tank_down from './images/sprite/ai_tank_down.png';
-import ai_tank_left from './images/sprite/ai_tank_left.png';
-import ai_tank_prize from './images/sprite/ai_tank_prize.png';
-import ai_tank_right from './images/sprite/ai_tank_right.png';
-import ai_tank_up from './images/sprite/ai_tank_up.png';
+import ai_down from './images/sprite/ai_down.png';
+import ai_left from './images/sprite/ai_left.png';
+import ai_prize from './images/sprite/ai_prize.png';
+import ai_right from './images/sprite/ai_right.png';
+import ai_up from './images/sprite/ai_up.png';
 import bang from './images/sprite/bang.png';
-import battle_wall from './images/sprite/battle_wall.png';
-import bullet from './images/sprite/bullet.png';
-import ice from './images/sprite/ice.png';
-import none from './images/sprite/none.png';
-import other_tank_down from './images/sprite/other_tank_down.png';
-import other_tank_left from './images/sprite/other_tank_left.png';
-import other_tank_right from './images/sprite/other_tank_right.png';
-import other_tank_up from './images/sprite/other_tank_up.png';
+import reefs from './images/sprite/reefs.png';
+import torpedo from './images/sprite/torpedo.png';
+import oil from './images/sprite/oil.png';
+import water from './images/sprite/water.png';
+import other_hero_down from './images/sprite/other_hero_down.png';
+import other_hero_left from './images/sprite/other_hero_left.png';
+import other_hero_right from './images/sprite/other_hero_right.png';
+import other_hero_up from './images/sprite/other_hero_up.png';
 import prize from './images/sprite/prize.png';
-import prize_breaking_walls from './images/sprite/prize_breaking_walls.png';
+import prize_breaking_bad from './images/sprite/prize_breaking_bad.png';
 import prize_immortality from './images/sprite/prize_immortality.png';
-import prize_walking_on_water from './images/sprite/prize_walking_on_water.png';
-import river from './images/sprite/river.png';
-import tank_down from './images/sprite/tank_down.png';
-import tank_left from './images/sprite/tank_left.png';
-import tank_right from './images/sprite/tank_right.png';
-import tank_up from './images/sprite/tank_up.png';
-import tree from './images/sprite/tree.png';
+import prize_walking_on_fishnet from './images/sprite/prize_walking_on_fishnet.png';
+import fishnet from './images/sprite/fishnet.png';
+import hero_down from './images/sprite/hero_down.png';
+import hero_left from './images/sprite/hero_left.png';
+import hero_right from './images/sprite/hero_right.png';
+import hero_up from './images/sprite/hero_up.png';
+import seaweed from './images/sprite/seaweed.png';
 import wall from './images/sprite/wall.png';
-import wall_destroyed_down from './images/sprite/wall_destroyed_down.png';
-import wall_destroyed_down_left from './images/sprite/wall_destroyed_down_left.png';
-import wall_destroyed_down_right from './images/sprite/wall_destroyed_down_right.png';
-import wall_destroyed_down_twice from './images/sprite/wall_destroyed_down_twice.png';
-import wall_destroyed_left from './images/sprite/wall_destroyed_left.png';
-import wall_destroyed_left_right from './images/sprite/wall_destroyed_left_right.png';
-import wall_destroyed_left_twice from './images/sprite/wall_destroyed_left_twice.png';
-import wall_destroyed_right from './images/sprite/wall_destroyed_right.png';
-import wall_destroyed_right_twice from './images/sprite/wall_destroyed_right_twice.png';
-import wall_destroyed_right_up from './images/sprite/wall_destroyed_right_up.png';
-import wall_destroyed_up from './images/sprite/wall_destroyed_up.png';
-import wall_destroyed_up_down from './images/sprite/wall_destroyed_up_down.png';
-import wall_destroyed_up_left from './images/sprite/wall_destroyed_up_left.png';
-import wall_destroyed_up_twice from './images/sprite/wall_destroyed_up_twice.png';
+import iceberg_medium_down from './images/sprite/iceberg_medium_down.png';
+import iceberg_small_down_left from './images/sprite/iceberg_small_down_left.png';
+import iceberg_small_down_right from './images/sprite/iceberg_small_down_right.png';
+import iceberg_small_down_down from './images/sprite/iceberg_small_down_down.png';
+import iceberg_medium_left from './images/sprite/iceberg_medium_left.png';
+import iceberg_small_left_right from './images/sprite/iceberg_small_left_right.png';
+import iceberg_small_left_left from './images/sprite/iceberg_small_left_left.png';
+import iceberg_medium_right from './images/sprite/iceberg_medium_right.png';
+import iceberg_small_right_right from './images/sprite/iceberg_small_right_right.png';
+import iceberg_small_up_right from './images/sprite/iceberg_small_up_right.png';
+import iceberg_medium_up from './images/sprite/iceberg_medium_up.png';
+import iceberg_small_up_down from './images/sprite/iceberg_small_up_down.png';
+import iceberg_small_up_left from './images/sprite/iceberg_small_up_left.png';
+import iceberg_small_up_up from './images/sprite/iceberg_small_up_up.png';
 import prize_visibility from './images/sprite/prize_visibility.png';
 import prize_no_sliding from './images/sprite/prize_no_sliding.png';
 
@@ -48,208 +48,208 @@ import prize_no_sliding from './images/sprite/prize_no_sliding.png';
 
 export default [
 	{
-		image: none,
-		title: `NONE(' ')`,
-		description: `Вільне місце, по якому може рухатися танк`,
+		image: water,
+		title: `WATER(' ')`,
+		description: `Вільні води, через які може рухатися герой`,
 	},
 	{
-		image: battle_wall,
-		title: `BATTLE_WALL('☼')`,
-		description: `Стіна, яку(у звичайний умовах) не можна зруйнувати`,
+		image: reefs,
+		title: `REEFS('☼')`,
+		description: `Риф, який (у звичайних умовах) не можна зруйнувати`,
 	},
 	{
 		image: bang,
-		title: `BANG('Ѡ')`,
-		description: `Місце вибуху ворожого танку`,
+		title: `EXPLOSION('Ѡ')`,
+		description: `Місце вибуху`,
 	},
 	{
-		image: ice,
-		title: `ICE('#')`,
-		description: `Крига. Змушує танки ковзати `,
+		image: oil,
+		title: `OIL('#')`,
+		description: `Вилив нафти. Змушує героя ковзати`,
 	},
 	{
-		image: tree,
-		title: `TREE('%')`,
-		description: `Дерева(Кущі). Може приховувати танки та кулі`,
+		image: seaweed,
+		title: `SEAWEED('%')`,
+		description: `Водорості. Може приховувати героя та торпеди`,
 	},
 	{
-		image: river,
-		title: `RIVER('~')`,
-		description: `Річка(Вода)`,
+		image: fishnet,
+		title: `FISHNET('~')`,
+		description: `Риболовецькі сітки. Не дозвляють (у звичайних умовах) рухатись герою`,
 	},
 	{
-		image: wall,
-		title: `WALL('╬')`,
-		description: `Стіна, яку можна зруйнувати`,
+		image: iceberg_huge,
+		title: `ICEBERG_HUGE('╬')`,
+		description: `Айсберг, який можна зруйнувати 3 торпедами` ,
 	},
 	{
-		image: wall_destroyed_down,
-		title: `WALL_DESTROYED_DOWN('╩')`,
-		description: `Стіна, яку можна зруйнувати`,
+		image: iceberg_medium_down,
+		title: `ICEBERG_MEDIUM_DOWN('╩')`,
+		description: `Айсберг, який можна зруйнувати 2 торпедами`,
 	},
 	{
-		image: wall_destroyed_up,
-		title: `WALL_DESTROYED_UP('╦')`,
-		description: `Стіна, яку можна зруйнувати`,
+		image: iceberg_medium_up,
+		title: `ICEBERG_MEDIUM_UP('╦')`,
+		description: `Айсберг, який можна зруйнувати 2 торпедами`,
 	},
 	{
-		image: wall_destroyed_left,
-		title: `WALL_DESTROYED_LEFT('╠')`,
-		description: `Стіна, яку можна зруйнувати`,
+		image: iceberg_medium_left,
+		title: `ICEBERG_MEDIUM_LEFT('╠')`,
+		description: `Айсберг, який можна зруйнувати 2 торпедами`,
 	},
 	{
-		image: wall_destroyed_right,
-		title: `WALL_DESTROYED_RIGHT('╣')`,
-		description: `Стіна, яку можна зруйнувати`,
+		image: iceberg_medium_right,
+		title: `ICEBERG_MEDIUM_RIGHT('╣')`,
+		description: `Айсберг, який можна зруйнувати 2 торпедами`,
 	},
 	{
-		image: wall_destroyed_down_twice,
-		title: `WALL_DESTROYED_DOWN_TWICE('╨')`,
-		description: `Стіна, яку можна зруйнувати`,
+		image: iceberg_small_down_down,
+		title: `ICEBERG_SMALL_DOWN_DOWN('╨')`,
+		description: `Айсберг, який можна зруйнувати 1 торпедою`,
 	},
 	{
-		image: wall_destroyed_up_twice,
-		title: `WALL_DESTROYED_UP_TWICE('╥')`,
-		description: `Стіна, яку можна зруйнувати`,
+		image: iceberg_small_up_up,
+		title: `ICEBERG_SMALL_UP_UP('╥')`,
+		description: `Айсберг, який можна зруйнувати 1 торпедою`,
 	},
 	{
-		image: wall_destroyed_left_twice,
-		title: `WALL_DESTROYED_LEFT_TWICE('╞')`,
-		description: `Стіна, яку можна зруйнувати`,
+		image: iceberg_small_left_left,
+		title: `ICEBERG_SMALL_LEFT_LEFT('╞')`,
+		description: `Айсберг, який можна зруйнувати 1 торпедою`,
 	},
 	{
-		image: wall_destroyed_right_twice,
-		title: `WALL_DESTROYED_RIGHT_TWICE('╡')`,
-		description: `Стіна, яку можна зруйнувати`,
+		image: iceberg_small_right_right,
+		title: `ICEBERG_SMALL_RIGHT_RIGHT('╡')`,
+		description: `Айсберг, який можна зруйнувати 1 торпедою`,
 	},
 	{
-		image: wall_destroyed_left_right,
-		title: `WALL_DESTROYED_LEFT_RIGHT('│')`,
-		description: `Стіна, яку можна зруйнувати`,
+		image: iceberg_small_left_right,
+		title: `ICEBERG_SMALL_LEFT_RIGHT('│')`,
+		description: `Айсберг, який можна зруйнувати 1 торпедою`,
 	},
 	{
-		image: wall_destroyed_up_down,
-		title: `WALL_DESTROYED_UP_DOWN('─')`,
-		description: `Стіна, яку можна зруйнувати`,
+		image: iceberg_small_up_down,
+		title: `ICEBERG_SMALL_UP_DOWN('─')`,
+		description: `Айсберг, який можна зруйнувати 1 торпедою`,
 	},
 	{
-		image: wall_destroyed_up_left,
-		title: `WALL_DESTROYED_UP_LEFT('┌')`,
-		description: `Стіна, яку можна зруйнувати`,
+		image: iceberg_small_up_left,
+		title: `ICEBERG_SMALL_UP_LEFT('┌')`,
+		description: `Айсберг, який можна зруйнувати 1 торпедою`,
 	},
 	{
-		image: wall_destroyed_right_up,
-		title: `WALL_DESTROYED_RIGHT_UP('┐')`,
-		description: `Стіна, яку можна зруйнувати`,
+		image: iceberg_small_up_right,
+		title: `ICEBERG_SMALL_UP_RIGHT('┐')`,
+		description: `Айсберг, який можна зруйнувати 1 торпедою`,
 	},
 	{
-		image: wall_destroyed_down_left,
-		title: `WALL_DESTROYED_DOWN_LEFT('└')`,
-		description: `Стіна, яку можна зруйнувати`,
+		image: iceberg_small_down_left,
+		title: `ICEBERG_SMALL_DOWN_LEFT('└')`,
+		description: `Айсберг, який можна зруйнувати 1 торпедою`,
 	},
 	{
-		image: wall_destroyed_down_right,
-		title: `WALL_DESTROYED_DOWN_RIGHT('┘')`,
-		description: `Стіна, яку можна зруйнувати`,
+		image: iceberg_small_down_right,
+		title: `ICEBERG_SMALL_DOWN_RIGHT('┘')`,
+		description: `Айсберг, який можна зруйнувати 1 торпедою`,
 	},
 	{
-		image: bullet,
-		title: `BULLET('•')`,
-		description: `Куля. Власна або ворожа`,
+		image: torpedo,
+		title: `TORPEDO('•')`,
+		description: `Торпеда. Власна або ворожа`,
 	},
 	{
-		image: tank_up,
-		title: `TANK_UP('▲')`,
-		description: `Танк гравця`,
+		image: hero_up,
+		title: `HERO_UP('▲')`,
+		description: `Субмарина героя. Керується догори`,
 	},
 	{
-		image: tank_right,
-		title: `TANK_RIGHT('►')`,
-		description: `Танк гравця`,
+		image: hero_right,
+		title: `HERO_RIGHT('►')`,
+		description: `Субмарина героя. Керується вправо`,
 	},
 	{
-		image: tank_down,
-		title: `TANK_DOWN('▼')`,
-		description: `Танк гравця`,
+		image: hero_down,
+		title: `HERO_DOWN('▼')`,
+		description: `Субмарина героя. Керується додолу`,
 	},
 	{
-		image: tank_left,
-		title: `TANK_LEFT('◄')`,
-		description: `Танк гравця`,
+		image: hero_left,
+		title: `HERO_LEFT('◄')`,
+		description: `Субмарина героя. Керується вліво`,
 	},
 	{
-		image: other_tank_up,
-		title: `OTHER_TANK_UP('˄')`,
-		description: `Ворожий танк`,
+		image: other_hero_up,
+		title: `OTHER_HERO_UP('˄')`,
+		description: `Ворожий танк. Керується догори`,
 	},
 	{
-		image: other_tank_right,
-		title: `OTHER_TANK_RIGHT('˃')`,
-		description: `Ворожий танк`,
+		image: other_hero_right,
+		title: `OTHER_HERO_RIGHT('˃')`,
+		description: `Ворожа субмарина. Керується вправо`,
 	},
 	{
-		image: other_tank_down,
-		title: `OTHER_TANK_DOWN('˅')`,
-		description: `Ворожий танк`,
+		image: other_hero_down,
+		title: `OTHER_HERO_DOWN('˅')`,
+		description: `Ворожа субмарина. Керується додолу`,
 	},
 	{
-		image: other_tank_left,
-		title: `OTHER_TANK_LEFT('˂')`,
-		description: `Ворожий танк`,
+		image: other_hero_left,
+		title: `OTHER_HERO_LEFT('˂')`,
+		description: `Ворожа субмарина. Керується вліво`,
 	},
 	{
-		image: ai_tank_up,
-		title: `AI_TANK_UP('?')`,
-		description: `AI-танк. Дивиться вгору`,
+		image: ai_up,
+		title: `AI_UP('?')`,
+		description: `AI-субмарина. Керується догори`,
 	},
 	{
-		image: ai_tank_right,
-		title: `AI_TANK_RIGHT('»')`,
-		description: `AI-танк. Дивиться вправо`,
+		image: ai_right,
+		title: `AI_RIGHT('»')`,
+		description: `AI-субмарина. Керується вправо`,
 	},
 	{
-		image: ai_tank_down,
-		title: `AI_TANK_DOWN('¿')`,
-		description: `AI-танк. Дивиться донизу`,
+		image: ai_down,
+		title: `AI_DOWN('¿')`,
+		description: `AI-субмарина. Керується додолу`,
 	},
 	{
-		image: ai_tank_left,
-		title: `AI_TANK_LEFT('«')`,
-		description: `AI-танк. Дивиться вліво`,
+		image: ai_left,
+		title: `AI_LEFT('«')`,
+		description: `AI-субмарина. Керується вліво`,
 	},
 	{
-		image: ai_tank_prize,
-		title: `AI_TANK_PRIZE('◘')`,
-		description: `Призовий AI-танк`,
+		image: ai_prize,
+		title: `AI_PRIZE('◘')`,
+		description: `Призова AI-субмарина`,
 	},
 	{
 		image: prize,
 		title: `PRIZE('!')`,
-		description: `Приз, який випав с призового танку`,
+		description: `Приз, який випав с призової AI-субмарини`,
 	},
 	{
 		image: prize_immortality,
 		title: `PRIZE_IMMORTALITY('1')`,
-		description: `Приз із невразливістю до ворожих куль`,
+		description: `Приз із невразливістю до ворожих торпед`,
 	},
 	{
-		image: prize_breaking_walls,
-		title: `PRIZE_BREAKING_WALLS('2')`,
-		description: `Приз, який дає можливість руйнувати стіни`,
+		image: prize_breaking_bad,
+		title: `PRIZE_BREAKING_BAD('2')`,
+		description: `Приз, який дає можливість руйнувати айсберги та рифи за один постріл`,
 	},
 	{
-		image: prize_walking_on_water,
-		title: `PRIZE_WALKING_ON_WATER('3')`,
-		description: `Приз, який дозволяє рухатися по воді`,
+		image: prize_walking_on_fishnet,
+		title: `PRIZE_WALKING_ON_FISHNET('3')`,
+		description: `Приз, який дозволяє рухатися через риболовецькі сітки`,
 	},
 	{
 		image: prize_visibility,
 		title: `PRIZE_VISIBILITY('4')`,
-		description: `Надає можливість бачити техніку супротивника поза деревами`,
+		description: `Надає можливість бачити техніку супротивника приховану у водоростях`,
 	},
 	{
 		image: prize_no_sliding,
 		title: `PRIZE_NO_SLIDING('5')`,
-		description: `Запобігає ковзанню на льоду`,
+		description: `Запобігає ковзанню в нафті`,
 	},
 ];
