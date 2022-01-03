@@ -8,8 +8,8 @@
 /CodingDojo/external
 /CodingDojo/build/out/
 /CodingDojo/**/external
-/CodingDojo/repo
-/CodingDojo/repo/**
+/repo
+/repo/**
 /CodingDojo/**/*.log
 /CodingDojo/saves/*.game
 /CodingDojo/**/.idea
