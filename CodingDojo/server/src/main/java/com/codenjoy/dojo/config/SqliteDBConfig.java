@@ -10,12 +10,12 @@ package com.codenjoy.dojo.config;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.ContextPathGetter;
 import com.codenjoy.dojo.services.dao.*;
 import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory;
+import com.codenjoy.dojo.web.controller.GithubUsernamesCache;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -103,7 +104,7 @@ public class SqliteDBConfig {
     public Registration registration(@Value("${admin.login}") String adminLogin,
                                      @Value("${admin.password}") String adminPassword) {
         return new Registration(registrationPoolFactory(), adminLogin, adminPassword,
-                passwordEncoder, properties, true);
+                passwordEncoder, properties, true, new GithubUsernamesCache());
     }
 
     @Bean
