@@ -18,25 +18,25 @@ Scenario: Admin can change team for any player
   Given Login to Admin page
   When Select game room 'sample'
   When Click LoadAll players
-  When Enter value 'input-score' = '10' for the 'input-readable' is 'Stiven Pupkin' and click Save
-  When Enter value 'input-score' = '20' for the 'input-readable' is 'Eva Pupkina' and click Save
-  When Enter value 'input-score' = '30' for the 'input-readable' is 'Bob Pupkin' and click Save
+  When Enter value 'input-score' = '100' for the 'input-readable' is 'Stiven Pupkin' and click Save
+  When Enter value 'input-score' = '200' for the 'input-readable' is 'Eva Pupkina' and click Save
+  When Enter value 'input-score' = '300' for the 'input-readable' is 'Bob Pupkin' and click Save
 
   When Click ViewGame for the 'input-readable' is 'Eva Pupkina'
   And Save page url as 'EVA_BOARD'
-  Then There are players '{Bob Pupkin={score=30}, Eva Pupkina={you=*, score=20}, Stiven Pupkin={score=10}}' on the leaderboard
+  Then There are players '{Bob Pupkin={score=300}, Eva Pupkina={you=*, score=200}, Stiven Pupkin={score=100}}' on the leaderboard
 
   Given Open page with url '/admin?room=sample'
   When Enter value 'input-team' = '1' for the 'input-readable' is 'Eva Pupkina' and click Save
   Given Open page with url '<EVA_BOARD>'
-  Then There are players '{Bob Pupkin={team=[1], score=30}, Eva Pupkina={team=[2], you=*, score=20}, Stiven Pupkin={team=[1], score=10}}' on the leaderboard
+  Then There are players '{Bob Pupkin={team=[1], score=280}, Eva Pupkina={team=[2], you=*, score=180}, Stiven Pupkin={team=[1], score=80}}' on the leaderboard
 
   Given Open page with url '/admin?room=sample'
   When Enter value 'input-team' = '1' for the 'input-readable' is 'Stiven Pupkin' and click Save
   Given Open page with url '<EVA_BOARD>'
-  Then There are players '{Bob Pupkin={team=[1], score=30}, Eva Pupkina={team=[2], you=*, score=20}, Stiven Pupkin={team=[2], score=10}}' on the leaderboard
+  Then There are players '{Bob Pupkin={team=[1], score=260}, Eva Pupkina={team=[2], you=*, score=160}, Stiven Pupkin={team=[2], score=60}}' on the leaderboard
 
   Given Open page with url '/admin?room=sample'
   When Enter value 'input-team' = '1' for the 'input-readable' is 'Bob Pupkin' and click Save
   Given Open page with url '<EVA_BOARD>'
-  Then There are players '{Bob Pupkin={score=30}, Eva Pupkina={you=*, score=20}, Stiven Pupkin={score=10}}' on the leaderboard
+  Then There are players '{Bob Pupkin={score=240}, Eva Pupkina={you=*, score=140}, Stiven Pupkin={score=40}}' on the leaderboard
