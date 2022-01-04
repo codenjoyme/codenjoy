@@ -37,6 +37,8 @@ import java.util.Map;
 @Service
 public class EventService extends EventServiceGrpc.EventServiceImplBase {
 
+    private static final String URL = "localhost:9091";
+
     private final PlayerGameSaver playerGameSaver;
     private final EventsConfig eventsConfig;
 
@@ -53,11 +55,10 @@ public class EventService extends EventServiceGrpc.EventServiceImplBase {
         EventsResponse.Builder responseBuilder = EventsResponse.newBuilder();
 
         events.forEach((key, value) -> {
-            String url = eventsConfig.getProperty(key);
             Event event = Event.newBuilder()
                     .setRoomName(key)
                     .setGameName(value)
-                    .setGameServerUrl(url)
+                    .setGameServerUrl(URL)
                     .build();
             responseBuilder.addEvent(event);
         });
