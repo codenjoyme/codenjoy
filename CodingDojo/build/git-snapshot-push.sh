@@ -42,7 +42,7 @@ eval_echo "`ssh-agent -s`"
 eval_echo "ssh-add ~/.ssh/*_rsa"
 
 eval_echo "cd $PROJECT_ROOT"
-eval_echo "./mvnw -f ./pom.xml -DaltDeploymentRepository=snapshots::default::file:$REPO/snapshots clean deploy -DskipTests=true -DgitDir=$GIT_ROOT 2>&1 | tee $OUT/snapshot-deploy.log" 
+eval_echo "./mvnw -f ./pom.xml -DaltDeploymentRepository=snapshots::default::file:./../repo/snapshots clean deploy -DskipTests=true -DgitDir=$GIT_ROOT 2>&1 | tee $OUT/snapshot-deploy.log" 
 
 eval_echo "cd $REPO"
 
