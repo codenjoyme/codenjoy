@@ -2,7 +2,7 @@
  * #%L
  * Bootstrap v3.3.5 (http://getbootstrap.com)
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2012 - 2022 Codenjoy
  * %%
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * #L%

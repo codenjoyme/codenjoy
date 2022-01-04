@@ -3,7 +3,7 @@
  * jQuery MD5 Plugin 1.2.1
  * https://github.com/blueimp/jQuery-MD5
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2012 - 2022 Codenjoy
  * %%
  * Licensed under the MIT license:
  * http://creativecommons.org/licenses/MIT/

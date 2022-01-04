@@ -3,7 +3,7 @@
  * Templates Plugin 1.0.4
  * https://github.com/KanbanSolutions/jquery-tmpl
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2012 - 2022 Codenjoy
  * %%
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
