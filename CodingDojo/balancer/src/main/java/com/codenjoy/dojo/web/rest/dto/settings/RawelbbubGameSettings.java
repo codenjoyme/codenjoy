@@ -43,7 +43,6 @@ public class RawelbbubGameSettings extends AbstractSettings {
     public static final String PRIZE_ON_FIELD = "[Prize] The period of prize validity on the field after the appearance";
     public static final String PRIZE_WORKING = "[Prize] Working time of the prize after catch up";
     public static final String AI_PRIZE_LIMIT = "[Prize] The total number of prize AI and prizes on the board";
-    public static final String AI_PRIZE_SPRITE_CHANGE_TICKS = "[Prize] AI sprite changes every ticks";
     public static final String PRIZE_SPRITE_CHANGE_TICKS = "[Prize] Prize sprite changes every ticks";
 
     public static final String CHANCE_IMMORTALITY = "[Chance] Prize immortality";
@@ -104,10 +103,6 @@ public class RawelbbubGameSettings extends AbstractSettings {
         add(AI_PRIZE_LIMIT, input);
     }
 
-    public void setAiPrizeSpriteChangeTicks(Integer input) {
-        add(AI_PRIZE_SPRITE_CHANGE_TICKS, input);
-    }
-
     public void setPrizeSpriteChangeTicks(Integer input) {
         add(PRIZE_SPRITE_CHANGE_TICKS, input);
     }
@@ -162,7 +157,6 @@ public class RawelbbubGameSettings extends AbstractSettings {
         update(parameters, PRIZE_ON_FIELD);
         update(parameters, PRIZE_WORKING);
         update(parameters, AI_PRIZE_LIMIT);
-        update(parameters, AI_PRIZE_SPRITE_CHANGE_TICKS);
         update(parameters, PRIZE_SPRITE_CHANGE_TICKS);
         update(parameters, CHANCE_IMMORTALITY);
         update(parameters, CHANCE_BREAKING_BAD);
