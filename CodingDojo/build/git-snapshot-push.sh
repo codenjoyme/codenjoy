@@ -30,6 +30,11 @@ eval_echo() {
     eval $command
 }
 
+color() {
+    message=$1
+    echo "[93m$message[0m"
+}
+
 eval_echo "OUT=$(pwd)/out"
 eval_echo "mkdir $OUT"
 eval_echo "cd .."
@@ -52,5 +57,5 @@ eval_echo "git push origin master"
 
 eval_echo "cd $OUT/.."
 
-echo Press Enter to continue
+color "Press Enter to continue"
 read

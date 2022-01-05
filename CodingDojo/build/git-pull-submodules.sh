@@ -30,6 +30,11 @@ eval_echo() {
     eval $command
 }
 
+color() {
+    message=$1
+    echo "[93m$message[0m"
+}
+
 eval_echo "cd .."
 
 eval_echo "`ssh-agent -s`"
@@ -40,5 +45,5 @@ eval_echo "git pull origin develop"
 eval_echo "git pull origin $BRANCH"
 eval_echo "git submodule foreach git pull origin master"
 
-echo Press Enter to continue
+color "Press Enter to continue"
 read
