@@ -428,7 +428,6 @@ class RulesContainer extends Component {
                             <li>Час існування призу на полі: { this._gets('prizeOnField') }.</li>
                             <li>Час впливу призу на героя: { this._gets('prizeWorking') }.</li>
                             <li>Загальна кількість одночасних AI-субмарин та наявних призів на полі: { this._gets('aiPrizeLimit') }.</li>
-                            <li>Кількість тіків якими блимає AI-субмарина спрайтом AI_PRIZE на полі: { this._gets('aiPrizeSpriteChangeTicks') }.</li>
                             <li>Кількість тіків якими блимає приз спрайтом PRIZE на полі: { this._gets('prizeSpriteChangeTicks') }.</li>
                             <li>Вірогідність отримання призу PRIZE_IMMORTALITY: { this._gets('chanceImmortality') }.</li>
                             <li>Вірогідність отримання призу PRIZE_BREAKING_BAD: { this._gets('chanceBreakingBad') }.</li>
