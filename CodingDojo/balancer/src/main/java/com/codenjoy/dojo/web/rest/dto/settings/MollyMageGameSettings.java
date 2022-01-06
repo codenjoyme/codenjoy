@@ -210,6 +210,8 @@ public class MollyMageGameSettings extends AbstractSettings {
         return getBoolean(SEMIFINAL_SHUFFLE_BOARD);
     }
 
+    // ---------
+
     public void setMultiple(Boolean input) {
         add(GAME_IS_MULTIPLE_OR_DISPOSABLE, input);
     }
