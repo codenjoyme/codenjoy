@@ -110,6 +110,8 @@ public class ICanCodeGameSettings extends AbstractSettings {
         return getInteger(GUN_REST_TIME);
     }
 
+    // ---------
+
     public void setRoomSize(Integer input) {
         add(ROOM_SIZE, input);
     }

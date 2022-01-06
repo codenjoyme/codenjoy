@@ -34,9 +34,10 @@ public class RawelbbubGameSettings extends AbstractSettings {
     public static final String HERO_TICKS_PER_SHOOT = "[Game] Ticks until the next hero shoot";
     public static final String OIL_SLIPPERINESS = "[Game] The amount of leaked oil. The more - the more naughty the submarine.";
     public static final String PENALTY_WALKING_ON_FISHNET = "[Game] Penalty time when walking on fishnet";
-    public static final String SHOW_MY_HERO_UNDER_SEAWEED = "[Game] Show my tank under tree";
+    public static final String SHOW_MY_HERO_UNDER_SEAWEED = "[Game] Show my tank under seaweed";
     public static final String ICEBERG_REGENERATE_TIME = "[Game] Iceberg regenerate time";
     public static final String TICKS_STUCK_BY_FISHNET = "[Game] Ticks AI gets stuck by fishnet";
+    public static final String COUNT_AIS = "[Game] Count AIs on the board";
 
     public static final String SPAWN_AI_PRIZE = "[Prize] Count spawn for AI with prize";
     public static final String KILL_HITS_AI_PRIZE = "[Prize] Hits to kill AI with prize";
@@ -54,7 +55,97 @@ public class RawelbbubGameSettings extends AbstractSettings {
     public static final String HERO_DIED_PENALTY = "[Score] Kill your hero penalty";
     public static final String KILL_OTHER_HERO_SCORE = "[Score] Kill other hero score";
     public static final String KILL_AI_SCORE = "[Score] Kill other AI score";
+
+    public void getAiTicksPerShoot() {
+        getInteger(AI_TICKS_PER_SHOOT);
+    }
+
+    public void getHeroTicksPerShoot() {
+        getInteger(HERO_TICKS_PER_SHOOT);
+    }
+
+    public void getOilSlipperiness() {
+        getInteger(OIL_SLIPPERINESS);
+    }
+
+    public void getPenaltyWalkingOnFishnet() {
+        getInteger(PENALTY_WALKING_ON_FISHNET);
+    }
+
+    public void isShowMyHeroUnderSeaweed() {
+        getInteger(SHOW_MY_HERO_UNDER_SEAWEED);
+    }
+
+    public void getIcebergRegenerateTime() {
+        getInteger(ICEBERG_REGENERATE_TIME);
+    }
+
+    public void getTicksStuckByFishnet() {
+        getInteger(TICKS_STUCK_BY_FISHNET);
+    }
+
+    public void getCountAis() {
+        getInteger(COUNT_AIS);
+    }
+
+    public void getSpawnAiPrize() {
+        getInteger(SPAWN_AI_PRIZE);
+    }
+
+    public void getKillHitsAiPrize() {
+        getInteger(KILL_HITS_AI_PRIZE);
+    }
+
+    public void getPrizeOnField() {
+        getInteger(PRIZE_ON_FIELD);
+    }
+
+    public void getPrizeWorking() {
+        getInteger(PRIZE_WORKING);
+    }
+
+    public void getAiPrizeLimit() {
+        getInteger(AI_PRIZE_LIMIT);
+    }
+
+    public void getPrizeSpriteChangeTicks() {
+        getInteger(PRIZE_SPRITE_CHANGE_TICKS);
+    }
+
+    public void getChanceImmortality() {
+        getInteger(CHANCE_IMMORTALITY);
+    }
+
+    public void getChanceBreakingBad() {
+        getInteger(CHANCE_BREAKING_BAD);
+    }
+
+    public void getChanceWalkingOnFishnet() {
+        getInteger(CHANCE_WALKING_ON_FISHNET);
+    }
+
+    public void getChanceVisibility() {
+        getInteger(CHANCE_VISIBILITY);
+    }
+
+    public void getChanceNoSliding() {
+        getInteger(CHANCE_NO_SLIDING);
+    }
+
+    public void getHeroDiedPenalty() {
+        getInteger(HERO_DIED_PENALTY);
+    }
+
+    public void getKillOtherHeroScore() {
+        getInteger(KILL_OTHER_HERO_SCORE);
+    }
+
+    public void getKillAiScore() {
+        getInteger(KILL_AI_SCORE);
+    }
     
+    // ---------
+
     public void setAiTicksPerShoot(Integer input) {
         add(AI_TICKS_PER_SHOOT, input);
     }
@@ -71,7 +162,7 @@ public class RawelbbubGameSettings extends AbstractSettings {
         add(PENALTY_WALKING_ON_FISHNET, input);
     }
 
-    public void setShowMyHeroUnderSeaweed(Integer input) {
+    public void setShowMyHeroUnderSeaweed(Boolean input) {
         add(SHOW_MY_HERO_UNDER_SEAWEED, input);
     }
 
@@ -81,6 +172,10 @@ public class RawelbbubGameSettings extends AbstractSettings {
 
     public void setTicksStuckByFishnet(Integer input) {
         add(TICKS_STUCK_BY_FISHNET, input);
+    }
+    
+    public void setCountAis(Integer input) {
+        add(COUNT_AIS, input);
     }
 
     public void setSpawnAiPrize(Integer input) {
@@ -152,6 +247,7 @@ public class RawelbbubGameSettings extends AbstractSettings {
         update(parameters, SHOW_MY_HERO_UNDER_SEAWEED);
         update(parameters, ICEBERG_REGENERATE_TIME);
         update(parameters, TICKS_STUCK_BY_FISHNET);
+        update(parameters, COUNT_AIS);
         update(parameters, SPAWN_AI_PRIZE);
         update(parameters, KILL_HITS_AI_PRIZE);
         update(parameters, PRIZE_ON_FIELD);
