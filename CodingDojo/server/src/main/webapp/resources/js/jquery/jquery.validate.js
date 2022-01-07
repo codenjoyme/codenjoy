@@ -3,7 +3,7 @@
  * jQuery Validation Plugin - v1.10.0 - 9/7/2012
  * https://github.com/jzaefferer/jquery-validation
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2012 - 2022 Codenjoy
  * %%
  * Licensed MIT, GPL
  * #L%

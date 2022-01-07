@@ -414,7 +414,7 @@
                     <licenseResolver>${project.baseUri}/src/license</licenseResolver>
                     <organizationName>Codenjoy</organizationName>
                     <projectName>Codenjoy - it's a dojo-like platform from developers to developers.</projectName>
-                    <inceptionYear>2018</inceptionYear>
+                    <inceptionYear>2012</inceptionYear>
                     <canUpdateCopyright>false</canUpdateCopyright>
                     <canUpdateDescription>false</canUpdateDescription>
                     <canUpdateLicense>false</canUpdateLicense>

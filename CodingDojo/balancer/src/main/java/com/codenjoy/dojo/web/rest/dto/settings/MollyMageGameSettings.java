@@ -4,7 +4,7 @@ package com.codenjoy.dojo.web.rest.dto.settings;
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 - 2020 Codenjoy
+ * Copyright (C) 2012 - 2022 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -209,6 +209,8 @@ public class MollyMageGameSettings extends AbstractSettings {
     public Boolean isSemifinalShuffleBoard() {
         return getBoolean(SEMIFINAL_SHUFFLE_BOARD);
     }
+
+    // ---------
 
     public void setMultiple(Boolean input) {
         add(GAME_IS_MULTIPLE_OR_DISPOSABLE, input);

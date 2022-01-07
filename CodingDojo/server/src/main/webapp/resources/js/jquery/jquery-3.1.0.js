@@ -6,7 +6,7 @@
  * Includes Sizzle.js
  * https://sizzlejs.com/
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2012 - 2022 Codenjoy
  * %%
  * Released under the MIT license
  * https://jquery.org/license
