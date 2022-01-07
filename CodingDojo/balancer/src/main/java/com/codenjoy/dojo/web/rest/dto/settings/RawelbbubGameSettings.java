@@ -38,6 +38,7 @@ public class RawelbbubGameSettings extends AbstractSettings {
     public static final String ICEBERG_REGENERATE_TIME = "[Game] Iceberg regenerate time";
     public static final String TICKS_STUCK_BY_FISHNET = "[Game] Ticks AI gets stuck by fishnet";
     public static final String COUNT_AIS = "[Game] Count AIs on the board";
+    public static final String TURN_MODE = "[Game] Turn mode";
 
     public static final String SPAWN_AI_PRIZE = "[Prize] Count spawn for AI with prize";
     public static final String KILL_HITS_AI_PRIZE = "[Prize] Hits to kill AI with prize";
@@ -56,92 +57,96 @@ public class RawelbbubGameSettings extends AbstractSettings {
     public static final String KILL_OTHER_HERO_SCORE = "[Score] Kill other hero score";
     public static final String KILL_AI_SCORE = "[Score] Kill other AI score";
 
-    public void getAiTicksPerShoot() {
-        getInteger(AI_TICKS_PER_SHOOT);
+    public Integer getAiTicksPerShoot() {
+        return getInteger(AI_TICKS_PER_SHOOT);
     }
 
-    public void getHeroTicksPerShoot() {
-        getInteger(HERO_TICKS_PER_SHOOT);
+    public Integer getHeroTicksPerShoot() {
+        return getInteger(HERO_TICKS_PER_SHOOT);
     }
 
-    public void getOilSlipperiness() {
-        getInteger(OIL_SLIPPERINESS);
+    public Integer getOilSlipperiness() {
+        return getInteger(OIL_SLIPPERINESS);
     }
 
-    public void getPenaltyWalkingOnFishnet() {
-        getInteger(PENALTY_WALKING_ON_FISHNET);
+    public Integer getPenaltyWalkingOnFishnet() {
+        return getInteger(PENALTY_WALKING_ON_FISHNET);
     }
 
-    public void isShowMyHeroUnderSeaweed() {
-        getInteger(SHOW_MY_HERO_UNDER_SEAWEED);
+    public Boolean isShowMyHeroUnderSeaweed() {
+        return getBoolean(SHOW_MY_HERO_UNDER_SEAWEED);
     }
 
-    public void getIcebergRegenerateTime() {
-        getInteger(ICEBERG_REGENERATE_TIME);
+    public Integer getIcebergRegenerateTime() {
+        return getInteger(ICEBERG_REGENERATE_TIME);
     }
 
-    public void getTicksStuckByFishnet() {
-        getInteger(TICKS_STUCK_BY_FISHNET);
+    public Integer getTicksStuckByFishnet() {
+        return getInteger(TICKS_STUCK_BY_FISHNET);
     }
 
-    public void getCountAis() {
-        getInteger(COUNT_AIS);
+    public Integer getCountAis() {
+        return getInteger(COUNT_AIS);
     }
 
-    public void getSpawnAiPrize() {
-        getInteger(SPAWN_AI_PRIZE);
+    public Integer getTurnMode() {
+        return getInteger(TURN_MODE);
     }
 
-    public void getKillHitsAiPrize() {
-        getInteger(KILL_HITS_AI_PRIZE);
+    public Integer getSpawnAiPrize() {
+        return getInteger(SPAWN_AI_PRIZE);
     }
 
-    public void getPrizeOnField() {
-        getInteger(PRIZE_ON_FIELD);
+    public Integer getKillHitsAiPrize() {
+        return getInteger(KILL_HITS_AI_PRIZE);
     }
 
-    public void getPrizeWorking() {
-        getInteger(PRIZE_WORKING);
+    public Integer getPrizeOnField() {
+        return getInteger(PRIZE_ON_FIELD);
     }
 
-    public void getAiPrizeLimit() {
-        getInteger(AI_PRIZE_LIMIT);
+    public Integer getPrizeWorking() {
+        return getInteger(PRIZE_WORKING);
     }
 
-    public void getPrizeSpriteChangeTicks() {
-        getInteger(PRIZE_SPRITE_CHANGE_TICKS);
+    public Integer getAiPrizeLimit() {
+        return getInteger(AI_PRIZE_LIMIT);
     }
 
-    public void getChanceImmortality() {
-        getInteger(CHANCE_IMMORTALITY);
+    public Integer getPrizeSpriteChangeTicks() {
+        return getInteger(PRIZE_SPRITE_CHANGE_TICKS);
     }
 
-    public void getChanceBreakingBad() {
-        getInteger(CHANCE_BREAKING_BAD);
+    public Integer getChanceImmortality() {
+        return getInteger(CHANCE_IMMORTALITY);
     }
 
-    public void getChanceWalkingOnFishnet() {
-        getInteger(CHANCE_WALKING_ON_FISHNET);
+    public Integer getChanceBreakingBad() {
+        return getInteger(CHANCE_BREAKING_BAD);
     }
 
-    public void getChanceVisibility() {
-        getInteger(CHANCE_VISIBILITY);
+    public Integer getChanceWalkingOnFishnet() {
+        return getInteger(CHANCE_WALKING_ON_FISHNET);
     }
 
-    public void getChanceNoSliding() {
-        getInteger(CHANCE_NO_SLIDING);
+    public Integer getChanceVisibility() {
+        return getInteger(CHANCE_VISIBILITY);
     }
 
-    public void getHeroDiedPenalty() {
-        getInteger(HERO_DIED_PENALTY);
+    public Integer getChanceNoSliding() {
+        return getInteger(CHANCE_NO_SLIDING);
     }
 
-    public void getKillOtherHeroScore() {
-        getInteger(KILL_OTHER_HERO_SCORE);
+    public Integer getHeroDiedPenalty() {
+        return getInteger(HERO_DIED_PENALTY);
     }
 
-    public void getKillAiScore() {
-        getInteger(KILL_AI_SCORE);
+    public Integer getKillOtherHeroScore() {
+        return getInteger(KILL_OTHER_HERO_SCORE);
+    }
+
+    public Integer getKillAiScore() {
+        return getInteger(KILL_AI_SCORE);
     }
     
     // ---------
@@ -176,6 +181,10 @@ public class RawelbbubGameSettings extends AbstractSettings {
     
     public void setCountAis(Integer input) {
         add(COUNT_AIS, input);
+    }
+
+    public void setTurnMode(Integer input) {
+        add(TURN_MODE, input);
     }
 
     public void setSpawnAiPrize(Integer input) {
