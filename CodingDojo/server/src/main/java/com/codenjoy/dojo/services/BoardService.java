@@ -60,12 +60,12 @@ public class BoardService {
             leaderboardsCache.put(game, new TreeMap<>());
         }
         leaderboardsCache.get(game).put(playerName, (int) player.getScore());
-        leaderboardsCache.replace(game, sortPlayersByScore(game));
+        sortPlayersByScore(game);
     }
 
     public void updateLeaderboardScore(String name, String game, long score) {
         leaderboardsCache.get(game).replace(name, (int) score);
-        leaderboardsCache.replace(game, sortPlayersByScore(game));
+        sortPlayersByScore(game);
     }
 
     public Map<Integer, Map.Entry<String, Integer>> getPlayersForGame(String game) {
@@ -80,19 +80,24 @@ public class BoardService {
     }
 
 
-    private Map<String, Integer> sortPlayersByScore(String game) {
-        return leaderboardsCache.get(game).entrySet().stream()
+    private void sortPlayersByScore(String game) {
+        leaderboardsCache.replace(game, leaderboardsCache.get(game).entrySet().stream()
                 .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new)));
+//        return leaderboardsCache.get(game).entrySet().stream()
+//                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+//                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
     }
 
     private Map<Integer, Map.Entry<String, Integer>> sortPlayersByScoreAndCountThem(String game) {
         Map<Integer, Map.Entry<String, Integer>> numeratedLeaderboard = new HashMap<>();
+        sortPlayersByScore(game);
 
-        AtomicInteger counter = new AtomicInteger(1);
-        leaderboardsCache.get(game).entrySet().stream()
-                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-                .forEach(entry -> numeratedLeaderboard.put(counter.getAndIncrement(), entry));
+        int counter = 1;
+        for (Map.Entry<String,Integer> entry: leaderboardsCache.get(game).entrySet()) {
+            numeratedLeaderboard.put(counter, entry);
+            counter++;
+        }
 
         return numeratedLeaderboard;
     }

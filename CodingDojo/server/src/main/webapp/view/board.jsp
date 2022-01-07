@@ -58,6 +58,7 @@
             <div style = "flex:0 0 37%;">
                 <label style="text-align:center;"> Hello ${readableName}! <br>This is a competition for a ${game} position at EPAM. <br>
                         The people within the top 10 go forward to a technical interview. <br>
+                        <!--TODO: Change top 10 so an admin can determine how much-->
                          In order to climb the leaderboard you will have to do some tasks. <br> <br>
                           We have provided you with a
                             <a href="${repositoryURL}"> github repository </a>
