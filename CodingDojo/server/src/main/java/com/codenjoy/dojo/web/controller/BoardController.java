@@ -323,7 +323,9 @@ public class BoardController {
         List<Query> allActiveQueries = queryClient.getQueriesForContest(game);
         List<Integer> userQueryIds = player.getSubscriptionIdsForGame(game);
 
-        queryClient.subscribeToNewQueries(player, allActiveQueries, userQueryIds, game);
-        queryClient.removeOldQueries(player, allActiveQueries, userQueryIds, game);
+        if (allActiveQueries != null) {
+            queryClient.subscribeToNewQueries(player, allActiveQueries, userQueryIds, game);
+            queryClient.removeOldQueries(player, allActiveQueries, userQueryIds, game);
+        }
     }
 }

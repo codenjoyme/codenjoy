@@ -78,8 +78,14 @@ public class UserDetailsService extends UserDetailsServiceGrpc.UserDetailsServic
         String username = removeGameFromUsername(request.getUsername());
         String id = this.registration.getIdByGitHubUsername(username);
         String email = this.registration.getEmailById(id);
+        String slackEmail = this.registration.getSlackEmailById(id);
 
-        responseObserver.onNext(UserDetailsResponse.newBuilder().setId(id).setEmail(email).build());
+        if(slackEmail == null) {
+            responseObserver.onNext(UserDetailsResponse.newBuilder().setId(id).setEmail(email).build());
+        }
+        else {
+            responseObserver.onNext(UserDetailsResponse.newBuilder().setId(id).setEmail(email).setSlackEmail(slackEmail).build());
+        }
         responseObserver.onCompleted();
     }
 
