@@ -40,12 +40,12 @@ public class RawelbbubGameSettings extends AbstractSettings {
     public static final String COUNT_AIS = "[Game] Count AIs on the board";
     public static final String TURN_MODE = "[Game] Turn mode";
 
-    public static final String SPAWN_AI_PRIZE = "[Prize] Count spawn for AI with prize";
-    public static final String KILL_HITS_AI_PRIZE = "[Prize] Hits to kill AI with prize";
-    public static final String PRIZE_ON_FIELD = "[Prize] The period of prize validity on the field after the appearance";
-    public static final String PRIZE_WORKING = "[Prize] Working time of the prize after catch up";
-    public static final String AI_PRIZE_LIMIT = "[Prize] The total number of prize AI and prizes on the board";
-    public static final String PRIZE_SPRITE_CHANGE_TICKS = "[Prize] Prize sprite changes every ticks";
+    public static final String AI_PRIZE_PROBABILITY = "[Prize] Count spawn for AI with prize";
+    public static final String AI_PRIZE_SURVIVABILITY = "[Prize] Hits to kill AI with prize";
+    public static final String PRIZE_AVAILABLE_TIMEOUT = "[Prize] The period of prize validity on the field after the appearance";
+    public static final String PRIZE_EFFECT_TIMEOUT = "[Prize] Working time of the prize after catch up";
+    public static final String PRIZES_COUNT = "[Prize] The total number of prize AI and prizes on the board";
+    public static final String PRIZE_BLINK_TIMEOUT = "[Prize] Prize sprite changes every ticks";
 
     public static final String CHANCE_IMMORTALITY = "[Chance] Prize immortality";
     public static final String CHANCE_BREAKING_BAD = "[Chance] Prize breaking bad";
@@ -93,28 +93,28 @@ public class RawelbbubGameSettings extends AbstractSettings {
         return getInteger(TURN_MODE);
     }
 
-    public Integer getSpawnAiPrize() {
-        return getInteger(SPAWN_AI_PRIZE);
+    public Integer getAiPrizeProbability() {
+        return getInteger(AI_PRIZE_PROBABILITY);
     }
 
-    public Integer getKillHitsAiPrize() {
-        return getInteger(KILL_HITS_AI_PRIZE);
+    public Integer getAiPrizeSurvivability() {
+        return getInteger(AI_PRIZE_SURVIVABILITY);
     }
 
-    public Integer getPrizeOnField() {
-        return getInteger(PRIZE_ON_FIELD);
+    public Integer getPrizeAvailableTimout() {
+        return getInteger(PRIZE_AVAILABLE_TIMEOUT);
     }
 
-    public Integer getPrizeWorking() {
-        return getInteger(PRIZE_WORKING);
+    public Integer getPrizeEffectTimeout() {
+        return getInteger(PRIZE_EFFECT_TIMEOUT);
     }
 
-    public Integer getAiPrizeLimit() {
-        return getInteger(AI_PRIZE_LIMIT);
+    public Integer getPrizesCount() {
+        return getInteger(PRIZES_COUNT);
     }
 
-    public Integer getPrizeSpriteChangeTicks() {
-        return getInteger(PRIZE_SPRITE_CHANGE_TICKS);
+    public Integer getPrizeBlinkTimeout() {
+        return getInteger(PRIZE_BLINK_TIMEOUT);
     }
 
     public Integer getChanceImmortality() {
@@ -187,28 +187,28 @@ public class RawelbbubGameSettings extends AbstractSettings {
         add(TURN_MODE, input);
     }
 
-    public void setSpawnAiPrize(Integer input) {
-        add(SPAWN_AI_PRIZE, input);
+    public void setAiPrizeProbability(Integer input) {
+        add(AI_PRIZE_PROBABILITY, input);
     }
 
-    public void setKillHitsAiPrize(Integer input) {
-        add(KILL_HITS_AI_PRIZE, input);
+    public void setAiPrizeSurvivability(Integer input) {
+        add(AI_PRIZE_SURVIVABILITY, input);
     }
 
-    public void setPrizeOnField(Integer input) {
-        add(PRIZE_ON_FIELD, input);
+    public void setPrizeAvailableTimout(Integer input) {
+        add(PRIZE_AVAILABLE_TIMEOUT, input);
     }
 
-    public void setPrizeWorking(Integer input) {
-        add(PRIZE_WORKING, input);
+    public void setPrizeEffectTimeout(Integer input) {
+        add(PRIZE_EFFECT_TIMEOUT, input);
     }
 
-    public void setAiPrizeLimit(Integer input) {
-        add(AI_PRIZE_LIMIT, input);
+    public void setPrizesCount(Integer input) {
+        add(PRIZES_COUNT, input);
     }
 
-    public void setPrizeSpriteChangeTicks(Integer input) {
-        add(PRIZE_SPRITE_CHANGE_TICKS, input);
+    public void setPrizeBlinkTimeout(Integer input) {
+        add(PRIZE_BLINK_TIMEOUT, input);
     }
 
     public void setChanceImmortality(Integer input) {
@@ -257,12 +257,12 @@ public class RawelbbubGameSettings extends AbstractSettings {
         update(parameters, ICEBERG_REGENERATE_TIME);
         update(parameters, TICKS_STUCK_BY_FISHNET);
         update(parameters, COUNT_AIS);
-        update(parameters, SPAWN_AI_PRIZE);
-        update(parameters, KILL_HITS_AI_PRIZE);
-        update(parameters, PRIZE_ON_FIELD);
-        update(parameters, PRIZE_WORKING);
-        update(parameters, AI_PRIZE_LIMIT);
-        update(parameters, PRIZE_SPRITE_CHANGE_TICKS);
+        update(parameters, AI_PRIZE_PROBABILITY);
+        update(parameters, AI_PRIZE_SURVIVABILITY);
+        update(parameters, PRIZE_AVAILABLE_TIMEOUT);
+        update(parameters, PRIZE_EFFECT_TIMEOUT);
+        update(parameters, PRIZES_COUNT);
+        update(parameters, PRIZE_BLINK_TIMEOUT);
         update(parameters, CHANCE_IMMORTALITY);
         update(parameters, CHANCE_BREAKING_BAD);
         update(parameters, CHANCE_WALKING_ON_FISHNET);

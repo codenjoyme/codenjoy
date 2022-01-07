@@ -275,7 +275,7 @@ class RulesContainer extends Component {
                         герой стоятиме нерухомо на тому ж місці.
                     </p>
                     <p>
-                        Перелік доступних команд:
+                        Перелік доступних команд (классичний режим 0, вид зверху, [LEFT, RIGHT, UP, DOWN]):
                     </p>
                         <ul>
                             <li><span className='command'>Direction[UP, DOWN, LEFT, RIGHT]</span> - призводять до руху героя в заданому напрямку на 1 клітинку.</li>
@@ -286,6 +286,36 @@ class RulesContainer extends Component {
                                 <span className='command'>Direction,ACT</span>- герой рухається та робить постріл у вказанному напрямку
                             </li>
                         </ul>
+                    <p>
+                        Перелік доступних команд (режим 1, вид зверху, [UP->FORWARD, DOWN->BACKWARD, LEFT->TURN_LEFT, RIGHT->TURN_RIGHT]):
+                    </p>
+                    <ul>
+                        <li><span className='command'>Direction[RIGHT]</span> - призводить до оберту героя за годинниковою стрілкою без руху.</li>
+                        <li><span className='command'>Direction[LEFT]</span> - призводить до оберту героя проти годинникової стрілки без руху.</li>
+                        <li><span className='command'>Direction[UP]</span> - призводить до руху героя вперед на 1 клітинку.</li>
+                        <li><span className='command'>Direction[DOWN]</span> - призводить до руху героя в зворотньому напрямку на 1 клітинку без зміни орієнтації.</li>
+                        <li><span className='command'>ACT</span> - герой робить постріл торпедою стоячи на місці. </li>
+                        <li>
+                            <span className='command'>ACT,Direction </span>
+                            або
+                            <span className='command'>Direction,ACT</span>- герой рухається та робить постріл у вказанному напрямку
+                        </li>
+                    </ul>
+                    <p>
+                        Перелік доступних команд (режим 2, вид сбоку, [UP->SURFACE, DOWN->DIVE, LEFT->LEFT, RIGHT->RIGHT]):
+                    </p>
+                    <ul>
+                        <li><span className='command'>Direction[RIGHT]</span> - призводить до оберту героя за годинниковою стрілкою без руху.</li>
+                        <li><span className='command'>Direction[LEFT]</span> - призводить до оберту героя проти годинникової стрілки без руху.</li>
+                        <li><span className='command'>Direction[UP]</span> - призводить до руху героя вперед на 1 клітинку.</li>
+                        <li><span className='command'>Direction[DOWN]</span> - призводить до руху героя в зворотньому напрямку на 1 клітинку без зміни орієнтації.</li>
+                        <li><span className='command'>ACT</span> - герой робить постріл торпедою стоячи на місці. </li>
+                        <li>
+                            <span className='command'>ACT,Direction </span>
+                            або
+                            <span className='command'>Direction,ACT</span>- герой рухається та робить постріл у вказанному напрямку
+                        </li>
+                    </ul>
                     <p>
                         Ваше завдання: підключитися з клієнтської частини до ігрового сервера через веб-сокет з'єднання.
                         Спостерігайте за ігровим процесом, щоб описана вами поведінка бота приносила бажані бали.
@@ -332,7 +362,7 @@ class RulesContainer extends Component {
                             невразливість до ворожих пострілів. <br />
                             <ul class="sub_ul">
                                 <li>
-                                    Дія перку зникає через { this._gets('prizeWorking') } тіків (секунд).
+                                    Дія перку зникає через { this._gets('prizeEffectTimeout') } тіків (секунд).
                                 </li>
                             </ul>
                         </li>
@@ -341,7 +371,7 @@ class RulesContainer extends Component {
                              та рифи (окрім межі поля) з одного пострілу. <br />
                             <ul class="sub_ul">
                                 <li>
-                                    Дія перку зникає через { this._gets('prizeWorking') } тіків (секунд).
+                                    Дія перку зникає через { this._gets('prizeEffectTimeout') } тіків (секунд).
                                 </li>
                             </ul>
                         </li>
@@ -353,7 +383,7 @@ class RulesContainer extends Component {
                             тіків, доки герой не потрапить в чисті води.
                             <ul class="sub_ul">
                                 <li>
-                                    Дія перку зникає через { this._gets('prizeWorking') } тіків (секунд).
+                                    Дія перку зникає через { this._gets('prizeEffectTimeout') } тіків (секунд).
                                 </li>
                                 <li>
                                     Кількість штрафних тіків-затримки серед сіток: { this._gets('penaltyWalkingOnFishnet') }.
@@ -365,7 +395,7 @@ class RulesContainer extends Component {
                             що ховаються серед вдоростей.<br />
                             <ul class="sub_ul">
                                 <li>
-                                    Дія перку зникає через { this._gets('prizeWorking') } тіків (секунд).
+                                    Дія перку зникає через { this._gets('prizeEffectTimeout') } тіків (секунд).
                                 </li>
                             </ul>
                         </li>
@@ -375,17 +405,16 @@ class RulesContainer extends Component {
                              Після закінчення дії перку фізика руху по кризі буде така сама, ніби ви виїхали на нього вперше.
                             <ul class="sub_ul">
                                 <li>
-                                    Дія перку зникає через { this._gets('prizeWorking') } тіків (секунд).
+                                    Дія перку зникає через { this._gets('prizeEffectTimeout') } тіків (секунд).
                                 </li>
                             </ul>
                         </li>
                         <li>
-                            Призи-перки з'являтимуться на місці знищеної призової AI-субмарини, яка позначається символом
-                            <span className='command'>AI_PRIZE</span> із певною періодичністю.
+                            Призи-перки з'являтимуться на місці знищеної призової AI-субмарини.
                         </li>
                         <li>
                             Якщо перк ніхто не підібрав, він зникає з поля
-                            після { this._gets('prizeOnField') } тіків(секунд).
+                            після { this._gets('prizeAvailableTimout') } тіків(секунд).
                         </li>
                     </ul>
 
@@ -423,12 +452,14 @@ class RulesContainer extends Component {
                             <li>Бачите ви свого героя серед водоростей, чи ні: { this._gets('showMyHeroUnderSeaweed') }.</li>
                             <li>Час регенерації айсбергів після повного знищення: { this._gets('icebergRegenerateTime') }.</li>
                             <li>Кількість тіків, які AI-субмарини туплять коло риболовецьких сіток: { this._gets('ticksStuckByFishnet') }.</li>
-                            <li>Кількість одночасних AI-субмарин на полі: { this._gets('spawnAiPrize') }.</li>
-                            <li>Кількість пострілів, які потрібно зробити по призовій AI-сумарині: { this._gets('killHitsAiPrize') }.</li>
-                            <li>Час існування призу на полі: { this._gets('prizeOnField') }.</li>
-                            <li>Час впливу призу на героя: { this._gets('prizeWorking') }.</li>
-                            <li>Загальна кількість одночасних AI-субмарин та наявних призів на полі: { this._gets('aiPrizeLimit') }.</li>
-                            <li>Кількість тіків якими блимає приз спрайтом PRIZE на полі: { this._gets('prizeSpriteChangeTicks') }.</li>
+                            <li>Кількість одночасних AI-субмарин на полі: { this._gets('сountAis') }.</li>
+                            <li>Режим керування субмаринами: 0 - классичний, вид зверху, керується командами LEFT,RIGHT,UP,DOWN; 1 - вид зверху, керується командами UP(повний хід),DOWN(задній хід),LEFT/RIGHT(повернутися); 2 - вид сбоку, UP(винирнути),DOWN(заглибитися),LEFT/RIGHT(рух): { this._gets('turnMode') }.</li>
+                            <li>Кількість тіків (як часто) будуть з'являтись призові AI-субмарини: { this._gets('aiPrizeProbability') }.</li>
+                            <li>Кількість пострілів, які потрібно зробити по призовій AI-сумарині: { this._gets('aiPrizeSurvivability') }.</li>
+                            <li>Час існування призу на полі: { this._gets('prizeAvailableTimout') }.</li>
+                            <li>Час впливу призу на героя: { this._gets('prizeEffectTimeout') }.</li>
+                            <li>Загальна кількість одночасних AI-субмарин та наявних призів на полі: { this._gets('prizesCount') }.</li>
+                            <li>Кількість тіків якими блимає приз спрайтом PRIZE на полі: { this._gets('prizeBlinkTimeout') }.</li>
                             <li>Вірогідність отримання призу PRIZE_IMMORTALITY: { this._gets('chanceImmortality') }.</li>
                             <li>Вірогідність отримання призу PRIZE_BREAKING_BAD: { this._gets('chanceBreakingBad') }.</li>
                             <li>Вірогідність отримання призу PRIZE_WALKING_ON_FISHNET: { this._gets('chanceWalkingOnFishnet') }.</li>
