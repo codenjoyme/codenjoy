@@ -22,9 +22,16 @@
 # #L%
 ###
 
+BLUE=94
+GRAY=89
+
 eval_echo() {
     command=$1
-    color=94 # blue
+    if [[ "$2" == "" ]]; then
+        color=$BLUE
+    else
+        color=$2
+    fi
     echo "[${color}m$command[0m"
     echo
     eval $command

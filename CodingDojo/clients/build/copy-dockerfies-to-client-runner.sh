@@ -22,9 +22,16 @@
 # #L%
 ###
 
+BLUE=94
+GRAY=89
+
 eval_echo() {
     command=$1
-    color=94 # blue
+    if [[ "$2" == "" ]]; then
+        color=$BLUE
+    else
+        color=$2
+    fi
     echo "[${color}m$command[0m"
     echo
     eval $command
@@ -42,7 +49,7 @@ copy_dockerfiles() {
     if [[ "$from_lng" == "java-script" ]]; then
         to_lng=javascript
     fi
-    eval_echo "cp ../$from_lng/Dockerfile $to_dir/$to_lng/"
+    eval_echo "cp ../$from_lng/Dockerfile $to_dir/$to_lng/" $GRAY
 }
 
 eval_echo "copy_dockerfiles 'csharp'"
