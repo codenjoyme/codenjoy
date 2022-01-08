@@ -28,7 +28,7 @@ import com.codenjoy.dojo.football.model.Field;
 import com.codenjoy.dojo.football.model.Player;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.services.printer.state.State;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import org.apache.commons.lang3.StringUtils;
 

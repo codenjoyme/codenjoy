@@ -24,6 +24,7 @@ package com.codenjoy.dojo.puzzlebox.model;
 
 import com.codenjoy.dojo.games.puzzlebox.Element;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.printer.state.State;
 
 public class Box extends PointImpl implements Joystick, Tickable, State<Element, Player> {
 

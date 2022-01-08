@@ -231,7 +231,7 @@ export default [
 	{
 		image: other_hero_up,
 		title: `OTHER_HERO_UP('˄')`,
-		description: `Ворожий танк. Скерована догори`,
+		description: `Ворожа субмарина. Скерована догори`,
 	},
 	{
 		image: other_hero_right,
@@ -257,6 +257,36 @@ export default [
         image: other_hero_side_right,
         title: `OTHER_HERO_SIDE_RIGHT('O')`,
         description: `Ворожа субмарина (вигляд збоку). Скерована вправо`,
+    },
+	{
+		image: enemy_hero_up,
+		title: `ENEMY_HERO_UP('Ô')`,
+		description: `Ворожа субмарина із іншої команди. Скерована догори`,
+	},
+	{
+		image: enemy_hero_right,
+		title: `ENEMY_HERO_RIGHT('£')`,
+		description: `Ворожа субмарина із іншої команди. Скерована вправо`,
+	},
+	{
+		image: enemy_hero_down,
+		title: `ENEMY_HERO_DOWN('Ç')`,
+		description: `Ворожа субмарина із іншої команди. Скерована додолу`,
+	},
+	{
+		image: enemy_hero_left,
+		title: `ENEMY_HERO_LEFT('Ð')`,
+		description: `Ворожа субмарина із іншої команди. Скерована вліво`,
+	},
+	{
+		image: enemy_hero_side_left,
+		title: `ENEMY_HERO_SIDE_LEFT('e')`,
+		description: `Ворожа субмарина із іншої команди (вигляд збоку). Скерована вліво`,
+	},
+    {
+        image: enemy_hero_side_right,
+        title: `ENEMY_HERO_SIDE_RIGHT('E')`,
+        description: `Ворожа субмарина із іншої команди (вигляд збоку). Скерована вправо`,
     },
 	{
 		image: ai_up,

@@ -25,6 +25,7 @@ package com.codenjoy.dojo.startandjump.model;
 
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import com.codenjoy.dojo.games.startandjump.Element;
+import com.codenjoy.dojo.services.printer.state.State;
 import com.codenjoy.dojo.startandjump.services.HeroStatus;
 import com.codenjoy.dojo.services.*;
 
