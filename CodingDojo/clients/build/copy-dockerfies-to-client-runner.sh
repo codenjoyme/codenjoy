@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+  #!/usr/bin/env bash
 
 ###
 # #%L
@@ -30,6 +30,11 @@ eval_echo() {
     eval $command
 }
 
+color() {
+    message=$1
+    echo "[93m$message[0m"
+}
+
 copy_dockerfiles() {
     from_lng=$1
     to_lng=$1
@@ -51,5 +56,6 @@ eval_echo "copy_dockerfiles 'python'"
 eval_echo "copy_dockerfiles 'ruby'"
 eval_echo "copy_dockerfiles 'scala'"
 
-echo Press Enter to continue
+echo
+color "Press Enter to continue"
 read

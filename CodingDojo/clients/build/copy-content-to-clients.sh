@@ -30,6 +30,11 @@ eval_echo() {
     eval $command
 }
 
+color() {
+    message=$1
+    echo "[93m$message[0m"
+}
+
 install_all() {
    from=content/$1
    to=$2
@@ -60,5 +65,6 @@ eval_echo "install_all 'run.sh' 'build/run.sh'"
 # eval_echo "install_all '.env' '.env'"
 eval_echo "install_jvm 'jvm_stuff.bat' 'build/stuff.bat'"
 
-echo Press Enter to continue
+echo
+color "Press Enter to continue"
 read

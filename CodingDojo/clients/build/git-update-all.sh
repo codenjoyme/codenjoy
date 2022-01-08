@@ -30,11 +30,17 @@ eval_echo() {
     eval $command
 }
 
+color() {
+    message=$1
+    echo "[93m$message[0m"
+}
+
 eval_echo "cd .."
 eval_echo "git submodule foreach git pull origin master"
 eval_echo "git add ."
 eval_echo "git commit -m'New release'"
 eval_echo "git push origin master"
 
-echo Press any key to continue
+echo
+color "Press Enter to continue"
 read
