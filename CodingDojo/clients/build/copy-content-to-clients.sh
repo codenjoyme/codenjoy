@@ -24,22 +24,20 @@
 
 BLUE=94
 GRAY=89
-
-eval_echo() {
-    command=$1
-    if [[ "$2" == "" ]]; then
-        color=$BLUE
-    else
-        color=$2
-    fi
-    echo "[${color}m$command[0m"
-    echo
-    eval $command
-}
+YELLOW=93
 
 color() {
     message=$1
-    echo "[93m$message[0m"
+    [[ "$2" == "" ]] && color=$YELLOW || color=$2
+    echo "[${color}m${message}[0m"
+}
+
+eval_echo() {
+    command=$1
+    [[ "$2" == "" ]] && color=$BLUE || color=$2
+    color "${command}" $color
+    echo
+    eval $command
 }
 
 install_all() {
