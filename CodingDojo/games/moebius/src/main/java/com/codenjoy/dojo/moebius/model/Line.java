@@ -27,7 +27,7 @@ import com.codenjoy.dojo.games.moebius.Element;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.services.printer.state.State;
 
 public class Line extends PointImpl implements State<Element, Player> {
     enum Type {

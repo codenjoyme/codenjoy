@@ -25,6 +25,7 @@ package com.codenjoy.dojo.startandjump.model;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.games.startandjump.Element;
+import com.codenjoy.dojo.services.printer.state.State;
 
 public class Platform extends PointImpl implements Tickable, State<Element, Player> {
 

@@ -24,6 +24,7 @@ package com.codenjoy.dojo.spacerace.model;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.games.spacerace.Element;
+import com.codenjoy.dojo.services.printer.state.State;
 
 /**
  * Артефакт Бомба на поле

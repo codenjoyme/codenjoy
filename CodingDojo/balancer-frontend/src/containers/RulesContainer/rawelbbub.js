@@ -467,6 +467,7 @@ class RulesContainer extends Component {
                             <li>Вірогідність отримання призу PRIZE_NO_SLIDING: { this._gets('chanceNoSliding') }.</li>
                             <li>Штрафні бали, коли гине ваш герой: { this._gets('heroDiedPenalty') }.</li>
                             <li>Бали, які ви заробляєтете, знищуючи інших ботів: { this._gets('killOtherHeroScore') }.</li>
+                            <li>Бали, які ви заробляєтете, знищуючи інших ботів з чужої команди: { this._gets('killEnemyHeroScore') }.</li>
                             <li>Бали за знищення AI-ботів: { this._gets('killAiScore') }.</li>
                             <li>Отримати ці данні в форматі xml можа за посиланням:
                                 <a href={ settingsLink } rel='noopener noreferrer' target='_blank'>

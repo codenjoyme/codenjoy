@@ -26,7 +26,7 @@ package com.codenjoy.dojo.quake2d.model;
 import com.codenjoy.dojo.games.quake2d.Element;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.services.printer.state.State;
 import com.codenjoy.dojo.services.Tickable;
 
 public class Bullet extends PointImpl implements Tickable, State<Element, Player> {

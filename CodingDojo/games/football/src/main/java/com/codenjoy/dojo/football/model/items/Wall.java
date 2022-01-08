@@ -26,7 +26,7 @@ import com.codenjoy.dojo.games.football.Element;
 import com.codenjoy.dojo.football.model.Player;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.services.printer.state.State;
 
 public class Wall extends PointImpl implements State<Element, Player> {
 

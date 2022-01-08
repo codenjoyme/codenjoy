@@ -27,6 +27,7 @@ import com.codenjoy.dojo.games.hex.Element;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.joystick.NoActJoystick;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
+import com.codenjoy.dojo.services.printer.state.State;
 
 public class Hero extends PlayerHero<Field> implements State<Element, Player>, NoActJoystick {
 

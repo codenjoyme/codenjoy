@@ -26,7 +26,7 @@ package com.codenjoy.dojo.a2048.model;
 import com.codenjoy.dojo.games.a2048.Element;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.services.printer.state.State;
 
 public class Number extends PointImpl implements State<Element, Player> {
 
