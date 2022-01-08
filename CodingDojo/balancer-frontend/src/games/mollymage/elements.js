@@ -4,11 +4,10 @@ import React from 'react';
 // proj
 // import potion from './images/sprite/potion.png';
 import potion_blast_radius_increase from './images/sprite/potion_blast_radius_increase.png';
-import potion_hero from './images/sprite/potion_hero.png';
+import hero_potion from './images/sprite/hero_potion.png';
 import potion_count_increase from './images/sprite/potion_count_increase.png';
 import potion_immune from './images/sprite/potion_immune.png';
 import potion_remote_control from './images/sprite/potion_remote_control.png';
-// import potion_timer_0 from './images/sprite/potion_timer_0.png';
 import potion_timer_1 from './images/sprite/potion_timer_1.png';
 import potion_timer_2 from './images/sprite/potion_timer_2.png';
 import potion_timer_3 from './images/sprite/potion_timer_3.png';
@@ -16,16 +15,18 @@ import potion_timer_4 from './images/sprite/potion_timer_4.png';
 import potion_timer_5 from './images/sprite/potion_timer_5.png';
 import hero from './images/sprite/hero.png';
 import blast from './images/sprite/blast.png';
-import dead_hero from './images/sprite/dead_hero.png';
-import dead_ghost from './images/sprite/dead_ghost.png';
+import hero_dead from './images/sprite/hero_dead.png';
+import ghost_dead from './images/sprite/ghost_dead.png';
 import treasure_box from './images/sprite/treasure_box.png';
-import opening_treasure_box from './images/sprite/opening_treasure_box.png';
+import treasure_box_opening from './images/sprite/treasure_box_opening.png';
 import ghost from './images/sprite/ghost.png';
 import none from './images/sprite/none.png';
-import other_potion_hero from './images/sprite/other_potion_hero.png';
+import other_hero_potion from './images/sprite/other_hero_potion.png';
 import other_hero from './images/sprite/other_hero.png';
-import other_dead_hero from './images/sprite/other_dead_hero.png';
+import other_hero_dead from './images/sprite/other_hero_dead.png';
 import enemy_hero from './images/sprite/enemy_hero.png';
+import enemy_hero_potion from './images/sprite/enemy_hero_potion.png';
+import enemy_hero_dead from './images/sprite/enemy_hero_dead.png';
 import wall from './images/sprite/wall.png';
 
 //own
@@ -37,13 +38,13 @@ export default [
         description: `Ваша Моллі.`,
     },
     {
-        image:       potion_hero,
-        title:       `POTION_HERO ('☻')`,
+        image:       hero_potion,
+        title:       `HERO_POTION ('☻')`,
         description: `Ваша Моллі, якщо вона сидить на зіллі що має вибухнути.`,
     },
     {
-        image:       dead_hero,
-        title:       `DEAD_HERO ('Ѡ')`,
+        image:       hero_dead,
+        title:       `HERO_DEAD ('Ѡ')`,
         description: `Йойкс! Ваша Моллі померла. Нехвилюйтеся, вона з'явиться
 десь на полі із новим Раудндом ви зможете нею керувати, але цілком ймовірно за
 це ви отримаєте штрафні бали.`,
@@ -54,13 +55,13 @@ export default [
         description: `Моллі супротивника.`,
     },
     {
-        image:       other_potion_hero,
-        title:       `OTHER_POTION_HERO ('♠')`,
+        image:       other_hero_potion,
+        title:       `OTHER_HERO_POTION ('♠')`,
         description: `Моллі супротивника, яка сидить на зіллі що має вибухнути.`
     },
     {
-        image:       other_dead_hero,
-        title:       `OTHER_DEAD_HERO ('♣')`,
+        image:       other_hero_dead,
+        title:       `OTHER_HERO_DEAD ('♣')`,
         description: `Так виглядає мертва Моллі супротивника.
 Якщо це ви її підірвали - ви отримаєте бонусні бали.`
     },
@@ -70,13 +71,13 @@ export default [
         description: `Моллі ворога.`,
     },
     {
-        image:       other_potion_hero,
-        title:       `ENEMY_POTION_HERO ('Ö')`,
+        image:       enemy_hero_potion,
+        title:       `ENEMY_HERO_POTION ('Ö')`,
         description: `Моллі ворога, яка сидить на зіллі що має вибухнути.`
     },
     {
-        image:       other_dead_hero,
-        title:       `ENEMY_DEAD_HERO ('ø')`,
+        image:       enemy_hero_dead,
+        title:       `ENEMY_HERO_DEAD ('ø')`,
         description: `Так виглядає мертва Моллі ворога.
 Якщо це ви її підірвали - ви отримаєте бонусні бали.`
     },
@@ -85,7 +86,7 @@ export default [
         title:       `POTION_TIMER_5 ('5')`,
         description: `Після того як Моллі зварить зілля таймер
 почне працювати (всього 5 тіків/секунд). Скоріше за все ви не побачите
-не цей символ, а POTION_HERO('☻'), але пам'ятайте - 5 секунд і вибух.
+не цей символ, а HERO_POTION('☻'), але пам'ятайте - 5 секунд і вибух.
 Тре тікати швидко.`
     },
     {
@@ -127,8 +128,8 @@ export default [
 Часом всередині можна щось знайти.`
     },
     {
-        image:       opening_treasure_box,
-        title:       `OPENING_TREASURE_BOX ('H')`,
+        image:       treasure_box_opening,
+        title:       `TREASURE_BOX_OPENING ('H')`,
         description: `Ця скринька відчиняється, вона пропаде
 в наступну секунду, а на її місці можно знайти щось корисне.
 Якщо це ви зробили - отримаєте бонусні бали.`
@@ -141,8 +142,8 @@ export default [
 його, за це ви отримаєте бонусні бали. Інакше тікайте!`
     },
     {
-        image:       dead_ghost,
-        title:       `DEAD_GHOST ('x')`,
+        image:       ghost_dead,
+        title:       `GHOST_DEAD ('x')`,
         description: `Це привид, якого вбили. Так-так в нас це можливо.
 Якщо це ви зробили - отримаєте бонусні бали.`
     },
