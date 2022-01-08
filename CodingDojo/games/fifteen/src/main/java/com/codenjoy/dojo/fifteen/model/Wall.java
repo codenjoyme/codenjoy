@@ -25,7 +25,7 @@ package com.codenjoy.dojo.fifteen.model;
 import com.codenjoy.dojo.games.fifteen.Element;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.services.printer.state.State;
 
 /**
  * Артефакт Стена на поле

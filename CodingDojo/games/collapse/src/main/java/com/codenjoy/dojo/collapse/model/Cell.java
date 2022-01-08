@@ -26,7 +26,7 @@ package com.codenjoy.dojo.collapse.model;
 import com.codenjoy.dojo.games.collapse.Element;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.services.printer.state.State;
 
 public class Cell extends PointImpl implements State<Element, Player> {
     private int number;

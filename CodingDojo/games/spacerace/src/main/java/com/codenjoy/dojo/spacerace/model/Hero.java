@@ -25,6 +25,7 @@ package com.codenjoy.dojo.spacerace.model;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import com.codenjoy.dojo.games.spacerace.Element;
+import com.codenjoy.dojo.services.printer.state.State;
 
 public class Hero extends PlayerHero<Field> implements State<Element, Player> {
 

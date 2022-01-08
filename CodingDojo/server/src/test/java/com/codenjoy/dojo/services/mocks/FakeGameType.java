@@ -36,6 +36,7 @@ import com.codenjoy.dojo.services.printer.CharElement;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsReader;
+import com.codenjoy.dojo.services.printer.state.State;
 import lombok.Getter;
 import lombok.Setter;
 import org.mockito.Mockito;

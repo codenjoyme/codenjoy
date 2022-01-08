@@ -25,7 +25,7 @@ package com.codenjoy.dojo.expansion.model.levels;
 
 import com.codenjoy.dojo.games.expansion.Element;
 import com.codenjoy.dojo.expansion.model.Player;
-import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.services.printer.state.State;
 import com.codenjoy.dojo.expansion.model.levels.items.FeatureItem;
 
 import java.util.List;

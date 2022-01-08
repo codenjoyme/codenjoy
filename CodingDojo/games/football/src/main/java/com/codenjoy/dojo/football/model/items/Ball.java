@@ -28,7 +28,7 @@ import com.codenjoy.dojo.football.model.Player;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.services.printer.state.State;
 import com.codenjoy.dojo.services.Tickable;
 
 public class Ball extends PointImpl implements State<Element, Player>, Tickable {
