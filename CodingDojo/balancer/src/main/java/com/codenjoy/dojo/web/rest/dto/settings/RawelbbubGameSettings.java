@@ -55,6 +55,7 @@ public class RawelbbubGameSettings extends AbstractSettings {
 
     public static final String HERO_DIED_PENALTY = "[Score] Kill your hero penalty";
     public static final String KILL_OTHER_HERO_SCORE = "[Score] Kill other hero score";
+    public static final String KILL_ENEMY_HERO_SCORE = "[Score] Kill enemy hero score";
     public static final String KILL_AI_SCORE = "[Score] Kill other AI score";
 
     public Integer getAiTicksPerShoot() {
@@ -143,6 +144,10 @@ public class RawelbbubGameSettings extends AbstractSettings {
 
     public Integer getKillOtherHeroScore() {
         return getInteger(KILL_OTHER_HERO_SCORE);
+    }
+
+    public Integer getKillEnemyHeroScore() {
+        return getInteger(KILL_ENEMY_HERO_SCORE);
     }
 
     public Integer getKillAiScore() {
@@ -239,6 +244,10 @@ public class RawelbbubGameSettings extends AbstractSettings {
         add(KILL_OTHER_HERO_SCORE, input);
     }
 
+    public void setKillEnemyHeroScore(Integer input) {
+        add(KILL_ENEMY_HERO_SCORE, input);
+    }
+
     public void setKillAiScore(Integer input) {
         add(KILL_AI_SCORE, input);
     }
@@ -270,6 +279,7 @@ public class RawelbbubGameSettings extends AbstractSettings {
         update(parameters, CHANCE_NO_SLIDING);
         update(parameters, HERO_DIED_PENALTY);
         update(parameters, KILL_OTHER_HERO_SCORE);
+        update(parameters, KILL_ENEMY_HERO_SCORE);
         update(parameters, KILL_AI_SCORE);
     }
 }
