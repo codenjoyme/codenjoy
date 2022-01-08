@@ -35,6 +35,9 @@ color() {
     echo "[93m$message[0m"
 }
 
+eval_echo "`ssh-agent -s`"
+eval_echo "ssh-add ~/.ssh/*_rsa"
+
 eval_echo "cd .."
 eval_echo "git submodule foreach git pull origin master"
 eval_echo "git add ."
