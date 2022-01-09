@@ -22,17 +22,22 @@
 # #L%
 ###
 
-eval_echo() {
-    command=$1
-    color=94 # blue
-    echo "[${color}m$command[0m"
-    echo
-    eval $command
-}
+BLUE=94
+GRAY=89
+YELLOW=93
 
 color() {
     message=$1
-    echo "[93m$message[0m"
+    [[ "$2" == "" ]] && color=$YELLOW || color=$2
+    echo "[${color}m${message}[0m"
+}
+
+eval_echo() {
+    command=$1
+    [[ "$2" == "" ]] && color=$BLUE || color=$2
+    color "${command}" $color
+    echo
+    eval $command
 }
 
 check_machine() {
@@ -77,17 +82,22 @@ create_run_script() {
     cat << EOF > $OUT/run-local-server.sh
 #!/usr/bin/env bash
 
-eval_echo() {
-    command=\$1
-    color=94 # blue
-    echo "[\${color}m\$command[0m"
-    echo
-    eval \$command
-}
+BLUE=94
+GRAY=89
+YELLOW=93
 
 color() {
     message=\$1
-    echo "[93m\$message[0m"
+    [[ "\$2" == "" ]] && color=\$YELLOW || color=\$2
+    echo "[\${color}m\${message}[0m"
+}
+
+eval_echo() {
+    command=\$1
+    [[ "\$2" == "" ]] && color=\$BLUE || color=\$2
+    color "\${command}" \$color
+    echo
+    eval \$command
 }
 
 read_env() {
@@ -108,7 +118,8 @@ read
 EOF
 }
 
-echo Please enter game name
+echo
+color "Please enter game name"
 read GAME
 
 eval_echo "ROOT=$(pwd)/.."
@@ -121,9 +132,9 @@ eval_echo "OUT=$(pwd)/out"
 if [[ ! -d "$GAME_ROOT" ]]; then
     color "Game $GAME does not exists!"
 else
-    # eval_echo "$MVNW -f $JAVA_CLIENT_ROOT/pom.xml clean install -DskipTests=true"
-    # eval_echo "$MVNW -f $ENGINE_ROOT/pom.xml clean install -DskipTests=true"
-    # eval_echo "$MVNW -f $GAME_ROOT/pom.xml clean compile assembly:single -DskipTests=true -DgitDir=$ROOT -Pjar-local"
+    eval_echo "$MVNW -f $JAVA_CLIENT_ROOT/pom.xml clean install -DskipTests=true"
+    eval_echo "$MVNW -f $ENGINE_ROOT/pom.xml clean install -DskipTests=true"
+    eval_echo "$MVNW -f $GAME_ROOT/pom.xml clean compile assembly:single -DskipTests=true -DgitDir=$ROOT -Pjar-local"
     eval_echo "mkdir $OUT"
     eval_echo "SOURCE=$GAME_ROOT/target/$GAME-engine.jar"
     eval_echo "DEST=$OUT/$GAME-engine.jar"
@@ -134,6 +145,6 @@ else
     color "Update '.env' file then run 'run-local-server.sh'"
 fi
 
-echo Press Enter to continue
+echo
+color "Press Enter to continue"
 read
-}

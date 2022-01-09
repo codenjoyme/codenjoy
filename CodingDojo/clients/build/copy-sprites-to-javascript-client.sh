@@ -40,15 +40,22 @@ eval_echo() {
     eval $command
 }
 
-eval_echo "cd .."
+copy_from_game() {
+   game=$1
+   from=$ROOT/../games/$game/src/main/webapp/resources/$game/sprite
+   to=$ROOT/java-script/games/$game/sprites
+   eval_echo "rm -rf $to" $GRAY
+   eval_echo "mkdir $to" $GRAY
+   eval_echo "cp $from/*.* $to" $GRAY
+}
 
-eval_echo "`ssh-agent -s`"
-eval_echo "ssh-add ~/.ssh/*_rsa"
+eval_echo "ROOT=$(pwd)/.."
+eval_echo "copy_from_game 'clifford'"
+eval_echo "copy_from_game 'mollymage'"
+eval_echo "copy_from_game 'sample'"
+eval_echo "copy_from_game 'verland'"
+eval_echo "copy_from_game 'rawelbbub'"
 
-eval_echo "BRANCH=$(git rev-parse --abbrev-ref HEAD)"
-eval_echo "git pull origin develop"
-eval_echo "git pull origin $BRANCH"
-eval_echo "git submodule foreach git pull origin master"
-
+echo
 color "Press Enter to continue"
 read

@@ -22,42 +22,47 @@
 # #L%
 ###
 
-eval_echo() {
-    command=$1
-    color=94 # blue
-    echo "[${color}m$command[0m"
-    echo
-    eval $command
-}
+BLUE=94
+GRAY=89
+YELLOW=93
 
 color() {
     message=$1
-    echo "[93m$message[0m"
+    [[ "$2" == "" ]] && color=$YELLOW || color=$2
+    echo "[${color}m${message}[0m"
+}
+
+eval_echo() {
+    command=$1
+    [[ "$2" == "" ]] && color=$BLUE || color=$2
+    color "${command}" $color
+    echo
+    eval $command
 }
 
 install_all() {
    from=content/$1
    to=$2
-   eval_echo "cp $from ../cpp/$to"
-   eval_echo "cp $from ../csharp/$to"
-   eval_echo "cp $from ../go/$to"
-   eval_echo "cp $from ../java/$to"
-   eval_echo "cp $from ../java-script/$to"
-   eval_echo "cp $from ../kotlin/$to"
-   eval_echo "cp $from ../php/$to"
-   eval_echo "cp $from ../pseudo/$to"
-   eval_echo "cp $from ../python/$to"
-   eval_echo "cp $from ../ruby/$to"
-   eval_echo "cp $from ../scala/$to"
+   eval_echo "cp $from ../cpp/$to" $GRAY
+   eval_echo "cp $from ../csharp/$to" $GRAY
+   eval_echo "cp $from ../go/$to" $GRAY
+   eval_echo "cp $from ../java/$to" $GRAY
+   eval_echo "cp $from ../java-script/$to" $GRAY
+   eval_echo "cp $from ../kotlin/$to" $GRAY
+   eval_echo "cp $from ../php/$to" $GRAY
+   eval_echo "cp $from ../pseudo/$to" $GRAY
+   eval_echo "cp $from ../python/$to" $GRAY
+   eval_echo "cp $from ../ruby/$to" $GRAY
+   eval_echo "cp $from ../scala/$to" $GRAY
 }
 
 install_jvm() {
    from=content/$1
    to=$2
-   eval_echo "cp $from ../java/$to"
-   eval_echo "cp $from ../kotlin/$to"
-   eval_echo "cp $from ../pseudo/$to"
-   eval_echo "cp $from ../scala/$to"
+   eval_echo "cp $from ../java/$to" $GRAY
+   eval_echo "cp $from ../kotlin/$to" $GRAY
+   eval_echo "cp $from ../pseudo/$to" $GRAY
+   eval_echo "cp $from ../scala/$to" $GRAY
 }
 
 eval_echo "install_all 'run.bat' 'build/run.bat'"
