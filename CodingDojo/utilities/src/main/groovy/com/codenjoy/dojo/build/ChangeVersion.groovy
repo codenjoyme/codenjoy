@@ -76,6 +76,8 @@ def files = dirs3.collect {
 } + dirs3.collect {
     new File("$it/README.md")
 }
+files << new File("${base}build/change-version.sh")
+
 files << new File("${base}games/engine/build/setup.bat")
 files << new File("${base}games/engine/build/setup.sh")
 

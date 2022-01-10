@@ -62,7 +62,13 @@ parameter_prefix() {
 }
 
 eval_echo "from=1.1.1"
-eval_echo "to=1.1.1"
+
+color "Please enter new version for '$from'"
+read to
+
+if [[ "$to" == "" ]]; then
+    eval_echo "to=$from"
+fi
 
 eval_echo "ROOT=$(pwd)/.."
 
