@@ -22,6 +22,7 @@ package com.codenjoy.dojo.build
  * #L%
  */
 
+import java.nio.charset.Charset
 
 def fromVersion = properties['replace.from']
 def toVersion = properties['replace.to']
@@ -98,5 +99,10 @@ files.each {
     if (!it.exists()) return
     println "Processing file: " + it.canonicalPath
 
-    it.text = it.text.replace(fromVersion, toVersion)
+    def content = it.text.replace(fromVersion, toVersion)
+
+    new FileWriter(it, Charset.forName("UTF-8"), false).with {
+        write(content)
+        flush()
+    }
 }
