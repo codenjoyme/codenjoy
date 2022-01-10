@@ -40,21 +40,41 @@ eval_echo() {
     eval $command
 }
 
-copy_from_game() {
+copy_to() {
    game=$1
-   from=$ROOT/../games/$game/src/main/webapp/resources/$game/sprite
-   to=$ROOT/java-script/games/$game/sprites
+   mode=$3
+   from=$ROOT/games/$game/src/main/webapp/resources/$game/sprite/$3
+   to=$2
    eval_echo "rm -rf $to" $GRAY
    eval_echo "mkdir $to" $GRAY
    eval_echo "cp $from/*.* $to" $GRAY
 }
 
-eval_echo "ROOT=$(pwd)/.."
-eval_echo "copy_from_game 'clifford'"
-eval_echo "copy_from_game 'mollymage'"
-eval_echo "copy_from_game 'sample'"
-eval_echo "copy_from_game 'verland'"
-eval_echo "copy_from_game 'rawelbbub'"
+copy_to_javascript_client() {
+   game=$1
+   mode=$2
+   to=$ROOT/clients/java-script/games/$game/sprites
+   copy_to "$game" "$to"
+}
+
+copy_to_balancer() {
+   game=$1
+   mode=$2
+   to=$ROOT/balancer-frontend/src/games/$game/images/sprite
+   copy_to "$game" "$to" "$mode"
+}
+
+eval_echo "ROOT=$(pwd)/../.."
+
+eval_echo "copy_to_javascript_client 'clifford'"
+eval_echo "copy_to_javascript_client 'mollymage'"
+eval_echo "copy_to_javascript_client 'sample'"
+eval_echo "copy_to_javascript_client 'verland'"
+eval_echo "copy_to_javascript_client 'rawelbbub'"
+
+eval_echo "copy_to_balancer 'rawelbbub'"
+eval_echo "copy_to_balancer 'mollymage'"
+eval_echo "copy_to_balancer 'icancode' 'robot'"
 
 echo
 color "Press Enter to continue"
