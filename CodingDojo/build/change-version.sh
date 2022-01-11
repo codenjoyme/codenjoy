@@ -61,7 +61,7 @@ parameter_prefix() {
     fi
 }
 
-eval_echo "from=1.1.2"
+eval_echo "from=1.1.3"
 
 color "Please enter new version for '$from'"
 read to
