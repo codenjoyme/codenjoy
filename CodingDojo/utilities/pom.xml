@@ -17,7 +17,50 @@
         <json.version>20180813</json.version> <!-- do not update -->
 
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+        <maven-gmaven-plugin.version>1.0</maven-gmaven-plugin.version>
+        <maven-gmavenplus-plugin.version>1.13.1</maven-gmavenplus-plugin.version>
     </properties>
+
+    <profiles>
+        <profile>
+            <id>change-version</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.gmavenplus</groupId>
+                        <artifactId>gmavenplus-plugin</artifactId>
+                        <version>${maven-gmavenplus-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>execute</goal>
+                                </goals>
+                                <configuration>
+                                    <bindPropertiesToSeparateVariables>false</bindPropertiesToSeparateVariables>
+                                    <properties>
+                                        <property>
+                                            <name>replace.from</name>
+                                            <value>${replace.from}</value>
+                                        </property>
+                                        <property>
+                                            <name>replace.to</name>
+                                            <value>${replace.to}</value>
+                                        </property>
+                                    </properties>
+                                    <scripts>
+                                        <script>
+                                            ${project.basedir}/src/main/groovy/com/codenjoy/dojo/build/ChangeVersion.groovy
+                                        </script>
+                                    </scripts>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
     <dependencies>
         <dependency>
