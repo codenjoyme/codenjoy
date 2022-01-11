@@ -93,5 +93,6 @@ fi
 
 eval_echo "show_branch_on_git"
 
+echo
 color "Press Enter to continue"
 read

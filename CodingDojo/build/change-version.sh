@@ -78,5 +78,6 @@ eval_echo "../mvnw -f ./pom.xml clean compile -Pchange-version ${preffix}replace
 
 eval_echo "cd $ROOT"
 
+echo
 color "Press Enter to continue"
 read
