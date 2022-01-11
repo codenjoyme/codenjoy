@@ -23,6 +23,7 @@ package com.codenjoy.dojo.build
  */
 
 import java.nio.charset.Charset
+import java.nio.charset.StandardCharsets
 
 def fromVersion = properties['replace.from']
 def toVersion = properties['replace.to']
@@ -71,7 +72,7 @@ def dirs3 = dirs2.findAll {
 }
 
 // collect all pom.xml and README.md files
-def files = dirs3.collect {
+List<File> files = dirs3.collect {
     new File("$it/pom.xml")
 } + dirs3.collect {
     new File("$it/README.md")
@@ -101,9 +102,10 @@ files.each {
     if (!it.exists()) return
     println "Processing file: " + it.canonicalPath
 
-    def content = it.text.replace(fromVersion, toVersion)
+    Charset charset = StandardCharsets.UTF_8
+    def content = it.getText(charset.name()).replace(fromVersion, toVersion)
 
-    new FileWriter(it, Charset.forName("UTF-8"), false).with {
+    new FileWriter(it, charset, false).with {
         write(content)
         flush()
     }
