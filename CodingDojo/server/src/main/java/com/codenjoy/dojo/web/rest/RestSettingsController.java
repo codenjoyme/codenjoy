@@ -23,7 +23,6 @@ package com.codenjoy.dojo.web.rest;
  */
 
 
-import com.codenjoy.dojo.client.Encoding;
 import com.codenjoy.dojo.services.Deal;
 import com.codenjoy.dojo.services.Deals;
 import com.codenjoy.dojo.services.GameService;
@@ -33,6 +32,7 @@ import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.security.GameAuthoritiesConstants;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
+import com.codenjoy.dojo.utils.LevelUtils;
 import com.codenjoy.dojo.web.controller.Validator;
 import com.codenjoy.dojo.web.rest.pojo.PParameters;
 import lombok.AllArgsConstructor;
@@ -43,6 +43,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
@@ -164,6 +165,6 @@ public class RestSettingsController {
             value = value.substring(1, value.length() - 1);
         }
 
-        return URLDecoder.decode(Encoding.replaceN(value), Encoding.UTF8);
+        return URLDecoder.decode(LevelUtils.replaceN(value), StandardCharsets.UTF_8);
     }
 }
