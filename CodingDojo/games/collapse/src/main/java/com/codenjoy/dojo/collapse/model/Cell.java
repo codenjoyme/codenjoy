@@ -29,30 +29,35 @@ import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.printer.state.State;
 
 public class Cell extends PointImpl implements State<Element, Player> {
-    private int number;
 
-    public Cell(Point point, int number) {
+    private Element element;
+
+    public Cell(Point point, Element element) {
         super(point);
-        this.number = number;
+        this.element = element;
     }
 
     public int getNumber() {
-        return number;
+        return element.number();
+    }
+
+    public Element getElement() {
+        return element;
     }
 
     @Override
     public String toString() {
-        return String.format("pt%s=%s", super.toString(), number);
+        return String.format("pt%s=%s", super.toString(), getNumber());
     }
 
     @Override
     public Element state(Player player, Object... alsoAtPoint) {
-        return Element.valueOf(String.valueOf(number).charAt(0));
+        return element;
     }
 
     public void exchange(Cell cell) {
-        int temp = cell.number;
-        cell.number = this.number;
-        this.number = temp;
+        Element temp = cell.element;
+        cell.element = this.element;
+        this.element = temp;
     }
 }

@@ -23,12 +23,15 @@ package com.codenjoy.dojo.a2048.model;
  */
 
 
+import com.codenjoy.dojo.client.ElementsMap;
 import com.codenjoy.dojo.games.a2048.Element;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.printer.state.State;
 
 public class Number extends PointImpl implements State<Element, Player> {
+
+    private static final ElementsMap<Element> elements = new ElementsMap<>(Element.values());
 
     private int number;
 
@@ -64,6 +67,6 @@ public class Number extends PointImpl implements State<Element, Player> {
         if (number == Numbers.NONE) {
             return Element.NONE;
         }
-        return Element.valueOf(number);
+        return elements.get("_" + number);
     }
 }

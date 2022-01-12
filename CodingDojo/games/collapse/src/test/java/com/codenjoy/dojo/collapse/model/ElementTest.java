@@ -33,12 +33,9 @@ import static org.junit.Assert.assertEquals;
 public class ElementTest {
 
     @Test
-    public void testValuesExcept() {
-        assertEquals("[ , ☼, 1, 2, 3, 4, 5, 6, 7, 8, 9]",
-                Arrays.toString(Element.valuesExcept()));
-
+    public void testNumbers() {
         assertEquals("[1, 2, 3, 4, 5, 6, 7, 8, 9]",
-                Arrays.toString(Element.valuesExcept(Element.NONE, Element.BORDER)));
+                Arrays.toString(Element.numbers()));
     }
 
     @Test
