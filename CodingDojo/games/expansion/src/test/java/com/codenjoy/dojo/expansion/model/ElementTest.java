@@ -48,9 +48,8 @@ public class ElementTest {
 
     @Test
     public void testGetAllElements() {
-        assertEquals("{-=-, .=., ╔=╔, ═=═, ┐=┐, │=│, ┘=┘, ─=─, └=└, " +
-                "║=║, ┌=┌, ╗=╗, ╝=╝, ╚=╚,  = , ♥=♥, ♦=♦, ♣=♣, ♠=♠, " +
-                "E=E, O=O, B=B, $=$, 1=1, 2=2, 3=3, 4=4, F=F, G=G}\n" +
+        assertEquals("[ , $, -, ., 1, 2, 3, 4, B, E, F, G, O, ─, " +
+                "│, ┌, ┐, └, ┘, ═, ║, ╔, ╗, ╚, ╝, ♠, ♣, ♥, ♦]\n" +
                 "{EMPTY=-, FLOOR=., ANGLE_IN_LEFT=╔, WALL_FRONT=═, " +
                 "ANGLE_IN_RIGHT=┐, WALL_RIGHT=│, ANGLE_BACK_RIGHT=┘, " +
                 "WALL_BACK=─, ANGLE_BACK_LEFT=└, WALL_LEFT=║, " +

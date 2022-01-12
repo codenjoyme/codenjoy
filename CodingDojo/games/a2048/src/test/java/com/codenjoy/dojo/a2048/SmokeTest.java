@@ -46,7 +46,7 @@ public class SmokeTest {
 
     @Test
     public void test() {
-        // about 7s
+        // about 6.6 sec
         int maxDeep = 5;
         int ticks = 1000;
 

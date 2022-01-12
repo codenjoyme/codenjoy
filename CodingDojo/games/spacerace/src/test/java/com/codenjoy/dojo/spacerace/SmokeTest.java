@@ -51,7 +51,7 @@ public class SmokeTest {
 
     @Test
     public void test() {
-        // about 2.5 sec
+        // about 1.9 sec
         int ticks = 1000;
 
         smoke.settings().showPlayers("1,2");
