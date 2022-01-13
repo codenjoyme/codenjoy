@@ -139,16 +139,9 @@ public abstract class FakeGameType extends AbstractGameType<Settings> {
     public class ClientBoard extends AbstractBoard<CharElement> {
 
         @Override
-        public CharElement valueOf(char ch) {
-            return FakeGameType.this.valueOf(ch);
+        public CharElement[] elements() {
+            return FakeGameType.this.getPlots();
         }
-    }
-
-    public CharElement valueOf(char ch) {
-        return Arrays.stream(getPlots())
-                .filter(el -> el.ch() == ch)
-                .findFirst()
-                .get();
     }
 
     @Override

@@ -23,8 +23,10 @@ package com.codenjoy.dojo.collapse.model;
  */
 
 
+import com.codenjoy.dojo.client.ElementsMap;
 import com.codenjoy.dojo.collapse.services.Event;
 import com.codenjoy.dojo.collapse.services.GameSettings;
+import com.codenjoy.dojo.games.collapse.Element;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
@@ -37,6 +39,8 @@ import static com.codenjoy.dojo.collapse.services.Event.Type.SUCCESS;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class Collapse implements Field {
+
+    private static final ElementsMap<Element> elements = new ElementsMap<>(Element.values());
 
     private final Dice dice;
     private Container<Point, Cell> cells;
@@ -106,7 +110,7 @@ public class Collapse implements Field {
                     if (cell2 == null) break;
 
                     cells.remove(cell2);
-                    Cell newCell = new Cell(pt(x, y), cell2.getNumber());
+                    Cell newCell = new Cell(pt(x, y), cell2.getElement());
                     cells.add(newCell);
                 }
             }
@@ -156,7 +160,7 @@ public class Collapse implements Field {
 
                 Cell cell = cells.get(pt);
                 if (cell == null) {
-                    Cell newCell = new Cell(pt, dice.next(8) + 1);
+                    Cell newCell = new Cell(pt, Element.numbers()[dice.next(8)]);
                     cells.add(newCell);
                 }
             }

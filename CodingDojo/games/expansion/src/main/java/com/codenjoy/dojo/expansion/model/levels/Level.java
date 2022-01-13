@@ -23,6 +23,7 @@ package com.codenjoy.dojo.expansion.model.levels;
  */
 
 
+import com.codenjoy.dojo.client.ElementsMap;
 import com.codenjoy.dojo.expansion.model.IField;
 import com.codenjoy.dojo.expansion.model.levels.items.*;
 import com.codenjoy.dojo.games.expansion.Element;
@@ -37,8 +38,10 @@ import java.util.function.Predicate;
 import static org.fest.reflect.core.Reflection.constructor;
 
 public class Level extends AbstractLevel {
-
+    
+    private static final ElementsMap<Element> elements = new ElementsMap<>(Element.values());
     public static final int ONE_CHAR = 1;
+
     private Cell[] cells;
     private int viewSize;
     private String name;
@@ -58,11 +61,11 @@ public class Level extends AbstractLevel {
 
     private void fillMap(String map) {
         fill(map, 1, (cell, ch) -> {
-            Element element = Element.valueOf(ch.charAt(0));
+            Element element = elements.get(ch.charAt(0));
             BaseItem item = baseItem(element);
 
             if (element.getLayer() != Element.Layers.LAYER1) {
-                Element atBottom = Element.valueOf(Element.FLOOR.ch());
+                Element atBottom = elements.get(Element.FLOOR.ch());
                 cell.addItem(baseItem(atBottom));
             }
             cell.addItem(item);
@@ -81,7 +84,7 @@ public class Level extends AbstractLevel {
 
     public void fillForces(String forcesMap, List<Hero> heroes) {
         fill(forcesMap, ONE_CHAR, (cell, ch) -> {
-            int index = Element.valueOf(ch.charAt(0)).getIndex();
+            int index = elements.get(ch.charAt(0)).getIndex();
             if (index == -1) {
                 return;
             }

@@ -62,7 +62,7 @@ public class MuiltiplayerTest {
 //                        "☼    ☼" +
 //                        "☼☼☼☼☼☼");
 //
-//        dice = mock(Dice.class);
+//        dice = new MockDice();
 //        Sokoban sokoban = new Sokoban(level, dice);
 //        PrinterFactory factory = new PrinterFactoryImpl();
 //
@@ -85,8 +85,8 @@ public class MuiltiplayerTest {
 //        game3.newGame();
 //    }
 //
-//    private void dice(int x, int y) {
-//        when(dice.next(anyInt())).thenReturn(x, y);
+//    private void dice(Integer... next) {
+//        dice.then(next);
 //    }
 //
 //    private void asrtFl1(String expected) {

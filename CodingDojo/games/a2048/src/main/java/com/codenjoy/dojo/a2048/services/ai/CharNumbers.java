@@ -24,10 +24,13 @@ package com.codenjoy.dojo.a2048.services.ai;
 
 
 import com.codenjoy.dojo.a2048.model.Numbers;
+import com.codenjoy.dojo.client.ElementsMap;
 import com.codenjoy.dojo.games.a2048.Element;
 import com.codenjoy.dojo.services.Direction;
 
 public class CharNumbers {
+
+    private static final ElementsMap<Element> elements = new ElementsMap<>(Element.values());
 
     private Numbers numbers;
 
@@ -48,8 +51,7 @@ public class CharNumbers {
         if (number == ' ') {
             return 0;
         }
-        Element elements = Element.valueOf(number);
-        return elements.number();
+        return elements.get(number).number();
     }
 
     private char valueChar(int number) {
@@ -59,8 +61,7 @@ public class CharNumbers {
         if (number == -1) {
             return 'x';
         }
-        Element elements = Element.valueOf(number);
-        return elements.ch();
+        return elements.get("_" + number).ch();
     }
 
     public int freeSpace() {

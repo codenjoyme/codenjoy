@@ -23,18 +23,17 @@ package com.codenjoy.dojo.tetris.model;
  */
 
 
-import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.dice.MockDice;
 import com.codenjoy.dojo.tetris.model.levels.level.MockLevels;
 import org.junit.Test;
 
-import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
+import static org.junit.Assert.assertSame;
 
 public class LevelsBuilderTest {
 
     private Levels levels;
-    private Dice dice = mock(Dice.class);
+    private MockDice dice = new MockDice();
 
     @Test
     public void shouldGetLevelsDataWhenCallLevelsReader() {

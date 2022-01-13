@@ -40,8 +40,7 @@ public class Level extends AbstractLevel{
     }
 
     public List<Cell> cells() {
-        return find((pt, el) -> new Cell(pt, el.number()),
-                Element.valuesExcept(NONE, BORDER));
+        return find(Cell::new, Element.numbers());
     }
 
     public List<Wall> walls() {
