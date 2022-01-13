@@ -23,12 +23,14 @@ package com.codenjoy.dojo.services.dao;
  */
 
 
+import com.codenjoy.dojo.services.BoardService;
 import com.codenjoy.dojo.services.GameSaver;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerSave;
 import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
 import com.codenjoy.dojo.services.jdbc.JDBCTimeUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -36,10 +38,14 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class PlayerGameSaver implements GameSaver {
 
     private CrudConnectionThreadPool pool;
+
+    @Autowired
+    private BoardService boardService;
 
     public PlayerGameSaver(ConnectionThreadPoolFactory factory) {
         pool = factory.create(
@@ -73,6 +79,7 @@ public class PlayerGameSaver implements GameSaver {
                         save,
                         player.getRepositoryUrl()
                 });
+        boardService.savePlayerForGame(player);
     }
 
     @Override
@@ -149,7 +156,13 @@ public class PlayerGameSaver implements GameSaver {
     }
 
     @Override
-    public void updateScore(String playerId, String gameName, long score, long time) {
+    public void delete(String id, String game) {
+        pool.update("DELETE FROM saves WHERE player_id = ? AND game_name = ?;",
+                new Object[]{id, game});
+    }
+
+    @Override
+    public void updateScore(String playerId, String name, String gameName, long score, long time) {
         pool.update("UPDATE saves " +
                         "SET time = ?, score = ?" +
                         "WHERE player_id = ? AND game_name = ?;",
@@ -158,6 +171,7 @@ public class PlayerGameSaver implements GameSaver {
                         playerId,
                         gameName
                 });
+        boardService.updateLeaderboardScore(name, gameName, score);
     }
 
     @Override
@@ -227,5 +241,20 @@ public class PlayerGameSaver implements GameSaver {
                 },
                 rs -> rs.next() ? rs.getString("repository_url") : null
         );
+    }
+
+    public Map<String, Integer> getPlayerIdAndScoresForGame(String game) {
+        return pool.select("SELECT player_id, score FROM saves " +
+                        "WHERE game_name = ? ",
+                new Object[]{game},
+                rs -> {
+                    Map<String, Integer> result = new TreeMap<>();
+                    while (rs.next()) {
+                        String playerId = rs.getString("player_id");
+                        int score = rs.getInt("score");
+                        result.put(playerId, score);
+                    }
+                    return result;
+                });
     }
 }

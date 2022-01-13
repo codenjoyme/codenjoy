@@ -220,11 +220,11 @@ public class SaveServiceImpl implements SaveService {
         return result;
     }
 
-    public String getGameFromUserId(String userId){
+    public String getGameFromUserId(String userId) {
         return saver.getRoomNameByPlayerId(userId);
     }
 
-    public List<String> getGamesByUserId(String id){
+    public List<String> getGamesByUserId(String id) {
         return saver.getUserGames(id);
     }
 
@@ -246,6 +246,12 @@ public class SaveServiceImpl implements SaveService {
     @Override
     public void removeSave(String id) {
         saver.delete(id);
+    }
+
+
+    @Override
+    public void removeSaveForGame(String id, String game) {
+        saver.delete(id, game);
     }
 
     @Override

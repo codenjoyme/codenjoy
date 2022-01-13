@@ -40,7 +40,9 @@ public interface GameSaver {
 
     void delete(String id);
 
-    void updateScore(String playerId, String gameName, long score, long time);
+    void delete(String id, String game);
+
+    void updateScore(String playerId, String name, String gameName, long score, long time);
 
     List<PlayerSave> loadAllSaves();
 
@@ -52,4 +54,4 @@ public interface GameSaver {
 
     String getRepositoryByPlayerIdForGame(String id, String game);
 
-    }
+}

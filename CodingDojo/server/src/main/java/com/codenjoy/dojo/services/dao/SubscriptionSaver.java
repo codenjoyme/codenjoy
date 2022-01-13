@@ -127,7 +127,7 @@ public class SubscriptionSaver {
                 new Object[]{playerId,
                         queryId,
                         game},
-                rs -> rs.next() ? rs.getBoolean("slackSubscription") : null
+                rs -> rs.next() && rs.getBoolean("slackSubscription")
         );
     }
 }

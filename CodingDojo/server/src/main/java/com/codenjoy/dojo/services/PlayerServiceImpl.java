@@ -277,13 +277,14 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     public void updateScore(String gitHubUsername, String game, long score) {
         String id = registration.getIdByGitHubUsername(gitHubUsername);
+        String name = registration.getNameById(id);
         updateScoreList(id, game, score);
-        saver.updateScore(id, game, score, System.currentTimeMillis());
+        saver.updateScore(id, name, game, score, System.currentTimeMillis());
     }
 
     private void updateScoreList(String id, String game, long score) {
-        Optional<PlayerGame> playerGame = playerGames.getAll().stream().filter(pg ->pg.getRoom().equals(game) && pg.getPlayerId().equals(id)).findFirst();
-        if(playerGame.isPresent()) {
+        Optional<PlayerGame> playerGame = playerGames.getAll().stream().filter(pg -> pg.getRoom().equals(game) && pg.getPlayerId().equals(id)).findFirst();
+        if (playerGame.isPresent()) {
             Player player = playerGame.get().getPlayer();
             if (player.getId().equals(id)) {
                 player.setScore(score);

@@ -36,7 +36,6 @@
 <body>
     <div id="settings" page="${page}" contextPath="${ctx}" game="${game}"></div>
 
-    <%@include file="forkMe.jsp"%>
 
     <div class="page-header">
         <h1>WTF! Something wrong...</h1>

@@ -28,9 +28,8 @@
         <div class="leader-board-label">
             <h3> Leaderboard </h3>
         </div>
-        <div class="div-table">
-                <table id="table-logs" class="table table-striped leaderboard-table">
-                <thead>
+        <div class="div-table overflow">
+                <table id="table-logs" class = "inner-table leaderboard-table">
                     <th width="5%">
                         <c:choose>
                             <c:when test="${code != null}">
@@ -54,14 +53,13 @@
                         </div>
                     </th>
                     <th width="25%" class="center">Score</th>
-                </thead>
-                <tbody id="table-logs-body">
-                <!--
-                    <td>1</td>
-                    <td><a href="${ctx}/board/player/email?code=code">name</a></td>
-                    <td class="center">score</td>
-                -->
-                </tbody>
+                        <c:forEach items="${leaderboard}" var="currPlayer">
+                            <tr>
+                                <td style = "flex:0 0 10%;">${currPlayer.key}. </td>
+                                <td style = "flex:0 0 70%;"><a href="${ctx}/board/player/email?code=${code}"> ${currPlayer.value.key}</a></td>
+                                <td class="center" style = "flex:0 0 20%;"> ${currPlayer.value.value}</td>
+                            </tr>
+                        </c:forEach>
                 </table>
         </div>
     </div>
