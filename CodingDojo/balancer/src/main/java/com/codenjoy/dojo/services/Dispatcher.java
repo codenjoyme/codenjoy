@@ -181,6 +181,7 @@ public class Dispatcher {
         } catch (RestClientException e) {
             log.error("Error processing scores from server: " + server, e);
 
+            // TODO do not use map.containsKey just check that map.get() != null
             if (scoresFromGameServers.containsKey(server)) {
                 return scoresFromGameServers.get(server);
             } else {
@@ -293,6 +294,7 @@ public class Dispatcher {
                 .collect(toMap(score -> score.getId(), score -> score));
 
         list.forEach(score -> {
+            // TODO do not use map.containsKey just check that map.get() != null
             if (scoresMap.containsKey(score.getId())) {
                 PlayerScore startHourScore = scoresMap.get(score.getId());
                 if (score.getScore() >= startHourScore.getScore()) {
@@ -305,6 +307,7 @@ public class Dispatcher {
     private List<PlayerScore> getPlayerScores(String day, long time) {
         String key = DAY_TIME_FORMATTER.format(new Date(time));
 
+        // TODO do not use map.containsKey just check that map.get() != null
         if (currentScores.containsKey(key)) {
             return currentScores.get(key);
         }

@@ -76,6 +76,7 @@ public class Container<T, V> implements Iterable<V> {
     }
 
     public boolean contains(T value) {
+        // TODO do not use map.containsKey just check that map.get() != null
         return data.containsKey(value);
     }
 }

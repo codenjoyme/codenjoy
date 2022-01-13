@@ -249,6 +249,7 @@ public class GameServiceImpl implements GameService {
      * @param transform Функция подмены.
      */
     public void replace(String game, Function<GameType, GameType> transform) {
+        // TODO do not use map.containsKey just check that map.get() != null
         if (!cache.containsKey(game)) {
             throw new IllegalArgumentException("Game not found in cache: " + game);
         }

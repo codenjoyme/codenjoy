@@ -168,6 +168,7 @@ public class SaveServiceImpl implements SaveService {
         for (String id : saved) {
             if (id == null) continue;
 
+            // TODO do not use map.containsKey just check that map.get() != null
             boolean found = map.containsKey(id);
             if (found) {
                 PlayerInfo info = map.get(id);
