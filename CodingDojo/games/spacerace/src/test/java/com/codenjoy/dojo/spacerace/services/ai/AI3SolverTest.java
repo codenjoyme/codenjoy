@@ -22,28 +22,24 @@ package com.codenjoy.dojo.spacerace.services.ai;
  * #L%
  */
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
+import com.codenjoy.dojo.client.Solver;
+import com.codenjoy.dojo.games.spacerace.Board;
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.dice.MockDice;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.games.spacerace.Board;
+import static org.junit.Assert.assertEquals;
 
 public class AI3SolverTest {
 
-    private Dice dice;
+    private MockDice dice;
     private Solver ai;
 
     @Before
     public void setup() {
-        dice = mock(Dice.class);
+        dice = new MockDice();
         ai = new AI3Solver(dice);
     }
 
@@ -333,6 +329,6 @@ public class AI3SolverTest {
     }
 
     private void dice(Direction direction) {
-        when(dice.next(anyInt())).thenReturn(direction.value());
+        dice.then(direction.value());
     }
 }

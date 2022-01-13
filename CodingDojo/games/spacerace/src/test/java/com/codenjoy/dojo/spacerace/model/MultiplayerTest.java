@@ -22,13 +22,13 @@ package com.codenjoy.dojo.spacerace.model;
  * #L%
  */
 
-import com.codenjoy.dojo.services.Game;
-import com.codenjoy.dojo.services.multiplayer.Single;
-import com.codenjoy.dojo.spacerace.services.Event;
-import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Game;
+import com.codenjoy.dojo.services.dice.MockDice;
+import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.spacerace.services.Event;
 import com.codenjoy.dojo.spacerace.services.GameSettings;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,7 +37,6 @@ import static com.codenjoy.dojo.spacerace.services.GameSettings.Keys.BULLETS_COU
 import static com.codenjoy.dojo.spacerace.services.GameSettings.Keys.TICKS_TO_RECHARGE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
 public class MultiplayerTest {
@@ -54,7 +53,7 @@ public class MultiplayerTest {
     private Game game4;
     private Game game5;
     private Game game6;
-    private Dice dice;
+    private MockDice dice;
     private Spacerace field;
 
     // появляется другие игроки, игра становится мультипользовательской
@@ -67,7 +66,7 @@ public class MultiplayerTest {
                 "☼   ☼" +
                 "☼   ☼");
 
-        dice = mock(Dice.class);
+        dice = new MockDice();
         GameSettings settings = new GameSettings()
                 .integer(TICKS_TO_RECHARGE, 100)
                 .integer(BULLETS_COUNT, 1);
@@ -110,11 +109,11 @@ public class MultiplayerTest {
     }
 
     private void diceOld(int x, int y) {
-        when(dice.next(anyInt())).thenReturn(x, y);
+        dice.then(x, y);
     }
 
     private void dice(int x, int y) {
-        when(dice.next(anyInt())).thenReturn(x, y, x, y, x, y, -1);
+        dice.then(x, y, x, y, x, y, -1);
     }
 
     private void asrtFl1(String expected) {

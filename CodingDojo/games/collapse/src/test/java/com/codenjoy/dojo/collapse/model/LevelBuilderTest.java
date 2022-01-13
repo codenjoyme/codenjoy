@@ -23,29 +23,28 @@ package com.codenjoy.dojo.collapse.model;
  */
 
 
-import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.dice.MockDice;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class LevelBuilderTest {
 
-    private Dice dice;
+    private MockDice dice;
     private LevelBuilder builder;
     private final int SIZE = 4;
 
     @Before
     public void setup() {
-        dice = mock(Dice.class);
+        dice = new MockDice();
     }
 
     @Test
-    public void testGetBoard() throws Exception {
-        when(dice.next(8)).thenReturn(0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3);
+    public void testGetBoard() {
+        dice.whenThen(8,
+                0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3);
         builder = new LevelBuilder(dice, SIZE);
 
         assertB("☼☼☼☼" +

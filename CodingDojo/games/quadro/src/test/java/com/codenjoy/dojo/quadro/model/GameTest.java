@@ -26,17 +26,15 @@ package com.codenjoy.dojo.quadro.model;
 import com.codenjoy.dojo.quadro.TestGameSettings;
 import com.codenjoy.dojo.quadro.services.Event;
 import com.codenjoy.dojo.quadro.services.GameSettings;
-import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.dice.MockDice;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.stubbing.OngoingStubbing;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
 public class GameTest {
@@ -44,7 +42,7 @@ public class GameTest {
     private Quadro game;
     private Hero hero1;
     private Hero hero2;
-    private Dice dice;
+    private MockDice dice;
     private EventListener listener1;
     private EventListener listener2;
     private Player player1;
@@ -54,16 +52,13 @@ public class GameTest {
 
     @Before
     public void setup() {
-        dice = mock(Dice.class);
+        dice = new MockDice();
         printer = new PrinterFactoryImpl();
         settings = new TestGameSettings();
     }
 
-    private void dice(int... ints) {
-        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
-        for (int i : ints) {
-            when = when.thenReturn(i);
-        }
+    private void dice(Integer... next) {
+        dice.then(next);
     }
 
     private void givenFl(String board) {

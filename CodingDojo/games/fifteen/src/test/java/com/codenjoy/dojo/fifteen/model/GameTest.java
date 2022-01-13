@@ -25,8 +25,8 @@ package com.codenjoy.dojo.fifteen.model;
 import com.codenjoy.dojo.fifteen.TestGameSettings;
 import com.codenjoy.dojo.fifteen.services.GameSettings;
 import com.codenjoy.dojo.games.fifteen.Element;
-import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.dice.MockDice;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.utils.TestUtils;
@@ -38,13 +38,12 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class GameTest {
 
     private Fifteen game;
     private Hero hero;
-    private Dice dice;
+    private MockDice dice;
     private EventListener listener;
     private Player player;
     private PrinterFactory printer;
@@ -52,14 +51,14 @@ public class GameTest {
 
     @Before
     public void setup() {
-        dice = mock(Dice.class);
+        dice = new MockDice();
         printer = new PrinterFactoryImpl();
         settings = new TestGameSettings();
     }
 
     private void dice() {
         for (int i = 16; i > 0; i--) {
-            when(dice.next(i)).thenReturn(i - 1);
+            dice.whenThen(i, i - 1);
         }
     }
 
