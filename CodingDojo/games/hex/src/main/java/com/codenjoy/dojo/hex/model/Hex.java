@@ -26,9 +26,9 @@ package com.codenjoy.dojo.hex.model;
 import com.codenjoy.dojo.games.hex.Element;
 import com.codenjoy.dojo.hex.model.items.Wall;
 import com.codenjoy.dojo.hex.services.GameSettings;
-import com.codenjoy.dojo.services.BoardUtils;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.field.Generator;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.*;
@@ -189,7 +189,7 @@ public class Hex implements Field {
 
     @Override
     public Optional<Point> freeRandom(Player player) {
-        return BoardUtils.freeRandom(size, dice, pt -> isFree(pt));
+        return Generator.freeRandom(size, dice, pt -> isFree(pt));
     }
 
     @Override

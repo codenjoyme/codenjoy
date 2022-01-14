@@ -24,10 +24,10 @@ package com.codenjoy.dojo.quake2d.model;
 
 import com.codenjoy.dojo.quake2d.services.Event;
 import com.codenjoy.dojo.quake2d.services.GameSettings;
-import com.codenjoy.dojo.services.BoardUtils;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.field.Generator;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.ArrayList;
@@ -162,7 +162,7 @@ public class Quake2D implements Field {
 
     @Override
     public Optional<Point> freeRandom(Player player) {
-        return BoardUtils.freeRandom(size, dice, pt -> isFree(pt));
+        return Generator.freeRandom(size, dice, pt -> isFree(pt));
     }
 
     @Override

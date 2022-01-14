@@ -22,9 +22,9 @@ package com.codenjoy.dojo.sokoban.model;
  * #L%
  */
 
-import com.codenjoy.dojo.services.BoardUtils;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.field.Generator;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.sokoban.model.items.*;
 import com.codenjoy.dojo.sokoban.services.Event;
@@ -125,7 +125,7 @@ public class Sokoban implements Field {
 
     @Override
     public Optional<Point> freeRandom(Player player) {
-        return BoardUtils.freeRandom(size, dice, pt -> isFree(pt));
+        return Generator.freeRandom(size, dice, pt -> isFree(pt));
     }
 
     @Override

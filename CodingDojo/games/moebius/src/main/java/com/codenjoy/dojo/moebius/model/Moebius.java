@@ -26,9 +26,9 @@ package com.codenjoy.dojo.moebius.model;
 import com.codenjoy.dojo.games.moebius.Element;
 import com.codenjoy.dojo.moebius.services.Event;
 import com.codenjoy.dojo.moebius.services.GameSettings;
-import com.codenjoy.dojo.services.BoardUtils;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.field.Generator;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.*;
@@ -136,7 +136,7 @@ public class Moebius implements Field {
     }
 
     public Optional<Point> freeRandom() {
-        return BoardUtils.freeRandom(size, dice,
+        return Generator.freeRandom(size, dice,
                 pt -> !pt.isOutOf(1, 1, size) && isFree(pt));
     }
 
