@@ -82,7 +82,7 @@ public class Moebius implements Field {
             Line line = processing.remove();
 
             if (line.getType() == Line.Type.CROSS) continue;
-            if (line.isOutOf(1, 1, size)) continue;
+            if (line.isOutOfExclude(1, 1, size)) continue;
 
             List<Line> cycle = checkCycle(line);
 
@@ -137,7 +137,7 @@ public class Moebius implements Field {
 
     public Optional<Point> freeRandom() {
         return Generator.freeRandom(size, dice,
-                pt -> !pt.isOutOf(1, 1, size) && isFree(pt));
+                pt -> !pt.isOutOfExclude(1, 1, size) && isFree(pt));
     }
 
     @Override
