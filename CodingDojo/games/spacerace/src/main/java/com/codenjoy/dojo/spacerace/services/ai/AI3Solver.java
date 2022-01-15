@@ -23,11 +23,11 @@ package com.codenjoy.dojo.spacerace.services.ai;
  */
 
 import com.codenjoy.dojo.client.Solver;
+import com.codenjoy.dojo.games.spacerace.Board;
+import com.codenjoy.dojo.games.spacerace.Element;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.games.spacerace.Board;
-import com.codenjoy.dojo.games.spacerace.Element;
 
 import java.util.List;
 
@@ -64,8 +64,8 @@ public class AI3Solver implements Solver<Board> {
     }
 
     private boolean isBulletAtop() {
-        int y = board.getMe().getY();
-        int x = board.getMe().getX();
+        int y = board.getHero().getY();
+        int x = board.getHero().getX();
 
         for (int i = y - 1; i >= 0; i--) {
             if(board.isBulletAt(x,i)){
@@ -76,8 +76,8 @@ public class AI3Solver implements Solver<Board> {
     }
 
     private boolean isStoneOrBombAtop() {
-        int y = board.getMe().getY();
-        int x = board.getMe().getX();
+        int y = board.getHero().getY();
+        int x = board.getHero().getX();
 
         for (int i = y - 1; i >= 0; i--) {
             if(board.isStoneAt(x,i) || board.isBombAt(x, i)){
@@ -90,7 +90,7 @@ public class AI3Solver implements Solver<Board> {
     private Direction findDirection(Board board) {
         Direction result = Direction.STOP;
 
-        Point me = board.getMe();
+        Point me = board.getHero();
         if (me != null) {
             result = findDirectionToBulletPack(board, me, result);
         }
@@ -147,7 +147,7 @@ public class AI3Solver implements Solver<Board> {
         Direction checkedResultBomb = result;
         Direction checkedDirection = Direction.STOP;
 
-        Point me = board.getMe();
+        Point me = board.getHero();
         if (me != null) {
 
             checkedResultStone = findBestDirectionNearStone(board, me, result);
