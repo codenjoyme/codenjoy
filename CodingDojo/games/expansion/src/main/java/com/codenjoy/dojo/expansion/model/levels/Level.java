@@ -111,7 +111,7 @@ public class Level extends AbstractLevel {
         int indexChar = 0;
         for (int y = size - 1; y > -1; --y) {
             for (int x = 0; x < size; ++x) {
-                int length = xy.getLength(x, y);
+                int length = xy.length(x, y);
                 Cell cell = cells[length];
                 if (cell == null) {
                     cell = new CellImpl(x, y);
@@ -135,7 +135,7 @@ public class Level extends AbstractLevel {
     }
 
     public Cell cell(int x, int y) {
-        return cells[xy.getLength(x, y)];
+        return cells[xy.length(x, y)];
     }
 
     public Cell cell(Point point) {
