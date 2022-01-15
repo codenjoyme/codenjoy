@@ -89,10 +89,10 @@ public class Levels {
     }
 
     public static String loadFromFile(String name) {
-        StringBuffer buffer = loadLines(
+        StringBuilder buffer = loadLines(
                 "expansion/levels/" + name + ".lev",
-                StringBuffer::new,
-                (container, line) -> container.append(line)
+                StringBuilder::new,
+                StringBuilder::append
         );
         return buffer.toString();
     }

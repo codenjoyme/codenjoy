@@ -112,7 +112,7 @@ public class Numbers {
 
     @Override
     public String toString() {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
 
         for (int y = size - 1; y >= 0; y--) {
             for (int x = 0; x < size; x++) {
