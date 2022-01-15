@@ -357,7 +357,7 @@ public class Levels {
             }
         }
 
-        return out.getMap();
+        return out.map();
     }
 
     private static boolean chk(String mask, int x, int y, LengthToXY.Map map) {
@@ -372,7 +372,7 @@ public class Levels {
                 out.setAt(xx + 1, yy + 1, ch);
             }
         }
-        String actual = TestUtils.injectN(out.getMap());
+        String actual = TestUtils.injectN(out.map());
         String expected = TestUtils.injectN(mask);
         return actual.equals(expected);
     }
