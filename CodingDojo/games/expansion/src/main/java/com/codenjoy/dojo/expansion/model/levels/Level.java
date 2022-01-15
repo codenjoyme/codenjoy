@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
+import static com.codenjoy.dojo.client.AbstractLayeredBoard.Layers.LAYER1;
 import static org.fest.reflect.core.Reflection.constructor;
 
 public class Level extends AbstractLevel {
@@ -64,7 +65,7 @@ public class Level extends AbstractLevel {
             Element element = elements.get(ch.charAt(0));
             BaseItem item = baseItem(element);
 
-            if (element.getLayer() != Element.Layers.LAYER1) {
+            if (element.getLayer() != LAYER1) {
                 Element atBottom = elements.get(Element.FLOOR.ch());
                 cell.addItem(baseItem(atBottom));
             }
