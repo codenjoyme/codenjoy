@@ -52,8 +52,8 @@ public class Level extends AbstractLevel {
         this.name = name;
         cells = new Cell[map.length()];
         this.viewSize = viewSize;
-        if (size*size != map.length()) {
-            throw new IllegalArgumentException("map must be square! " + size + "^2 != " + map.length());
+        if (size() * size() != map.length()) {
+            throw new IllegalArgumentException("map must be square! " + size() + "^2 != " + map.length());
         }
 
         fillMap(map);
@@ -109,9 +109,9 @@ public class Level extends AbstractLevel {
 
     private void fill(String map, int len, BiConsumer<Cell, String> function) {
         int indexChar = 0;
-        for (int y = size - 1; y > -1; --y) {
-            for (int x = 0; x < size; ++x) {
-                int length = xy.length(x, y);
+        for (int y = size() - 1; y > -1; --y) {
+            for (int x = 0; x < size(); ++x) {
+                int length = this.map.xy().length(x, y);
                 Cell cell = cells[length];
                 if (cell == null) {
                     cell = new CellImpl(x, y);
@@ -135,7 +135,7 @@ public class Level extends AbstractLevel {
     }
 
     public Cell cell(int x, int y) {
-        return cells[xy.length(x, y)];
+        return cells[map.xy().length(x, y)];
     }
 
     public Cell cell(Point point) {
@@ -147,7 +147,7 @@ public class Level extends AbstractLevel {
     }
 
     public boolean isBarrier(int x, int y) {
-        boolean isAbroad = x > size - 1 || x < 0 || y < 0 || y > size - 1;
+        boolean isAbroad = x > size() - 1 || x < 0 || y < 0 || y > size() - 1;
 
         return isAbroad || !cell(x, y).isPassable();
     }
@@ -157,7 +157,7 @@ public class Level extends AbstractLevel {
         for (Cell cell : cells) {
             for (Item item : cell.getItems()) {
                 if (clazz.isInstance(item)) {
-                    result.add((T)item);
+                    result.add((T) item);
                 }
             }
         }
