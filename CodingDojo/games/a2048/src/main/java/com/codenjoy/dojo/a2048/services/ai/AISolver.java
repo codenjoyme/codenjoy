@@ -70,7 +70,7 @@ public class AISolver implements Solver<Board> {
 
     @Override
     public String get(Board board) {
-        char[][] field = board.getField();
+        char[][] field = board.field();
 
         calculateFor(field, "");
 
