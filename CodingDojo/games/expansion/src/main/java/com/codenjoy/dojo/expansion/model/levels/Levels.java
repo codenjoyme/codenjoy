@@ -194,9 +194,9 @@ public class Levels {
 
     public static String decorate(String level) {
         LengthToXY.Map map = new LengthToXY.Map(level);
-        LengthToXY.Map out = new LengthToXY.Map(map.getSize());
-        for (int x = 0; x < map.getSize(); ++x) {
-            for (int y = 0; y < map.getSize(); ++y) {
+        LengthToXY.Map out = new LengthToXY.Map(map.size());
+        for (int x = 0; x < map.size(); ++x) {
+            for (int y = 0; y < map.size(); ++y) {
                 char at = map.getAt(x, y);
                 if (at != '#') {
                     out.setAt(x, y, at);
@@ -362,7 +362,7 @@ public class Levels {
 
     private static boolean chk(String mask, int x, int y, LengthToXY.Map map) {
         LengthToXY.Map mm = new LengthToXY.Map(mask);
-        LengthToXY.Map out = new LengthToXY.Map(mm.getSize());
+        LengthToXY.Map out = new LengthToXY.Map(mm.size());
         for (int xx = -1; xx <= 1; xx++) {
             for (int yy = -1; yy <= 1; yy++) {
                 char ch = ' ';
