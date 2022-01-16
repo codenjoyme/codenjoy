@@ -137,6 +137,11 @@ public class Fifteen implements Field {
         return walls;
     }
 
+    @Override
+    public int size() {
+        return size;
+    }
+
     public List<Digit> getDigits() {
         return digits;
     }

@@ -23,9 +23,9 @@ package com.codenjoy.dojo.tetris.model;
  */
 
 
-import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import com.codenjoy.dojo.games.tetris.Element;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import com.codenjoy.dojo.services.printer.state.State;
 import com.codenjoy.dojo.tetris.services.Event;
 
@@ -202,6 +202,13 @@ public class Hero extends PlayerHero<Field> implements State<Element, Player> {
 
     private int initialYPosition() {
         return (field.size() - 1) + figure.bottom() - 1;
+    }
+
+    @Override
+    protected boolean isValidateOnMove() {
+        // TODO в тетрисе фигуры появляются из за пределов поля,
+        //      а потому move валидацию обычную для других игр надо отключать
+        return false;
     }
 
     public boolean showCurrentFigure() {
