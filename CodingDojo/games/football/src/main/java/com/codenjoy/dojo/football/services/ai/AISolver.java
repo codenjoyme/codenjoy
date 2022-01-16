@@ -24,8 +24,8 @@ package com.codenjoy.dojo.football.services.ai;
 
 
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.games.football.Board;
 import com.codenjoy.dojo.football.model.Actions;
+import com.codenjoy.dojo.games.football.Board;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
@@ -59,7 +59,7 @@ public class AISolver implements Solver<Board> {
 
         String resultString = "";
 
-        Point from = board.getMe();
+        Point from = board.getHero();
 
         List<Direction> result = getDirections(board, from);
         if (result.isEmpty()) {

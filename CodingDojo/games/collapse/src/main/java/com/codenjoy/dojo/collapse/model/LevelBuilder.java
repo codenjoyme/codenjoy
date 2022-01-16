@@ -61,7 +61,7 @@ public class LevelBuilder {
     }
 
     public String getBoard() {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
 
         char borderChar = Element.BORDER.ch();
         for (int x = 0; x < size; x++) {

@@ -108,6 +108,7 @@ public class RestAdminController {
                     .orElse(NullPlayer.INSTANCE);
 
             String game = player.getGame();
+            // TODO do not use map.containsKey just check that map.get() != null
             if (!result.containsKey(game)) {
                 result.put(game, new LinkedList<>());
             }

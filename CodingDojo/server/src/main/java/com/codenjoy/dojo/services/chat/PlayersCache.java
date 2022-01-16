@@ -44,6 +44,7 @@ public class PlayersCache {
     }
 
     public String name(String id) {
+        // TODO do not use map.containsKey just check that map.get() != null
         if (!names.containsKey(id)) {
             String name = registration.getNameById(id);
             name = isEmpty(name) ? "player[" + id + "]" : name;

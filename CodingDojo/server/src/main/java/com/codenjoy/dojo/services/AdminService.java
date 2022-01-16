@@ -408,6 +408,7 @@ public class AdminService {
         validator.checkGame(game, Validator.CANT_BE_NULL);
         validator.checkRoom(room, Validator.CANT_BE_NULL);
 
+        // TODO do not use map.containsKey just check that map.get() != null
         if (!map.containsKey(settings.getAction())) {
             throw new IllegalArgumentException(
                     "Admin action not found: " + settings.getAction());

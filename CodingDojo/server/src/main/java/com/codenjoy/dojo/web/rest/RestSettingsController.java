@@ -114,6 +114,7 @@ public class RestSettingsController {
             return new JSONObject(parameters).toString();
         }
 
+        // TODO do not use map.containsKey just check that map.get() != null
         if (settings.hasParameter(key)) {
             return settings.getParameter(key).getValue().toString();
         }
@@ -149,6 +150,7 @@ public class RestSettingsController {
         GameType type = gameService.getGameType(game, room);
 
         Settings settings = type.getSettings();
+        // TODO do not use map.containsKey just check that map.get() != null
         if (settings.hasParameter(key)) {
             settings.getParameter(key).update(value);
             return "{}";

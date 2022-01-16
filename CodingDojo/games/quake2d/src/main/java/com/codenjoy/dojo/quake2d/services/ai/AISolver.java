@@ -22,14 +22,18 @@ package com.codenjoy.dojo.quake2d.services.ai;
  * #L%
  */
 
-import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.games.quake2d.Board;
 import com.codenjoy.dojo.games.quake2d.Element;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class AISolver implements Solver<Board> {
 
@@ -83,7 +87,7 @@ public class AISolver implements Solver<Board> {
         int size = board.size();
         int priority;
 //        Element elementOfPriority;
-        Point from = board.getMe();
+        Point from = board.getHero();
 
         List<Point> to_OtherHero = board.get(Element.OTHER_HERO);
         List<Point> to_Abilities = board.get(Element.SUPER_WEAPON);
