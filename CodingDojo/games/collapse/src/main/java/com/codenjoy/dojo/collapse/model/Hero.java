@@ -84,6 +84,13 @@ public class Hero extends PlayerHero<Field> {
         move(-1, -1);
     }
 
+    @Override
+    protected boolean isValidateOnMove() {
+        // TODO тут маркер каждый тик прячется за пределы поля,
+        //      а валидатор этого не допустит
+        return false;
+    }
+
     public Point getAct() {
         if (isOutOf(field.size())) {
             return null;

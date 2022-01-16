@@ -32,7 +32,8 @@ import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.function.Consumer;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
@@ -97,7 +98,8 @@ public class Quadro implements Field {
         }
     }
 
-    public int getSize() {
+    @Override
+    public int size() {
         return size;
     }
 

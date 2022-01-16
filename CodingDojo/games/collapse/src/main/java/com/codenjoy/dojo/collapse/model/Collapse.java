@@ -23,7 +23,6 @@ package com.codenjoy.dojo.collapse.model;
  */
 
 
-import com.codenjoy.dojo.client.ElementsMap;
 import com.codenjoy.dojo.collapse.services.Event;
 import com.codenjoy.dojo.collapse.services.GameSettings;
 import com.codenjoy.dojo.games.collapse.Element;
@@ -39,8 +38,6 @@ import static com.codenjoy.dojo.collapse.services.Event.Type.SUCCESS;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class Collapse implements Field {
-
-    private static final ElementsMap<Element> elements = new ElementsMap<>(Element.values());
 
     private final Dice dice;
     private Container<Point, Cell> cells;

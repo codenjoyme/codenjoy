@@ -38,7 +38,7 @@ public class Hero extends PlayerHero<Field> implements ActJoystick {
     @Override
     public void act(int... p) {
         act = (p.length == 1)
-                && !pt(p[0], 0).isOutOf(field.getSize());
+                && !pt(p[0], 0).isOutOf(field.size());
 
         if (act) {
             x = p[0];
