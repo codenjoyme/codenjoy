@@ -76,6 +76,11 @@ public class Moebius implements Field {
         }
     }
 
+    @Override
+    public int size() {
+        return size;
+    }
+
     private void removePipes() {
         Queue<Line> processing = new LinkedList<>(lines);
         do {
