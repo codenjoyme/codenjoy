@@ -22,30 +22,30 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
+import com.codenjoy.dojo.config.oauth2.OAuth2CodeExecutionClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 @Service
 public class GameServerServiceImpl implements GameServerService {
     public static final String REPOSITORY_NOT_FOUND = "Repository not found!";
     private final ConfigProperties config;
-    private final RestTemplate restTemplate;
+    private final OAuth2CodeExecutionClient OAuth2CodeExecutionClient;
 
     @Autowired
-    public GameServerServiceImpl(ConfigProperties config, RestTemplate restTemplate) {
+    public GameServerServiceImpl(ConfigProperties config, OAuth2CodeExecutionClient OAuth2CodeExecutionClient) {
         this.config = config;
-        this.restTemplate = restTemplate;
+        this.OAuth2CodeExecutionClient = OAuth2CodeExecutionClient;
     }
 
     @Override
     public String createOrGetRepository(String gitHubUsername) {
-        return restTemplate.getForObject(createHostUrl(gitHubUsername,""), String.class);
+        return OAuth2CodeExecutionClient.getRequest(createHostUrl(gitHubUsername, ""));
     }
 
     @Override
     public String createOrGetRepositoryWithGame(String gitHubUsername, String game) {
-        return restTemplate.getForObject(createHostUrl(gitHubUsername, game), String.class);
+        return OAuth2CodeExecutionClient.getRequest(createHostUrl(gitHubUsername, game));
     }
 
     @Override
