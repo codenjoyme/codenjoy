@@ -24,6 +24,7 @@ package com.codenjoy.dojo.a2048.model;
 
 
 import com.codenjoy.dojo.games.a2048.Element;
+import com.codenjoy.dojo.games.a2048.ElementUtils;
 import com.codenjoy.dojo.services.field.AbstractLevel;
 
 import java.util.List;
@@ -35,12 +36,12 @@ public class Level extends AbstractLevel {
     }
 
     public List<Number> numbers() {
-        return find((pt, el) -> new Number(el.number(), pt),
-                Element.valuesExcept(Element.NONE));
+        return find((pt, el) -> new Number(ElementUtils.number(el), pt),
+                ElementUtils.valuesExcept(Element.NONE));
     }
 
     public List<Number> breaks() {
-        return find((pt, el) -> new Number(el.number(), pt),
+        return find((pt, el) -> new Number(ElementUtils.number(el), pt),
                 Element._x);
     }
 }

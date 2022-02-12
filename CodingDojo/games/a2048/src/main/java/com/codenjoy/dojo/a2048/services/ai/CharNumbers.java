@@ -26,6 +26,7 @@ package com.codenjoy.dojo.a2048.services.ai;
 import com.codenjoy.dojo.a2048.model.Numbers;
 import com.codenjoy.dojo.client.ElementsMap;
 import com.codenjoy.dojo.games.a2048.Element;
+import com.codenjoy.dojo.games.a2048.ElementUtils;
 import com.codenjoy.dojo.services.Direction;
 
 public class CharNumbers {
@@ -51,7 +52,7 @@ public class CharNumbers {
         if (number == ' ') {
             return 0;
         }
-        return elements.get(number).number();
+        return ElementUtils.number(elements.get(number));
     }
 
     private char valueChar(int number) {
