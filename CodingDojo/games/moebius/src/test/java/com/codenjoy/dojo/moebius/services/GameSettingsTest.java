@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.a2048.services;
+package com.codenjoy.dojo.moebius.services;
 
 /*-
  * #%L
@@ -31,16 +31,9 @@ public class GameSettingsTest {
 
     @Test
     public void shouldGetAllKeys() {
-        assertEquals("SIZE                   =[Level] Size\n" +
-                    "NEW_NUMBERS            =[Game] New numbers\n" +
-                    "NUMBERS_MODE           =[Game] Numbers mode\n" +
-                    "BREAKS_MODE            =[Game] Breaks mode\n" +
-                    "LEVEL_MAP              =[Level] Level map\n" +
-                    "SCORE_COUNTING_TYPE    =[Score] Counting score mode\n" +
-                    "NEW_NUMBERS_IN_CORNERS =Classic (corner only) mode\n" +
-                    "NEW_NUMBERS_IN_RANDOM  =With random numbers mode\n" +
-                    "BREAKS_EXISTS          =With breaks mode\n" +
-                    "BREAKS_NOT_EXISTS      =Without breaks mode",
+        assertEquals("WIN_SCORE    =[Score] Win score\n" +
+                    "LOSE_PENALTY =[Score] Lose penalty\n" +
+                    "SIZE         =[Level] Size",
                 TestUtils.toString(new GameSettings().allKeys()));
     }
 }

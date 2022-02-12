@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.a2048.services;
+package com.codenjoy.dojo.tetris.services;
 
 /*-
  * #%L
@@ -31,16 +31,16 @@ public class GameSettingsTest {
 
     @Test
     public void shouldGetAllKeys() {
-        assertEquals("SIZE                   =[Level] Size\n" +
-                    "NEW_NUMBERS            =[Game] New numbers\n" +
-                    "NUMBERS_MODE           =[Game] Numbers mode\n" +
-                    "BREAKS_MODE            =[Game] Breaks mode\n" +
-                    "LEVEL_MAP              =[Level] Level map\n" +
-                    "SCORE_COUNTING_TYPE    =[Score] Counting score mode\n" +
-                    "NEW_NUMBERS_IN_CORNERS =Classic (corner only) mode\n" +
-                    "NEW_NUMBERS_IN_RANDOM  =With random numbers mode\n" +
-                    "BREAKS_EXISTS          =With breaks mode\n" +
-                    "BREAKS_NOT_EXISTS      =Without breaks mode",
+        assertEquals("GAME_LEVELS               =[Game] Game Levels\n" +
+                    "GLASS_SIZE                =[Game] Glass Size\n" +
+                    "SCORE_MODE                =[Score] Score mode (cumulative or maximum between overflows)\n" +
+                    "FIGURE_DROPPED_SCORE      =[Score] Figure dropped score score\n" +
+                    "ONE_LINE_REMOVED_SCORE    =[Score] One line removed score\n" +
+                    "TWO_LINES_REMOVED_SCORE   =[Score] Two lines removed score\n" +
+                    "THREE_LINES_REMOVED_SCORE =[Score] Three lines removed score\n" +
+                    "FOUR_LINES_REMOVED_SCORE  =[Score] Four lines removed score\n" +
+                    "GLASS_OVERFLOWN_PENALTY   =[Score] Glass overflown penalty\n" +
+                    "SCORE_COUNTING_TYPE       =[Score] Counting score mode",
                 TestUtils.toString(new GameSettings().allKeys()));
     }
 }
