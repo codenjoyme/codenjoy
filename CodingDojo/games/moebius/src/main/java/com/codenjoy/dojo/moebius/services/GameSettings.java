@@ -25,26 +25,28 @@ package com.codenjoy.dojo.moebius.services;
 
 import com.codenjoy.dojo.moebius.model.Level;
 import com.codenjoy.dojo.services.event.Calculator;
+import com.codenjoy.dojo.services.settings.PropertiesKey;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import java.util.Arrays;
 import java.util.List;
 
+import static com.codenjoy.dojo.moebius.services.GameRunner.GAME_NAME;
 import static com.codenjoy.dojo.moebius.services.GameSettings.Keys.*;
 
 public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
 
-    public enum Keys implements Key {
+    public enum Keys implements PropertiesKey {
 
-        WIN_SCORE("[Score] Win score"),
-        LOSE_PENALTY("[Score] Lose penalty"),
-        SIZE("[Level] Size");
+        WIN_SCORE,
+        LOSE_PENALTY,
+        SIZE;
 
         private String key;
 
-        Keys(String key) {
-            this.key = key;
+        Keys() {
+            this.key = key(GAME_NAME);
         }
 
         @Override
