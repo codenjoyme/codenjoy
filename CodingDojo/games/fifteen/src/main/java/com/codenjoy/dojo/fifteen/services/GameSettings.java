@@ -24,26 +24,28 @@ package com.codenjoy.dojo.fifteen.services;
 
 
 import com.codenjoy.dojo.services.event.Calculator;
+import com.codenjoy.dojo.services.settings.PropertiesKey;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import java.util.Arrays;
 import java.util.List;
 
+import static com.codenjoy.dojo.fifteen.services.GameRunner.GAME_NAME;
 import static com.codenjoy.dojo.fifteen.services.GameSettings.Keys.BONUS_SCORE;
 import static com.codenjoy.dojo.fifteen.services.GameSettings.Keys.WIN_SCORE;
 
 public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
 
-    public enum Keys implements Key {
+    public enum Keys implements PropertiesKey {
 
-        WIN_SCORE("[Score] Win score"),
-        BONUS_SCORE("[Score] Bonus score");
+        WIN_SCORE,
+        BONUS_SCORE;
 
         private String key;
 
-        Keys(String key) {
-            this.key = key;
+        Keys() {
+            this.key = key(GAME_NAME);
         }
 
         @Override
