@@ -553,7 +553,7 @@ public class AdminService {
         // сохраняем для отображения inactivity settings pojo
         result.setInactivity(inactivitySettings(room));
         // отдельно оставшиеся параметры
-        List<Parameter> parameters = gameType.getSettings().getParameters();
+        List<Parameter> parameters = new LinkedList<>(gameType.getSettings().getParameters());
         parameters.removeIf(Predicate.not(onlyUngrouped()));
         result.setOther(parameters);
         result.setOtherValues(parameters.stream()
