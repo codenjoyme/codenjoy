@@ -23,7 +23,7 @@ package com.codenjoy.dojo.tetris.services;
  */
 
 import com.codenjoy.dojo.services.event.Calculator;
-import com.codenjoy.dojo.services.event.ScoresImpl;
+import com.codenjoy.dojo.services.settings.PropertiesKey;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 import com.codenjoy.dojo.tetris.model.levels.LevelsFactory;
@@ -33,28 +33,28 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.codenjoy.dojo.services.event.Mode.CUMULATIVELY;
+import static com.codenjoy.dojo.tetris.services.GameRunner.GAME_NAME;
 import static com.codenjoy.dojo.tetris.services.GameSettings.Keys.*;
 
 public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
 
-    public enum Keys implements Key {
+    public enum Keys implements PropertiesKey {
 
-        GAME_LEVELS("[Game] Game Levels"),
-        GLASS_SIZE("[Game] Glass Size"),
-
-        SCORE_MODE("[Score] Score mode (cumulative or maximum between overflows)"),
-        FIGURE_DROPPED_SCORE("[Score] Figure dropped score score"),
-        ONE_LINE_REMOVED_SCORE("[Score] One line removed score"),
-        TWO_LINES_REMOVED_SCORE("[Score] Two lines removed score"),
-        THREE_LINES_REMOVED_SCORE("[Score] Three lines removed score"),
-        FOUR_LINES_REMOVED_SCORE("[Score] Four lines removed score"),
-        GLASS_OVERFLOWN_PENALTY("[Score] Glass overflown penalty"),
-        SCORE_COUNTING_TYPE(ScoresImpl.SCORE_COUNTING_TYPE.key());
+        GAME_LEVELS,
+        GLASS_SIZE,
+        SCORE_MODE,
+        FIGURE_DROPPED_SCORE,
+        ONE_LINE_REMOVED_SCORE,
+        TWO_LINES_REMOVED_SCORE,
+        THREE_LINES_REMOVED_SCORE,
+        FOUR_LINES_REMOVED_SCORE,
+        GLASS_OVERFLOWN_PENALTY,
+        SCORE_COUNTING_TYPE;
 
         private String key;
 
-        Keys(String key) {
-            this.key = key;
+        Keys() {
+            this.key = key(GAME_NAME);
         }
 
         @Override
