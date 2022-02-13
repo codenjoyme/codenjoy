@@ -25,7 +25,7 @@ package com.codenjoy.dojo.collapse.model;
 
 import com.codenjoy.dojo.collapse.services.Event;
 import com.codenjoy.dojo.collapse.services.GameSettings;
-import com.codenjoy.dojo.games.collapse.Element;
+import com.codenjoy.dojo.games.collapse.ElementUtils;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
@@ -157,7 +157,7 @@ public class Collapse implements Field {
 
                 Cell cell = cells.get(pt);
                 if (cell == null) {
-                    Cell newCell = new Cell(pt, Element.numbers()[dice.next(8)]);
+                    Cell newCell = new Cell(pt, ElementUtils.numbers()[dice.next(8)]);
                     cells.add(newCell);
                 }
             }
