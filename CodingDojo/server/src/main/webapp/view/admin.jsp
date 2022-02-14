@@ -45,6 +45,41 @@
         <h1>Admin page</h1>
     </div>
 
+    <form:form id="form" name="form" action="${ctx}/admin/game/create" method="POST">
+           <table class="admin-table" id="gameVersion">
+                <b> Create new game</b>
+                <tr>
+                    <td>
+                        <b>Game name:</b></br>
+                        <input id="gameName" name = "gameName" type="text" style="color: black !important;" required/>
+                    </td>
+                <tr>
+                </tr>
+                    <td>
+                        <b>Template repository URL:</b></br>
+                        <input id="templateRepo" name = "templateRepo" type="text" style="color: black !important;" required/>
+                    </td>
+                </tr>
+                </tr>
+                    <td>
+                        <b>Welcome text<br>*player* = current player;<br> *game* = current game;<br> *repositoryURL* = player repository</b>
+                        <textarea id="welcomeText" name = "welcomeText" type="text" style="color: black !important;resize:vertical;width:100%;height:100px;" required>
+Hello *player*! <br>This is a competition for a *game* position at EPAM. <br> The people within the top 10 go forward to a technical interview. <br>
+
+In order to climb the leaderboard you will have to do some tasks. <br> <br> We have provided you with a<a href="*repositoryURL*"> github repository </a> where you will find what tasks you have to complete and you will have to submit them in the provided repository.<br><br> We wish you good luck and may the best coders win!
+                        </textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:500px;">
+                        <input type="hidden" name="game" value="${game}"/>
+                        <input type="hidden" name="room" value="${room}"/>
+                        <input class="btn-submit" type="submit" value="Add Game"/>
+                    </td>
+                </tr>
+           </table>
+     </form:form>
+
     <table class="admin-table" id="gameVersion">
         <tr>
             <td>
@@ -61,7 +96,7 @@
                 <b>Game version:</b>
             </td>
             <td style="width:500px;">
-                <textarea rows="3" cols="45">${gameVersion}</textarea>
+                <textarea rows="3" cols="45" style="color: black !important;">${gameVersion}</textarea>
             </td>
         </tr>
     </table>
@@ -100,7 +135,7 @@
                 <td>
                     <input type="hidden" name="game" value="${game}"/>
                     <input type="hidden" name="room" value="${room}"/>
-                    <input type="submit" value="Save"/>
+                    <input class="btn-submit" type="submit" value="Save"/>
                 </td>
             </tr>
         </table>
@@ -122,13 +157,13 @@
             </td>
             <form:form modelAttribute="adminSettings" action="admin#pauseGame" method="POST">
                 <tr>
-                    <td><input type="text" name="timerPeriod" value="${timerPeriod}"/></td>
+                    <td><input type="text" name="timerPeriod" style="color: black !important;" value="${timerPeriod}"/></td>
                 </tr>
                 <tr>
                     <td>
                         <input type="hidden" name="game" value="${game}"/>
                         <input type="hidden" name="room" value="${room}"/>
-                        <input type="submit" value="Set"/>
+                        <input class="btn-submit" type="submit" value="Set"/>
                     </td>
                 </tr>
             </form:form>
@@ -240,7 +275,7 @@
                 <td>
                     <input type="hidden" name="game" value="${game}"/>
                     <input type="hidden" name="room" value="${room}"/>
-                    <input type="submit" value="Save"/>
+                    <input class="btn-submit" type="submit" value="Save"/>
                 </td>
             </tr>
         </table>
@@ -265,13 +300,13 @@
                 <td><b>Load save (progress) for all</b></td>
             </tr>
             <tr>
-                <td><input type="text" class="player-save" name="progress" value="${defaultProgress}"/></td>
+                <td><input type="text" class="player-save" style="color: black !important;" name="progress" value="${defaultProgress}"/></td>
             </tr>
             <tr>
                 <td>
                     <input type="hidden" name="game" value="${game}"/>
                     <input type="hidden" name="room" value="${room}"/>
-                    <input type="submit" value="Apply for all"/>
+                    <input class="btn-submit" type="submit" value="Apply for all"/>
                 </td>
             </tr>
         </table>
@@ -350,15 +385,15 @@
                 <td>Count</td>
                 <td>RoomName</td>
             <tr>
-                <td><input type="text" name="generateNameMask" value="${generateNameMask}"/></td>
-                <td><input type="text" name="generateCount" value="${generateCount}"/></td>
-                <td><input type="text" name="generateRoom" value="${generateRoom}"/></td>
+                <td><input type="text" style="color: black !important;" name="generateNameMask" value="${generateNameMask}"/></td>
+                <td><input type="text" style="color: black !important;" name="generateCount" value="${generateCount}"/></td>
+                <td><input type="text" style="color: black !important;" name="generateRoom" value="${generateRoom}"/></td>
             </tr>
             <tr>
                 <td>
                     <input type="hidden" name="game" value="${game}"/>
                     <input type="hidden" name="room" value="${room}"/>
-                    <input type="submit" value="Create"/>
+                    <input class="btn-submit" type="submit" value="Create"/>
                 </td>
             </tr>
         </table>
@@ -382,7 +417,7 @@
                                 <td><form:input path="parameters[${status.index}]"/></td>
                             </c:when>
                             <c:when test="${element.type == 'editbox' && element.multiline}">
-                                <td><form:textarea rows="5" cols="50" path="parameters[${status.index}]"/></td>
+                                <td><form:textarea rows="5" cols="50" style="color: black !important;" path="parameters[${status.index}]"/></td>
                             </c:when>
                             <c:when test="${element.type == 'checkbox'}">
                                 <td><form:checkbox path="parameters[${status.index}]"/></td>
@@ -397,7 +432,7 @@
                     <td>
                         <input type="hidden" name="game" value="${game}"/>
                         <input type="hidden" name="room" value="${room}"/>
-                        <input type="submit" value="Save"/>
+                        <input class="btn-submit" type="submit" value="Save"/>
                     </td>
                 </tr>
             </table>
@@ -527,11 +562,11 @@
                             </c:when>
 
                             <c:otherwise>
-                                <td><input type="text" readonly="true" class="input-id"       value="${player.id}"/></td>
-                                <td><input type="text" readonly="true" class="input-readable" value="${player.readableName}"/></td>
-                                <td><input type="text" readonly="true" class="input-room" value="${player.room}"/></td>
-                                <td><input type="text" readonly="true" class="input-score"    value="${player.score}"/></td>
-                                <td><input type="text" readonly="true" class="input-callback" value="${player.callbackUrl}"/></td>
+                                <td><input type="text" style="color: black !important;" readonly="true" class="input-id"       value="${player.id}"/></td>
+                                <td><input type="text" style="color: black !important;" readonly="true" class="input-readable" value="${player.readableName}"/></td>
+                                <td><input type="text" style="color: black !important;" readonly="true" class="input-room" value="${player.room}"/></td>
+                                <td><input type="text" style="color: black !important;" readonly="true" class="input-score"    value="${player.score}"/></td>
+                                <td><input type="text" style="color: black !important;" readonly="true" class="input-callback" value="${player.callbackUrl}"/></td>
                                 <td>UDLRA</td>
                                 <td><a href="${ctx}/board/game/${player.game}">${player.game}</a></td>
                                 <td>Save</td>
@@ -586,7 +621,7 @@
                     <td>
                         <input type="hidden" name="game" value="${game}"/>
                         <input type="hidden" name="room" value="${room}"/>
-                        <input type="submit" value="Save all"/>
+                        <input class="btn-submit" type="submit" value="Save all"/>
                     </td>
                 </tr>
             </table>

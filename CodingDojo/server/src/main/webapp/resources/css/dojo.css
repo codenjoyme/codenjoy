@@ -81,10 +81,21 @@ label.error {
 }
 
 .admin-table {
-    background-color: papayawhip;
+    background-color: rgb(48, 54, 68);
     margin:10px;
     font-family: monospace;
     font-size: 14px;
+}
+
+.btn-submit {
+    margin-top: 10px;
+    height: 50px;
+    width: 100%;
+    background-color: #a3c644;
+    border: none;
+    color: #fff;
+    font-family: sans-serif;
+    text-transform: uppercase;
 }
 
 .admin-table .rightStep {

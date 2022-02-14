@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.basicGame;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2018 - 2022 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,31 +22,9 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
+import com.codenjoy.dojo.services.round.RoundSettings;
+import com.codenjoy.dojo.services.settings.SettingsImpl;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 
-import java.util.List;
-import java.util.Map;
-
-public interface GameService {
-
-    void addGame(String name);
-
-    List<String> getGames();
-
-    List<String> getRooms();
-
-    List<String> getOnlyGames();
-
-    Map<String, List<String>> getSpritesNames();
-
-    Map<String, List<String>> getSpritesValues();
-
-    Map<String, List<String>> getSprites();
-
-    GameType getGameType(String game);
-
-    GameType getGameType(String game, String room);
-
-    String getDefaultRoom();
-
-    boolean exists(String game);
+public class BasicGameSettings extends SettingsImpl implements SettingsReader<BasicGameSettings>, RoundSettings {
 }

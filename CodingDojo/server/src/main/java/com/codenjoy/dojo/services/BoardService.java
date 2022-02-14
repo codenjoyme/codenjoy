@@ -34,7 +34,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Component
@@ -84,9 +83,6 @@ public class BoardService {
         leaderboardsCache.replace(game, leaderboardsCache.get(game).entrySet().stream()
                 .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new)));
-//        return leaderboardsCache.get(game).entrySet().stream()
-//                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-//                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
     }
 
     private Map<Integer, Map.Entry<String, Integer>> sortPlayersByScoreAndCountThem(String game) {
@@ -94,7 +90,7 @@ public class BoardService {
         sortPlayersByScore(game);
 
         int counter = 1;
-        for (Map.Entry<String,Integer> entry: leaderboardsCache.get(game).entrySet()) {
+        for (Map.Entry<String, Integer> entry : leaderboardsCache.get(game).entrySet()) {
             numeratedLeaderboard.put(counter, entry);
             counter++;
         }

@@ -24,11 +24,13 @@ package com.codenjoy.dojo.web.controller;
 
 
 import com.codenjoy.dojo.services.ConfigProperties;
+import com.codenjoy.dojo.services.GameBoardData;
 import com.codenjoy.dojo.services.GameServiceImpl;
 import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.BoardService;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerService;
+import com.codenjoy.dojo.services.dao.BoardData;
 import com.codenjoy.dojo.services.dao.FeedbackSaver;
 import com.codenjoy.dojo.services.dao.PlayerGameSaver;
 import com.codenjoy.dojo.services.dao.Registration;
@@ -73,6 +75,7 @@ public class BoardController {
     public static final String PLAYER_ID = "playerId";
     public static final String READABLE_NAME = "readableName";
     public static final String GITHUB = "github";
+    public static final String WELCOME_TEXT = "welcomeText";
     public static final String PLAYER_SCORE_CLEANUP_ENABLED = "playerScoreCleanupEnabled";
     public static final String SUBSCRIBED = "subscribed";
     public static final String IS_SLACK_SUBSCRIBED = "isSlackSubscribed";
@@ -90,6 +93,7 @@ public class BoardController {
     private final SubscriptionSaver subscriptionSaver;
     private final QueryClient queryClient;
     private final BoardService leaderboardService;
+    private final BoardData boardData;
 
     @GetMapping("/player/{player}")
     public String boardPlayer(ModelMap model,
@@ -127,10 +131,10 @@ public class BoardController {
         if (player == NullPlayer.INSTANCE) {
             return "redirect:/register?id=" + id;
         }
-
+        GameBoardData gameBoardData = boardData.getInfoForGame(game);
         setUpQueries(player, game);
 
-        populateBoardAttributes(model, code, player, false);
+        populateBoardAttributes(model, code, gameBoardData, player, false);
 
         justBoard = justBoard != null && justBoard;
         model.addAttribute("justBoard", justBoard);
@@ -168,34 +172,35 @@ public class BoardController {
         if (player == NullPlayer.INSTANCE) {
             return registrationService.connectRegisteredPlayer(user.getCode(), request, user.getId(), room, game, user.getGitHubUsername(), player.getSlackEmail());
         }
-
-        populateBoardAttributes(model, player.getCode(), player, false);
+        GameBoardData gameBoardData = boardData.getInfoForGame(game);
+        populateBoardAttributes(model, player.getCode(), gameBoardData, player, false);
         return "board";
     }
 
-    private void populateBoardAttributes(ModelMap model, String code, Player player, boolean allPlayersScreen) {
-        populateBoardAttributes(model, code, player.getGame(), player.getRoom(), player.getGameOnly(), player.getId(),
+    private void populateBoardAttributes(ModelMap model, String code, GameBoardData gameBoardData, Player player, boolean allPlayersScreen) {
+        populateBoardAttributes(model, code, gameBoardData, player.getRoom(), player.getId(),
                 player.getReadableName(), player.getGitHubUsername(), player.getSubscriptionsForGame(player.getGame()), allPlayersScreen);
     }
 
-    private void populateBoardAttributes(ModelMap model, String code, String game, String room, String gameOnly,
+    private void populateBoardAttributes(ModelMap model, String code, GameBoardData gameBoardData, String room,
                                          String playerId, String readableName, String github,
                                          List<QuerySubscription> subscriptionForGame, boolean allPlayersScreen) {
+        String repoURL = playerGameSaver.getRepositoryByPlayerIdForGame(playerId, gameBoardData.getGameName());
+        String game = gameBoardData.getGameName();
         model.addAttribute(CODE, code);
         model.addAttribute(GAME, game);
         model.addAttribute(ROOM, room);
-        model.addAttribute(ALL_PLAYERS_SCREEN, false);
-        model.addAttribute(GAME, game);
-        model.addAttribute(GAME_ONLY, gameOnly);
+        model.addAttribute(GAME_ONLY, game);
         model.addAttribute(PLAYER_ID, playerId);
         model.addAttribute(READABLE_NAME, readableName);
         model.addAttribute(GITHUB, github);
+        model.addAttribute(WELCOME_TEXT, formatText(gameBoardData.getWelcomeText(), readableName, game, repoURL));
         model.addAttribute(ALL_PLAYERS_SCREEN, allPlayersScreen); // TODO так клиенту припрутся все доски и даже не из его игры, надо фиксить dojo transport
         model.addAttribute(PLAYER_SCORE_CLEANUP_ENABLED, properties.isPlayerScoreCleanupEnabled());
         model.addAttribute(SUBSCRIBED, subscriptionForGame);
         model.addAttribute(IS_SLACK_SUBSCRIBED, !registration.getSlackEmailById(playerId).equals(""));
-        model.addAttribute(REPOSITORY_URL, playerGameSaver.getRepositoryByPlayerIdForGame(playerId, game));
-        model.addAttribute(LEADERBOARD, leaderboardService.getPlayersForGame(game));
+        model.addAttribute(REPOSITORY_URL, repoURL);
+        model.addAttribute(LEADERBOARD, leaderboardService.getPlayersForGame(gameBoardData.getGameName()));
     }
 
     @GetMapping(value = "/log/player/{player}", params = {"game", "room"})
@@ -259,7 +264,8 @@ public class BoardController {
             code = user.getCode();
         }
 
-        populateBoardAttributes(model, code, game, room, player.getGameOnly(), null, null, null, null, true);
+        GameBoardData gameBoardData = boardData.getInfoForGame(game);
+        populateBoardAttributes(model, code, gameBoardData, room, null, null, null, null, true);
         return "board";
     }
 
@@ -327,5 +333,12 @@ public class BoardController {
             queryClient.subscribeToNewQueries(player, allActiveQueries, userQueryIds, game);
             queryClient.removeOldQueries(player, allActiveQueries, userQueryIds, game);
         }
+    }
+
+    private String formatText(String welcomeText, String readableName, String game, String repoURL) {
+        return welcomeText
+                .replace("*player*", readableName)
+                .replace("*game*", game)
+                .replace("*repositoryURL*", repoURL);
     }
 }

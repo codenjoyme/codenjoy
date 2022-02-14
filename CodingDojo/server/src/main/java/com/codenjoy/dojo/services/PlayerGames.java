@@ -161,8 +161,6 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
         Game game = new LockedGame(lock).wrap(single);
 
-        play(game, room, gameType, parseSave(save));
-
         PlayerGame playerGame = new PlayerGame(player, game, room);
         if (onAdd != null) {
             onAdd.accept(playerGame);
