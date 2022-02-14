@@ -107,9 +107,10 @@ public class AISolver extends AbstractSolver {
         if (!destination.isEmpty()) {
             int length = Integer.MAX_VALUE;
             List<Direction> shortestWay = null;
+            findWay.getPossibleWays(board.size(), map);
             for (Forces force : board.getMyForces()) {
                 Point from = force.getRegion();
-                List<Direction> way = findWay.getShortestWay(board.size(), from, destination, map);
+                List<Direction> way = findWay.buildPath(from, destination);
                 if (way.size() < length) {
                     length = way.size();
                     shortestWay = way;
