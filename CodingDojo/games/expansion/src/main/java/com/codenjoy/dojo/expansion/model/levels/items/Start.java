@@ -24,6 +24,7 @@ package com.codenjoy.dojo.expansion.model.levels.items;
 
 
 import com.codenjoy.dojo.games.expansion.Element;
+import com.codenjoy.dojo.games.expansion.ElementUtils;
 
 public class Start extends BaseItem {
 
@@ -34,11 +35,11 @@ public class Start extends BaseItem {
     }
 
     public Element element() {
-        return Element.getForce(index());
+        return ElementUtils.force(index());
     }
 
     public int index() {
-        return element.getIndex();
+        return ElementUtils.index(element);
     }
 
     public boolean isFree() {

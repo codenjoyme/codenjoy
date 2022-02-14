@@ -23,9 +23,10 @@ package com.codenjoy.dojo.expansion.model.levels.items;
  */
 
 
-import com.codenjoy.dojo.games.expansion.Element;
-import com.codenjoy.dojo.games.expansion.Forces;
 import com.codenjoy.dojo.expansion.model.Player;
+import com.codenjoy.dojo.games.expansion.Element;
+import com.codenjoy.dojo.games.expansion.ElementUtils;
+import com.codenjoy.dojo.games.expansion.Forces;
 
 public class HeroForces extends FieldItem {
 
@@ -54,7 +55,7 @@ public class HeroForces extends FieldItem {
 
     @Override
     public Element state(Player player, Object... alsoAtPoint) {
-        return Element.getForce(hero.getBase().index());
+        return ElementUtils.force(hero.getBase().index());
     }
 
     public int getCount() {
