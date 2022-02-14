@@ -34,6 +34,10 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.games.expansion.ElementUtils.barriers;
+import static com.codenjoy.dojo.games.expansion.ElementUtils.holes;
+import static com.codenjoy.dojo.services.algs.DeikstraFindWay.POSSIBLE_IS_CONSTANT;
+
 public class AISolver extends AbstractSolver {
 
     private int increase;
@@ -62,14 +66,12 @@ public class AISolver extends AbstractSolver {
     }
 
     public static DeikstraFindWay.Possible possible(Board board) {
-        List<Point> barriers = board.barriers();
-        List<Point> holes = board.holes();
-
         return new DeikstraFindWay.Possible() {
             @Override
-            public boolean possible(Point point) {
-                return !barriers.contains(point)
-                        && !holes.contains(point);
+            public boolean possible(Point pt) {
+                if (board.isAt(pt, barriers)) return false;
+                if (board.isAt(pt, holes)) return false;
+                return true;
             }
         };
     }
@@ -95,7 +97,7 @@ public class AISolver extends AbstractSolver {
         if (board.isGameOver()) return Command.doNothing();
 
         DeikstraFindWay.Possible map = possible(board);
-        DeikstraFindWay findWay = new DeikstraFindWay(true);
+        DeikstraFindWay findWay = new DeikstraFindWay(POSSIBLE_IS_CONSTANT);
 
         Point point = null;
         QDirection direction = null;
