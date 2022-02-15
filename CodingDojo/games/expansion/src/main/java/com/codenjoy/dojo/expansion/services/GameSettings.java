@@ -308,7 +308,10 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
     public void updateLevels(String type, String description,
                                     int index, String value) {
         String name = type + index + "_TEST";
-        getParameter(getKey(index, description)).update(name);
+        Parameter<?> parameter = getParameter(getKey(index, description), () -> null);
+        if (parameter != null) {
+            parameter.update(name);
+        }
         Levels.put(name, value);
         int size = (int) Math.sqrt(value.length());
         if (size < boardSize()) {
