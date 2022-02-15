@@ -24,26 +24,28 @@ package com.codenjoy.dojo.collapse.services;
 
 
 import com.codenjoy.dojo.services.event.Calculator;
+import com.codenjoy.dojo.services.settings.PropertiesKey;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import java.util.Arrays;
 import java.util.List;
 
+import static com.codenjoy.dojo.collapse.services.GameRunner.GAME_NAME;
 import static com.codenjoy.dojo.collapse.services.GameSettings.Keys.FIELD_SIZE;
 import static com.codenjoy.dojo.collapse.services.GameSettings.Keys.SUCCESS_SCORE;
 
 public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
 
-    public enum Keys implements Key {
+    public enum Keys implements PropertiesKey {
 
-        SUCCESS_SCORE("[Score] Success score"),
-        FIELD_SIZE("[Level] Field size");
+        SUCCESS_SCORE,
+        FIELD_SIZE;
 
         private String key;
 
-        Keys(String key) {
-            this.key = key;
+        Keys() {
+            this.key = key(GAME_NAME);
         }
 
         @Override

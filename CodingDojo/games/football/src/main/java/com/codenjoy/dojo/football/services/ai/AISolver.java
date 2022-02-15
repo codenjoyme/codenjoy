@@ -44,7 +44,7 @@ public class AISolver implements Solver<Board> {
         this.dice = dice;
     }
 
-    public DeikstraFindWay.Possible possible(final Board board) {
+    public DeikstraFindWay.Possible possible(Board board) {
         return new DeikstraFindWay.Possible() {
             @Override // TODO test me
             public boolean possible(Point point) {

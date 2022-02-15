@@ -50,7 +50,7 @@ public class SmokeTest {
 
     @Test
     public void test() {
-        // about 15.9 sec
+        // about 14.1 sec
         int players = 4;
         int ticks = 1000;
 

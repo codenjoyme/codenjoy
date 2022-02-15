@@ -82,9 +82,9 @@ public class InactivityServiceTest extends AbstractDealsTest {
             when(settings.hasParameter(INACTIVITY_TIMEOUT.key()))
                     .thenReturn(enabled);
 
-            when(settings.getParameter(INACTIVITY_ENABLED.key()))
+            when(settings.getParameter(eq(INACTIVITY_ENABLED.key()), any()))
                     .thenReturn(new CheckBox(INACTIVITY_ENABLED.key()).type(Boolean.class).update(value));
-            when(settings.getParameter(INACTIVITY_TIMEOUT.key()))
+            when(settings.getParameter(eq(INACTIVITY_TIMEOUT.key()), any()))
                     .thenReturn(new EditBox(INACTIVITY_TIMEOUT.key()).type(Integer.class).update(timeout));
         }
     }

@@ -23,15 +23,12 @@ package com.codenjoy.dojo.collapse.model;
  */
 
 
-import com.codenjoy.dojo.games.collapse.Element;
-import com.codenjoy.dojo.services.LengthToXY;
+import com.codenjoy.dojo.games.collapse.ElementUtils;
 import com.codenjoy.dojo.services.field.AbstractLevel;
-import com.codenjoy.dojo.utils.LevelUtils;
 
 import java.util.List;
 
 import static com.codenjoy.dojo.games.collapse.Element.BORDER;
-import static com.codenjoy.dojo.games.collapse.Element.NONE;
 
 public class Level extends AbstractLevel{
 
@@ -40,7 +37,7 @@ public class Level extends AbstractLevel{
     }
 
     public List<Cell> cells() {
-        return find(Cell::new, Element.numbers());
+        return find(Cell::new, ElementUtils.numbers());
     }
 
     public List<Wall> walls() {

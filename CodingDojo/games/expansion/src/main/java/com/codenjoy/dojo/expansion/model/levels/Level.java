@@ -27,6 +27,7 @@ import com.codenjoy.dojo.client.ElementsMap;
 import com.codenjoy.dojo.expansion.model.IField;
 import com.codenjoy.dojo.expansion.model.levels.items.*;
 import com.codenjoy.dojo.games.expansion.Element;
+import com.codenjoy.dojo.games.expansion.ElementUtils;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.field.AbstractLevel;
 
@@ -65,7 +66,7 @@ public class Level extends AbstractLevel {
             Element element = elements.get(ch.charAt(0));
             BaseItem item = baseItem(element);
 
-            if (element.getLayer() != LAYER1) {
+            if (ElementUtils.layer(element) != LAYER1) {
                 Element atBottom = elements.get(Element.FLOOR.ch());
                 cell.addItem(baseItem(atBottom));
             }
@@ -85,7 +86,7 @@ public class Level extends AbstractLevel {
 
     public void fillForces(String forcesMap, List<Hero> heroes) {
         fill(forcesMap, ONE_CHAR, (cell, ch) -> {
-            int index = elements.get(ch.charAt(0)).getIndex();
+            int index = ElementUtils.index(elements.get(ch.charAt(0)));
             if (index == -1) {
                 return;
             }

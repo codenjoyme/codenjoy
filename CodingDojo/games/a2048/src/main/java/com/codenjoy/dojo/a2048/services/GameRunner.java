@@ -44,6 +44,8 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 public class GameRunner extends AbstractGameType<GameSettings> {
 
+    public static final String GAME_NAME = "a2048";
+
     @Override
     public GameSettings getSettings() {
         return new GameSettings();
@@ -66,7 +68,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public String name() {
-        return "a2048";
+        return GAME_NAME;
     }
 
     @Override

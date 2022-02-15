@@ -25,6 +25,7 @@ package com.codenjoy.dojo.expansion.model;
 
 import com.codenjoy.dojo.client.ElementsMap;
 import com.codenjoy.dojo.games.expansion.Element;
+import com.codenjoy.dojo.games.expansion.ElementUtils;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -35,10 +36,10 @@ public class ElementTest {
     
     @Test
     public void testGetForce() {
-        assertEquals(Element.FORCE1, Element.getForce(0));
-        assertEquals(Element.FORCE2, Element.getForce(1));
-        assertEquals(Element.FORCE3, Element.getForce(2));
-        assertEquals(Element.FORCE4, Element.getForce(3));
+        assertEquals(Element.FORCE1, ElementUtils.force(0));
+        assertEquals(Element.FORCE2, ElementUtils.force(1));
+        assertEquals(Element.FORCE3, ElementUtils.force(2));
+        assertEquals(Element.FORCE4, ElementUtils.force(3));
 
         assertEquals(Element.FORCE1, elements.get('♥'));
         assertEquals(Element.FORCE2, elements.get('♦'));

@@ -29,7 +29,7 @@ import com.codenjoy.dojo.a2048.model.generator.Generator;
 import com.codenjoy.dojo.a2048.model.generator.RandomGenerator;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.event.Calculator;
-import com.codenjoy.dojo.services.event.ScoresImpl;
+import com.codenjoy.dojo.services.settings.PropertiesKey;
 import com.codenjoy.dojo.services.settings.SelectBox;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
@@ -41,6 +41,7 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
+import static com.codenjoy.dojo.a2048.services.GameRunner.GAME_NAME;
 import static com.codenjoy.dojo.a2048.services.GameSettings.BreaksMode.BREAKS_NOT_EXISTS;
 import static com.codenjoy.dojo.a2048.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.a2048.services.GameSettings.NumbersMode.NEW_NUMBERS_IN_CORNERS;
@@ -49,17 +50,17 @@ import static java.util.stream.Collectors.toList;
 
 public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
 
-    public enum BreaksMode implements SettingsReader.Key {
+    public enum BreaksMode implements PropertiesKey {
 
-        BREAKS_EXISTS(0, "With breaks mode"),
-        BREAKS_NOT_EXISTS(1, "Without breaks mode");
+        BREAKS_EXISTS(0),
+        BREAKS_NOT_EXISTS(1);
 
         private int value;
         private String key;
 
-        BreaksMode(int value, String key) {
+        BreaksMode(int value) {
             this.value = value;
-            this.key = key;
+            key = key(GAME_NAME);
         }
 
         public static List<String> keys() {
@@ -78,17 +79,17 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         }
     }
 
-    public enum NumbersMode implements SettingsReader.Key {
+    public enum NumbersMode implements PropertiesKey {
 
-        NEW_NUMBERS_IN_CORNERS(0, "Classic (corner only) mode"),
-        NEW_NUMBERS_IN_RANDOM(1, "With random numbers mode");
+        NEW_NUMBERS_IN_CORNERS(0),
+        NEW_NUMBERS_IN_RANDOM(1);
 
         private int value;
         private String key;
 
-        NumbersMode(int value, String key) {
+        NumbersMode(int value) {
             this.value = value;
-            this.key = key;
+            this.key = key(GAME_NAME);
         }
 
         public static List<String> keys() {
@@ -107,19 +108,19 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         }
     }
 
-    public enum Keys implements SettingsReader.Key {
+    public enum Keys implements PropertiesKey {
 
-        SIZE("[Level] Size"),
-        NEW_NUMBERS("[Game] New numbers"),
-        NUMBERS_MODE("[Game] Numbers mode"),
-        BREAKS_MODE("[Game] Breaks mode"),
-        LEVEL_MAP("[Level] Level map"),
-        SCORE_COUNTING_TYPE(ScoresImpl.SCORE_COUNTING_TYPE.key());
+        SIZE,
+        NEW_NUMBERS,
+        NUMBERS_MODE,
+        BREAKS_MODE,
+        LEVEL_MAP,
+        SCORE_COUNTING_TYPE;
 
         private String key;
 
-        Keys(String key) {
-            this.key = key;
+        Keys() {
+            this.key = key(GAME_NAME);
         }
 
         @Override

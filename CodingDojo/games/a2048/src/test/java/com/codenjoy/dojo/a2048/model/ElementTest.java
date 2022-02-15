@@ -23,6 +23,7 @@ package com.codenjoy.dojo.a2048.model;
  */
 
 import com.codenjoy.dojo.games.a2048.Element;
+import com.codenjoy.dojo.games.a2048.ElementUtils;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -34,10 +35,10 @@ public class ElementTest {
     @Test
     public void testValuesExcept() {
         assertEquals("[x, 2, 4, 8, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S,  ]",
-                Arrays.toString(Element.valuesExcept()));
+                Arrays.toString(ElementUtils.valuesExcept()));
 
         assertEquals("[2, 4, 8, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S]",
-                Arrays.toString(Element.valuesExcept(Element.NONE, Element._x)));
+                Arrays.toString(ElementUtils.valuesExcept(Element.NONE, Element._x)));
 
     }
 

@@ -23,6 +23,7 @@ package com.codenjoy.dojo.collapse.model;
  */
 
 import com.codenjoy.dojo.games.collapse.Element;
+import com.codenjoy.dojo.games.collapse.ElementUtils;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -35,7 +36,7 @@ public class ElementTest {
     @Test
     public void testNumbers() {
         assertEquals("[1, 2, 3, 4, 5, 6, 7, 8, 9]",
-                Arrays.toString(Element.numbers()));
+                Arrays.toString(ElementUtils.numbers()));
     }
 
     @Test
@@ -43,7 +44,7 @@ public class ElementTest {
         assertEquals("[' ':-1, '☼':-1, '1':1, '2':2, '3':3, '4':4, " +
                         "'5':5, '6':6, '7':7, '8':8, '9':9]",
                 Arrays.stream(Element.values())
-                    .map(el -> String.format("'%s':%s", el.ch(), el.number()))
+                    .map(el -> String.format("'%s':%s", el.ch(), ElementUtils.number(el)))
                     .collect(toList())
                     .toString());
     }

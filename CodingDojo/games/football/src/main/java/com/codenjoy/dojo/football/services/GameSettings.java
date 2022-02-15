@@ -25,27 +25,29 @@ package com.codenjoy.dojo.football.services;
 
 import com.codenjoy.dojo.football.model.Level;
 import com.codenjoy.dojo.services.event.Calculator;
+import com.codenjoy.dojo.services.settings.PropertiesKey;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import java.util.Arrays;
 import java.util.List;
 
+import static com.codenjoy.dojo.football.services.GameRunner.GAME_NAME;
 import static com.codenjoy.dojo.football.services.GameSettings.Keys.*;
 
 public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
 
-    public enum Keys implements Key {
+    public enum Keys implements PropertiesKey {
 
-        NUMBER_OF_PLAYERS("[Game] Number of players"),
-        IS_NEED_AI("[Game] Is need AI"),
-        WIN_SCORE("[Score] Win score"),
-        LEVEL_MAP("[Level] Level map");
+        NUMBER_OF_PLAYERS,
+        IS_NEED_AI,
+        WIN_SCORE,
+        LEVEL_MAP;
 
         private String key;
 
-        Keys(String key) {
-            this.key = key;
+        Keys() {
+            this.key = key(GAME_NAME);
         }
 
         @Override

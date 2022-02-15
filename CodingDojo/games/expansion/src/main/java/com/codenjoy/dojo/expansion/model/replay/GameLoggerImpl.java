@@ -27,6 +27,7 @@ import com.codenjoy.dojo.expansion.model.Expansion;
 import com.codenjoy.dojo.expansion.model.Player;
 import com.codenjoy.dojo.expansion.model.levels.items.Hero;
 import com.codenjoy.dojo.expansion.services.GameSettings;
+import com.codenjoy.dojo.games.expansion.ElementUtils;
 import com.codenjoy.dojo.utils.JsonUtils;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
@@ -99,7 +100,7 @@ public class GameLoggerImpl implements GameLogger {
                         player.lg.id(),
                         hero.lg.id(),
                         new JSONObject(hero.getBasePosition()),
-                        hero.getBase().element().getIndex(),
+                        ElementUtils.index(hero.getBase().element()),
                         player.getName()));
                 write(String.format("// Please run \"http://127.0.0.1:8080/codenjoy-contest" +
                                 "/admin31415?player=%s&gameName=expansion&data=" +

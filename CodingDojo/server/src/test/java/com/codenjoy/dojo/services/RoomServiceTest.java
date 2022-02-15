@@ -267,7 +267,7 @@ public class RoomServiceTest {
 
         // when
         // меняем настройку в одном сеттинг объекте
-        settings1.getParameter(PARAMETER1.key()).update(23);
+        settings1.parameter(PARAMETER1.key()).update(23);
 
         // then
         // проверили что поменялось в другом
@@ -296,7 +296,7 @@ public class RoomServiceTest {
 
         // when
         // меняем настройку в одном сеттинг объекте
-        settings1.getParameter(PARAMETER1.key()).update(23);
+        settings1.parameter(PARAMETER1.key()).update(23);
 
         // then
         // проверили что поменялось только в нем
@@ -324,7 +324,7 @@ public class RoomServiceTest {
 
         // when
         // меняем настройку в одном сеттинг объекте
-        settings1.getParameter(PARAMETER1.key()).update(23);
+        settings1.parameter(PARAMETER1.key()).update(23);
 
         // then
         // проверили что поменялось только в нем

@@ -25,26 +25,28 @@ package com.codenjoy.dojo.puzzlebox.services;
 
 import com.codenjoy.dojo.puzzlebox.model.Level;
 import com.codenjoy.dojo.services.event.Calculator;
+import com.codenjoy.dojo.services.settings.PropertiesKey;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import java.util.Arrays;
 import java.util.List;
 
+import static com.codenjoy.dojo.puzzlebox.services.GameRunner.GAME_NAME;
 import static com.codenjoy.dojo.puzzlebox.services.GameSettings.Keys.*;
 
 public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
 
-    public enum Keys implements Key {
+    public enum Keys implements PropertiesKey {
 
-        WIN_SCORE("[Score] Win score"),
-        FILL_SCORE("[Score] Fill score"),
-        LEVEL_MAP("[Level] Level map");
+        WIN_SCORE,
+        FILL_SCORE,
+        LEVEL_MAP;
 
         private String key;
 
-        Keys(String key) {
-            this.key = key;
+        Keys() {
+            this.key = key(GAME_NAME);
         }
 
         @Override

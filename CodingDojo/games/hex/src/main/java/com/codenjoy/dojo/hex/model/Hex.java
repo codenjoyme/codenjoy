@@ -24,6 +24,7 @@ package com.codenjoy.dojo.hex.model;
 
 
 import com.codenjoy.dojo.games.hex.Element;
+import com.codenjoy.dojo.games.hex.ElementUtils;
 import com.codenjoy.dojo.hex.model.items.Wall;
 import com.codenjoy.dojo.hex.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
@@ -256,7 +257,7 @@ public class Hex implements Field {
                 .map(Player::getElement)
                 .collect(toList());
 
-        List<Element> free = Element.heroes().stream()
+        List<Element> free = Arrays.stream(ElementUtils.enemies)
                 .filter(el -> !busy.contains(el))
                 .collect(toList());
 

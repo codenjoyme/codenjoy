@@ -58,6 +58,7 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 public class GameRunner extends AbstractGameType<GameSettings>  {
 
     private static final Logger log = LoggerFactory.getLogger(GameRunner.class);
+    public static final String GAME_NAME = "expansion";
 
     @Override
     public GameSettings getSettings() {
@@ -131,7 +132,7 @@ public class GameRunner extends AbstractGameType<GameSettings>  {
 
     @Override
     public String name() {
-        return "expansion";
+        return GAME_NAME;
     }
 
     @Override
