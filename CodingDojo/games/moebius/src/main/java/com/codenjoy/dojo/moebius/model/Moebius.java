@@ -24,6 +24,7 @@ package com.codenjoy.dojo.moebius.model;
 
 
 import com.codenjoy.dojo.games.moebius.Element;
+import com.codenjoy.dojo.games.moebius.ElementUtils;
 import com.codenjoy.dojo.moebius.services.Event;
 import com.codenjoy.dojo.moebius.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
@@ -69,7 +70,7 @@ public class Moebius implements Field {
 
         Optional<Point> pt = freeRandom();
         if (pt.isPresent()) {
-            setLine(pt.get(), Element.random(dice));
+            setLine(pt.get(), ElementUtils.random(dice));
         } else {
             player.event(new Event(Event.Type.GAME_OVER));
             player.getHero().die();
