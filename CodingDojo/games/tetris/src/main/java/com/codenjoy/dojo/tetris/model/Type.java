@@ -23,6 +23,7 @@ package com.codenjoy.dojo.tetris.model;
  */
 
 import com.codenjoy.dojo.games.tetris.Element;
+import com.codenjoy.dojo.games.tetris.ElementUtils;
 
 public enum Type {
 
@@ -95,7 +96,7 @@ public enum Type {
 
     public static Type getByIndex(int figureIndex) {
         for (Type type : values()) {
-            if (type.getColor().index() == figureIndex) {
+            if (ElementUtils.index(type.getColor()) == figureIndex) {
                 return type;
             }
         }

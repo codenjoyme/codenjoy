@@ -23,12 +23,13 @@ package com.codenjoy.dojo.tetris.services.ai;
  */
 
 
-import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.AbstractJsonSolver;
-import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.games.tetris.Board;
 import com.codenjoy.dojo.games.tetris.Element;
+import com.codenjoy.dojo.games.tetris.ElementUtils;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.tetris.model.*;
 import org.apache.commons.lang3.StringUtils;
 
@@ -60,7 +61,7 @@ public class AISolver extends AbstractJsonSolver<Board> {
         if (current == null) {
             return "";
         }
-        Figure figure = Type.getByIndex(current.index()).create();
+        Figure figure = Type.getByIndex(ElementUtils.index(current)).create();
 
         Point point = board.getCurrentFigurePoint();
 

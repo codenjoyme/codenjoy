@@ -23,8 +23,9 @@ package com.codenjoy.dojo.tetris.model;
  */
 
 
-import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.games.tetris.Element;
+import com.codenjoy.dojo.games.tetris.ElementUtils;
+import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.tetris.services.Event;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
@@ -348,7 +349,7 @@ public class GlassImplTest {
     public void shouldNotifyScoreBoardWhenDropped() {
         glass.drop(point, 0, HEIGHT);
 
-        verify(listener).event(Event.figuresDropped(1, point.type().getColor().index()));
+        verify(listener).event(Event.figuresDropped(1, ElementUtils.index(point.type().getColor())));
     }
 
     @Test
@@ -369,14 +370,14 @@ public class GlassImplTest {
     public void shouldNotifyAllListenersScoreBoardWhenDropped() {
         glass.drop(point, 0, HEIGHT);
 
-        verify(listener).event(Event.figuresDropped(1, point.type().getColor().index()));
+        verify(listener).event(Event.figuresDropped(1, ElementUtils.index(point.type().getColor())));
     }
 
     @Test
     public void shouldNotifyAllListenersScoreBoardWhenLinesRemoved() {
         glass.drop(glassWidthFigure, 0, HEIGHT);
 
-        verify(listener).event(Event.figuresDropped(1, glassWidthFigure.type().getColor().index()));
+        verify(listener).event(Event.figuresDropped(1, ElementUtils.index(glassWidthFigure.type().getColor())));
     }
 
     @Test
@@ -385,7 +386,7 @@ public class GlassImplTest {
 
         try {
             glass.drop(Type.I.create(), WIDTH / 2, HEIGHT);
-            verify(listener, times(1)).event(Event.figuresDropped(1, Type.I.getColor().index()));
+            verify(listener, times(1)).event(Event.figuresDropped(1, ElementUtils.index(Type.I.getColor())));
         } catch (Exception e) {
             fail("Was exception: " + e);
         }
