@@ -62,5 +62,6 @@ eval_echo "git push origin master"
 
 eval_echo "cd $OUT/.."
 
+echo
 color "Press Enter to continue"
 read

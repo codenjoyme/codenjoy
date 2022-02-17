@@ -46,6 +46,7 @@ public class TrueRandomDice implements Dice {
 
     @Override
     public int next(int n) {
+        // TODO do not use map.containsKey just check that map.get() != null
         if (!map.containsKey(n)) {
             generate(n);
         }

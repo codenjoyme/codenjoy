@@ -23,16 +23,12 @@ package com.codenjoy.dojo.quadro.model;
  */
 
 import com.codenjoy.dojo.quadro.model.items.Chip;
-import com.codenjoy.dojo.quadro.model.items.RedChip;
-import com.codenjoy.dojo.quadro.model.items.YellowChip;
 import com.codenjoy.dojo.services.Point;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static java.util.stream.Collectors.toMap;
 
 class ChipSet {
 
@@ -51,6 +47,7 @@ class ChipSet {
     }
 
     boolean contains(Point point) {
+        // TODO do not use map.containsKey just check that map.get() != null
         return chips.containsKey(point);
     }
 

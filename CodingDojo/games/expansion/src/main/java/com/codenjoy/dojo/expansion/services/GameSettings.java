@@ -28,6 +28,7 @@ import com.codenjoy.dojo.expansion.model.attack.DefenderHasAdvantageAttack;
 import com.codenjoy.dojo.expansion.model.attack.OneByOneAttack;
 import com.codenjoy.dojo.expansion.model.levels.Levels;
 import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.settings.PropertiesKey;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 import org.jetbrains.annotations.NotNull;
@@ -36,6 +37,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import static com.codenjoy.dojo.expansion.services.GameRunner.GAME_NAME;
 import static com.codenjoy.dojo.expansion.services.GameSettings.Keys.*;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.ArrayUtils.toArray;
@@ -44,34 +46,34 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
 
     public static final int UNLIMITED = -1;
 
-    public enum Keys implements Key {
+    public enum Keys implements PropertiesKey {
         
-        BOARD_SIZE("Board size"),
-        SINGLE_TRAINING_MODE("Single training mode"),
-        WAITING_OTHERS("Waiting others"),
-        SHUFFLE_PLAYERS_AFTER_LOBBY("Shuffle players after lobby"),
-        WIN_ON_MULTIPLE_SCORE("Win on multiple score"),
-        DRAW_ON_MULTIPLE_SCORE("Draw on multiple score"),
-        TICKS_PER_ROUND("Ticks per round"),
-        LEAVE_FORCES("Leave forces count"),
-        INITIAL_FORCES("Initial forces count"),
-        INCREASE_FORCES_PER_TICK("Increase forces per tick count"),
-        INCREASE_FORCES_GOLD_SCORE("Increase forces gold score"),
-        REGION_SCORE("Total count territories is occupied by you increase force score"),
-        DEFENDER_HAS_ADVANTAGE("Defender has advantage"),
-        DEFENDER_ATTACK_ADVANTAGE("Defender attack advantage"),
-        COMMAND("Command"),
-        GAME_LOGGING_ENABLE("Game logging enable"),
-        DELAY_REPLAY("Clean scores to run all replays"),
-        MULTIPLE_LEVEL("Multiple level"),
-        MULTIPLE_LEVEL_SIZE("Multiple levels size"),
-        SINGLE_LEVEL("Single level"),
-        SINGLE_LEVEL_SIZE("Single levels size");
+        BOARD_SIZE,
+        SINGLE_TRAINING_MODE,
+        WAITING_OTHERS,
+        SHUFFLE_PLAYERS_AFTER_LOBBY,
+        WIN_ON_MULTIPLE_SCORE,
+        DRAW_ON_MULTIPLE_SCORE,
+        TICKS_PER_ROUND,
+        LEAVE_FORCES,
+        INITIAL_FORCES,
+        INCREASE_FORCES_PER_TICK,
+        INCREASE_FORCES_GOLD_SCORE,
+        REGION_SCORE,
+        DEFENDER_HAS_ADVANTAGE,
+        DEFENDER_ATTACK_ADVANTAGE,
+        COMMAND,
+        GAME_LOGGING_ENABLE,
+        DELAY_REPLAY,
+        MULTIPLE_LEVEL,
+        MULTIPLE_LEVEL_SIZE,
+        SINGLE_LEVEL,
+        SINGLE_LEVEL_SIZE;
 
         private String key;
 
-        Keys(String key) {
-            this.key = key;
+        Keys() {
+            this.key = key(GAME_NAME);
         }
         
         @Override
@@ -306,7 +308,10 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
     public void updateLevels(String type, String description,
                                     int index, String value) {
         String name = type + index + "_TEST";
-        getParameter(getKey(index, description)).update(name);
+        Parameter<?> parameter = getParameter(getKey(index, description), () -> null);
+        if (parameter != null) {
+            parameter.update(name);
+        }
         Levels.put(name, value);
         int size = (int) Math.sqrt(value.length());
         if (size < boardSize()) {

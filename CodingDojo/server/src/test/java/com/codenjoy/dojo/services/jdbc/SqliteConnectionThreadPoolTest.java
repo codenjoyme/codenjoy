@@ -95,6 +95,7 @@ public class SqliteConnectionThreadPoolTest {
         assertEquals(count, inserted.size());
 
         list.forEach(user -> {
+            // TODO do not use map.containsKey just check that map.get() != null
             if (!inserted.containsKey(user.getId())) {
                 return;
             }

@@ -27,6 +27,7 @@ import com.codenjoy.dojo.expansion.model.levels.Levels;
 import com.codenjoy.dojo.expansion.model.levels.items.Hero;
 import com.codenjoy.dojo.expansion.services.Event;
 import com.codenjoy.dojo.expansion.services.GameSettings;
+import com.codenjoy.dojo.games.expansion.ElementUtils;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
@@ -97,7 +98,7 @@ public class Player extends GamePlayer<Hero, IField> {
     }
 
     public int getForcesColor() {
-        return hero.getBase().element().getIndex();
+        return ElementUtils.index(hero.getBase().element());
     }
 
     public IField getField() {

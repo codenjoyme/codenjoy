@@ -25,10 +25,11 @@ package com.codenjoy.dojo.a2048.model;
 
 import com.codenjoy.dojo.a2048.TestGameSettings;
 import com.codenjoy.dojo.a2048.services.Event;
-import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.games.a2048.Element;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.Joystick;
+import com.codenjoy.dojo.services.dice.MockDice;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
@@ -36,7 +37,6 @@ import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.stream.IntStream;
 
@@ -46,7 +46,6 @@ import static com.codenjoy.dojo.a2048.services.GameSettings.Keys.LEVEL_MAP;
 import static com.codenjoy.dojo.a2048.services.GameSettings.NumbersMode.NEW_NUMBERS_IN_CORNERS;
 import static com.codenjoy.dojo.a2048.services.GameSettings.NumbersMode.NEW_NUMBERS_IN_RANDOM;
 import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
 public class GameTest {
@@ -54,27 +53,22 @@ public class GameTest {
     private A2048 field;
     private Game game;
     private Joystick joystick;
-    private Dice dice;
+    private MockDice dice;
     private EventListener listener;
-    private Level level;
-    private PrinterFactory printer;
+    private PrinterFactory<Element, Player> printer;
     private TestGameSettings settings;
 
     @Before
     public void setup() {
-        dice = mock(Dice.class);
+        dice = new MockDice();
         printer = new PrinterFactoryImpl<>();
         settings = new TestGameSettings();
         settings.mode(NEW_NUMBERS_IN_CORNERS, 0);
         settings.mode(BREAKS_NOT_EXISTS, 0);
     }
 
-    private void dice(int...ints) {
-        reset(dice);
-        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
-        for (int i : ints) {
-            when = when.thenReturn(i);
-        }
+    private void dice(Integer...next) {
+        dice.then(next);
     }
 
     private void givenFl(String board) {
@@ -906,7 +900,7 @@ public class GameTest {
     }
 
     private void assertEvens(String expected) {
-        ArgumentCaptor captor = ArgumentCaptor.forClass(Event.class);
+        ArgumentCaptor<Event> captor = ArgumentCaptor.forClass(Event.class);
         int count = expected.split(",").length;
         verify(listener, times(count)).event(captor.capture());
         assertEquals(expected, captor.getAllValues().toString());

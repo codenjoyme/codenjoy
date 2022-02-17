@@ -25,27 +25,29 @@ package com.codenjoy.dojo.quadro.services;
 
 import com.codenjoy.dojo.quadro.model.Level;
 import com.codenjoy.dojo.services.event.Calculator;
+import com.codenjoy.dojo.services.settings.PropertiesKey;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import java.util.Arrays;
 import java.util.List;
 
+import static com.codenjoy.dojo.quadro.services.GameRunner.GAME_NAME;
 import static com.codenjoy.dojo.quadro.services.GameSettings.Keys.*;
 
 public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
 
-    public enum Keys implements Key {
+    public enum Keys implements PropertiesKey {
 
-        WIN_SCORE("[Score] Win score"),
-        LOSE_PENALTY("[Score] Lose penalty"),
-        DRAW_SCORE("[Score] Draw score"),
-        LEVEL_MAP("[Level] Level map");
+        WIN_SCORE,
+        LOSE_PENALTY,
+        DRAW_SCORE,
+        LEVEL_MAP;
 
         private String key;
 
-        Keys(String key) {
-            this.key = key;
+        Keys() {
+            this.key = key(GAME_NAME);
         }
 
         @Override

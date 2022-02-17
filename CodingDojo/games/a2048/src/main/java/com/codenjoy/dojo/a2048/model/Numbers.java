@@ -24,6 +24,7 @@ package com.codenjoy.dojo.a2048.model;
 
 
 import com.codenjoy.dojo.games.a2048.Element;
+import com.codenjoy.dojo.games.a2048.ElementUtils;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 
@@ -96,7 +97,7 @@ public class Numbers {
     public boolean contains(Element element) {
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
-                if (data[x][y] == element.number()) return true;
+                if (data[x][y] == ElementUtils.number(element)) return true;
             }
         }
         return false;
@@ -112,7 +113,7 @@ public class Numbers {
 
     @Override
     public String toString() {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
 
         for (int y = size - 1; y >= 0; y--) {
             for (int x = 0; x < size; x++) {

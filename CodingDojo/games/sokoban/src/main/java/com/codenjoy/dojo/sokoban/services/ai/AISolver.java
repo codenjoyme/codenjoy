@@ -24,12 +24,12 @@ package com.codenjoy.dojo.sokoban.services.ai;
 
 
 import com.codenjoy.dojo.client.Solver;
+import com.codenjoy.dojo.games.sokoban.Board;
+import com.codenjoy.dojo.games.sokoban.Element;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
-import com.codenjoy.dojo.games.sokoban.Board;
-import com.codenjoy.dojo.games.sokoban.Element;
 
 import java.util.List;
 
@@ -43,7 +43,7 @@ public class AISolver implements Solver<Board> {
         this.way = new DeikstraFindWay();
     }
 
-    public DeikstraFindWay.Possible possible(final Board board) {
+    public DeikstraFindWay.Possible possible(Board board) {
         return new DeikstraFindWay.Possible() {
             @Override
             public boolean possible(Point point) { // TODO test me
@@ -66,7 +66,7 @@ public class AISolver implements Solver<Board> {
     }
 
     private String getBombIfNeeded(Board board) {
-        Point me = board.getMe();
+        Point me = board.getHero();
         if (me.getX() % 2 == 0 && me.getY() % 2 == 0) {
             return ", ACT";
         } else {
@@ -77,7 +77,7 @@ public class AISolver implements Solver<Board> {
     public List<Direction> getDirections(Board board) {
         int size = board.size();
 
-        Point from = board.getMe();
+        Point from = board.getHero();
         List<Point> to = board.get(Element.BOX);
         DeikstraFindWay.Possible map = possible(board);
         return way.getShortestWay(size, from, to, map);

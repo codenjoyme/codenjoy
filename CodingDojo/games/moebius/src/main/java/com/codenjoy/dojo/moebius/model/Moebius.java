@@ -24,11 +24,12 @@ package com.codenjoy.dojo.moebius.model;
 
 
 import com.codenjoy.dojo.games.moebius.Element;
+import com.codenjoy.dojo.games.moebius.ElementUtils;
 import com.codenjoy.dojo.moebius.services.Event;
 import com.codenjoy.dojo.moebius.services.GameSettings;
-import com.codenjoy.dojo.services.BoardUtils;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.field.Generator;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.*;
@@ -69,11 +70,16 @@ public class Moebius implements Field {
 
         Optional<Point> pt = freeRandom();
         if (pt.isPresent()) {
-            setLine(pt.get(), Element.random(dice));
+            setLine(pt.get(), ElementUtils.random(dice));
         } else {
             player.event(new Event(Event.Type.GAME_OVER));
             player.getHero().die();
         }
+    }
+
+    @Override
+    public int size() {
+        return size;
     }
 
     private void removePipes() {
@@ -82,7 +88,7 @@ public class Moebius implements Field {
             Line line = processing.remove();
 
             if (line.getType() == Line.Type.CROSS) continue;
-            if (line.isOutOf(1, 1, size)) continue;
+            if (line.isOutOfExclude(1, 1, size)) continue;
 
             List<Line> cycle = checkCycle(line);
 
@@ -136,8 +142,8 @@ public class Moebius implements Field {
     }
 
     public Optional<Point> freeRandom() {
-        return BoardUtils.freeRandom(size, dice,
-                pt -> !pt.isOutOf(1, 1, size) && isFree(pt));
+        return Generator.freeRandom(size, dice,
+                pt -> !pt.isOutOfExclude(1, 1, size) && isFree(pt));
     }
 
     @Override

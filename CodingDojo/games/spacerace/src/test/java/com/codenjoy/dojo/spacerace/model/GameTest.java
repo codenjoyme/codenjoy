@@ -22,8 +22,8 @@ package com.codenjoy.dojo.spacerace.model;
  * #L%
  */
 
-import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.dice.MockDice;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
@@ -31,23 +31,18 @@ import com.codenjoy.dojo.spacerace.services.GameSettings;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.stubbing.OngoingStubbing;
 
 import static com.codenjoy.dojo.spacerace.services.GameSettings.Keys.BULLETS_COUNT;
 import static com.codenjoy.dojo.spacerace.services.GameSettings.Keys.TICKS_TO_RECHARGE;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class GameTest {
 
     private Spacerace game;
     private BulletCharger charger;
     private Hero hero;
-    private Dice dice;
+    private MockDice dice;
     private EventListener listener;
     private Player player;
     private PrinterFactory printer = new PrinterFactoryImpl();
@@ -55,37 +50,32 @@ public class GameTest {
 
     @Before
     public void setup() {
-        dice = mock(Dice.class);
+        dice = new MockDice();
         settings = new GameSettings()
                 .integer(TICKS_TO_RECHARGE, 100)
                 .integer(BULLETS_COUNT, 1);
         charger = new BulletCharger(settings);
     }
 
-    private void dice(int...ints) {
-        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
-        for (int i : ints) {
-            when = when.thenReturn(i);
-        }
+    private void dice(Integer... next) {
+        dice.then(next);
     }
 
     private void diceNew(int...ints) {
-        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
-
-        if(ints.length == 0){ // we work just with nothing
-            when = when.thenReturn(-1);
+        if (ints.length == 0) { // we work just with nothing
+            dice.then(-1);
         }
 
-        if(ints.length == 1){ // we work just with stones
-            when = when.thenReturn(-1, -1, -1, -1, ints[0], -1);
+        if (ints.length == 1) { // we work just with stones
+            dice.then(-1, -1, -1, -1, ints[0], -1);
         }
 
-        if(ints.length == 2){ // we work with stones and bombs
-            when = when.thenReturn(-1, -1, -1, -1, ints[0], ints[1], -1);
+        if (ints.length == 2) { // we work with stones and bombs
+            dice.then(-1, -1, -1, -1, ints[0], ints[1], -1);
         }
 
-        if(ints.length == 4){ // we work stones, bombs and bulletPacks
-            when = when.thenReturn(ints[2], ints[3], ints[0], ints[1], -1);
+        if (ints.length == 4) { // we work stones, bombs and bulletPacks
+            dice.then(ints[2], ints[3], ints[0], ints[1], -1);
         }
     }
 

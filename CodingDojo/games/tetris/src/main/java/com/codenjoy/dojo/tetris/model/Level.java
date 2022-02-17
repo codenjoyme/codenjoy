@@ -23,7 +23,7 @@ package com.codenjoy.dojo.tetris.model;
  */
 
 
-import com.codenjoy.dojo.games.tetris.Element;
+import com.codenjoy.dojo.games.tetris.ElementUtils;
 import com.codenjoy.dojo.services.field.AbstractLevel;
 
 import java.util.List;
@@ -38,7 +38,7 @@ public class Level extends AbstractLevel {
 
     public List<Plot> plots() {
         return find(Plot::new,
-                Element.valuesExcept(NONE));
+                ElementUtils.valuesExcept(NONE));
 
     }
 }

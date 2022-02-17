@@ -25,9 +25,9 @@ package com.codenjoy.dojo.football.model;
 import com.codenjoy.dojo.football.TestGameSettings;
 import com.codenjoy.dojo.football.services.Event;
 import com.codenjoy.dojo.football.services.GameSettings;
-import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
+import com.codenjoy.dojo.services.dice.MockDice;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
@@ -43,9 +43,7 @@ import java.util.List;
 import static java.util.stream.Collectors.joining;
 import static org.apache.commons.lang3.StringUtils.repeat;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class MultiplayerTest {
 
@@ -55,7 +53,7 @@ public class MultiplayerTest {
     private Game game1;
     private Game game2;
     private Game game3;
-    private Dice dice;
+    private MockDice dice;
     private Football field;
     private EventsListenersAssert events;
     private Level level;
@@ -71,7 +69,7 @@ public class MultiplayerTest {
                 "☼    ☼\n" +
                 "☼☼┬┬☼☼\n");
 
-        dice = mock(Dice.class);
+        dice = new MockDice();
         GameSettings settings = new TestGameSettings();
         field = new Football(level, dice, settings);
         PrinterFactory factory = new PrinterFactoryImpl();
@@ -125,8 +123,8 @@ public class MultiplayerTest {
         verifyAllEvents("");
     }
 
-    private void dice(int x, int y) {
-        when(dice.next(anyInt())).thenReturn(x, y);
+    private void dice(Integer... next) {
+        dice.then(next);
     }
 
     public void verifyAllEvents(String expected) {

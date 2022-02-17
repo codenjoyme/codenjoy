@@ -24,38 +24,37 @@ package com.codenjoy.dojo.hex.model;
 
 
 import com.codenjoy.dojo.games.hex.Element;
+import com.codenjoy.dojo.games.hex.ElementUtils;
 import com.codenjoy.dojo.hex.TestGameSettings;
 import com.codenjoy.dojo.hex.services.GameSettings;
-import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.Joystick;
+import com.codenjoy.dojo.services.dice.MockDice;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Test;
-import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
 public class MultiplayerTest {
 
     private Hex game;
     private Level level;
-    private Dice dice;
+    private MockDice dice = new MockDice();
     private int count = 2;
     private EventListener listener;
-    private PrinterFactory printerFactory;
+    private PrinterFactory<Element, Player> printerFactory;
 
     public void givenGame() {
         level = mock(Level.class);
-        printerFactory = new PrinterFactoryImpl();
+        printerFactory = new PrinterFactoryImpl<>();
         listener = mock(EventListener.class);
         when(level.size()).thenReturn(5);
 
@@ -73,8 +72,8 @@ public class MultiplayerTest {
     // вводится 3-4-5-n игрок на поле
     @Test
     public void shouldManyPlayers() {
-        count = Element.heroes().size() + 1;
-        givenDice(0,0, 0,2, 0,4, 1,1, 1,3, 2,0, 2,2, 2,4, 3,1, 3,3, 4,0, 4,2, 4,4);
+        count = ElementUtils.enemies.length + 1;
+        dice(0,0, 0,2, 0,4, 1,1, 1,3, 2,0, 2,2, 2,4, 3,1, 3,3, 4,0, 4,2, 4,4);
         givenGame();
 
         // then
@@ -89,7 +88,7 @@ public class MultiplayerTest {
     @Test
     public void shouldNoWayAtHero() {
         count = 3;
-        givenDice(0,0, 0,1, 0,2);
+        dice(0,0, 0,1, 0,2);
         givenGame();
 
         assertF("     " +
@@ -139,12 +138,8 @@ public class MultiplayerTest {
         verifyNoMoreInteractions(listener);
     }
 
-    private void givenDice(int... values) {
-        dice = mock(Dice.class);
-        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
-        for (int value : values) {
-            when = when.thenReturn(value);
-        }
+    private void dice(Integer... next) {
+        dice.then(next);
     }
 
     private void assertF(String expected, Player player) {

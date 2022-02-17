@@ -46,6 +46,8 @@ import static com.codenjoy.dojo.collapse.services.GameSettings.Keys.FIELD_SIZE;
 
 public class GameRunner extends AbstractGameType<GameSettings> {
 
+    public static final String GAME_NAME = "collapse";
+
     @Override
     public GameSettings getSettings() {
         return new GameSettings();
@@ -71,7 +73,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public String name() {
-        return "collapse";
+        return GAME_NAME;
     }
 
     @Override

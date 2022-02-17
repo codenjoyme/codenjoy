@@ -3,7 +3,7 @@
 ## Symbol breakdown
 | Sprite | Code | Description |
 | -------- | -------- | -------- |
-|<img src="https://github.com/codenjoyme/codenjoy/raw/master/CodingDojo/games/sokoban/src/main/webapp/resources/sokoban/sprite/none.png" style="width:40px;" /> | `NONE(' ')` | Emty space. | 
+|<img src="https://github.com/codenjoyme/codenjoy/raw/master/CodingDojo/games/sokoban/src/main/webapp/resources/sokoban/sprite/none.png" style="width:40px;" /> | `NONE(' ')` | Empty space. | 
 |<img src="https://github.com/codenjoyme/codenjoy/raw/master/CodingDojo/games/sokoban/src/main/webapp/resources/sokoban/sprite/wall.png" style="width:40px;" /> | `WALL('☼')` | Wall. | 
 |<img src="https://github.com/codenjoyme/codenjoy/raw/master/CodingDojo/games/sokoban/src/main/webapp/resources/sokoban/sprite/hero.png" style="width:40px;" /> | `HERO('☺')` | Your hero. | 
 |<img src="https://github.com/codenjoyme/codenjoy/raw/master/CodingDojo/games/sokoban/src/main/webapp/resources/sokoban/sprite/box.png" style="width:40px;" /> | `BOX('■')` | Box. You can drag it. | 

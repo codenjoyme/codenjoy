@@ -26,9 +26,6 @@ package com.codenjoy.dojo.expansion.model;
 import com.codenjoy.dojo.expansion.services.Event;
 import org.junit.Test;
 
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.when;
-
 public class SingleMultiplayerTest extends AbstractMultiplayerTest {
 
     protected boolean isSingleTrainingOrMultiple() {
@@ -316,7 +313,7 @@ public class SingleMultiplayerTest extends AbstractMultiplayerTest {
 
         // when
         // another player6 registered
-        when(dice.next(anyInt())).thenReturn(0, 0); // first empty multiple, then first level on it
+        dice.then(0, 0); // first empty multiple, then first level on it
         spreader.createOneMorePlayer();
         spreader.tickAll();
 

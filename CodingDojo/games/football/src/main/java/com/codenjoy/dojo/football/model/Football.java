@@ -29,9 +29,9 @@ import com.codenjoy.dojo.football.model.items.Wall;
 import com.codenjoy.dojo.football.services.Event;
 import com.codenjoy.dojo.football.services.GameSettings;
 import com.codenjoy.dojo.games.football.Element;
-import com.codenjoy.dojo.services.BoardUtils;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.field.Generator;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.ArrayList;
@@ -142,8 +142,8 @@ public class Football implements Field {
 
     @Override
     public Optional<Point> freeRandom(Player player) {
-        return BoardUtils.freeRandom(size, dice, pt -> isFreeAndOnMyHalf(pt, player))
-                .or(() -> BoardUtils.freeRandom(size, dice, pt -> isFree(pt)));
+        return Generator.freeRandom(size, dice, pt -> isFreeAndOnMyHalf(pt, player))
+                .or(() -> Generator.freeRandom(size, dice, pt -> isFree(pt)));
     }
 
     private boolean isFreeAndOnMyHalf(Point pt, Player player) {

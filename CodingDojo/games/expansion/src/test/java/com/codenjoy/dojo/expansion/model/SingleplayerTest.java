@@ -180,7 +180,7 @@ public class SingleplayerTest extends AbstractSingleplayerTest {
         shouldCreateSixPlayersInTwoDifferentRooms();
 
         game(PLAYER1).getJoystick().act(0); // player want to leave room
-        gotoFreeRoom(0); // select free room with index 0 (PLAYER2, PLAYER3, PLAYER4)
+        dice(0); // select free room with index 0 (PLAYER2, PLAYER3, PLAYER4)
         tickAll();
 
         String level1 =

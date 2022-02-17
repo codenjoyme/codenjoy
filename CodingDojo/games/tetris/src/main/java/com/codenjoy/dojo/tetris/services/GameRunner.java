@@ -51,6 +51,8 @@ import static com.codenjoy.dojo.tetris.services.GameSettings.Keys.GLASS_SIZE;
 
 public class GameRunner extends AbstractGameType<GameSettings> {
 
+    public static final String GAME_NAME = "tetris";
+
     @Override
     public GameSettings getSettings() {
         return new GameSettings();
@@ -80,7 +82,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public String name() {
-        return "tetris";
+        return GAME_NAME;
     }
 
     @Override

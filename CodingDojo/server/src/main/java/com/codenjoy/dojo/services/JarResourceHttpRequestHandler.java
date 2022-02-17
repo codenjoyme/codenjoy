@@ -59,6 +59,7 @@ public class JarResourceHttpRequestHandler extends ResourceHttpRequestHandler {
             @Override
 
             protected Resource getResource(String resource, Resource location) throws IOException {
+                // TODO do not use map.containsKey just check that map.get() != null
                 if (resourcesCache.containsKey(resource)) {
                     return resourcesCache.get(resource);
                 }
@@ -114,6 +115,7 @@ public class JarResourceHttpRequestHandler extends ResourceHttpRequestHandler {
     }
 
     private List<File> getJars(String jarFolder, String resource) {
+        // TODO do not use map.containsKey just check that map.get() != null
         if (!jarsCache.containsKey(jarFolder)) {
             jarsCache.put(jarFolder, map().get());
 

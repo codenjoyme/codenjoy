@@ -54,7 +54,7 @@ public class AISolver implements Solver<Board> {
     }
 
     private boolean checkDirection(String direction, Board board) {
-        Point me = board.getMe();
+        Point me = board.getHero();
 
         int newX = me.getX();
         int newY = me.getY();

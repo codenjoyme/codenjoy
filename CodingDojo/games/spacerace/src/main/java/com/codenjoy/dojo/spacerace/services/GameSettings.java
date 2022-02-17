@@ -23,6 +23,7 @@ package com.codenjoy.dojo.spacerace.services;
  */
 
 import com.codenjoy.dojo.services.event.Calculator;
+import com.codenjoy.dojo.services.settings.PropertiesKey;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 import com.codenjoy.dojo.spacerace.model.Level;
@@ -30,24 +31,25 @@ import com.codenjoy.dojo.spacerace.model.Level;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.codenjoy.dojo.spacerace.services.GameRunner.GAME_NAME;
 import static com.codenjoy.dojo.spacerace.services.GameSettings.Keys.*;
 
 public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
 
-    public enum Keys implements Key {
+    public enum Keys implements PropertiesKey {
 
-        TICKS_TO_RECHARGE("[Game] Ticks to recharge"),
-        BULLETS_COUNT("[Game] Bullets count"),
-        DESTROY_BOMB_SCORE("[Score] Destroy bomb score"),
-        DESTROY_STONE_SCORE("[Score] Destroy stone score"),
-        DESTROY_ENEMY_SCORE("[Score] Destroy enemy score"),
-        LOSE_PENALTY("[ScoreL ose penalty"),
-        LEVEL_MAP("[Level] Level map");
+        TICKS_TO_RECHARGE,
+        BULLETS_COUNT,
+        DESTROY_BOMB_SCORE,
+        DESTROY_STONE_SCORE,
+        DESTROY_ENEMY_SCORE,
+        LOSE_PENALTY,
+        LEVEL_MAP;
 
         private String key;
 
-        Keys(String key) {
-            this.key = key;
+        Keys() {
+            this.key = key(GAME_NAME);
         }
 
         @Override

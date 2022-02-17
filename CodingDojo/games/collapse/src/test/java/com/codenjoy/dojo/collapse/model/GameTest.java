@@ -25,9 +25,10 @@ package com.codenjoy.dojo.collapse.model;
 import com.codenjoy.dojo.collapse.TestGameSettings;
 import com.codenjoy.dojo.collapse.services.Event;
 import com.codenjoy.dojo.collapse.services.GameSettings;
-import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.games.collapse.Element;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Joystick;
+import com.codenjoy.dojo.services.dice.MockDice;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.utils.TestUtils;
@@ -35,7 +36,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
-import org.mockito.stubbing.OngoingStubbing;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
@@ -46,20 +46,20 @@ public class GameTest {
     private EventListener listener;
     private Player player;
     private Joystick joystick;
-    private Dice dice;
-    private PrinterFactory printerFactory;
+    private MockDice dice;
+    private PrinterFactory<Element, Player> printerFactory;
     private GameSettings settings;
 
     @Before
     public void setup() {
-        printerFactory = new PrinterFactoryImpl();
+        printerFactory = new PrinterFactoryImpl<>();
         settings = new TestGameSettings();
     }
 
     private void givenFl(String board) {
         Level level = new Level(board);
 
-        dice = mock(Dice.class);
+        dice = new MockDice();
         game = new Collapse(level, dice, settings);
         listener = mock(EventListener.class);
         player = new Player(listener, settings);
@@ -304,11 +304,8 @@ public class GameTest {
 
     }
 
-    private void dice(int... next) {
-        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
-        for (int i : next) {
-            when = when.thenReturn(i);
-        }
+    private void dice(Integer... next) {
+        dice.then(next);
     }
 
     // ходить надо в течении одного тика, все недоделанные ходы за тик стиратся
@@ -321,10 +318,31 @@ public class GameTest {
                 "☼☼☼☼☼");
 
         // when
+        // проигнорится, мы не указали куда двигаем
         joystick.act(1, 2);
         game.tick();
+
+        // then
+        assertE("☼☼☼☼☼" +
+                "☼311☼" +
+                "☼121☼" +
+                "☼333☼" +
+                "☼☼☼☼☼");
+
+        // when
+        // проигнорится, мы не указали что двигаем
         joystick.right();
         game.tick();
+
+        // then
+        assertE("☼☼☼☼☼" +
+                "☼311☼" +
+                "☼121☼" +
+                "☼333☼" +
+                "☼☼☼☼☼");
+
+        // when
+        // проигнорится, мы не указали куда двигаем
         joystick.act(1, 2);
         game.tick();
 

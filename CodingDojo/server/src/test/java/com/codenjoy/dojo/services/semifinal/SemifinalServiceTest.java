@@ -67,7 +67,7 @@ public class SemifinalServiceTest extends AbstractDealsTest {
     }
 
     protected Settings settings(String room) {
-        return (Settings) new SemifinalSettingsImpl()
+        return new SemifinalSettingsImpl()
                     .setEnabled(true)
                     .setTimeout(timeout)
                     .setPercentage(true)
@@ -215,8 +215,8 @@ public class SemifinalServiceTest extends AbstractDealsTest {
                 semifinal.getSemifinalStatus("room").toString());
     }
 
-        private SemifinalSettings<SettingsReader> updateSettings(String room) {
-        return (SemifinalSettings<SettingsReader>) roomService.settings(room);
+    private SemifinalSettingsImpl updateSettings(String room) {
+        return (SemifinalSettingsImpl) roomService.settings(room);
     }
 
     @Test
@@ -1302,7 +1302,7 @@ public class SemifinalServiceTest extends AbstractDealsTest {
         // given
         Player player = createPlayer();
 
-        SemifinalSettings original = updateSettings("room");
+        SemifinalSettingsImpl original = updateSettings("room");
         original.setPercentage(false)
                 .setLimit(10);
 

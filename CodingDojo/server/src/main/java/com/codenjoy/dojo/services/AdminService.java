@@ -408,6 +408,7 @@ public class AdminService {
         validator.checkGame(game, Validator.CANT_BE_NULL);
         validator.checkRoom(room, Validator.CANT_BE_NULL);
 
+        // TODO do not use map.containsKey just check that map.get() != null
         if (!map.containsKey(settings.getAction())) {
             throw new IllegalArgumentException(
                     "Admin action not found: " + settings.getAction());
@@ -552,7 +553,7 @@ public class AdminService {
         // сохраняем для отображения inactivity settings pojo
         result.setInactivity(inactivitySettings(room));
         // отдельно оставшиеся параметры
-        List<Parameter> parameters = gameType.getSettings().getParameters();
+        List<Parameter> parameters = new LinkedList<>(gameType.getSettings().getParameters());
         parameters.removeIf(Predicate.not(onlyUngrouped()));
         result.setOther(parameters);
         result.setOtherValues(parameters.stream()

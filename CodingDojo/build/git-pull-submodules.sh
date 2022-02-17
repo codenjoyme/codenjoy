@@ -50,5 +50,6 @@ eval_echo "git pull origin develop"
 eval_echo "git pull origin $BRANCH"
 eval_echo "git submodule foreach git pull origin master"
 
+echo
 color "Press Enter to continue"
 read

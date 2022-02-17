@@ -22,9 +22,9 @@ package com.codenjoy.dojo.spacerace.model;
  * #L%
  */
 
-import com.codenjoy.dojo.services.BoardUtils;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.field.Generator;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.spacerace.services.Event;
 import com.codenjoy.dojo.spacerace.services.GameSettings;
@@ -336,10 +336,10 @@ public class Spacerace implements Field {
 
     @Override
     public Optional<Point> freeRandom(Player player) {
-        return BoardUtils.freeRandom(
+        return Generator.freeRandom(
                 () -> dice.next(size),
                 () -> dice.next(4),
-                pt -> isFree(pt));
+                this::isFree);
     }
 
     @Override

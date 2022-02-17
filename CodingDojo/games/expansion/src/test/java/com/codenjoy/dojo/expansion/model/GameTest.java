@@ -32,17 +32,16 @@ import com.codenjoy.dojo.expansion.services.Event;
 import com.codenjoy.dojo.expansion.services.GameSettings;
 import com.codenjoy.dojo.games.expansion.Forces;
 import com.codenjoy.dojo.games.expansion.ForcesMoves;
-import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.QDirection;
+import com.codenjoy.dojo.services.dice.MockDice;
 import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.layeredview.LayeredViewPrinter;
 import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -57,7 +56,7 @@ public class GameTest {
     private Printer<PrinterData> printer;
 
     private Hero hero;
-    private Dice dice;
+    private MockDice dice;
     private EventListener listener;
     private Player player;
     private int size = -1;
@@ -67,7 +66,7 @@ public class GameTest {
 
     @Before
     public void setup() {
-        dice = mock(Dice.class);
+        dice = new MockDice();
         settings = new GameSettings()
                 .leaveForceCount(1)
                 .regionsScores(0)
@@ -75,11 +74,8 @@ public class GameTest {
                 .defenderHasAdvantage(false);
     }
 
-    private void dice(int... ints) {
-        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
-        for (int i : ints) {
-            when = when.thenReturn(i);
-        }
+    private void dice(Integer... next) {
+        dice.then(next);
     }
 
     private void givenSize(int size) {
