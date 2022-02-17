@@ -73,7 +73,7 @@ public class ChatResponseHandler implements ResponseHandler {
     }
 
     public boolean isFor(Deal deal) {
-        return deal.equals(deal);
+        return this.deal.equals(deal);
     }
 
     public void tick() {
