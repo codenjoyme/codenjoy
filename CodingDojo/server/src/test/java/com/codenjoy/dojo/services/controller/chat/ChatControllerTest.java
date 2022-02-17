@@ -133,6 +133,104 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
                 chat.getAllField(Filter.room("room").count(10).get()).toString());
     }
 
+    @Test
+    public void shouldDoNotAffectOtherPlayers_whenRemoveSomePlayer() {
+        // given
+        createPlayer("player", "room", "first");
+        createPlayer("player2", "room", "first");
+        createPlayer("player3", "room", "first");
+
+        client(0).start();
+        client(1).start();
+        client(2).start();
+
+        // when
+        // regular posting
+        with.time.nowIs(12345L);
+        client(0).sendToServer("{'command':'postRoom', " +
+                "'data':{'room':'room', 'text':'message1'}}");
+        waitForServerReceived();
+        waitForClientReceived(0);
+        waitForClientReceived(1);
+        waitForClientReceived(2);
+
+        // then
+        assertEquals("[postRoom(message1, room)]", receivedOnServer());
+
+        // inform player1
+        assertEquals("[{'command':'add', 'type':'room', 'data':[" +
+                        "{'id':1,'text':'message1','room':'room','type':1,'topicId':null," +
+                        "'playerId':'player','playerName':'player-name','time':12345}]}]",
+                client(0).messages());
+
+        // inform player2 because of same room
+        assertEquals("[{'command':'add', 'type':'room', 'data':[" +
+                        "{'id':1,'text':'message1','room':'room','type':1,'topicId':null," +
+                        "'playerId':'player','playerName':'player-name','time':12345}]}]",
+                client(1).messages());
+
+        // inform player3 because of same room
+        assertEquals("[{'command':'add', 'type':'room', 'data':[" +
+                        "{'id':1,'text':'message1','room':'room','type':1,'topicId':null," +
+                        "'playerId':'player','playerName':'player-name','time':12345}]}]",
+                client(2).messages());
+
+        // when
+        // remove one player from server
+        with.time.nowIs(12346L);
+        Deal deal2 = deals.get("player2");
+        players.remove(deal2.getPlayerId());
+        waitForServerReceived();
+        waitForClientReceived(0, false);
+        waitForClientReceived(1);
+        waitForClientReceived(2, false);
+
+        // then
+        assertEquals("[postField(Player left the field, room)]", receivedOnServer());
+
+        // inform player1
+        assertEquals("[]",
+                client(0).messages());
+
+        // inform player2
+        assertEquals("[{'command':'add', 'type':'field', 'data':[" +
+                        "{'id':2,'text':'Player left the field','room':'room','type':3,'topicId':2," +
+                        "'playerId':'player2','playerName':'player2-name','time':12346}]}]",
+                client(1).messages());
+
+        // inform player3
+        assertEquals("[]",
+                client(2).messages());
+
+        // when
+        // try second posting
+        with.time.nowIs(12347L);
+        client(0).sendToServer("{'command':'postRoom', " +
+                "'data':{'room':'room', 'text':'message2'}}");
+        waitForServerReceived();
+        waitForClientReceived(0);
+        waitForClientReceived(1, false);
+        waitForClientReceived(2);
+
+        // then
+        assertEquals("[postRoom(message2, room)]", receivedOnServer());
+
+        // inform player1
+        assertEquals("[{'command':'add', 'type':'room', 'data':[" +
+                        "{'id':3,'text':'message2','room':'room','type':1,'topicId':null," +
+                        "'playerId':'player','playerName':'player-name','time':12347}]}]",
+                client(0).messages());
+
+        // don't inform player2 because of leave
+        assertEquals("[]",
+                client(1).messages());
+
+        // inform player3 because of same room
+        assertEquals("[{'command':'add', 'type':'room', 'data':[" +
+                        "{'id':3,'text':'message2','room':'room','type':1,'topicId':null," +
+                        "'playerId':'player','playerName':'player-name','time':12347}]}]",
+                client(2).messages());
+    }
 
     @Test
     public void shouldRemoveChatControl_whenRemovePlayer() {
