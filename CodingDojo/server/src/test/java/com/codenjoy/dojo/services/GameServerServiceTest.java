@@ -22,6 +22,7 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
+import com.codenjoy.dojo.config.oauth2.OAuth2CodeExecutionClient;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -44,6 +45,9 @@ public class GameServerServiceTest {
 
     @Mock
     private RestTemplate restTemplate;
+
+    @Mock
+    private OAuth2CodeExecutionClient OAuth2CodeExecutionClient;
 
     private String username = "dummy-user";
 

@@ -25,7 +25,7 @@ game:
   save:
     auto: false
     ticks: 30
-    load-on-start: false
+    load-on-start: true
   ai: false
   player:
     score:
@@ -100,3 +100,10 @@ grpc:
     port: 9090
   executor:
     pool.size: 5
+  dojo:
+    host: localhost
+    port: 9092
+spring:
+  config:
+    activate:
+      on-profile: test,sqlite

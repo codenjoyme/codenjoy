@@ -55,7 +55,7 @@ import static org.junit.Assert.assertEquals;
 @SpringBootTest(classes = CodenjoyContestApplication.class,
         properties = "spring.main.allow-bean-definition-overriding=true")
 @RunWith(SpringRunner.class)
-@ActiveProfiles(SQLiteProfile.NAME)
+@ActiveProfiles(profiles = {SQLiteProfile.NAME,"test"})
 @Import(RestGameControllerTest.ContextConfiguration.class)
 @ContextConfiguration(initializers = AbstractRestControllerTest.PropertyOverrideContextInitializer.class)
 @WebAppConfiguration

@@ -57,10 +57,12 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.invocation.Invocation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -77,7 +79,8 @@ import static org.mockito.Mockito.*;
 
 @SpringBootTest(classes = CodenjoyContestApplication.class)
 @RunWith(SpringRunner.class)
-@ActiveProfiles(SQLiteProfile.NAME)
+@ActiveProfiles(profiles = {SQLiteProfile.NAME,"test"})
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class PlayerServiceImplTest {
 
     public static final String VASYA = "vasya";
@@ -1530,15 +1533,12 @@ public class PlayerServiceImplTest {
 
         String game = createPlayer(VASYA).getGame();
 
-        verify(gameType, times(1)).getAI();
-        verify(gameType, times(1)).getBoard();
-
         // when
         playerService.reloadAI(VASYA);
 
         // then
-        verify(gameType, times(2)).getAI();
-        verify(gameType, times(2)).getBoard();
+        verify(gameType, times(1)).getAI();
+        verify(gameType, times(1)).getBoard();
 
         PlayerGame playerGame = playerGames.get(VASYA);
         assertEquals(game, playerGame.getPlayer().getGame());

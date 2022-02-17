@@ -24,10 +24,12 @@ package com.codenjoy.dojo.web.rest;
 
 import com.codenjoy.dojo.CodenjoyContestApplication;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
+import com.codenjoy.dojo.services.GameService;
 import com.codenjoy.dojo.services.GameServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -45,7 +47,7 @@ import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 @SpringBootTest(classes = CodenjoyContestApplication.class,
         properties = "spring.main.allow-bean-definition-overriding=true")
 @RunWith(SpringRunner.class)
-@ActiveProfiles(SQLiteProfile.NAME)
+@ActiveProfiles(profiles = {SQLiteProfile.NAME,"test"})
 @Import(RestRoomControllerTest.ContextConfiguration.class)
 @ContextConfiguration(initializers = AbstractRestControllerTest.PropertyOverrideContextInitializer.class)
 @WebAppConfiguration
@@ -55,12 +57,26 @@ public class RestRoomControllerTest extends AbstractRestControllerTest {
     @Autowired
     private RestRoomController service;
 
+    private final String ID = "validPlayer";
+    private final String CODE = "5600964726966732831";
+    private final String REQUEST = "{\n" +
+            "        \"email\":\"mail@mail.com\",\n" +
+            "        \"id\":\"" + ID + "\",\n" +
+            "        \"readableName\":\"Name\",\n" +
+            "        \"approved\":\"1\",\n" +
+            "        \"code\":\"" + CODE + "\",\n" +
+            "        \"data\":\"{}\",\n" +
+            "        \"gitHubUsername\":\"ghusername\"\n" +
+            "}";
+    private final String RESPONSE = "{'code':'" + CODE  + "','id':'" + ID  +"'}";
+
     @Before
     public void setUp() {
         super.setUp();
 
         playerService.removeAll();
         registration.removeAll();
+
     }
 
     // проверяем что для залогиненого пользователя все методы сервиса отрабатывают
@@ -82,8 +98,7 @@ public class RestRoomControllerTest extends AbstractRestControllerTest {
         assertEquals("false", get("/rest/room/validRoom/player/validPlayer/joined"));
 
         // when
-        assertEquals("{'code':'4020021687627278468','id':'validPlayer'}",
-                quote(get("/rest/room/validRoom/game/first/join")));
+        assertEquals(RESPONSE, quote(post(200,"/rest/room/validRoom/game/first/join", REQUEST)));
 
         // then
         assertEquals("true", get("/rest/room/validRoom/joined"));
@@ -112,7 +127,7 @@ public class RestRoomControllerTest extends AbstractRestControllerTest {
         assertEquals("true", get("/rest/room/validRoom/player/validPlayer/joined"));
 
         // when
-        assertEquals("", get("/rest/room/validRoom/game/first/join"));
+        assertEquals("", post(200,"/rest/room/validRoom/game/first/join","{}"));
 
         // then
         assertEquals("false", get("/rest/room/validRoom/joined"));
@@ -139,8 +154,7 @@ public class RestRoomControllerTest extends AbstractRestControllerTest {
 
         // when
         // все же зашли, комната может быть любой
-        assertEquals("{'code':'4020021687627278468','id':'validPlayer'}",
-                quote(get("/rest/room/badRoom/game/first/join")));
+        assertEquals(RESPONSE, quote(post(200,"/rest/room/badRoom/game/first/join",REQUEST)));
 
         // then
         assertEquals("true", get("/rest/room/badRoom/player/validPlayer/joined"));
@@ -185,23 +199,7 @@ public class RestRoomControllerTest extends AbstractRestControllerTest {
     public void shouldJoinRoom() {
         register("1", "ip", "validRoom", "first");
 
-        String request = "{\n" +
-                "        \"email\":\"mail@mail.com\",\n" +
-                "        \"id\":\"1\",\n" +
-                "        \"readableName\":\"Name\",\n" +
-                "        \"approved\":\"1\",\n" +
-                "        \"code\":\"5600964726966732831\",\n" +
-                "        \"data\":\"{}\",\n" +
-                "        \"gitHubUsername\":\"ghusername\"\n" +
-                "}";
-
-
-        assertEquals("{\"id\":\"1\",\"code\":\"5600964726966732831\"}",
-                post(HttpStatus.OK.value(),
-                        "/rest/room/validRoom/game/first/join",
-                        request));
-
-        assertEquals("validRoom", gameSaver.loadGame("1").getRoom());
+        assertEquals(RESPONSE, quote(post(HttpStatus.OK.value(), "/rest/room/validRoom/game/first/join", REQUEST)));
     }
 
     @TestConfiguration

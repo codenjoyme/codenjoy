@@ -63,6 +63,7 @@ public class DojoPlayerServiceTest {
     public void updateUserScore() {
         //Arrange
         doNothing().when(playerService).updateScore(GITHUB_USERNAME, GAME_NAME,  SCORE);
+        when(registration.getIdByGitHubUsername(GITHUB_USERNAME)).thenReturn(GITHUB_USERNAME);
 
         //Act
         dojoPlayerService.updateUserScore(GITHUB_USERNAME, GAME_NAME, SCORE);

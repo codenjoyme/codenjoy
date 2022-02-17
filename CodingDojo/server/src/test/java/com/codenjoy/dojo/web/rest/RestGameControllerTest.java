@@ -55,7 +55,7 @@ import static org.mockito.Mockito.verify;
 @SpringBootTest(classes = CodenjoyContestApplication.class,
         properties = "spring.main.allow-bean-definition-overriding=true")
 @RunWith(SpringRunner.class)
-@ActiveProfiles(SQLiteProfile.NAME)
+@ActiveProfiles(profiles = {SQLiteProfile.NAME,"test"})
 @Import(RestGameControllerTest.ContextConfiguration.class)
 @ContextConfiguration(initializers = AbstractRestControllerTest.PropertyOverrideContextInitializer.class)
 @WebAppConfiguration
@@ -130,7 +130,7 @@ public class RestGameControllerTest extends AbstractRestControllerTest {
                 "  ],\n" +
                 "  'room':'room1',\n" +
                 "  'sprites':{\n" +
-                "    'alphabet':'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',\n" +
+                "    'alphabet':'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',\n" +
                 "    'names':[\n" +
                 "      'none',\n" +
                 "      'wall',\n" +
@@ -198,7 +198,7 @@ public class RestGameControllerTest extends AbstractRestControllerTest {
                 "  ],\n" +
                 "  'room':'room2',\n" +
                 "  'sprites':{\n" +
-                "    'alphabet':'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',\n" +
+                "    'alphabet':'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',\n" +
                 "    'names':[\n" +
                 "      'none',\n" +
                 "      'red',\n" +
@@ -317,7 +317,7 @@ public class RestGameControllerTest extends AbstractRestControllerTest {
 
     @Test
     public void shouldSpritesAlphabet() {
-        String expected = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        String expected = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         assertEquals(expected, service.spritesAlphabet());
         assertEquals(expected, get("/rest/game/sprites/alphabet"));
     }
@@ -331,9 +331,12 @@ public class RestGameControllerTest extends AbstractRestControllerTest {
         Player player = new Player();
         player.setId("1");
         player.setGitHubUsername("username");
+        player.setGame("game");
+        player.setReadableName("Readable Name");
+        player.setScore(Integer.parseInt("0"));
         gameSaver.saveGame(player, "{}", System.currentTimeMillis());
 
-        post(HttpStatus.OK.value(), "/rest/game/update/username/score", "60");
+        post(HttpStatus.OK.value(), "/rest/update/username/game/score", "60");
         assertEquals("60", gameSaver.loadGame("1").getScore());
         verify(updateHandler, times(1)).sendUpdate("username", 60);
     }

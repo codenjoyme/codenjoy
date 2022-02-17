@@ -24,10 +24,17 @@ package com.codenjoy.dojo.services.dao;
 
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Random;
 
@@ -36,8 +43,11 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@RunWith(SpringRunner.class)
 public class PlayerGameSaverTest {
 
+    @MockBean
+    public BoardService boardService;
     private PlayerGameSaver saver;
 
     @Before
@@ -51,6 +61,7 @@ public class PlayerGameSaverTest {
                                 return "context";
                             }
                         }));
+        saver.boardService = boardService;
     }
 
     @After

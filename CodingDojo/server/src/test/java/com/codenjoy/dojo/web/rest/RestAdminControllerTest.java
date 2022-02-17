@@ -50,14 +50,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest(classes = CodenjoyContestApplication.class,
         properties = "spring.main.allow-bean-definition-overriding=true")
 @RunWith(SpringRunner.class)
-@ActiveProfiles(SQLiteProfile.NAME)
+@ActiveProfiles(profiles = {SQLiteProfile.NAME,"test"})
 @Import(RestAdminControllerTest.ContextConfiguration.class)
 @ContextConfiguration(initializers = AbstractRestControllerTest.PropertyOverrideContextInitializer.class)
 @WebAppConfiguration
@@ -348,7 +346,7 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
     }
 
     @Test
-    public void shouldSaveAllAndLoad() {
+    public void shouldSaveAll() {
         // given
         register("player1", "ip1", "room1", "first");
         register("player2", "ip2", "room1", "first");
@@ -362,8 +360,9 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
         service.setScores("room2", "player3", "30");
         service.setScores("room3", "player4", "40");
 
-        assertScores("{player1=10, player2=20, player3=30, player4=40}");
-
+        String playersScores = service.getPlayersScores().toString();
+        String expected = "{player1=10, player2=20, player3=30, player4=40}";
+        assertEquals(expected,playersScores);
         // when
         service.saveAll("room1");
         assertEquals("", get("/rest/admin/room/room2/saveAll"));
@@ -376,29 +375,12 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
         assertScores("{player1=0, player2=0, player3=0, player4=0}");
 
         // when
-        service.load("room1", "player1"); // save exists
-        // service.load("room1", "player2"); // do not load
-        assertEquals("", get("/rest/admin/room/room2/load/player3")); // save exists
-        assertEquals("", get("/rest/admin/room/room3/load/player4")); // save not exists
-
-        // then
-        assertScores("{player1=10, player2=0, player3=30, player4=0}");
-
-        // when
         service.gameOverAll("room1");
         service.gameOverAll("room2");
         service.gameOverAll("room3");
 
         // then
         assertScores("{}");
-
-        service.load("room1", "player1"); // save exists
-        // service.load("room1", "player2"); // do not load
-        service.load("room2", "player3"); // save exists
-        service.load("room3", "player4"); // save not exists
-
-        // then
-        assertScores("{player1=10, player3=30}");
     }
 
     @Test

@@ -458,7 +458,7 @@ public class SaveServiceImplTest {
     public void shouldRemoveSave() {
         saveService.removeSaveForGame("player", "game");
 
-        verify(saver).delete("player");
+        verify(saver).delete("player","game");
     }
 
     @Test

@@ -50,7 +50,7 @@ import static org.junit.Assert.assertEquals;
 @SpringBootTest(classes = CodenjoyContestApplication.class,
         properties = "spring.main.allow-bean-definition-overriding=true")
 @RunWith(SpringRunner.class)
-@ActiveProfiles(SQLiteProfile.NAME)
+@ActiveProfiles(profiles = {SQLiteProfile.NAME,"test"})
 @Import(RestGameControllerTest.ContextConfiguration.class)
 @ContextConfiguration(initializers = AbstractRestControllerTest.PropertyOverrideContextInitializer.class)
 @WebAppConfiguration
@@ -71,13 +71,15 @@ public class RestBoardControllerIntegrationTest extends AbstractRestControllerTe
         player.setId("1");
         player.setRoom("kata");
         player.setScore(2);
+        player.setGame("game");
+        player.setReadableName("Readable Name");
         gameSaver.saveGame(player, "{}", System.currentTimeMillis());
     }
 
     @Test
     public void shouldGetPlayersScoresForGame() {
-        String expected = "[{\"name\":\"Name\",\"id\":\"1\",\"score\":2}]";
-        assertEquals(expected, get("/rest/room/kata/scores"));
+        String expected = "[{'id':'1','name':'nickName','score':2}]";
+        assertEquals(expected, quote(get("/rest/room/kata/scores")));
     }
 
     @Test

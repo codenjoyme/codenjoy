@@ -30,6 +30,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -38,7 +39,8 @@ import static org.mockito.Mockito.*;
 
 @SpringBootTest(classes = CodenjoyContestApplication.class)
 @RunWith(SpringRunner.class)
-@ActiveProfiles(SQLiteProfile.NAME)
+@ActiveProfiles(profiles = {SQLiteProfile.NAME,"test"})
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @TestPropertySource(properties = {
         "game.save.auto=true"
 })
@@ -71,7 +73,7 @@ public class AutoSaverTest {
 
         Thread.sleep(1000);
 
-        verify(save, only()).saveAll();
+        verify(save, only()).updateAll();
     }
 
 }

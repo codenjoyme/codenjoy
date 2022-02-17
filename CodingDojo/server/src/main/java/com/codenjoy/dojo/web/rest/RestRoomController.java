@@ -120,7 +120,7 @@ public class RestRoomController {
                                                   @RequestBody Registration.User user) {
         validator.checkRoom(room, CANT_BE_NULL);
 
-        if (user == null) {
+        if (user == null || user.getId() == null) {
             return null;
         }
 

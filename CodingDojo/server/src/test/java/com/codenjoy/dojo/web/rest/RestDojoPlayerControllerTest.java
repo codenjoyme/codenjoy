@@ -56,7 +56,7 @@ import static org.mockito.Mockito.verify;
 @SpringBootTest(classes = CodenjoyContestApplication.class,
         properties = "spring.main.allow-bean-definition-overriding=true")
 @RunWith(SpringRunner.class)
-@ActiveProfiles(SQLiteProfile.NAME)
+@ActiveProfiles(profiles = {SQLiteProfile.NAME,"test"})
 @Import(RestGameControllerTest.ContextConfiguration.class)
 @ContextConfiguration(initializers = AbstractRestControllerTest.PropertyOverrideContextInitializer.class)
 @WebAppConfiguration
@@ -83,12 +83,15 @@ public class RestDojoPlayerControllerTest extends AbstractRestControllerTest {
         Player player = new Player();
         player.setId("1");
         player.setGitHubUsername("username");
+        player.setReadableName("Readable name");
+        player.setGame("game");
+        player.setScore(Integer.parseInt("60"));
         gameSaver.saveGame(player, "{}", System.currentTimeMillis());
     }
 
     @Test
     public void shouldUpdateScore() {
-        post(HttpStatus.OK.value(), "/rest/update/username/score", "60");
+        post(HttpStatus.OK.value(), "/rest/update/username/game/score", "60");
         assertEquals("60", gameSaver.loadGame("1").getScore());
         verify(updateHandler, times(1)).sendUpdate("username", 60);
     }

@@ -58,7 +58,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     private Spreader spreader = new Spreader();
 
     @Autowired
-    private GameSaver gameSaver;
+    protected GameSaver gameSaver;
 
     @Autowired
     protected RoomService roomService;

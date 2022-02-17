@@ -89,8 +89,7 @@ public class ChatTest {
         // when then
         addMessage("room1", "player1"); // id = 1
         assertEquals(Integer.valueOf(1), chat.getLastMessageId("room1"));
-        assertEquals("{room1=1}",
-                chat.getLastMessageIds().toString());
+        assertEquals("{room1=1}", chat.getLastMessageIds().toString());
 
         // when then
         addMessage("room1", "player1"); // id = 2

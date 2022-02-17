@@ -65,8 +65,8 @@ public class PlayerServiceImplTests {
         //Arrange
         when(registration.getIdByGitHubUsername(GITHUB_USERNAME)).thenReturn("1");
         when(playerGames.getAll()).thenReturn(Collections.singletonList(playerGame));
-        when(player.getId()).thenReturn("1");
-        when(playerGame.getPlayer()).thenReturn(player);
+        when(playerGame.getRoom()).thenReturn(GAME_NAME);
+        when(playerGame.getPlayerId()).thenReturn(GITHUB_USERNAME);
 
         //Act
         playerService.updateScore(GITHUB_USERNAME, GAME_NAME, 5);
@@ -74,7 +74,7 @@ public class PlayerServiceImplTests {
         //Assert
         verify(registration, times(1)).getIdByGitHubUsername(GITHUB_USERNAME);
         verify(playerGames, times(1)).getAll();
-        verify(player, times(1)).getId();
-        verify(playerGame, times(1)).getPlayer();
+        verify(playerGame,times(1)).getRoom();
+        verify(playerGame,times(1)).getPlayerId();
     }
 }
