@@ -541,30 +541,30 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
         // given
         // custom room settings
         PParameters settings1 = service.getSettings("name1", "first");
-        assertEquals("[[Parameter 1:Integer = multiline[false] def[12] val[15]], \n" +
-                        "[Parameter 2:Boolean = def[true] val[true]], \n" +
-                        "[[Semifinal] Enabled:Boolean = def[false] val[false]], \n" +
-                        "[[Semifinal] Timeout:Integer = multiline[false] def[900] val[900]], \n" +
-                        "[[Semifinal] Percentage:Boolean = def[true] val[true]], \n" +
-                        "[[Semifinal] Limit:Integer = multiline[false] def[50] val[50]], \n" +
-                        "[[Semifinal] Reset board:Boolean = def[true] val[true]], \n" +
-                        "[[Semifinal] Shuffle board:Boolean = def[true] val[true]], \n" +
-                        "[[Semifinal] Clear scores:Boolean = def[false] val[false]]]",
-                split(settings1.build(), "]], \n["));
+        assertEqualsSettingsParameters(settings1,
+                "[[Parameter 1:Integer = multiline[false] def[12] val[15]], \n" +
+                "[Parameter 2:Boolean = def[true] val[true]], \n" +
+                "[[Semifinal] Enabled:Boolean = def[false] val[false]], \n" +
+                "[[Semifinal] Timeout:Integer = multiline[false] def[900] val[900]], \n" +
+                "[[Semifinal] Percentage:Boolean = def[true] val[true]], \n" +
+                "[[Semifinal] Limit:Integer = multiline[false] def[50] val[50]], \n" +
+                "[[Semifinal] Reset board:Boolean = def[true] val[true]], \n" +
+                "[[Semifinal] Shuffle board:Boolean = def[true] val[true]], \n" +
+                "[[Semifinal] Clear scores:Boolean = def[false] val[false]]]");
 
         // when then
         // get game settings
         JSONObject settings2 = new JSONObject(get("/rest/admin/game/first/settings"));
-        assertEquals("{'parameters':[{'def':'12','multiline':false,'name':'Parameter 1','options':['12','15'],'type':'editbox','value':'15','valueType':'Integer'},\n" +
-                        "{'def':'true','multiline':false,'name':'Parameter 2','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
-                        "{'def':'false','multiline':false,'name':'[Semifinal] Enabled','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'},\n" +
-                        "{'def':'900','multiline':false,'name':'[Semifinal] Timeout','options':['900'],'type':'editbox','value':'900','valueType':'Integer'},\n" +
-                        "{'def':'true','multiline':false,'name':'[Semifinal] Percentage','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
-                        "{'def':'50','multiline':false,'name':'[Semifinal] Limit','options':['50'],'type':'editbox','value':'50','valueType':'Integer'},\n" +
-                        "{'def':'true','multiline':false,'name':'[Semifinal] Reset board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
-                        "{'def':'true','multiline':false,'name':'[Semifinal] Shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
-                        "{'def':'false','multiline':false,'name':'[Semifinal] Clear scores','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'}]}",
-                split(quote(settings2.toString()), "},\n{'def'"));
+        assertEqualsSettingsJson(settings2,
+                "{'parameters':[{'def':'12','multiline':false,'name':'Parameter 1','options':['12','15'],'type':'editbox','value':'15','valueType':'Integer'},\n" +
+                "{'def':'true','multiline':false,'name':'Parameter 2','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
+                "{'def':'false','multiline':false,'name':'[Semifinal] Enabled','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'},\n" +
+                "{'def':'900','multiline':false,'name':'[Semifinal] Timeout','options':['900'],'type':'editbox','value':'900','valueType':'Integer'},\n" +
+                "{'def':'true','multiline':false,'name':'[Semifinal] Percentage','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
+                "{'def':'50','multiline':false,'name':'[Semifinal] Limit','options':['50'],'type':'editbox','value':'50','valueType':'Integer'},\n" +
+                "{'def':'true','multiline':false,'name':'[Semifinal] Reset board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
+                "{'def':'true','multiline':false,'name':'[Semifinal] Shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
+                "{'def':'false','multiline':false,'name':'[Semifinal] Clear scores','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'}]}");
 
         // when
         // change room settings
@@ -576,52 +576,61 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
 
         // then
         // room settings changed
-        JSONObject settings3 = new JSONObject(get("/rest/admin/room/name1/settings/first"));
-        assertEquals("{'parameters':[{'def':'12','multiline':false,'name':'Parameter 1','options':['12','55'],'type':'editbox','value':'55','valueType':'Integer'},\n" +
-                        "{'def':'true','multiline':false,'name':'Parameter 2','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
-                        "{'def':'false','multiline':false,'name':'[Semifinal] Enabled','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'},\n" +
-                        "{'def':'900','multiline':false,'name':'[Semifinal] Timeout','options':['900'],'type':'editbox','value':'900','valueType':'Integer'},\n" +
-                        "{'def':'true','multiline':false,'name':'[Semifinal] Percentage','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
-                        "{'def':'50','multiline':false,'name':'[Semifinal] Limit','options':['50'],'type':'editbox','value':'50','valueType':'Integer'},\n" +
-                        "{'def':'true','multiline':false,'name':'[Semifinal] Reset board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
-                        "{'def':'true','multiline':false,'name':'[Semifinal] Shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
-                        "{'def':'false','multiline':false,'name':'[Semifinal] Clear scores','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'}]}",
-                split(quote(settings3.toString()), "},\n{'def'"));
+        assertEqualsSettingsJson(new JSONObject(get("/rest/admin/room/name1/settings/first")),
+                "{'parameters':[{'def':'12','multiline':false,'name':'Parameter 1','options':['12','55'],'type':'editbox','value':'55','valueType':'Integer'},\n" +
+                "{'def':'true','multiline':false,'name':'Parameter 2','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
+                "{'def':'false','multiline':false,'name':'[Semifinal] Enabled','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'},\n" +
+                "{'def':'900','multiline':false,'name':'[Semifinal] Timeout','options':['900'],'type':'editbox','value':'900','valueType':'Integer'},\n" +
+                "{'def':'true','multiline':false,'name':'[Semifinal] Percentage','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
+                "{'def':'50','multiline':false,'name':'[Semifinal] Limit','options':['50'],'type':'editbox','value':'50','valueType':'Integer'},\n" +
+                "{'def':'true','multiline':false,'name':'[Semifinal] Reset board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
+                "{'def':'true','multiline':false,'name':'[Semifinal] Shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
+                "{'def':'false','multiline':false,'name':'[Semifinal] Clear scores','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'}]}");
 
         // then
         // game settings are the same
-        JSONObject settings4 = new JSONObject(get("/rest/admin/game/first/settings"));
-        assertEquals(
-                split(quote(settings2.toString()), "},\n{'def'"),
-                split(quote(settings4.toString()), "},\n{'def'"));
+        assertEqualsSettingsJson(
+                new JSONObject(get("/rest/admin/game/first/settings")),
+                splitSettings(settings2));
+    }
+
+    private void assertEqualsSettingsJson(JSONObject settings, String expected) {
+        assertEquals(expected, splitSettings(settings));
+    }
+
+    private String splitSettings(JSONObject settings) {
+        return split(quote(settings.toString()), "},\n{'def'");
+    }
+
+    private void assertEqualsSettingsParameters(PParameters settings, String expected) {
+        assertEquals(expected, split(settings.build(), "]], \n["));
     }
 
     @Test
     public void shouldGetSetRoomSettings() {
         PParameters settings1 = service.getSettings("name1", "first");
-        assertEquals("[[Parameter 1:Integer = multiline[false] def[12] val[15]], " +
-                        "[Parameter 2:Boolean = def[true] val[true]], " +
-                        "[[Semifinal] Enabled:Boolean = def[false] val[false]], " +
-                        "[[Semifinal] Timeout:Integer = multiline[false] def[900] val[900]], " +
-                        "[[Semifinal] Percentage:Boolean = def[true] val[true]], " +
-                        "[[Semifinal] Limit:Integer = multiline[false] def[50] val[50]], " +
-                        "[[Semifinal] Reset board:Boolean = def[true] val[true]], " +
-                        "[[Semifinal] Shuffle board:Boolean = def[true] val[true]], " +
-                        "[[Semifinal] Clear scores:Boolean = def[false] val[false]]]",
-                settings1.build().toString());
+        assertEqualsSettingsParameters(settings1,
+                "[[Parameter 1:Integer = multiline[false] def[12] val[15]], \n" +
+                "[Parameter 2:Boolean = def[true] val[true]], \n" +
+                "[[Semifinal] Enabled:Boolean = def[false] val[false]], \n" +
+                "[[Semifinal] Timeout:Integer = multiline[false] def[900] val[900]], \n" +
+                "[[Semifinal] Percentage:Boolean = def[true] val[true]], \n" +
+                "[[Semifinal] Limit:Integer = multiline[false] def[50] val[50]], \n" +
+                "[[Semifinal] Reset board:Boolean = def[true] val[true]], \n" +
+                "[[Semifinal] Shuffle board:Boolean = def[true] val[true]], \n" +
+                "[[Semifinal] Clear scores:Boolean = def[false] val[false]]]");
 
         JSONObject settings2 = new JSONObject(get("/rest/admin/room/name2/settings/second"));
-        assertEquals("{'parameters':[" +
-                        "{'def':'43','multiline':false,'name':'Parameter 3','options':['43'],'type':'editbox','value':'43','valueType':'Integer'}," +
-                        "{'def':'false','multiline':false,'name':'Parameter 4','options':['false','true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
-                        "{'def':'false','multiline':false,'name':'[Semifinal] Enabled','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'}," +
-                        "{'def':'900','multiline':false,'name':'[Semifinal] Timeout','options':['900'],'type':'editbox','value':'900','valueType':'Integer'}," +
-                        "{'def':'true','multiline':false,'name':'[Semifinal] Percentage','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
-                        "{'def':'50','multiline':false,'name':'[Semifinal] Limit','options':['50'],'type':'editbox','value':'50','valueType':'Integer'}," +
-                        "{'def':'true','multiline':false,'name':'[Semifinal] Reset board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
-                        "{'def':'true','multiline':false,'name':'[Semifinal] Shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
-                        "{'def':'false','multiline':false,'name':'[Semifinal] Clear scores','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'}]}",
-                quote(settings2.toString()));
+        assertEqualsSettingsJson(settings2,
+                "{'parameters':[{'def':'43','multiline':false,'name':'Parameter 3','options':['43'],'type':'editbox','value':'43','valueType':'Integer'},\n" +
+                "{'def':'false','multiline':false,'name':'Parameter 4','options':['false','true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
+                "{'def':'false','multiline':false,'name':'[Semifinal] Enabled','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'},\n" +
+                "{'def':'900','multiline':false,'name':'[Semifinal] Timeout','options':['900'],'type':'editbox','value':'900','valueType':'Integer'},\n" +
+                "{'def':'true','multiline':false,'name':'[Semifinal] Percentage','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
+                "{'def':'50','multiline':false,'name':'[Semifinal] Limit','options':['50'],'type':'editbox','value':'50','valueType':'Integer'},\n" +
+                "{'def':'true','multiline':false,'name':'[Semifinal] Reset board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
+                "{'def':'true','multiline':false,'name':'[Semifinal] Shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
+                "{'def':'false','multiline':false,'name':'[Semifinal] Clear scores','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'}]}");
 
         // when
         settings1.getParameters().get(0).setValue("30");
@@ -636,29 +645,28 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
 
         // then
         settings1 = service.getSettings("name1", "first");
-        assertEquals("[[Parameter 1:Integer = multiline[false] def[12] val[30]], " +
-                        "[Parameter 2:Boolean = def[true] val[false]], " +
-                        "[[Semifinal] Enabled:Boolean = def[false] val[false]], " +
-                        "[[Semifinal] Timeout:Integer = multiline[false] def[900] val[900]], " +
-                        "[[Semifinal] Percentage:Boolean = def[true] val[true]], " +
-                        "[[Semifinal] Limit:Integer = multiline[false] def[50] val[50]], " +
-                        "[[Semifinal] Reset board:Boolean = def[true] val[true]], " +
-                        "[[Semifinal] Shuffle board:Boolean = def[true] val[true]], " +
-                        "[[Semifinal] Clear scores:Boolean = def[false] val[false]]]",
-                settings1.build().toString());
+        assertEqualsSettingsParameters(settings1,
+                "[[Parameter 1:Integer = multiline[false] def[12] val[30]], \n" +
+                "[Parameter 2:Boolean = def[true] val[false]], \n" +
+                "[[Semifinal] Enabled:Boolean = def[false] val[false]], \n" +
+                "[[Semifinal] Timeout:Integer = multiline[false] def[900] val[900]], \n" +
+                "[[Semifinal] Percentage:Boolean = def[true] val[true]], \n" +
+                "[[Semifinal] Limit:Integer = multiline[false] def[50] val[50]], \n" +
+                "[[Semifinal] Reset board:Boolean = def[true] val[true]], \n" +
+                "[[Semifinal] Shuffle board:Boolean = def[true] val[true]], \n" +
+                "[[Semifinal] Clear scores:Boolean = def[false] val[false]]]");
 
         settings2 = new JSONObject(get("/rest/admin/room/name2/settings/second"));
-        assertEquals("{'parameters':[" +
-                        "{'def':'43','multiline':false,'name':'Parameter 3','options':['43','55'],'type':'editbox','value':'55','valueType':'Integer'}," +
-                        "{'def':'false','multiline':false,'name':'Parameter 4','options':['false','true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
-                        "{'def':'false','multiline':false,'name':'[Semifinal] Enabled','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'}," +
-                        "{'def':'900','multiline':false,'name':'[Semifinal] Timeout','options':['900'],'type':'editbox','value':'900','valueType':'Integer'}," +
-                        "{'def':'true','multiline':false,'name':'[Semifinal] Percentage','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
-                        "{'def':'50','multiline':false,'name':'[Semifinal] Limit','options':['50'],'type':'editbox','value':'50','valueType':'Integer'}," +
-                        "{'def':'true','multiline':false,'name':'[Semifinal] Reset board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
-                        "{'def':'true','multiline':false,'name':'[Semifinal] Shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
-                        "{'def':'false','multiline':false,'name':'[Semifinal] Clear scores','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'}]}",
-                quote(settings2.toString()));
+        assertEqualsSettingsJson(settings2,
+                "{'parameters':[{'def':'43','multiline':false,'name':'Parameter 3','options':['43','55'],'type':'editbox','value':'55','valueType':'Integer'},\n" +
+                "{'def':'false','multiline':false,'name':'Parameter 4','options':['false','true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
+                "{'def':'false','multiline':false,'name':'[Semifinal] Enabled','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'},\n" +
+                "{'def':'900','multiline':false,'name':'[Semifinal] Timeout','options':['900'],'type':'editbox','value':'900','valueType':'Integer'},\n" +
+                "{'def':'true','multiline':false,'name':'[Semifinal] Percentage','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
+                "{'def':'50','multiline':false,'name':'[Semifinal] Limit','options':['50'],'type':'editbox','value':'50','valueType':'Integer'},\n" +
+                "{'def':'true','multiline':false,'name':'[Semifinal] Reset board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
+                "{'def':'true','multiline':false,'name':'[Semifinal] Shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
+                "{'def':'false','multiline':false,'name':'[Semifinal] Clear scores','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'}]}");
     }
 
     // тест такой же как и прошлый, только мы апдейтим не весь сеттинг каким он пришел,
@@ -666,29 +674,28 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldSetRoomSettings_onlyKeyValue() {
         PParameters settings1 = service.getSettings("name1", "first");
-        assertEquals("[[Parameter 1:Integer = multiline[false] def[12] val[15]], " +
-                        "[Parameter 2:Boolean = def[true] val[true]], " +
-                        "[[Semifinal] Enabled:Boolean = def[false] val[false]], " +
-                        "[[Semifinal] Timeout:Integer = multiline[false] def[900] val[900]], " +
-                        "[[Semifinal] Percentage:Boolean = def[true] val[true]], " +
-                        "[[Semifinal] Limit:Integer = multiline[false] def[50] val[50]], " +
-                        "[[Semifinal] Reset board:Boolean = def[true] val[true]], " +
-                        "[[Semifinal] Shuffle board:Boolean = def[true] val[true]], " +
-                        "[[Semifinal] Clear scores:Boolean = def[false] val[false]]]",
-                settings1.build().toString());
+        assertEqualsSettingsParameters(settings1,
+                "[[Parameter 1:Integer = multiline[false] def[12] val[15]], \n" +
+                "[Parameter 2:Boolean = def[true] val[true]], \n" +
+                "[[Semifinal] Enabled:Boolean = def[false] val[false]], \n" +
+                "[[Semifinal] Timeout:Integer = multiline[false] def[900] val[900]], \n" +
+                "[[Semifinal] Percentage:Boolean = def[true] val[true]], \n" +
+                "[[Semifinal] Limit:Integer = multiline[false] def[50] val[50]], \n" +
+                "[[Semifinal] Reset board:Boolean = def[true] val[true]], \n" +
+                "[[Semifinal] Shuffle board:Boolean = def[true] val[true]], \n" +
+                "[[Semifinal] Clear scores:Boolean = def[false] val[false]]]");
 
         JSONObject settings2 = new JSONObject(get("/rest/admin/room/name2/settings/second"));
-        assertEquals("{'parameters':[" +
-                        "{'def':'43','multiline':false,'name':'Parameter 3','options':['43'],'type':'editbox','value':'43','valueType':'Integer'}," +
-                        "{'def':'false','multiline':false,'name':'Parameter 4','options':['false','true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
-                        "{'def':'false','multiline':false,'name':'[Semifinal] Enabled','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'}," +
-                        "{'def':'900','multiline':false,'name':'[Semifinal] Timeout','options':['900'],'type':'editbox','value':'900','valueType':'Integer'}," +
-                        "{'def':'true','multiline':false,'name':'[Semifinal] Percentage','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
-                        "{'def':'50','multiline':false,'name':'[Semifinal] Limit','options':['50'],'type':'editbox','value':'50','valueType':'Integer'}," +
-                        "{'def':'true','multiline':false,'name':'[Semifinal] Reset board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
-                        "{'def':'true','multiline':false,'name':'[Semifinal] Shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
-                        "{'def':'false','multiline':false,'name':'[Semifinal] Clear scores','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'}]}",
-                quote(settings2.toString()));
+        assertEqualsSettingsJson(settings2,
+                "{'parameters':[{'def':'43','multiline':false,'name':'Parameter 3','options':['43'],'type':'editbox','value':'43','valueType':'Integer'},\n" +
+                "{'def':'false','multiline':false,'name':'Parameter 4','options':['false','true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
+                "{'def':'false','multiline':false,'name':'[Semifinal] Enabled','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'},\n" +
+                "{'def':'900','multiline':false,'name':'[Semifinal] Timeout','options':['900'],'type':'editbox','value':'900','valueType':'Integer'},\n" +
+                "{'def':'true','multiline':false,'name':'[Semifinal] Percentage','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
+                "{'def':'50','multiline':false,'name':'[Semifinal] Limit','options':['50'],'type':'editbox','value':'50','valueType':'Integer'},\n" +
+                "{'def':'true','multiline':false,'name':'[Semifinal] Reset board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
+                "{'def':'true','multiline':false,'name':'[Semifinal] Shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
+                "{'def':'false','multiline':false,'name':'[Semifinal] Clear scores','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'}]}");
 
         // when
         // обновляем сеттинги передавая только ключик и значение
@@ -704,29 +711,28 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
 
         // then
         settings1 = service.getSettings("name1", "first");
-        assertEquals("[[Parameter 1:Integer = multiline[false] def[12] val[30]], " +
-                        "[Parameter 2:Boolean = def[true] val[false]], " +
-                        "[[Semifinal] Enabled:Boolean = def[false] val[false]], " +
-                        "[[Semifinal] Timeout:Integer = multiline[false] def[900] val[900]], " +
-                        "[[Semifinal] Percentage:Boolean = def[true] val[true]], " +
-                        "[[Semifinal] Limit:Integer = multiline[false] def[50] val[50]], " +
-                        "[[Semifinal] Reset board:Boolean = def[true] val[true]], " +
-                        "[[Semifinal] Shuffle board:Boolean = def[true] val[true]], " +
-                        "[[Semifinal] Clear scores:Boolean = def[false] val[false]]]",
-                settings1.build().toString());
+        assertEqualsSettingsParameters(settings1,
+                "[[Parameter 1:Integer = multiline[false] def[12] val[30]], \n" +
+                "[Parameter 2:Boolean = def[true] val[false]], \n" +
+                "[[Semifinal] Enabled:Boolean = def[false] val[false]], \n" +
+                "[[Semifinal] Timeout:Integer = multiline[false] def[900] val[900]], \n" +
+                "[[Semifinal] Percentage:Boolean = def[true] val[true]], \n" +
+                "[[Semifinal] Limit:Integer = multiline[false] def[50] val[50]], \n" +
+                "[[Semifinal] Reset board:Boolean = def[true] val[true]], \n" +
+                "[[Semifinal] Shuffle board:Boolean = def[true] val[true]], \n" +
+                "[[Semifinal] Clear scores:Boolean = def[false] val[false]]]");
 
         settings2 = new JSONObject(get("/rest/admin/room/name2/settings/second"));
-        assertEquals("{'parameters':[" +
-                        "{'def':'43','multiline':false,'name':'Parameter 3','options':['43','55'],'type':'editbox','value':'55','valueType':'Integer'}," +
-                        "{'def':'false','multiline':false,'name':'Parameter 4','options':['false','true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
-                        "{'def':'false','multiline':false,'name':'[Semifinal] Enabled','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'}," +
-                        "{'def':'900','multiline':false,'name':'[Semifinal] Timeout','options':['900'],'type':'editbox','value':'900','valueType':'Integer'}," +
-                        "{'def':'true','multiline':false,'name':'[Semifinal] Percentage','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
-                        "{'def':'50','multiline':false,'name':'[Semifinal] Limit','options':['50'],'type':'editbox','value':'50','valueType':'Integer'}," +
-                        "{'def':'true','multiline':false,'name':'[Semifinal] Reset board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
-                        "{'def':'true','multiline':false,'name':'[Semifinal] Shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
-                        "{'def':'false','multiline':false,'name':'[Semifinal] Clear scores','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'}]}",
-                quote(settings2.toString()));
+        assertEqualsSettingsJson(settings2,
+                "{'parameters':[{'def':'43','multiline':false,'name':'Parameter 3','options':['43','55'],'type':'editbox','value':'55','valueType':'Integer'},\n" +
+                "{'def':'false','multiline':false,'name':'Parameter 4','options':['false','true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
+                "{'def':'false','multiline':false,'name':'[Semifinal] Enabled','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'},\n" +
+                "{'def':'900','multiline':false,'name':'[Semifinal] Timeout','options':['900'],'type':'editbox','value':'900','valueType':'Integer'},\n" +
+                "{'def':'true','multiline':false,'name':'[Semifinal] Percentage','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
+                "{'def':'50','multiline':false,'name':'[Semifinal] Limit','options':['50'],'type':'editbox','value':'50','valueType':'Integer'},\n" +
+                "{'def':'true','multiline':false,'name':'[Semifinal] Reset board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
+                "{'def':'true','multiline':false,'name':'[Semifinal] Shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
+                "{'def':'false','multiline':false,'name':'[Semifinal] Clear scores','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'}]}");
     }
 
     // тест такой же как и прошлый, только мы проверяем группу настроек semifinal
@@ -734,30 +740,28 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
     public void shouldSetRoomSettings_onlyKeyValue_semifinal() {
         // given
         PParameters settings1 = service.getSettings("name1", "first");
-        assertEquals("[[Parameter 1:Integer = multiline[false] def[12] val[15]], " +
-                        "[Parameter 2:Boolean = def[true] val[true]], " +
-                        "[[Semifinal] Enabled:Boolean = def[false] val[false]], " +
-                        "[[Semifinal] Timeout:Integer = multiline[false] def[900] val[900]], " +
-                        "[[Semifinal] Percentage:Boolean = def[true] val[true]], " +
-                        "[[Semifinal] Limit:Integer = multiline[false] def[50] val[50]], " +
-                        "[[Semifinal] Reset board:Boolean = def[true] val[true]], " +
-                        "[[Semifinal] Shuffle board:Boolean = def[true] val[true]], " +
-                        "[[Semifinal] Clear scores:Boolean = def[false] val[false]]]",
-
-                settings1.build().toString());
+        assertEqualsSettingsParameters(settings1,
+                "[[Parameter 1:Integer = multiline[false] def[12] val[15]], \n" +
+                "[Parameter 2:Boolean = def[true] val[true]], \n" +
+                "[[Semifinal] Enabled:Boolean = def[false] val[false]], \n" +
+                "[[Semifinal] Timeout:Integer = multiline[false] def[900] val[900]], \n" +
+                "[[Semifinal] Percentage:Boolean = def[true] val[true]], \n" +
+                "[[Semifinal] Limit:Integer = multiline[false] def[50] val[50]], \n" +
+                "[[Semifinal] Reset board:Boolean = def[true] val[true]], \n" +
+                "[[Semifinal] Shuffle board:Boolean = def[true] val[true]], \n" +
+                "[[Semifinal] Clear scores:Boolean = def[false] val[false]]]");
 
         JSONObject settings2 = new JSONObject(get("/rest/admin/room/name2/settings/second"));
-        assertEquals("{'parameters':[" +
-                        "{'def':'43','multiline':false,'name':'Parameter 3','options':['43'],'type':'editbox','value':'43','valueType':'Integer'}," +
-                        "{'def':'false','multiline':false,'name':'Parameter 4','options':['false','true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
-                        "{'def':'false','multiline':false,'name':'[Semifinal] Enabled','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'}," +
-                        "{'def':'900','multiline':false,'name':'[Semifinal] Timeout','options':['900'],'type':'editbox','value':'900','valueType':'Integer'}," +
-                        "{'def':'true','multiline':false,'name':'[Semifinal] Percentage','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
-                        "{'def':'50','multiline':false,'name':'[Semifinal] Limit','options':['50'],'type':'editbox','value':'50','valueType':'Integer'}," +
-                        "{'def':'true','multiline':false,'name':'[Semifinal] Reset board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
-                        "{'def':'true','multiline':false,'name':'[Semifinal] Shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
-                        "{'def':'false','multiline':false,'name':'[Semifinal] Clear scores','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'}]}",
-                quote(settings2.toString()));
+        assertEqualsSettingsJson(settings2,
+                "{'parameters':[{'def':'43','multiline':false,'name':'Parameter 3','options':['43'],'type':'editbox','value':'43','valueType':'Integer'},\n" +
+                "{'def':'false','multiline':false,'name':'Parameter 4','options':['false','true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
+                "{'def':'false','multiline':false,'name':'[Semifinal] Enabled','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'},\n" +
+                "{'def':'900','multiline':false,'name':'[Semifinal] Timeout','options':['900'],'type':'editbox','value':'900','valueType':'Integer'},\n" +
+                "{'def':'true','multiline':false,'name':'[Semifinal] Percentage','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
+                "{'def':'50','multiline':false,'name':'[Semifinal] Limit','options':['50'],'type':'editbox','value':'50','valueType':'Integer'},\n" +
+                "{'def':'true','multiline':false,'name':'[Semifinal] Reset board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
+                "{'def':'true','multiline':false,'name':'[Semifinal] Shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
+                "{'def':'false','multiline':false,'name':'[Semifinal] Clear scores','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'}]}");
 
         // when
         // обновляем сеттинги первой комнаты передавая только ключик и значение
@@ -775,30 +779,29 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
         // then
         // смотрим что поменялось
         settings1 = service.getSettings("name1", "first");
-        assertEquals("[[Parameter 1:Integer = multiline[false] def[12] val[15]], " +
-                        "[Parameter 2:Boolean = def[true] val[true]], " +
-                        "[[Semifinal] Enabled:Boolean = def[false] val[true]], " +
-                        "[[Semifinal] Timeout:Integer = multiline[false] def[900] val[500]], " +
-                        "[[Semifinal] Percentage:Boolean = def[true] val[false]], " +
-                        "[[Semifinal] Limit:Integer = multiline[false] def[50] val[70]], " +
-                        "[[Semifinal] Reset board:Boolean = def[true] val[false]], " +
-                        "[[Semifinal] Shuffle board:Boolean = def[true] val[false]], " +
-                        "[[Semifinal] Clear scores:Boolean = def[false] val[false]]]",
-                settings1.build().toString());
+        assertEqualsSettingsParameters(settings1,
+                "[[Parameter 1:Integer = multiline[false] def[12] val[15]], \n" +
+                "[Parameter 2:Boolean = def[true] val[true]], \n" +
+                "[[Semifinal] Enabled:Boolean = def[false] val[true]], \n" +
+                "[[Semifinal] Timeout:Integer = multiline[false] def[900] val[500]], \n" +
+                "[[Semifinal] Percentage:Boolean = def[true] val[false]], \n" +
+                "[[Semifinal] Limit:Integer = multiline[false] def[50] val[70]], \n" +
+                "[[Semifinal] Reset board:Boolean = def[true] val[false]], \n" +
+                "[[Semifinal] Shuffle board:Boolean = def[true] val[false]], \n" +
+                "[[Semifinal] Clear scores:Boolean = def[false] val[false]]]");
 
         // тут не поменялось ничего, т.к. комната другая
         settings2 = new JSONObject(get("/rest/admin/room/name2/settings/second"));
-        assertEquals("{'parameters':[" +
-        "{'def':'43','multiline':false,'name':'Parameter 3','options':['43'],'type':'editbox','value':'43','valueType':'Integer'}," +
-                "{'def':'false','multiline':false,'name':'Parameter 4','options':['false','true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
-                "{'def':'false','multiline':false,'name':'[Semifinal] Enabled','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'}," +
-                "{'def':'900','multiline':false,'name':'[Semifinal] Timeout','options':['900'],'type':'editbox','value':'900','valueType':'Integer'}," +
-                "{'def':'true','multiline':false,'name':'[Semifinal] Percentage','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
-                "{'def':'50','multiline':false,'name':'[Semifinal] Limit','options':['50'],'type':'editbox','value':'50','valueType':'Integer'}," +
-                "{'def':'true','multiline':false,'name':'[Semifinal] Reset board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
-                "{'def':'true','multiline':false,'name':'[Semifinal] Shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
-                "{'def':'false','multiline':false,'name':'[Semifinal] Clear scores','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'}]}",
-                quote(settings2.toString()));
+        assertEqualsSettingsJson(settings2,
+                "{'parameters':[{'def':'43','multiline':false,'name':'Parameter 3','options':['43'],'type':'editbox','value':'43','valueType':'Integer'},\n" +
+                "{'def':'false','multiline':false,'name':'Parameter 4','options':['false','true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
+                "{'def':'false','multiline':false,'name':'[Semifinal] Enabled','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'},\n" +
+                "{'def':'900','multiline':false,'name':'[Semifinal] Timeout','options':['900'],'type':'editbox','value':'900','valueType':'Integer'},\n" +
+                "{'def':'true','multiline':false,'name':'[Semifinal] Percentage','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
+                "{'def':'50','multiline':false,'name':'[Semifinal] Limit','options':['50'],'type':'editbox','value':'50','valueType':'Integer'},\n" +
+                "{'def':'true','multiline':false,'name':'[Semifinal] Reset board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
+                "{'def':'true','multiline':false,'name':'[Semifinal] Shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
+                "{'def':'false','multiline':false,'name':'[Semifinal] Clear scores','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'}]}");
 
         // when
         // для другой комнаты пробуем передавать строковые представления
@@ -816,29 +819,28 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
         // then
         // тут ничего не поменялось
         settings1 = service.getSettings("name1", "first");
-        assertEquals("[[Parameter 1:Integer = multiline[false] def[12] val[15]], " +
-                        "[Parameter 2:Boolean = def[true] val[true]], " +
-                        "[[Semifinal] Enabled:Boolean = def[false] val[true]], " +
-                        "[[Semifinal] Timeout:Integer = multiline[false] def[900] val[500]], " +
-                        "[[Semifinal] Percentage:Boolean = def[true] val[false]], " +
-                        "[[Semifinal] Limit:Integer = multiline[false] def[50] val[70]], " +
-                        "[[Semifinal] Reset board:Boolean = def[true] val[false]], " +
-                        "[[Semifinal] Shuffle board:Boolean = def[true] val[false]], " +
-                        "[[Semifinal] Clear scores:Boolean = def[false] val[false]]]",
-                settings1.build().toString());
+        assertEqualsSettingsParameters(settings1,
+                "[[Parameter 1:Integer = multiline[false] def[12] val[15]], \n" +
+                "[Parameter 2:Boolean = def[true] val[true]], \n" +
+                "[[Semifinal] Enabled:Boolean = def[false] val[true]], \n" +
+                "[[Semifinal] Timeout:Integer = multiline[false] def[900] val[500]], \n" +
+                "[[Semifinal] Percentage:Boolean = def[true] val[false]], \n" +
+                "[[Semifinal] Limit:Integer = multiline[false] def[50] val[70]], \n" +
+                "[[Semifinal] Reset board:Boolean = def[true] val[false]], \n" +
+                "[[Semifinal] Shuffle board:Boolean = def[true] val[false]], \n" +
+                "[[Semifinal] Clear scores:Boolean = def[false] val[false]]]");
 
         // а тут поменялось
         settings2 = new JSONObject(get("/rest/admin/room/name2/settings/second"));
-        assertEquals("{'parameters':[" +
-                        "{'def':'43','multiline':false,'name':'Parameter 3','options':['43'],'type':'editbox','value':'43','valueType':'Integer'}," +
-                        "{'def':'false','multiline':false,'name':'Parameter 4','options':['false','true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
-                        "{'def':'false','multiline':false,'name':'[Semifinal] Enabled','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'}," +
-                        "{'def':'900','multiline':false,'name':'[Semifinal] Timeout','options':['900','300'],'type':'editbox','value':'300','valueType':'Integer'}," +
-                        "{'def':'true','multiline':false,'name':'[Semifinal] Percentage','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
-                        "{'def':'50','multiline':false,'name':'[Semifinal] Limit','options':['50','60'],'type':'editbox','value':'60','valueType':'Integer'}," +
-                        "{'def':'true','multiline':false,'name':'[Semifinal] Reset board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
-                        "{'def':'true','multiline':false,'name':'[Semifinal] Shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
-                        "{'def':'false','multiline':false,'name':'[Semifinal] Clear scores','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'}]}",
-                quote(settings2.toString()));
+        assertEqualsSettingsJson(settings2,
+                "{'parameters':[{'def':'43','multiline':false,'name':'Parameter 3','options':['43'],'type':'editbox','value':'43','valueType':'Integer'},\n" +
+                "{'def':'false','multiline':false,'name':'Parameter 4','options':['false','true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
+                "{'def':'false','multiline':false,'name':'[Semifinal] Enabled','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'},\n" +
+                "{'def':'900','multiline':false,'name':'[Semifinal] Timeout','options':['900','300'],'type':'editbox','value':'300','valueType':'Integer'},\n" +
+                "{'def':'true','multiline':false,'name':'[Semifinal] Percentage','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
+                "{'def':'50','multiline':false,'name':'[Semifinal] Limit','options':['50','60'],'type':'editbox','value':'60','valueType':'Integer'},\n" +
+                "{'def':'true','multiline':false,'name':'[Semifinal] Reset board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
+                "{'def':'true','multiline':false,'name':'[Semifinal] Shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'},\n" +
+                "{'def':'false','multiline':false,'name':'[Semifinal] Clear scores','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'}]}");
     }
 }
