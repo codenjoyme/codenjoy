@@ -407,6 +407,63 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
         assertRooms("[]");
     }
 
+    @Test
+    public void shouldGameOverInRoom_severalPlayers() {
+        // given
+        with.login.register("player1", "ip1", "room1", "first");
+        with.login.register("player2", "ip2", "room1", "first");
+        with.login.register("player3", "ip3", "room1", "first");
+        with.login.register("player4", "ip4", "room1", "first");
+        with.login.register("player5", "ip5", "room1", "first");
+
+        with.login.register("player6", "ip6", "room2", "first");
+        with.login.register("player7", "ip7", "room2", "first");
+
+        with.login.register("player8", "ip8", "room3", "second");
+
+        // when
+        assertEquals("", get("/rest/admin/room/room1/gameOver",
+                unquote("{'ids':['player2','player4']}")));
+
+        // then
+        assertRooms("[[player8], [player1, player3, player5], [player6, player7]]");
+
+        // when
+        assertEquals("", get("/rest/admin/room/room1/gameOver",
+                unquote("{'ids':['player1']}")));
+
+        // then
+        assertRooms("[[player8], [player3, player5], [player6, player7]]");
+
+        // when
+        assertEquals("", get("/rest/admin/room/room1/gameOver",
+                unquote("{'ids':['player3','player5']}")));
+
+        // then
+        assertRooms("[[player8], [player6, player7]]");
+
+        // when
+        assertEquals("", get("/rest/admin/room/room2/gameOver",
+                unquote("{'ids':['player6']}")));
+
+        // then
+        assertRooms("[[player8], [player7]]");
+
+        // when
+        assertEquals("", get("/rest/admin/room/room3/gameOver",
+                unquote("{'ids':['player8']}")));
+
+        // then
+        assertRooms("[[player7]]");
+
+        // when
+        assertEquals("", get("/rest/admin/room/room3/gameOver",
+                unquote("{'ids':['player7']}")));
+
+        // then
+        assertRooms("[]");
+    }
+
     private void assertRooms(String expected) {
         assertEquals(expected, dealsView.getGroupsByRooms().toString());
     }

@@ -32,6 +32,7 @@ import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.web.controller.Validator;
 import com.codenjoy.dojo.web.rest.pojo.PParameters;
+import com.codenjoy.dojo.web.rest.pojo.PPlayers;
 import com.codenjoy.dojo.web.rest.pojo.PlayerDetailInfo;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -293,6 +294,17 @@ public class RestAdminController {
         validator.checkPlayerInRoom(id, room);
 
         playerService.remove(id);
+    }
+
+    @GetMapping(ROOM + "/gameOver")
+    public void gameOver(@PathVariable("room") String room,
+                         @RequestBody PPlayers players)
+    {
+        validator.checkRoom(room, CANT_BE_NULL);
+
+        for (String id : players.getIds()) {
+            playerService.remove(id);
+        }
     }
 
     @GetMapping(ROOM + "/gameOverAll")
