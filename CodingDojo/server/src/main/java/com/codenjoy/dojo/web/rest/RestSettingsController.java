@@ -70,6 +70,7 @@ public class RestSettingsController {
     @Secured(GameAuthoritiesConstants.ROLE_USER)
     public Map<String, String> getForPlayer(@AuthenticationPrincipal Registration.User user) {
         if (user == null) {
+            // TODO тут надо вернуть пустой список, или что-то чтобы было понятно что юзер не залогинился
             throw new IllegalArgumentException(
                     "Please join the game to check room settings");
         }
