@@ -53,6 +53,7 @@ public class RestAdminController {
 
     public static final String URI = "/rest/admin";
     public static final String ROOM = "/room/{room}";
+    public static final String GAME = "/game/{game}";
 
     private GameService gameService;
     private Validator validator;
@@ -236,11 +237,27 @@ public class RestAdminController {
     }
 
     /**
-     * @param room имя комнаты, для которой мы хотим получить настройки
-     * @param game имя игры указывается тут, потому что этот метод будет
+     * @param game Имя игры, для которой мы хотим получить настройки.
+     * @return Базовые настройки для этой игры, они берутся за основу
+     *       кастомных настроек комнаты.
+     */
+    @GetMapping(GAME + "/settings")
+    public PParameters getSettings(@PathVariable("game") String game) {
+        validator.checkGameType(game);
+
+        return wrap(gameService.getGameType(game));
+    }
+
+    private PParameters wrap(GameType type) {
+        return new PParameters(type.getSettings().getParameters());
+    }
+
+    /**
+     * @param room Имя комнаты, для которой мы хотим получить настройки
+     * @param game Имя игры указывается тут, потому что этот метод будет
      *                 дергаться еще до первого зарегистрированного пользователя
      *                 в комнату, а потому откуда codenjoy знает про связку комната + игра?
-     * @return кастомные настройки для этой комнаты
+     * @return Кастомные настройки для этой комнаты.
      */
     @GetMapping(ROOM + "/settings/{game}")
     public PParameters getSettings(@PathVariable("room") String room,
@@ -249,10 +266,7 @@ public class RestAdminController {
         validator.checkRoom(room, CANT_BE_NULL);
         validator.checkGameType(game);
 
-        GameType type = gameService.getGameType(game, room);
-        Settings settings = type.getSettings();
-        List<Parameter> result = settings.getParameters();
-        return new PParameters(result);
+        return wrap(gameService.getGameType(game, room));
     }
 
     @PostMapping(ROOM + "/settings/{game}")
