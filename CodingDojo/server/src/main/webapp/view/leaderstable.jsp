@@ -30,7 +30,7 @@
         </div>
         <div class="div-table overflow">
                 <table id="table-logs" class = "inner-table leaderboard-table">
-                    <th width="5%">
+                    <th style = "width:5%">
                         <c:choose>
                             <c:when test="${code != null}">
                                 <a href="${ctx}/board/game/${game}?code=${code}">#</a>
@@ -40,7 +40,7 @@
                             </c:otherwise>
                         </c:choose>
                     </th>
-                    <th width="55%">
+                    <th style = "width:70%">
                         <div class="score-header">
                             Player
                             <sec:authorize access="isAuthenticated()">
@@ -52,14 +52,14 @@
                             </sec:authorize>
                         </div>
                     </th>
-                    <th width="25%" class="center">Score</th>
-                        <c:forEach items="${leaderboard}" var="currPlayer">
-                            <tr>
-                                <td style = "flex:0 0 10%;">${currPlayer.key}. </td>
-                                <td style = "flex:0 0 70%;"><a href="${ctx}/board/player/email?code=${code}"> ${currPlayer.value.key}</a></td>
-                                <td class="center" style = "flex:0 0 20%;"> ${currPlayer.value.value}</td>
-                            </tr>
-                        </c:forEach>
+                    <th style = "width:25%" class="center">Score</th>
+                    <c:forEach items="${leaderboard}" var="currPlayer">
+                        <tr>
+                            <td>${currPlayer.key}. </td>
+                            <td><a href="${ctx}/board/player/email?code=${code}"> ${currPlayer.value.key}</a></td>
+                            <td class="center"> ${currPlayer.value.value}</td>
+                        </tr>
+                    </c:forEach>
                 </table>
         </div>
     </div>

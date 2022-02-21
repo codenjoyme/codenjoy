@@ -36,8 +36,7 @@
     <link href="${ctx}/resources/css/custom.css" rel="stylesheet">
     <jsp:include page="common-inclusion.jsp" />
 
-    <script src="${ctx}/resources/js/canvases-${gameOnly}.js"></script>
-    <script src="${ctx}/resources/js/${gameOnly}.js"></script>
+
     <script src="${ctx}/resources/js/settings.js"></script>
 </head>
 <body style="display:none;">
