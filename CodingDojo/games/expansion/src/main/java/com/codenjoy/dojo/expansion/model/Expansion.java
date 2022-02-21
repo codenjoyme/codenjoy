@@ -33,11 +33,10 @@ import com.codenjoy.dojo.games.expansion.Forces;
 import com.codenjoy.dojo.games.expansion.ForcesMoves;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.printer.state.State;
 import com.codenjoy.dojo.services.Tickable;
-import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.layeredview.LayeredBoardReader;
 import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
+import com.codenjoy.dojo.services.printer.state.State;
 import com.codenjoy.dojo.utils.JsonUtils;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
@@ -46,7 +45,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
 
 public class Expansion implements Tickable, IField {
 
@@ -581,21 +579,6 @@ public class Expansion implements Tickable, IField {
     @Override
     public String id() {
         return lg.id();
-    }
-
-    @Override
-    public BoardReader<Player> reader() {
-        return new BoardReader<>() {
-            @Override
-            public int size() {
-                return Expansion.this.size();
-            }
-
-            @Override
-            public void addAll(Player player, Consumer<Iterable<? extends Point>> processor) {
-                // do nothing because layeredReader() implemented here
-            }
-        };
     }
 
     public LayeredBoardReader layeredReader() {
