@@ -36,8 +36,7 @@
     <link href="${ctx}/resources/css/custom.css" rel="stylesheet">
     <jsp:include page="common-inclusion.jsp" />
 
-    <script src="${ctx}/resources/js/canvases-${gameOnly}.js"></script>
-    <script src="${ctx}/resources/js/${gameOnly}.js"></script>
+
     <script src="${ctx}/resources/js/settings.js"></script>
 </head>
 <body style="display:none;">
@@ -56,16 +55,7 @@
         <div class="separator">
             <%@include file="leaderstable.jsp"%>
             <div style = "flex:0 0 37%;">
-                <label style="text-align:center;"> Hello ${readableName}! <br>This is a competition for a ${game} position at EPAM. <br>
-                        The people within the top 10 go forward to a technical interview. <br>
-                        <!--TODO: Change top 10 so an admin can determine how much-->
-                         In order to climb the leaderboard you will have to do some tasks. <br> <br>
-                          We have provided you with a
-                            <a href="${repositoryURL}"> github repository </a>
-                            where you will find what tasks you have to complete and you will have to
-                            submit them in the provided repository.<br><br>
-                            We wish you good luck and may the best coders win!
-                </label>
+                <label style="text-align:center;"> ${welcomeText}</label>
             </div>
             <%@include file="leaderboard.jsp"%>
         </div>

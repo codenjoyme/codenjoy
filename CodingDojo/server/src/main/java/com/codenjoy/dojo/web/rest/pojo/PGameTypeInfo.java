@@ -10,12 +10,12 @@ package com.codenjoy.dojo.web.rest.pojo;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -24,11 +24,9 @@ package com.codenjoy.dojo.web.rest.pojo;
 
 import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.RoomGameType;
-import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.settings.Settings;
 import lombok.Getter;
 
-import java.util.List;
 
 @Getter
 public class PGameTypeInfo {
@@ -36,9 +34,6 @@ public class PGameTypeInfo {
     private String room;
     private String version;
     private String info;
-    private int boardSize;
-    private List<PParameter> parameters;
-    private MultiplayerType multiplayerType;
     private String helpUrl;
     private String clientUrl;
     private String wsUrl;
@@ -46,16 +41,11 @@ public class PGameTypeInfo {
 
     public PGameTypeInfo(GameType<Settings> type, String room, String helpUrl,
                          String clientUrl, String wsUrl,
-                         PSprites sprites) 
-    {
+                         PSprites sprites) {
 
-        Settings settings = type.getSettings();
         version = type.getVersion();
         this.room = room;
         info = RoomGameType.unwrap(type).toString();
-        boardSize = type.getBoardSize(settings).getValue();
-        parameters = new PParameters(settings.getParameters()).getParameters();
-        multiplayerType = type.getMultiplayerType(settings);
         this.helpUrl = helpUrl;
         this.clientUrl = clientUrl;
         this.wsUrl = wsUrl;

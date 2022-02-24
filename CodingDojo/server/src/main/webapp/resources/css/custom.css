@@ -134,15 +134,13 @@ body{
 
 .inner-table{
     line-height: 1.15;
-    -webkit-text-size-adjust: 100%;
+
     font-size: 62.5%;
-    font-family: var(--font-family);
-    --swiper-theme-color: #007aff;
-    --swiper-navigation-size: 44px;
+
     list-style-type: none;
     box-sizing: border-box;
     margin: 0;
-    padding: 1.6rem 1.4rem;
+
     display: flex;
     -webkit-box-align: center;
     align-items: center;

@@ -108,13 +108,13 @@ public class PlayerServiceImpl implements PlayerService {
         playerGames.onAdd(playerGame -> {
             Player player = playerGame.getPlayer();
             Joystick joystick = playerGame.getJoystick();
-            playerController.registerPlayerTransport(player, joystick);
-            screenController.registerPlayerTransport(player, null);
+//            playerController.registerPlayerTransport(player, joystick);
+//            screenController.registerPlayerTransport(player, null);
         });
         playerGames.onRemove(playerGame -> {
             Player player = playerGame.getPlayer();
-            playerController.unregisterPlayerTransport(player);
-            screenController.unregisterPlayerTransport(player);
+//            playerController.unregisterPlayerTransport(player);
+//            screenController.unregisterPlayerTransport(player);
         });
     }
 
@@ -128,18 +128,7 @@ public class PlayerServiceImpl implements PlayerService {
                 return NullPlayer.INSTANCE;
             }
 
-            registerAIIfNeeded(id, game, room);
-
-            // TODO test me
-            PlayerSave save = saver.loadGame(id);
-            if (save != PlayerSave.NULL
-                    && game.equals(save.getGame())
-                    && room.equals(save.getRoom())) // TODO ROOM test me
-            {
-                save.setCallbackUrl(ip);
-            } else {
-                save = new PlayerSave(id, ip, game, room, 0, null, repositoryUrl);
-            }
+            PlayerSave save = new PlayerSave(id, ip, game, room, 0, null, repositoryUrl);
 
             Player player = register(new PlayerSave(id, ip, game, room, save.getScore(), save.getSave(), repositoryUrl));
 
@@ -222,14 +211,7 @@ public class PlayerServiceImpl implements PlayerService {
         if (!gameService.exists(game)) {
             return NullPlayer.INSTANCE;
         }
-
         Player player = getPlayer(save, game, room);
-
-        if (isAI(id)) {
-            setupPlayerAI(() -> player,
-                    id, gerCodeForAI(id), game, room);
-        }
-
         return player;
     }
 
@@ -304,28 +286,27 @@ public class PlayerServiceImpl implements PlayerService {
                 || !game.equals(player.getGame())
                 || !room.equals(oldPlayerGame.getRoom()); // TODO ROOM test me
         if (newPlayer) {
-            playerGames.remove(player);
 
             PlayerScores playerScores = gameType.getPlayerScores(save.getScore(), gameType.getSettings());
             InformationCollector listener = new InformationCollector(playerScores);
 
             player = new Player(name, callbackUrl,
                     gameType, playerScores, listener);
-            player.setEventListener(listener);
 
             player.setGitHubUsername(registration.getGitHubUsernameById(player.getId()));
 
             player.setRepositoryUrl(saver.getRepositoryByPlayerIdForGame(player.getId(), game));
 
             player.setGameType(gameType);
+
+            player.setScore(0);
+            player.setRoom(game);
             PlayerGame playerGame = playerGames.add(player, room, save);
 
             player = playerGame.getPlayer();
 
             player.setReadableName(registration.getNameById(player.getId()));
 
-
-            log.debug("Player {} starting new game {}", name, playerGame.getGame());
         } else {
             // do nothing
         }
@@ -341,9 +322,6 @@ public class PlayerServiceImpl implements PlayerService {
             actionLogger.log(playerGames);
             autoSaver.tick();
 
-            playerGames.tick();
-            sendScreenUpdates();
-            requestControls();
 
             semifinal.tick();
 

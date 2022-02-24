@@ -86,6 +86,16 @@ public class Player implements ScreenRecipient, Closeable {
         subscriptionsForGame = new HashMap<>();
     }
 
+    public Player(String id, String readableName, String callbackUrl, String room, String game, int score, String repositoryUrl) {
+        this.id = id;
+        this.readableName = readableName;
+        this.callbackUrl = callbackUrl;
+        this.room = room;
+        this.game = game;
+        this.score = score;
+        this.repositoryUrl = repositoryUrl;
+    }
+
     public List<QuerySubscription> getSubscriptionsForGame(String game) {
         subscriptionsForGame.computeIfAbsent(game, k -> new ArrayList<>());
         return subscriptionsForGame.get(game);

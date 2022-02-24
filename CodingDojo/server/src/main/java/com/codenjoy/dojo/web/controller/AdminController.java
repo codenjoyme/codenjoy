@@ -25,6 +25,7 @@ package com.codenjoy.dojo.web.controller;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.ActionLogger;
+import com.codenjoy.dojo.services.dao.BoardData;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
@@ -77,6 +78,7 @@ public class AdminController {
     private final Semifinal semifinal;
     private final RoomService roomService;
     private final BoardService leaderboardService;
+    private final BoardData boardData;
 
 
     // TODO ROOM а этот метод вообще зачем?
@@ -174,12 +176,10 @@ public class AdminController {
     @GetMapping("/player/{player}/{name}/{game}/save/remove")
     public String cleanPlayerScoreAndRemovePlayerSave(@PathVariable("player") String id,
                                                       @PathVariable("name") String name,
-                                                      @PathVariable("game") String game,
-                                                      HttpServletRequest request) {
+                                                      @PathVariable("game") String game) {
         leaderboardService.removePlayerFromGame(name, game);
-        playerService.cleanScores(id);
         saveService.removeSaveForGame(id, game);
-        return getAdmin(request);
+        return "redirect";
     }
 
     @GetMapping("/player/save/removeAll")
@@ -195,7 +195,7 @@ public class AdminController {
     public String removePlayerRegistration(@PathVariable("player") String id,
                                            HttpServletRequest request) {
         registration.remove(id);
-        return getAdmin(request);
+        return "redirect";
     }
 
     @GetMapping("/player/registration/removeAll")
@@ -304,6 +304,21 @@ public class AdminController {
     }
 
     // ----------------
+
+    @PostMapping("/game/create")
+    public String addGame(AdminSettings settings,
+                          HttpServletRequest request) {
+        String room = settings.getRoom();
+        String templateRepo = request.getParameter("templateRepo").replace("\"", "");
+        String gameName = request.getParameter("gameName").replace("\"", "");
+        String feedbackText = request.getParameter("welcomeText");
+        if (!boardData.getAllGames().contains(gameName)) {
+            boardData.saveBoardGame(gameName, templateRepo, feedbackText, "img");
+        }
+        gameService.addGame(gameName);
+        rooms.addRoom(gameName);
+        return getAdmin(room);
+    }
 
     @PostMapping()
     public String saveSettings(AdminSettings settings,

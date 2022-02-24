@@ -10,12 +10,12 @@ package com.codenjoy.dojo.services;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.basicGame.BasicGameRunner;
 import com.codenjoy.dojo.services.classloader.GameLoader;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.printer.CharElements;
@@ -81,6 +82,13 @@ public class GameServiceImpl implements GameService {
             // создаем комнаты для каждой игры сразу
             roomService.create(name, gameType);
         }
+    }
+
+    @Override
+    public void addGame(String name) {
+        GameType gameType = new BasicGameRunner(name);
+        cache.put(name, gameType);
+        roomService.create(name, gameType);
     }
 
     private List<Class> allGames() {
@@ -163,13 +171,13 @@ public class GameServiceImpl implements GameService {
 
     private Map<String, List<String>> getStringListMap(Function<CharElements, String> mapper) {
         return cache.entrySet().stream()
-                .map(entry -> 
-                    new HashMap.SimpleEntry<>(
-                            entry.getValue().name(),
-                            Arrays.stream(entry.getValue().getPlots())
-                                    .map(mapper)
-                                    .collect(toList())
-                    )
+                .map(entry ->
+                        new HashMap.SimpleEntry<>(
+                                entry.getValue().name(),
+                                Arrays.stream(entry.getValue().getPlots())
+                                        .map(mapper)
+                                        .collect(toList())
+                        )
                 )
                 .collect(toMap(
                         AbstractMap.SimpleEntry::getKey,
