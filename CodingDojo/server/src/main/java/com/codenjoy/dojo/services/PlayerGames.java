@@ -58,7 +58,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     private Spreader spreader = new Spreader();
 
     @Autowired
-    protected GameSaver gameSaver;
+    private GameSaver gameSaver;
 
     @Autowired
     protected RoomService roomService;
@@ -469,5 +469,9 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
     public GameSaver getGameSaver() {
         return gameSaver;
+    }
+
+    protected void setGameSaver(GameSaver gameSaver) {
+        this.gameSaver = gameSaver;
     }
 }

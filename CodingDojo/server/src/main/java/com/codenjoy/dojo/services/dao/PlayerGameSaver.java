@@ -45,7 +45,11 @@ public class PlayerGameSaver implements GameSaver {
     private CrudConnectionThreadPool pool;
 
     @Autowired
-    protected BoardService boardService;
+    private BoardService boardService;
+
+    protected void setBoardService(BoardService boardService) {
+        this.boardService = boardService;
+    }
 
     public PlayerGameSaver(ConnectionThreadPoolFactory factory) {
         pool = factory.create(

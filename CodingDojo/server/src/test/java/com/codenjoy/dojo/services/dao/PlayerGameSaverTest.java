@@ -61,7 +61,7 @@ public class PlayerGameSaverTest {
                                 return "context";
                             }
                         }));
-        saver.boardService = boardService;
+        saver.setBoardService(boardService);
     }
 
     @After

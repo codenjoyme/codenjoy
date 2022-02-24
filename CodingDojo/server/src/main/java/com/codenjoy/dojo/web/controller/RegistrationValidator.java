@@ -67,17 +67,14 @@ public class RegistrationValidator implements Validator {
     public static final String ALREADY_USED_SLACK_EMAIL = "registration.slackEmail.alreadyUsed";
     public static final String INVALID_GAME = "registration.game.invalid";
     public static final String NICKNAME_INVALID = "registration.nickname.invalid";
-
-    @Value("${registration.nickname.allowed}")
-    private boolean nicknameAllowed;
-
-    @Value("${registration.password.min-length}")
-    private int minPasswordLen;
-
     private final com.codenjoy.dojo.web.controller.Validator validator;
     private final RoomsAliaser rooms;
     private final Registration registration;
     private final PlayerService playerService;
+    @Value("${registration.nickname.allowed}")
+    private boolean nicknameAllowed;
+    @Value("${registration.password.min-length}")
+    private int minPasswordLen;
 
     @Override
     public boolean supports(Class<?> clazz) {
@@ -102,8 +99,7 @@ public class RegistrationValidator implements Validator {
         validatePassword(errors, player);
         validateGithub(errors, player);
         validateSlackEmail(errors, player);
-        validateSlackEmail(errors, player);
-        validateGameName(errors,player);
+        validateGameName(errors, player);
     }
 
 
@@ -117,9 +113,9 @@ public class RegistrationValidator implements Validator {
         }
     }
 
-    private void validateGameName(Errors errors,Player player){
+    private void validateGameName(Errors errors, Player player) {
         String gameName = player.getGame();
-        if (!validator.isGameName(gameName,CANT_BE_NULL)) {
+        if (!validator.isGameName(gameName, CANT_BE_NULL)) {
             errors.rejectValue(GAME, INVALID_GAME, new Object[]{gameName}, null);
         }
     }
@@ -166,7 +162,7 @@ public class RegistrationValidator implements Validator {
         if (!checkNameUniqueness(name)) {
             errors.rejectValue(READABLE_NAME, ALREADY_USED_NICKNAME, new Object[]{name}, null);
         }
-        if(!validator.isReadableName(name)){
+        if (!validator.isReadableName(name)) {
             errors.rejectValue(READABLE_NAME, NICKNAME_INVALID, new Object[]{name}, null);
         }
     }

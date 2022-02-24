@@ -10,12 +10,12 @@ package com.codenjoy.dojo.services;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.services.controller.Controller;
+import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.services.hero.HeroDataImpl;
 import com.codenjoy.dojo.services.multiplayer.GameField;
@@ -34,15 +35,18 @@ import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.SimpleParameter;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.codenjoy.dojo.web.rest.pojo.PScores;
-import com.codenjoy.dojo.web.rest.pojo.PScoresOf;
 import org.fest.reflect.core.Reflection;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.stubbing.Answer;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
@@ -50,8 +54,13 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@RunWith(SpringRunner.class)
 public class PlayerGamesViewTest {
 
+    @MockBean
+    private GameSaver gameSaver;
+    @MockBean
+    private Registration registration;
     private PlayerGamesView playerGamesView;
     private PlayerGames playerGames;
     private List<Player> players;
@@ -66,6 +75,8 @@ public class PlayerGamesViewTest {
         playerGames = new PlayerGames();
         playerGamesView = new PlayerGamesView();
         playerGamesView.service = playerGames;
+        playerGamesView.service.setGameSaver(gameSaver);
+        playerGamesView.registration = registration;
 
         players = new LinkedList<>();
         games = new LinkedList<>();
@@ -86,14 +97,14 @@ public class PlayerGamesViewTest {
         // then
         String expectedGroup = "{'boardSize':1234,'decoder':{}," +
                 "'heroesData':{" +
-                    "'coordinates':{" +
-                        "'user1':{'additionalData':'data1','coordinate':{'x':1,'y':2},'level':10,'multiplayer':false}," +
-                        "'user2':{'additionalData':'data2','coordinate':{'x':3,'y':4},'level':11,'multiplayer':false}," +
-                        "'user3':{'additionalData':{'key':'value'},'coordinate':{'x':5,'y':6},'level':12,'multiplayer':false}," +
-                        "'user4':{'additionalData':['data3, data4'],'coordinate':{'x':7,'y':8},'level':13,'multiplayer':false}" +
-                    "}," +
-                    "'group':['user1','user2','user3','user4']," +
-                    "'readableNames':{'user1':'readable_user1','user2':'readable_user2','user3':'readable_user3','user4':'readable_user4'}" +
+                "'coordinates':{" +
+                "'user1':{'additionalData':'data1','coordinate':{'x':1,'y':2},'level':10,'multiplayer':false}," +
+                "'user2':{'additionalData':'data2','coordinate':{'x':3,'y':4},'level':11,'multiplayer':false}," +
+                "'user3':{'additionalData':{'key':'value'},'coordinate':{'x':5,'y':6},'level':12,'multiplayer':false}," +
+                "'user4':{'additionalData':['data3, data4'],'coordinate':{'x':7,'y':8},'level':13,'multiplayer':false}" +
+                "}," +
+                "'group':['user1','user2','user3','user4']," +
+                "'readableNames':{'user1':'readable_user1','user2':'readable_user2','user3':'readable_user3','user4':'readable_user4'}" +
                 "},'scores':{'user1':123,'user2':234,'user3':345,'user4':456}}";
 
         assertEquals(expectedGroup, toString(dataMap.get("user1")));
@@ -120,12 +131,12 @@ public class PlayerGamesViewTest {
         // then
         String expectedGroup1 = "{'boardSize':1234,'decoder':{}," +
                 "'heroesData':{" +
-                    "'coordinates':{" +
-                        "'user1':{'additionalData':'data1','coordinate':{'x':1,'y':2},'level':10,'multiplayer':false}," +
-                        "'user2':{'additionalData':'data2','coordinate':{'x':3,'y':4},'level':11,'multiplayer':false}" +
-                    "}," +
-                    "'group':['user1','user2']," +
-                    "'readableNames':{'user1':'readable_user1','user2':'readable_user2'}" +
+                "'coordinates':{" +
+                "'user1':{'additionalData':'data1','coordinate':{'x':1,'y':2},'level':10,'multiplayer':false}," +
+                "'user2':{'additionalData':'data2','coordinate':{'x':3,'y':4},'level':11,'multiplayer':false}" +
+                "}," +
+                "'group':['user1','user2']," +
+                "'readableNames':{'user1':'readable_user1','user2':'readable_user2'}" +
                 "},'scores':{'user1':123,'user2':234}}";
 
         assertEquals(expectedGroup1, toString(dataMap.get("user1")));
@@ -133,12 +144,12 @@ public class PlayerGamesViewTest {
 
         String expectedGroup2 = "{'boardSize':1234,'decoder':{}," +
                 "'heroesData':{" +
-                    "'coordinates':{" +
-                        "'user3':{'additionalData':{'key':'value'},'coordinate':{'x':5,'y':6},'level':12,'multiplayer':false}," +
-                        "'user4':{'additionalData':['data3, data4'],'coordinate':{'x':7,'y':8},'level':13,'multiplayer':false}" +
-                    "}," +
-                    "'group':['user3','user4']," +
-                    "'readableNames':{'user3':'readable_user3','user4':'readable_user4'}" +
+                "'coordinates':{" +
+                "'user3':{'additionalData':{'key':'value'},'coordinate':{'x':5,'y':6},'level':12,'multiplayer':false}," +
+                "'user4':{'additionalData':['data3, data4'],'coordinate':{'x':7,'y':8},'level':13,'multiplayer':false}" +
+                "}," +
+                "'group':['user3','user4']," +
+                "'readableNames':{'user3':'readable_user3','user4':'readable_user4'}" +
                 "},'scores':{'user3':345,'user4':456}}";
 
         assertEquals(expectedGroup2, toString(dataMap.get("user3")));
@@ -159,9 +170,9 @@ public class PlayerGamesViewTest {
 
         // then
         assertEquals("{user1=[user1, user2, user3, user4], " + // all together
-                "user2=[user1, user2, user3, user4], " +
-                "user3=[user1, user2, user3, user4], " +
-                "user4=[user1, user2, user3, user4]}",
+                        "user2=[user1, user2, user3, user4], " +
+                        "user3=[user1, user2, user3, user4], " +
+                        "user4=[user1, user2, user3, user4]}",
                 sortKeys(map).toString());
     }
 
@@ -175,9 +186,9 @@ public class PlayerGamesViewTest {
 
         // then
         assertEquals("{user1=[user1, user2], " + // group 1
-                "user2=[user1, user2], " +
-                "user3=[user3, user4], " +       // group 2
-                "user4=[user3, user4]}",
+                        "user2=[user1, user2], " +
+                        "user3=[user3, user4], " +       // group 2
+                        "user4=[user3, user4]}",
                 sortKeys(map).toString());
     }
 
@@ -214,7 +225,7 @@ public class PlayerGamesViewTest {
     private void givenUsersInSeveralGroups_inOneGeneralGameRoom() {
         GameField field1 = mock(GameField.class);
         GameField field2 = mock(GameField.class);
-        List<GameField> fields = new LinkedList<GameField>(){{
+        List<GameField> fields = new LinkedList<GameField>() {{
             addAll(Arrays.asList(field1, field1));
             addAll(Arrays.asList(field2, field2));
         }};
@@ -231,7 +242,7 @@ public class PlayerGamesViewTest {
     private void givenUsersInSeveralGroups_withDifferentRooms() {
         GameField field1 = mock(GameField.class);
         GameField field2 = mock(GameField.class);
-        List<GameField> fields = new LinkedList<GameField>(){{
+        List<GameField> fields = new LinkedList<GameField>() {{
             addAll(Arrays.asList(field1, field1));
             addAll(Arrays.asList(field2, field2));
         }};
@@ -275,22 +286,38 @@ public class PlayerGamesViewTest {
     @Test
     public void testGetScoresForGame() {
         // given
-        testGetGamesDataMap_singleGames();
+        GameField field1 = mock(GameField.class);
+        GameField field2 = mock(GameField.class);
+        List<GameField> fields = new LinkedList<GameField>() {{
+            addAll(Arrays.asList(field1, field1, field1, field1));
+            addAll(Arrays.asList(field2, field2));
+        }};
+        GameType gameType = addNewGameType("game1", 1234, inv -> fields.remove(0));
 
-        // юзера которые не должны войти в запрос
-        GameType gameType2 = addNewGameType("game2", 1234, inv -> mock(GameField.class));
-        addNewPlayer(gameType2, 678, getHeroData(23, pt(5, 6), "data8"));
-        addNewPlayer(gameType2, 789, getHeroData(24, pt(8, 7), "data9"));
+        List<PlayerGame> playerGames = List.of(
+                addNewPlayer(gameType, "room1", 123, getHeroData(10, pt(1, 2), "data1")),
+                addNewPlayer(gameType, "room1", 234, getHeroData(11, pt(3, 4), "data2")),
+                addNewPlayer(gameType, "room1", 345, getHeroData(12, pt(5, 6), new JSONObject("{'key':'value'}"))),
+                addNewPlayer(gameType, "room1", 456, getHeroData(13, pt(7, 8), Arrays.asList("data3, data4"))),
 
+                // юзера которые не должны войти в запрос
+                addNewPlayer(gameType, "room2", 678, getHeroData(23, pt(5, 6), "data8")),
+                addNewPlayer(gameType, "room2", 789, getHeroData(24, pt(8, 7), "data9"))
+        );
+
+        List<PlayerSave> playerSaves = playerGames.stream().map(g -> new PlayerSave(g.getPlayer())).collect(Collectors.toList());
+
+        when(gameSaver.loadAllSaves()).thenReturn(playerSaves);
         // when
         List<PScores> scores = playerGamesView.getScoresForGame("game1");
 
         // then
-        assertEquals("[" +
-                    "{'score':123,'name':'readable_user1','id':'user1'}," +
-                    "{'score':234,'name':'readable_user2','id':'user2'}," +
-                    "{'score':345,'name':'readable_user3','id':'user3'}," +
-                    "{'score':456,'name':'readable_user4','id':'user4'}]",
+        assertEquals("[{'score':123,'id':'user1'}," +
+                        "{'score':234,'id':'user2'}," +
+                        "{'score':345,'id':'user3'}," +
+                        "{'score':456,'id':'user4'}," +
+                        "{'score':678,'id':'user5'}," +
+                        "{'score':789,'id':'user6'}]",
                 JsonUtils.clean(JsonUtils.toStringSorted(new JSONArray(scores))));
     }
 
@@ -299,29 +326,34 @@ public class PlayerGamesViewTest {
         // given
         GameField field1 = mock(GameField.class);
         GameField field2 = mock(GameField.class);
-        List<GameField> fields = new LinkedList<GameField>(){{
+        List<GameField> fields = new LinkedList<GameField>() {{
             addAll(Arrays.asList(field1, field1, field1, field1));
             addAll(Arrays.asList(field2, field2));
         }};
         GameType gameType = addNewGameType("game1", 1234, inv -> fields.remove(0));
 
-        addNewPlayer(gameType, "room1", 123, getHeroData(10, pt(1, 2), "data1"));
-        addNewPlayer(gameType, "room1", 234, getHeroData(11, pt(3, 4), "data2"));
-        addNewPlayer(gameType, "room1", 345, getHeroData(12, pt(5, 6), new JSONObject("{'key':'value'}")));
-        addNewPlayer(gameType, "room1", 456, getHeroData(13, pt(7, 8), Arrays.asList("data3, data4")));
+        List<PlayerGame> playerGames = List.of(
+                addNewPlayer(gameType, "room1", 123, getHeroData(10, pt(1, 2), "data1")),
+                addNewPlayer(gameType, "room1", 234, getHeroData(11, pt(3, 4), "data2")),
+                addNewPlayer(gameType, "room1", 345, getHeroData(12, pt(5, 6), new JSONObject("{'key':'value'}"))),
+                addNewPlayer(gameType, "room1", 456, getHeroData(13, pt(7, 8), Arrays.asList("data3, data4"))),
 
-        // юзера которые не должны войти в запрос
-        addNewPlayer(gameType, "room2", 678, getHeroData(23, pt(5, 6), "data8"));
-        addNewPlayer(gameType, "room2", 789, getHeroData(24, pt(8, 7), "data9"));
+                // юзера которые не должны войти в запрос
+                addNewPlayer(gameType, "room2", 678, getHeroData(23, pt(5, 6), "data8")),
+                addNewPlayer(gameType, "room2", 789, getHeroData(24, pt(8, 7), "data9"))
+        );
 
+        List<PlayerSave> playerSaves = playerGames.stream().map(g -> new PlayerSave(g.getPlayer())).collect(Collectors.toList());
+
+        when(gameSaver.loadAllSaves()).thenReturn(playerSaves);
         // when
         List<PScores> scores = playerGamesView.getScoresForRoom("room1");
 
         // then
-        assertEquals("[{'score':123,'name':'readable_user1','id':'user1'}," +
-                        "{'score':234,'name':'readable_user2','id':'user2'}," +
-                        "{'score':345,'name':'readable_user3','id':'user3'}," +
-                        "{'score':456,'name':'readable_user4','id':'user4'}]",
+        assertEquals("[{'score':123,'id':'user1'}," +
+                        "{'score':234,'id':'user2'}," +
+                        "{'score':345,'id':'user3'}," +
+                        "{'score':456,'id':'user4'}]",
                 JsonUtils.clean(JsonUtils.toStringSorted(new JSONArray(scores))));
     }
 
@@ -330,7 +362,7 @@ public class PlayerGamesViewTest {
         // given
         GameField field1 = mock(GameField.class);
         GameField field2 = mock(GameField.class);
-        List<GameField> fields = new LinkedList<GameField>(){{
+        List<GameField> fields = new LinkedList<GameField>() {{
             addAll(Arrays.asList(field1, field1, field1, field1));
             addAll(Arrays.asList(field2, field2));
         }};
@@ -369,44 +401,44 @@ public class PlayerGamesViewTest {
         // then
         String expectedGroup1 = "{'boardSize':1234,'decoder':{}," +
                 "'heroesData':{" +
-                    "'coordinates':{" +
-                        "'user1':{'additionalData':'data1','coordinate':{'x':1,'y':2},'level':10,'multiplayer':false}" +
-                    "}," +
-                    "'group':['user1']," +
-                    "'readableNames':{'user1':'readable_user1'}" +
+                "'coordinates':{" +
+                "'user1':{'additionalData':'data1','coordinate':{'x':1,'y':2},'level':10,'multiplayer':false}" +
+                "}," +
+                "'group':['user1']," +
+                "'readableNames':{'user1':'readable_user1'}" +
                 "},'scores':{'user1':123}}";
 
         assertEquals(expectedGroup1, toString(dataMap.get("user1")));
 
         String expectedGroup2 = "{'boardSize':1234,'decoder':{}," +
                 "'heroesData':{" +
-                    "'coordinates':{" +
-                        "'user2':{'additionalData':'data2','coordinate':{'x':3,'y':4},'level':11,'multiplayer':false}" +
-                    "}," +
-                    "'group':['user2']," +
-                    "'readableNames':{'user2':'readable_user2'}" +
+                "'coordinates':{" +
+                "'user2':{'additionalData':'data2','coordinate':{'x':3,'y':4},'level':11,'multiplayer':false}" +
+                "}," +
+                "'group':['user2']," +
+                "'readableNames':{'user2':'readable_user2'}" +
                 "},'scores':{'user2':234}}";
 
         assertEquals(expectedGroup2, toString(dataMap.get("user2")));
 
         String expectedGroup3 = "{'boardSize':1234,'decoder':{}," +
                 "'heroesData':{" +
-                    "'coordinates':{" +
-                        "'user3':{'additionalData':{'key':'value'},'coordinate':{'x':5,'y':6},'level':12,'multiplayer':false}" +
-                    "}," +
-                    "'group':['user3']," +
-                    "'readableNames':{'user3':'readable_user3'}" +
+                "'coordinates':{" +
+                "'user3':{'additionalData':{'key':'value'},'coordinate':{'x':5,'y':6},'level':12,'multiplayer':false}" +
+                "}," +
+                "'group':['user3']," +
+                "'readableNames':{'user3':'readable_user3'}" +
                 "},'scores':{'user3':345}}";
 
         assertEquals(expectedGroup3, toString(dataMap.get("user3")));
 
         String expectedGroup4 = "{'boardSize':1234,'decoder':{}," +
                 "'heroesData':{" +
-                    "'coordinates':{" +
-                        "'user4':{'additionalData':['data3, data4'],'coordinate':{'x':7,'y':8},'level':13,'multiplayer':false}" +
-                    "}," +
-                    "'group':['user4']," +
-                    "'readableNames':{'user4':'readable_user4'}" +
+                "'coordinates':{" +
+                "'user4':{'additionalData':['data3, data4'],'coordinate':{'x':7,'y':8},'level':13,'multiplayer':false}" +
+                "}," +
+                "'group':['user4']," +
+                "'readableNames':{'user4':'readable_user4'}" +
                 "},'scores':{'user4':456}}";
 
         assertEquals(expectedGroup4, toString(dataMap.get("user4")));
@@ -485,6 +517,24 @@ public class PlayerGamesViewTest {
         return "user" + (players.size() + 1);
     }
 
+    @Test
+    public void shouldGetDecoders() {
+        // given
+        GameType gameType1 = addNewGameType("game1", 1234, inv -> mock(GameField.class));
+        when(gameType1.getPlots()).thenReturn(Elements1.values());
+
+        GameType gameType2 = addNewGameType("game2", 1234, inv -> mock(GameField.class));
+        when(gameType2.getPlots()).thenReturn(Elements2.values());
+
+        addNewPlayer(gameType1, 123, getHeroData(10, pt(1, 2), "data1"));
+        addNewPlayer(gameType2, 234, getHeroData(11, pt(3, 4), "data2"));
+
+        // when then
+        assertEquals("{game1=[abc -> ABC], " +
+                        "game2=[1234 -> ABCD]}",
+                playerGamesView.getDecoders().toString());
+    }
+
     enum Elements1 implements CharElements {
         A('a'),
         B('b'),
@@ -518,23 +568,5 @@ public class PlayerGamesViewTest {
         public char ch() {
             return ch;
         }
-    }
-
-    @Test
-    public void shouldGetDecoders() {
-        // given
-        GameType gameType1 = addNewGameType("game1", 1234, inv -> mock(GameField.class));
-        when(gameType1.getPlots()).thenReturn(Elements1.values());
-
-        GameType gameType2 = addNewGameType("game2", 1234, inv -> mock(GameField.class));
-        when(gameType2.getPlots()).thenReturn(Elements2.values());
-
-        addNewPlayer(gameType1, 123, getHeroData(10, pt(1, 2), "data1"));
-        addNewPlayer(gameType2, 234, getHeroData(11, pt(3, 4), "data2"));
-
-        // when then
-        assertEquals("{game1=[abc -> ABC], " +
-                        "game2=[1234 -> ABCD]}",
-                playerGamesView.getDecoders().toString());
     }
 }
