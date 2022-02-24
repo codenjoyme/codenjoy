@@ -279,82 +279,44 @@ public class PlayerGamesViewTest {
         List<List<String>> groups = playerGamesView.getGroupsByRooms();
 
         // then
-        assertEquals("[[user1, user2, user3, user4]]", // all together
-                groups.toString());
+        assertEquals("[[user1, user2, user3, user4]]",groups.toString());
     }
 
     @Test
     public void testGetScoresForGame() {
-        // given
-        GameField field1 = mock(GameField.class);
-        GameField field2 = mock(GameField.class);
-        List<GameField> fields = new LinkedList<GameField>() {{
-            addAll(Arrays.asList(field1, field1, field1, field1));
-            addAll(Arrays.asList(field2, field2));
-        }};
-        GameType gameType = addNewGameType("game1", 1234, inv -> fields.remove(0));
-
-        List<PlayerGame> playerGames = List.of(
-                addNewPlayer(gameType, "room1", 123, getHeroData(10, pt(1, 2), "data1")),
-                addNewPlayer(gameType, "room1", 234, getHeroData(11, pt(3, 4), "data2")),
-                addNewPlayer(gameType, "room1", 345, getHeroData(12, pt(5, 6), new JSONObject("{'key':'value'}"))),
-                addNewPlayer(gameType, "room1", 456, getHeroData(13, pt(7, 8), Arrays.asList("data3, data4"))),
-
-                // юзера которые не должны войти в запрос
-                addNewPlayer(gameType, "room2", 678, getHeroData(23, pt(5, 6), "data8")),
-                addNewPlayer(gameType, "room2", 789, getHeroData(24, pt(8, 7), "data9"))
-        );
-
-        List<PlayerSave> playerSaves = playerGames.stream().map(g -> new PlayerSave(g.getPlayer())).collect(Collectors.toList());
-
-        when(gameSaver.loadAllSaves()).thenReturn(playerSaves);
+        //given
+        prepareMockForSaves();
         // when
         List<PScores> scores = playerGamesView.getScoresForGame("game1");
 
         // then
-        assertEquals("[{'score':123,'id':'user1'}," +
-                        "{'score':234,'id':'user2'}," +
-                        "{'score':345,'id':'user3'}," +
-                        "{'score':456,'id':'user4'}," +
-                        "{'score':678,'id':'user5'}," +
-                        "{'score':789,'id':'user6'}]",
+        assertEquals("[{'score':123,'id':'user1'},{'score':234,'id':'user2'}," +
+                        "{'score':345,'id':'user3'},{'score':456,'id':'user4'}]",
                 JsonUtils.clean(JsonUtils.toStringSorted(new JSONArray(scores))));
     }
 
+
     @Test
     public void testGetScoresForRoom() {
-        // given
-        GameField field1 = mock(GameField.class);
-        GameField field2 = mock(GameField.class);
-        List<GameField> fields = new LinkedList<GameField>() {{
-            addAll(Arrays.asList(field1, field1, field1, field1));
-            addAll(Arrays.asList(field2, field2));
-        }};
-        GameType gameType = addNewGameType("game1", 1234, inv -> fields.remove(0));
-
-        List<PlayerGame> playerGames = List.of(
-                addNewPlayer(gameType, "room1", 123, getHeroData(10, pt(1, 2), "data1")),
-                addNewPlayer(gameType, "room1", 234, getHeroData(11, pt(3, 4), "data2")),
-                addNewPlayer(gameType, "room1", 345, getHeroData(12, pt(5, 6), new JSONObject("{'key':'value'}"))),
-                addNewPlayer(gameType, "room1", 456, getHeroData(13, pt(7, 8), Arrays.asList("data3, data4"))),
-
-                // юзера которые не должны войти в запрос
-                addNewPlayer(gameType, "room2", 678, getHeroData(23, pt(5, 6), "data8")),
-                addNewPlayer(gameType, "room2", 789, getHeroData(24, pt(8, 7), "data9"))
-        );
-
-        List<PlayerSave> playerSaves = playerGames.stream().map(g -> new PlayerSave(g.getPlayer())).collect(Collectors.toList());
-
-        when(gameSaver.loadAllSaves()).thenReturn(playerSaves);
+        //given
+        prepareMockForSaves();
         // when
         List<PScores> scores = playerGamesView.getScoresForRoom("room1");
 
         // then
-        assertEquals("[{'score':123,'id':'user1'}," +
-                        "{'score':234,'id':'user2'}," +
-                        "{'score':345,'id':'user3'}," +
-                        "{'score':456,'id':'user4'}]",
+        assertEquals("[{'score':123,'id':'user1'},{'score':234,'id':'user2'}]",
                 JsonUtils.clean(JsonUtils.toStringSorted(new JSONArray(scores))));
+    }
+
+    private void prepareMockForSaves(){
+        givenUsersInSeveralGroups_withDifferentRooms();
+
+        List<PlayerSave> playerSaves = playerGames
+                .stream()
+                .map(g -> new PlayerSave(g.getPlayer()))
+                .collect(Collectors.toList());
+
+        when(gameSaver.loadAllSaves()).thenReturn(playerSaves);
     }
 
     @Test

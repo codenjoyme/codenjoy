@@ -47,7 +47,7 @@ import static org.mockito.Mockito.when;
 public class PlayerGameSaverTest {
 
     @MockBean
-    public BoardService boardService;
+    private BoardService boardService;
     private PlayerGameSaver saver;
 
     @Before
