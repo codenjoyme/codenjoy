@@ -279,7 +279,7 @@ public class PlayerGamesViewTest {
         List<List<String>> groups = playerGamesView.getGroupsByRooms();
 
         // then
-        assertEquals("[[user1, user2, user3, user4]]",groups.toString());
+        assertEquals("[[user1, user2, user3, user4]]", groups.toString());
     }
 
     @Test
@@ -308,7 +308,7 @@ public class PlayerGamesViewTest {
                 JsonUtils.clean(JsonUtils.toStringSorted(new JSONArray(scores))));
     }
 
-    private void prepareMockForSaves(){
+    private void prepareMockForSaves() {
         givenUsersInSeveralGroups_withDifferentRooms();
 
         List<PlayerSave> playerSaves = playerGames
