@@ -105,4 +105,12 @@ public class BoardData {
                 }
         );
     }
+
+    public String getTemplateURLForGame(String gameName) {
+        return pool.select("SELECT template_url FROM board_data " +
+                        "WHERE game_name = ?",
+                new Object[]{gameName},
+                rs -> rs.getString("template_url")
+        );
+    }
 }
