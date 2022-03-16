@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 import com.codenjoy.dojo.config.oauth2.OAuth2CodeExecutionClient;
+import com.codenjoy.dojo.services.dao.BoardData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,11 +31,13 @@ import org.springframework.stereotype.Service;
 public class GameServerServiceImpl implements GameServerService {
     public static final String REPOSITORY_NOT_FOUND = "Repository not found!";
     private final ConfigProperties config;
+    private final BoardData boardData;
     private final OAuth2CodeExecutionClient OAuth2CodeExecutionClient;
 
     @Autowired
-    public GameServerServiceImpl(ConfigProperties config, OAuth2CodeExecutionClient OAuth2CodeExecutionClient) {
+    public GameServerServiceImpl(ConfigProperties config, BoardData boardData, OAuth2CodeExecutionClient OAuth2CodeExecutionClient) {
         this.config = config;
+        this.boardData = boardData;
         this.OAuth2CodeExecutionClient = OAuth2CodeExecutionClient;
     }
 
@@ -56,6 +59,7 @@ public class GameServerServiceImpl implements GameServerService {
     private String createHostUrl(String username, String game) {
         return "http://" + config.getGitHubHostName() + ":" +
                 config.getGitHubPort() + "/repository?username="
-                + username + "&game=" + game;
+                + username + "&game=" + game + "&templateURL=" +
+                boardData.getTemplateURLForGame(game);
     }
 }
