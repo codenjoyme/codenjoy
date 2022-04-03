@@ -45,7 +45,7 @@ import java.util.concurrent.ConcurrentSkipListMap;
 @RequiredArgsConstructor
 public class ErrorTicketService {
 
-    private static final String ERROR_MESSAGE = "Something wrong with your request. " +
+    public static final String ERROR_MESSAGE = "Something wrong with your request. " +
             "Please save your ticket number and ask site administrator.";
     private final static SimpleDateFormat DAY_TIME_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
