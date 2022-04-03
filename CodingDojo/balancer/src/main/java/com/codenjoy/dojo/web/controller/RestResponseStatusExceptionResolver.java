@@ -36,7 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 public class RestResponseStatusExceptionResolver extends AbstractHandlerExceptionResolver {
 
     @Autowired
-    private ErrorTicketService ticket;
+    private BalancerErrorTicketService ticket;
 
     @Autowired
     private DebugService debug;

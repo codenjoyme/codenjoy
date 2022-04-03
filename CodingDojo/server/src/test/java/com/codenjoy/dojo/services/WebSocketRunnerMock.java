@@ -23,17 +23,22 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.utils.JsonUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.*;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
+import org.json.JSONObject;
 
 import java.net.URI;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import static com.codenjoy.dojo.utils.JsonUtils.prettyPrint;
+import static java.util.stream.Collectors.joining;
 
 @Slf4j
 public class WebSocketRunnerMock {
@@ -92,9 +97,36 @@ public class WebSocketRunnerMock {
     }
 
     public String messages() {
-        String result = messages.toString().replace("\"", "'");
+        String result = "[" + messages.stream()
+                .map(message -> message.replace("\"", "'"))
+                .collect(joining(",\n")) + "]";
         messages.clear();
         return result;
+    }
+
+    private String cleanDebugInfo(String message) {
+        if (!message.contains("ticketNumber")) {
+            return message;
+        }
+        JSONObject json = new JSONObject(message);
+        if (!json.has("data")) {
+            return message;
+        }
+        Object object = json.get("data");
+        if (!(object instanceof JSONObject)) {
+            return message;
+        }
+        JSONObject data = (JSONObject) object;
+        if (data.has("exception")) {
+            data.put("exception", "<...>");
+        }
+        if (data.has("stackTrace")) {
+            data.put("stackTrace", "<...>");
+        }
+        if (data.has("ticketNumber")) {
+            data.put("ticketNumber", "<...>");
+        }
+        return data.toString();
     }
 
     public boolean isEmpty() {
@@ -167,7 +199,7 @@ public class WebSocketRunnerMock {
         @OnWebSocketMessage
         public void onMessage(String data) {
             log.info("Client got message: " + data);
-            messages.add(data);
+            messages.add(prettyPrint(cleanDebugInfo(data)));
 
             if (answer == null) {
                 if (replyToServerImmediately) {

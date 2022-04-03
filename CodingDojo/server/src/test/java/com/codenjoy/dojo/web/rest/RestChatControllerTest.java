@@ -23,6 +23,7 @@ package com.codenjoy.dojo.web.rest;
  */
 
 import com.codenjoy.dojo.config.ThreeGamesConfiguration;
+import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.helper.Helpers;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import org.junit.Before;
@@ -35,6 +36,7 @@ import java.util.stream.IntStream;
 import static com.codenjoy.dojo.client.Utils.split;
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_ENABLED;
 import static com.codenjoy.dojo.utils.smart.SmartAssert.assertEquals;
+import static org.apache.commons.lang3.StringUtils.leftPad;
 import static org.junit.Assert.assertNotEquals;
 import static org.mockito.Mockito.mock;
 
@@ -1858,5 +1860,36 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         assertEquals("[{'id':7,'playerId':'player4','playerName':'player4-name','room':'singleRoom',\n" + 
                         "    'text':'Player joined the field','time':12347,'topicId':107,'type':3}]",
                 fix(get("/rest/chat/singleRoom/messages/field")));
+    }
+
+    @Test
+    public void shouldValidateMessageLength_whenPostLargeMessage() {
+        // given
+        assertEquals("[]", fix(get("/rest/chat/validRoom/messages")));
+
+        // when
+        // valid message with max size length
+        with.time.nowIs(12345L);
+        String message1 = leftPad("", Chat.MESSAGE_MAX_LENGTH, '*');
+        post(200, "/rest/chat/validRoom/messages",
+                unquote("{text:'" + message1 + "'}"));
+
+        // then
+        assertEquals("[{'id':1,'playerId':'player','playerName':'player-name','room':'validRoom',\n" +
+                        "    'text':'" + message1 + "','time':12345,'topicId':null,'type':1}]",
+                fix(get("/rest/chat/validRoom/messages")));
+
+        // when
+        // too long invalid message
+        with.time.nowIs(23456L);
+        String message2 = message1 + "*";
+        assertPostError("java.lang.IllegalArgumentException: Chat message is too long. Max size is: 12000",
+                "/rest/chat/validRoom/messages",
+                unquote("{text:'" + message2 + "'}"));
+
+        // then
+        assertEquals("[{'id':1,'playerId':'player','playerName':'player-name','room':'validRoom',\n" +
+                        "    'text':'" + message1 + "','time':12345,'topicId':null,'type':1}]",
+                fix(get("/rest/chat/validRoom/messages")));
     }
 }

@@ -29,7 +29,7 @@ import com.codenjoy.dojo.services.entity.server.PlayerInfo;
 import com.codenjoy.dojo.services.entity.server.User;
 import com.codenjoy.dojo.services.httpclient.GameClientResolver;
 import com.codenjoy.dojo.services.httpclient.GameServerClientException;
-import com.codenjoy.dojo.web.controller.ErrorTicketService;
+import com.codenjoy.dojo.web.controller.BalancerErrorTicketService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -125,7 +125,7 @@ public class GameServer {
         } catch (GameServerClientException e) {
             log.error("Error clearing scores on server: " + server, e);
 
-            return ErrorTicketService.getPrintableMessage(e);
+            return BalancerErrorTicketService.getPrintableMessage(e);
         }
     }
 
@@ -142,7 +142,7 @@ public class GameServer {
         } catch (GameServerClientException e) {
             log.error("Error " + status + " game on server: " + server, e);
 
-            return ErrorTicketService.getPrintableMessage(e);
+            return BalancerErrorTicketService.getPrintableMessage(e);
         }
     }
 

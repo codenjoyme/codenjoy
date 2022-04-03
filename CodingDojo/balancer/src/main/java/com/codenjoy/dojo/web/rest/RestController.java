@@ -33,7 +33,7 @@ import com.codenjoy.dojo.services.entity.ServerLocation;
 import com.codenjoy.dojo.services.entity.server.Disqualified;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.log.DebugService;
-import com.codenjoy.dojo.web.controller.ErrorTicketService;
+import com.codenjoy.dojo.web.controller.BalancerErrorTicketService;
 import com.codenjoy.dojo.web.controller.LoginException;
 import com.codenjoy.dojo.web.controller.BalancerValidator;
 import com.codenjoy.dojo.web.rest.dto.*;
@@ -80,7 +80,7 @@ public class RestController {
     @Autowired private Players players;
     @Autowired private Scores scores;
     @Autowired private TimerService timer;
-    @Autowired private ErrorTicketService ticket;
+    @Autowired private BalancerErrorTicketService ticket;
     @Autowired private Dispatcher dispatcher;
     @Autowired private BalancerValidator validator;
     @Autowired private DebugService debug;
@@ -373,14 +373,14 @@ public class RestController {
             result = action.onGame();
         } catch (Exception e) {
             log.error("Error at game server", e);
-            errors.add("At game server: " + ErrorTicketService.getPrintableMessage(e));
+            errors.add("At game server: " + BalancerErrorTicketService.getPrintableMessage(e));
         }
 
         try {
             result = action.onBalancer(result);
         } catch (Exception e) {
             log.error("Error at balancer", e);
-            errors.add("At balancer: " + ErrorTicketService.getPrintableMessage(e));
+            errors.add("At balancer: " + BalancerErrorTicketService.getPrintableMessage(e));
         }
 
         if (!errors.isEmpty()) {
@@ -422,7 +422,7 @@ public class RestController {
             message = message + "exists: " + exists;
 
         } catch (Exception e) {
-            message = message + ErrorTicketService.getPrintableMessage(e);
+            message = message + BalancerErrorTicketService.getPrintableMessage(e);
         }
         status.add(message);
     }
@@ -440,7 +440,7 @@ public class RestController {
             Map<String, Boolean> map = dispatcher.existsOnGameServers(id);
             message = message + "exists: " + map;
         } catch (Exception e) {
-            message = message + ErrorTicketService.getPrintableMessage(e);
+            message = message + BalancerErrorTicketService.getPrintableMessage(e);
         }
         status.add(message);
     }

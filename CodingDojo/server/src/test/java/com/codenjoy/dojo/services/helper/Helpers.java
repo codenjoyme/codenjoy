@@ -22,6 +22,7 @@ package com.codenjoy.dojo.services.helper;
  * #L%
  */
 
+import com.codenjoy.dojo.services.log.DebugService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -36,5 +37,6 @@ public class Helpers {
     public final LoginHelper login;
     public final RoomHelper rooms;
     public final TimeHelper time;
+    public final DebugService debug;
 
 }

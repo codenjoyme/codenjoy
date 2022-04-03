@@ -256,7 +256,9 @@ public class ChatService {
     private PMessage postMessage(Integer topicId,
                                 String text, String room, String playerId)
     {
+        validator.checkChatMessageLength(text);
         ChatType type = validateTopicAvailable(topicId, playerId, room);
+
         return saveMessage(topicId, type, text, room, playerId, FOR_ALL);
     }
 
