@@ -24,8 +24,10 @@ package com.codenjoy.dojo.web.controller;
 
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
+import com.codenjoy.dojo.web.rest.pojo.PMessageShort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -321,6 +323,14 @@ public class Validator {
         if (!messages.isEmpty()) {
             throw new IllegalArgumentException(String.format(
                     "Custom query is invalid: %s", messages));
+        }
+    }
+
+    public void checkChatMessage(PMessageShort message) {
+        int length = Chat.MESSAGE_MAX_LENGTH;
+        if (message.getText().length() > length) {
+            throw new IllegalArgumentException(String.format(
+                    "Chat message is too long. Max size is: %s", length));
         }
     }
 }

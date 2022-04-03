@@ -23,6 +23,7 @@ package com.codenjoy.dojo.web.rest;
  */
 
 import com.codenjoy.dojo.config.ThreeGamesConfiguration;
+import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.helper.Helpers;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import org.junit.Before;
@@ -1869,7 +1870,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         // when
         // valid message with max size length
         with.time.nowIs(12345L);
-        String message1 = leftPad("", 12000, '*');
+        String message1 = leftPad("", Chat.MESSAGE_MAX_LENGTH, '*');
         post(200, "/rest/chat/validRoom/messages",
                 unquote("{text:'" + message1 + "'}"));
 
@@ -1882,7 +1883,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         // too long invalid message
         with.time.nowIs(23456L);
         String message2 = message1 + "*";
-        assertPostError("java.lang.reflect.UndeclaredThrowableException: null",
+        assertPostError("java.lang.IllegalArgumentException: Chat message is too long. Max size is: 12000",
                 "/rest/chat/validRoom/messages",
                 unquote("{text:'" + message2 + "'}"));
 

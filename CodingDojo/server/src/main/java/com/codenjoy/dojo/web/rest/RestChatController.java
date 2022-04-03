@@ -122,6 +122,7 @@ public class RestChatController {
             @AuthenticationPrincipal Registration.User user)
     {
         validator.checkUser(user);
+        validator.checkChatMessage(message);
 
         return chat.postMessageForRoom(
                 message.getText(), room,
