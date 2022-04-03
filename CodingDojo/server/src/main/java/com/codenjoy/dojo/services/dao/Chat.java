@@ -58,7 +58,7 @@ public class Chat {
                     "player_id varchar(255), " +
                     "recipient_id varchar(255), " +
                     "time varchar(255), " +
-                    "text varchar(255));"
+                    "text varchar(12000));"
         );
     }
 

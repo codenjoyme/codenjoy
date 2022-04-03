@@ -3,4 +3,4 @@ database:
   port: 5432
   name: 'codenjoy'
   user: 'codenjoy'
-  password: 'securePostgresDBPassword'
+  password: 'localpwd'
