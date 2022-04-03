@@ -48,7 +48,7 @@ public class Error {
 
     @Override
     public String toString() {
-        return String.format("ChatError(%s: %s)",
+        return String.format("Error(error=%s, message=%s)",
                 getError(), getMessage());
     }
 }
