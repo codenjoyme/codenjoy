@@ -326,9 +326,9 @@ public class Validator {
         }
     }
 
-    public void checkChatMessage(PMessageShort message) {
+    public void checkChatMessageLength(String message) {
         int length = Chat.MESSAGE_MAX_LENGTH;
-        if (message.getText().length() > length) {
+        if (message.length() > length) {
             throw new IllegalArgumentException(String.format(
                     "Chat message is too long. Max size is: %s", length));
         }
