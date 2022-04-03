@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static com.codenjoy.dojo.utils.JsonUtils.prettyPrint;
 import static java.util.stream.Collectors.joining;
 
 @Slf4j
@@ -125,7 +126,7 @@ public class WebSocketRunnerMock {
         if (data.has("ticketNumber")) {
             data.put("ticketNumber", "<...>");
         }
-        return JsonUtils.prettyPrint(data.toString());
+        return data.toString();
     }
 
     public boolean isEmpty() {
@@ -198,7 +199,7 @@ public class WebSocketRunnerMock {
         @OnWebSocketMessage
         public void onMessage(String data) {
             log.info("Client got message: " + data);
-            messages.add(cleanDebugInfo(data));
+            messages.add(prettyPrint(cleanDebugInfo(data)));
 
             if (answer == null) {
                 if (replyToServerImmediately) {

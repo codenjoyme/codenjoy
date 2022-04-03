@@ -161,21 +161,60 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         assertEquals("[postRoom(message1, room)]", receivedOnServer());
 
         // inform player1
-        assertEquals("[{'command':'add', 'type':'room', 'data':[" +
-                        "{'id':1,'text':'message1','room':'room','type':1,'topicId':null," +
-                        "'playerId':'player','playerName':'player-name','time':12345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'add',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':1,\n" +
+                        "      'playerId':'player',\n" +
+                        "      'playerName':'player-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message1',\n" +
+                        "      'time':12345,\n" +
+                        "      'topicId':null,\n" +
+                        "      'type':1\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'room'\n" +
+                        "}]",
                 client(0).messages());
 
         // inform player2 because of same room
-        assertEquals("[{'command':'add', 'type':'room', 'data':[" +
-                        "{'id':1,'text':'message1','room':'room','type':1,'topicId':null," +
-                        "'playerId':'player','playerName':'player-name','time':12345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'add',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':1,\n" +
+                        "      'playerId':'player',\n" +
+                        "      'playerName':'player-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message1',\n" +
+                        "      'time':12345,\n" +
+                        "      'topicId':null,\n" +
+                        "      'type':1\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'room'\n" +
+                        "}]",
                 client(1).messages());
 
         // inform player3 because of same room
-        assertEquals("[{'command':'add', 'type':'room', 'data':[" +
-                        "{'id':1,'text':'message1','room':'room','type':1,'topicId':null," +
-                        "'playerId':'player','playerName':'player-name','time':12345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'add',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':1,\n" +
+                        "      'playerId':'player',\n" +
+                        "      'playerName':'player-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message1',\n" +
+                        "      'time':12345,\n" +
+                        "      'topicId':null,\n" +
+                        "      'type':1\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'room'\n" +
+                        "}]",
                 client(2).messages());
 
         // when
@@ -196,9 +235,22 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
                 client(0).messages());
 
         // inform player2
-        assertEquals("[{'command':'add', 'type':'field', 'data':[" +
-                        "{'id':2,'text':'Player left the field','room':'room','type':3,'topicId':2," +
-                        "'playerId':'player2','playerName':'player2-name','time':12346}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'add',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':2,\n" +
+                        "      'playerId':'player2',\n" +
+                        "      'playerName':'player2-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'Player left the field',\n" +
+                        "      'time':12346,\n" +
+                        "      'topicId':2,\n" +
+                        "      'type':3\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'field'\n" +
+                        "}]",
                 client(1).messages());
 
         // inform player3
@@ -219,9 +271,22 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         assertEquals("[postRoom(message2, room)]", receivedOnServer());
 
         // inform player1
-        assertEquals("[{'command':'add', 'type':'room', 'data':[" +
-                        "{'id':3,'text':'message2','room':'room','type':1,'topicId':null," +
-                        "'playerId':'player','playerName':'player-name','time':12347}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'add',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':3,\n" +
+                        "      'playerId':'player',\n" +
+                        "      'playerName':'player-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message2',\n" +
+                        "      'time':12347,\n" +
+                        "      'topicId':null,\n" +
+                        "      'type':1\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'room'\n" +
+                        "}]",
                 client(0).messages());
 
         // don't inform player2 because of leave
@@ -229,9 +294,22 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
                 client(1).messages());
 
         // inform player3 because of same room
-        assertEquals("[{'command':'add', 'type':'room', 'data':[" +
-                        "{'id':3,'text':'message2','room':'room','type':1,'topicId':null," +
-                        "'playerId':'player','playerName':'player-name','time':12347}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'add',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':3,\n" +
+                        "      'playerId':'player',\n" +
+                        "      'playerName':'player-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message2',\n" +
+                        "      'time':12347,\n" +
+                        "      'topicId':null,\n" +
+                        "      'type':1\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'room'\n" +
+                        "}]",
                 client(2).messages());
     }
 
@@ -291,9 +369,22 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
 
         // then
         assertEquals("[get(1, room)]", receivedOnServer());
-        assertEquals("[{'command':'add', 'type':'room', 'data':[" +
-                        "{'id':1,'text':'message1','room':'room','type':1,'topicId':null," +
-                        "'playerId':'player','playerName':'player-name','time':1615231523345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'add',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':1,\n" +
+                        "      'playerId':'player',\n" +
+                        "      'playerName':'player-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message1',\n" +
+                        "      'time':1615231523345,\n" +
+                        "      'topicId':null,\n" +
+                        "      'type':1\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'room'\n" +
+                        "}]",
                 client(0).messages());
     }
 
@@ -314,9 +405,22 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
 
         // then
         assertEquals("[delete(1, room)]", receivedOnServer());
-        assertEquals("[{'command':'delete', 'type':'room', 'data':[" +
-                        "{'id':1,'text':'message1','room':'room','type':1,'topicId':null," +
-                        "'playerId':'player','playerName':'player-name','time':1615231523345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'delete',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':1,\n" +
+                        "      'playerId':'player',\n" +
+                        "      'playerName':'player-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message1',\n" +
+                        "      'time':1615231523345,\n" +
+                        "      'topicId':null,\n" +
+                        "      'type':1\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'room'\n" +
+                        "}]",
                 client(0).messages());
 
         assertEquals(null, chat.getMessageById(1));
@@ -351,15 +455,41 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         assertEquals(null, chat.getMessageById(1));
 
         // inform player1
-        assertEquals("[{'command':'delete', 'type':'room', 'data':[" +
-                        "{'id':1,'text':'message1','room':'room','type':1,'topicId':null," +
-                        "'playerId':'player','playerName':'player-name','time':1615231523345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'delete',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':1,\n" +
+                        "      'playerId':'player',\n" +
+                        "      'playerName':'player-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message1',\n" +
+                        "      'time':1615231523345,\n" +
+                        "      'topicId':null,\n" +
+                        "      'type':1\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'room'\n" +
+                        "}]",
                 client(0).messages());
 
         // inform player2 because of same room
-        assertEquals("[{'command':'delete', 'type':'room', 'data':[" +
-                        "{'id':1,'text':'message1','room':'room','type':1,'topicId':null," +
-                        "'playerId':'player','playerName':'player-name','time':1615231523345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'delete',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':1,\n" +
+                        "      'playerId':'player',\n" +
+                        "      'playerName':'player-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message1',\n" +
+                        "      'time':1615231523345,\n" +
+                        "      'topicId':null,\n" +
+                        "      'type':1\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'room'\n" +
+                        "}]",
                 client(1).messages());
 
         // don't inform player3 because of other room
@@ -389,9 +519,22 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
                 client(1).messages());
 
         // inform player3 because of author
-        assertEquals("[{'command':'delete', 'type':'room', 'data':[" +
-                        "{'id':2,'text':'message2','room':'room2','type':1,'topicId':null," +
-                        "'playerId':'player3','playerName':'player3-name','time':1615231623345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'delete',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':2,\n" +
+                        "      'playerId':'player3',\n" +
+                        "      'playerName':'player3-name',\n" +
+                        "      'room':'room2',\n" +
+                        "      'text':'message2',\n" +
+                        "      'time':1615231623345,\n" +
+                        "      'topicId':null,\n" +
+                        "      'type':1\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'room'\n" +
+                        "}]",
                 client(2).messages());
     }
 
@@ -425,15 +568,41 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         assertEquals(null, chat.getMessageById(2));
 
         // inform player1
-        assertEquals("[{'command':'delete', 'type':'room', 'data':[" +
-                        "{'id':2,'text':'message2','room':'room','type':2,'topicId':1," +
-                        "'playerId':'player','playerName':'player-name','time':1615231623345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'delete',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':2,\n" +
+                        "      'playerId':'player',\n" +
+                        "      'playerName':'player-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message2',\n" +
+                        "      'time':1615231623345,\n" +
+                        "      'topicId':1,\n" +
+                        "      'type':2\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'room'\n" +
+                        "}]",
                 client(0).messages());
 
         // inform player2 because of same room
-        assertEquals("[{'command':'delete', 'type':'room', 'data':[" +
-                        "{'id':2,'text':'message2','room':'room','type':2,'topicId':1," +
-                        "'playerId':'player','playerName':'player-name','time':1615231623345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'delete',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':2,\n" +
+                        "      'playerId':'player',\n" +
+                        "      'playerName':'player-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message2',\n" +
+                        "      'time':1615231623345,\n" +
+                        "      'topicId':1,\n" +
+                        "      'type':2\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'room'\n" +
+                        "}]",
                 client(1).messages());
 
         // don't inform player3 because of other room
@@ -455,15 +624,41 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         assertEquals(null, chat.getMessageById(3));
 
         // inform player1
-        assertEquals("[{'command':'delete', 'type':'room', 'data':[" +
-                        "{'id':3,'text':'message3','room':'room','type':2,'topicId':1," +
-                        "'playerId':'player2','playerName':'player2-name','time':1615231723345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'delete',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':3,\n" +
+                        "      'playerId':'player2',\n" +
+                        "      'playerName':'player2-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message3',\n" +
+                        "      'time':1615231723345,\n" +
+                        "      'topicId':1,\n" +
+                        "      'type':2\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'room'\n" +
+                        "}]",
                 client(0).messages());
 
         // inform player2 because of same room
-        assertEquals("[{'command':'delete', 'type':'room', 'data':[" +
-                        "{'id':3,'text':'message3','room':'room','type':2,'topicId':1," +
-                        "'playerId':'player2','playerName':'player2-name','time':1615231723345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'delete',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':3,\n" +
+                        "      'playerId':'player2',\n" +
+                        "      'playerName':'player2-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message3',\n" +
+                        "      'time':1615231723345,\n" +
+                        "      'topicId':1,\n" +
+                        "      'type':2\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'room'\n" +
+                        "}]",
                 client(1).messages());
 
         // don't inform player3 because of other room
@@ -498,15 +693,41 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         assertEquals(null, chat.getMessageById(1));
 
         // inform player1
-        assertEquals("[{'command':'delete', 'type':'room', 'data':[" +
-                        "{'id':1,'text':'message1','room':'room','type':1,'topicId':null," +
-                        "'playerId':'player','playerName':'player-name','time':1615231523345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'delete',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':1,\n" +
+                        "      'playerId':'player',\n" +
+                        "      'playerName':'player-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message1',\n" +
+                        "      'time':1615231523345,\n" +
+                        "      'topicId':null,\n" +
+                        "      'type':1\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'room'\n" +
+                        "}]",
                 client(0).messages());
 
         // inform player2 because of same room
-        assertEquals("[{'command':'delete', 'type':'room', 'data':[" +
-                        "{'id':1,'text':'message1','room':'room','type':1,'topicId':null," +
-                        "'playerId':'player','playerName':'player-name','time':1615231523345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'delete',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':1,\n" +
+                        "      'playerId':'player',\n" +
+                        "      'playerName':'player-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message1',\n" +
+                        "      'time':1615231523345,\n" +
+                        "      'topicId':null,\n" +
+                        "      'type':1\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'room'\n" +
+                        "}]",
                 client(1).messages());
 
         // when
@@ -523,15 +744,41 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         assertEquals(null, chat.getMessageById(3));
 
         // inform player1
-        assertEquals("[{'command':'delete', 'type':'room', 'data':[" +
-                        "{'id':3,'text':'message3','room':'room','type':2,'topicId':1," +
-                        "'playerId':'player2','playerName':'player2-name','time':1615231723345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'delete',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':3,\n" +
+                        "      'playerId':'player2',\n" +
+                        "      'playerName':'player2-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message3',\n" +
+                        "      'time':1615231723345,\n" +
+                        "      'topicId':1,\n" +
+                        "      'type':2\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'room'\n" +
+                        "}]",
                 client(0).messages());
 
         // inform player2 because of same room
-        assertEquals("[{'command':'delete', 'type':'room', 'data':[" +
-                        "{'id':3,'text':'message3','room':'room','type':2,'topicId':1," +
-                        "'playerId':'player2','playerName':'player2-name','time':1615231723345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'delete',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':3,\n" +
+                        "      'playerId':'player2',\n" +
+                        "      'playerName':'player2-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message3',\n" +
+                        "      'time':1615231723345,\n" +
+                        "      'topicId':1,\n" +
+                        "      'type':2\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'room'\n" +
+                        "}]",
                 client(1).messages());
 
         // when
@@ -548,15 +795,41 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         assertEquals(null, chat.getMessageById(2));
 
         // inform player1
-        assertEquals("[{'command':'delete', 'type':'room', 'data':[" +
-                        "{'id':2,'text':'message2','room':'room','type':2,'topicId':1," +
-                        "'playerId':'player','playerName':'player-name','time':1615231623345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'delete',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':2,\n" +
+                        "      'playerId':'player',\n" +
+                        "      'playerName':'player-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message2',\n" +
+                        "      'time':1615231623345,\n" +
+                        "      'topicId':1,\n" +
+                        "      'type':2\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'room'\n" +
+                        "}]",
                 client(0).messages());
 
         // inform player2 because of same room
-        assertEquals("[{'command':'delete', 'type':'room', 'data':[" +
-                        "{'id':2,'text':'message2','room':'room','type':2,'topicId':1," +
-                        "'playerId':'player','playerName':'player-name','time':1615231623345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'delete',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':2,\n" +
+                        "      'playerId':'player',\n" +
+                        "      'playerName':'player-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message2',\n" +
+                        "      'time':1615231623345,\n" +
+                        "      'topicId':1,\n" +
+                        "      'type':2\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'room'\n" +
+                        "}]",
                 client(1).messages());
     }
 
@@ -600,15 +873,41 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         assertEquals(null, chat.getMessageById(1));
 
         // inform player1
-        assertEquals("[{'command':'delete', 'type':'field', 'data':[" +
-                        "{'id':1,'text':'message1','room':'room','type':3,'topicId':1," +
-                        "'playerId':'player','playerName':'player-name','time':1615231523345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'delete',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':1,\n" +
+                        "      'playerId':'player',\n" +
+                        "      'playerName':'player-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message1',\n" +
+                        "      'time':1615231523345,\n" +
+                        "      'topicId':1,\n" +
+                        "      'type':3\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'field'\n" +
+                        "}]",
                 client(0).messages());
 
         // inform player2 because of same field
-        assertEquals("[{'command':'delete', 'type':'field', 'data':[" +
-                        "{'id':1,'text':'message1','room':'room','type':3,'topicId':1," +
-                        "'playerId':'player','playerName':'player-name','time':1615231523345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'delete',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':1,\n" +
+                        "      'playerId':'player',\n" +
+                        "      'playerName':'player-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message1',\n" +
+                        "      'time':1615231523345,\n" +
+                        "      'topicId':1,\n" +
+                        "      'type':3\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'field'\n" +
+                        "}]",
                 client(1).messages());
 
         // don't inform player3 because of other room
@@ -630,15 +929,41 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         assertEquals(null, chat.getMessageById(2));
 
         // inform player1
-        assertEquals("[{'command':'delete', 'type':'field', 'data':[" +
-                        "{'id':2,'text':'message2','room':'room','type':3,'topicId':1," +
-                        "'playerId':'player2','playerName':'player2-name','time':1615231623345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'delete',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':2,\n" +
+                        "      'playerId':'player2',\n" +
+                        "      'playerName':'player2-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message2',\n" +
+                        "      'time':1615231623345,\n" +
+                        "      'topicId':1,\n" +
+                        "      'type':3\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'field'\n" +
+                        "}]",
                 client(0).messages());
 
         // inform player2 because of same field
-        assertEquals("[{'command':'delete', 'type':'field', 'data':[" +
-                        "{'id':2,'text':'message2','room':'room','type':3,'topicId':1," +
-                        "'playerId':'player2','playerName':'player2-name','time':1615231623345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'delete',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':2,\n" +
+                        "      'playerId':'player2',\n" +
+                        "      'playerName':'player2-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message2',\n" +
+                        "      'time':1615231623345,\n" +
+                        "      'topicId':1,\n" +
+                        "      'type':3\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'field'\n" +
+                        "}]",
                 client(1).messages());
 
         // don't inform player3 because of other room
@@ -668,9 +993,22 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
                 client(1).messages());
 
         // inform player3 because of author
-        assertEquals("[{'command':'delete', 'type':'field', 'data':[" +
-                        "{'id':3,'text':'message3','room':'room2','type':3,'topicId':2," +
-                        "'playerId':'player3','playerName':'player3-name','time':1615231723345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'delete',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':3,\n" +
+                        "      'playerId':'player3',\n" +
+                        "      'playerName':'player3-name',\n" +
+                        "      'room':'room2',\n" +
+                        "      'text':'message3',\n" +
+                        "      'time':1615231723345,\n" +
+                        "      'topicId':2,\n" +
+                        "      'type':3\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'field'\n" +
+                        "}]",
                 client(2).messages());
     }
 
@@ -716,15 +1054,41 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         assertEquals(null, chat.getMessageById(2));
 
         // inform player1
-        assertEquals("[{'command':'delete', 'type':'field', 'data':[" +
-                        "{'id':2,'text':'message2','room':'room','type':4,'topicId':1," +
-                        "'playerId':'player','playerName':'player-name','time':1615231623345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'delete',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':2,\n" +
+                        "      'playerId':'player',\n" +
+                        "      'playerName':'player-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message2',\n" +
+                        "      'time':1615231623345,\n" +
+                        "      'topicId':1,\n" +
+                        "      'type':4\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'field'\n" +
+                        "}]",
                 client(0).messages());
 
         // inform player2 because of same field
-        assertEquals("[{'command':'delete', 'type':'field', 'data':[" +
-                        "{'id':2,'text':'message2','room':'room','type':4,'topicId':1," +
-                        "'playerId':'player','playerName':'player-name','time':1615231623345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'delete',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':2,\n" +
+                        "      'playerId':'player',\n" +
+                        "      'playerName':'player-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message2',\n" +
+                        "      'time':1615231623345,\n" +
+                        "      'topicId':1,\n" +
+                        "      'type':4\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'field'\n" +
+                        "}]",
                 client(1).messages());
 
         // don't inform player3 because of other room
@@ -746,15 +1110,41 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         assertEquals(null, chat.getMessageById(3));
 
         // inform player1
-        assertEquals("[{'command':'delete', 'type':'field', 'data':[" +
-                        "{'id':3,'text':'message3','room':'room','type':4,'topicId':1," +
-                        "'playerId':'player2','playerName':'player2-name','time':1615231723345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'delete',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':3,\n" +
+                        "      'playerId':'player2',\n" +
+                        "      'playerName':'player2-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message3',\n" +
+                        "      'time':1615231723345,\n" +
+                        "      'topicId':1,\n" +
+                        "      'type':4\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'field'\n" +
+                        "}]",
                 client(0).messages());
 
         // inform player2 because of same field
-        assertEquals("[{'command':'delete', 'type':'field', 'data':[" +
-                        "{'id':3,'text':'message3','room':'room','type':4,'topicId':1," +
-                        "'playerId':'player2','playerName':'player2-name','time':1615231723345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'delete',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':3,\n" +
+                        "      'playerId':'player2',\n" +
+                        "      'playerName':'player2-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message3',\n" +
+                        "      'time':1615231723345,\n" +
+                        "      'topicId':1,\n" +
+                        "      'type':4\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'field'\n" +
+                        "}]",
                 client(1).messages());
 
         // don't inform player3 because of other room
@@ -784,9 +1174,22 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
                 client(1).messages());
 
         // inform player3 because of author
-        assertEquals("[{'command':'delete', 'type':'field', 'data':[" +
-                        "{'id':5,'text':'message5','room':'room2','type':4,'topicId':4," +
-                        "'playerId':'player3','playerName':'player3-name','time':1615231923345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'delete',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':5,\n" +
+                        "      'playerId':'player3',\n" +
+                        "      'playerName':'player3-name',\n" +
+                        "      'room':'room2',\n" +
+                        "      'text':'message5',\n" +
+                        "      'time':1615231923345,\n" +
+                        "      'topicId':4,\n" +
+                        "      'type':4\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'field'\n" +
+                        "}]",
                 client(2).messages());
     }
 
@@ -827,15 +1230,41 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         assertEquals(null, chat.getMessageById(1));
 
         // inform player1
-        assertEquals("[{'command':'delete', 'type':'field', 'data':[" +
-                        "{'id':1,'text':'message1','room':'room','type':3,'topicId':1," +
-                        "'playerId':'player','playerName':'player-name','time':1615231523345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'delete',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':1,\n" +
+                        "      'playerId':'player',\n" +
+                        "      'playerName':'player-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message1',\n" +
+                        "      'time':1615231523345,\n" +
+                        "      'topicId':1,\n" +
+                        "      'type':3\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'field'\n" +
+                        "}]",
                 client(0).messages());
 
         // inform player2 because of same field
-        assertEquals("[{'command':'delete', 'type':'field', 'data':[" +
-                        "{'id':1,'text':'message1','room':'room','type':3,'topicId':1," +
-                        "'playerId':'player','playerName':'player-name','time':1615231523345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'delete',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':1,\n" +
+                        "      'playerId':'player',\n" +
+                        "      'playerName':'player-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message1',\n" +
+                        "      'time':1615231523345,\n" +
+                        "      'topicId':1,\n" +
+                        "      'type':3\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'field'\n" +
+                        "}]",
                 client(1).messages());
 
         // when
@@ -852,15 +1281,41 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         assertEquals(null, chat.getMessageById(3));
 
         // inform player1 because of same field
-        assertEquals("[{'command':'delete', 'type':'field', 'data':[" +
-                        "{'id':3,'text':'message3','room':'room','type':4,'topicId':1," +
-                        "'playerId':'player2','playerName':'player2-name','time':1615231723345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'delete',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':3,\n" +
+                        "      'playerId':'player2',\n" +
+                        "      'playerName':'player2-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message3',\n" +
+                        "      'time':1615231723345,\n" +
+                        "      'topicId':1,\n" +
+                        "      'type':4\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'field'\n" +
+                        "}]",
                 client(0).messages());
 
         // inform player2
-        assertEquals("[{'command':'delete', 'type':'field', 'data':[" +
-                        "{'id':3,'text':'message3','room':'room','type':4,'topicId':1," +
-                        "'playerId':'player2','playerName':'player2-name','time':1615231723345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'delete',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':3,\n" +
+                        "      'playerId':'player2',\n" +
+                        "      'playerName':'player2-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message3',\n" +
+                        "      'time':1615231723345,\n" +
+                        "      'topicId':1,\n" +
+                        "      'type':4\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'field'\n" +
+                        "}]",
                 client(1).messages());
 
         // when
@@ -877,15 +1332,41 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         assertEquals(null, chat.getMessageById(2));
 
         // inform player1
-        assertEquals("[{'command':'delete', 'type':'field', 'data':[" +
-                        "{'id':2,'text':'message2','room':'room','type':4,'topicId':1," +
-                        "'playerId':'player','playerName':'player-name','time':1615231623345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'delete',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':2,\n" +
+                        "      'playerId':'player',\n" +
+                        "      'playerName':'player-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message2',\n" +
+                        "      'time':1615231623345,\n" +
+                        "      'topicId':1,\n" +
+                        "      'type':4\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'field'\n" +
+                        "}]",
                 client(0).messages());
 
         // inform player2 because of same room
-        assertEquals("[{'command':'delete', 'type':'field', 'data':[" +
-                        "{'id':2,'text':'message2','room':'room','type':4,'topicId':1," +
-                        "'playerId':'player','playerName':'player-name','time':1615231623345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'delete',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':2,\n" +
+                        "      'playerId':'player',\n" +
+                        "      'playerName':'player-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message2',\n" +
+                        "      'time':1615231623345,\n" +
+                        "      'topicId':1,\n" +
+                        "      'type':4\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'field'\n" +
+                        "}]",
                 client(1).messages());
     }
 
@@ -969,11 +1450,32 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         assertEquals("[getAllRoom(Filter(room=room, recipientId=null, count=2, " +
                 "afterId=null, beforeId=null, inclusive=null))]",
                 receivedOnServer());
-        assertEquals("[{'command':'add', 'type':'room', 'data':[" +
-                        "{'id':2,'text':'message2','room':'room','type':1,'topicId':null," +
-                        "'playerId':'player','playerName':'player-name','time':1615231623345}," +
-                        "{'id':3,'text':'message3','room':'room','type':1,'topicId':null," +
-                        "'playerId':'player','playerName':'player-name','time':1615231723345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'add',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':2,\n" +
+                        "      'playerId':'player',\n" +
+                        "      'playerName':'player-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message2',\n" +
+                        "      'time':1615231623345,\n" +
+                        "      'topicId':null,\n" +
+                        "      'type':1\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      'id':3,\n" +
+                        "      'playerId':'player',\n" +
+                        "      'playerName':'player-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message3',\n" +
+                        "      'time':1615231723345,\n" +
+                        "      'topicId':null,\n" +
+                        "      'type':1\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'room'\n" +
+                        "}]",
                 client(0).messages());
     }
 
@@ -1026,11 +1528,32 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         assertEquals("[getAllTopic(1, Filter(room=room, recipientId=null, count=2, " +
                         "afterId=null, beforeId=null, inclusive=null))]",
                 receivedOnServer());
-        assertEquals("[{'command':'add', 'type':'room', 'data':[" +
-                        "{'id':2,'text':'message2','room':'room','type':2,'topicId':1," +
-                        "'playerId':'player','playerName':'player-name','time':1615231623345}," +
-                        "{'id':3,'text':'message3','room':'room','type':2,'topicId':1," +
-                        "'playerId':'player','playerName':'player-name','time':1615231723345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'add',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':2,\n" +
+                        "      'playerId':'player',\n" +
+                        "      'playerName':'player-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message2',\n" +
+                        "      'time':1615231623345,\n" +
+                        "      'topicId':1,\n" +
+                        "      'type':2\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      'id':3,\n" +
+                        "      'playerId':'player',\n" +
+                        "      'playerName':'player-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message3',\n" +
+                        "      'time':1615231723345,\n" +
+                        "      'topicId':1,\n" +
+                        "      'type':2\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'room'\n" +
+                        "}]",
                 client(0).messages());
     }
 
@@ -1083,11 +1606,32 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         assertEquals("[getAllField(Filter(room=room, recipientId=null, count=2, " +
                         "afterId=null, beforeId=null, inclusive=null))]",
                 receivedOnServer());
-        assertEquals("[{'command':'add', 'type':'field', 'data':[" +
-                        "{'id':2,'text':'message2','room':'room','type':3,'topicId':1," +
-                        "'playerId':'player','playerName':'player-name','time':1615231623345}," +
-                        "{'id':3,'text':'message3','room':'room','type':3,'topicId':1," +
-                        "'playerId':'player','playerName':'player-name','time':1615231723345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'add',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':2,\n" +
+                        "      'playerId':'player',\n" +
+                        "      'playerName':'player-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message2',\n" +
+                        "      'time':1615231623345,\n" +
+                        "      'topicId':1,\n" +
+                        "      'type':3\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      'id':3,\n" +
+                        "      'playerId':'player',\n" +
+                        "      'playerName':'player-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message3',\n" +
+                        "      'time':1615231723345,\n" +
+                        "      'topicId':1,\n" +
+                        "      'type':3\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'field'\n" +
+                        "}]",
                 client(0).messages());
     }
 
@@ -1133,9 +1677,22 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
 
         // then
         assertEquals("[postRoom(message, room)]", receivedOnServer());
-        assertEquals("[{'command':'add', 'type':'room', 'data':[" +
-                        "{'id':1,'text':'message','room':'room','type':1,'topicId':null," +
-                        "'playerId':'player','playerName':'player-name','time':12345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'add',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':1,\n" +
+                        "      'playerId':'player',\n" +
+                        "      'playerName':'player-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message',\n" +
+                        "      'time':12345,\n" +
+                        "      'topicId':null,\n" +
+                        "      'type':1\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'room'\n" +
+                        "}]",
                 client(0).messages());
     }
 
@@ -1162,15 +1719,41 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         // then
         assertEquals("[postRoom(message1, room)]", receivedOnServer());
         // inform player1
-        assertEquals("[{'command':'add', 'type':'room', 'data':[" +
-                        "{'id':1,'text':'message1','room':'room','type':1,'topicId':null," +
-                        "'playerId':'player','playerName':'player-name','time':12345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'add',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':1,\n" +
+                        "      'playerId':'player',\n" +
+                        "      'playerName':'player-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message1',\n" +
+                        "      'time':12345,\n" +
+                        "      'topicId':null,\n" +
+                        "      'type':1\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'room'\n" +
+                        "}]",
                 client(0).messages());
 
         // inform player2 because of same room
-        assertEquals("[{'command':'add', 'type':'room', 'data':[" +
-                        "{'id':1,'text':'message1','room':'room','type':1,'topicId':null," +
-                        "'playerId':'player','playerName':'player-name','time':12345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'add',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':1,\n" +
+                        "      'playerId':'player',\n" +
+                        "      'playerName':'player-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message1',\n" +
+                        "      'time':12345,\n" +
+                        "      'topicId':null,\n" +
+                        "      'type':1\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'room'\n" +
+                        "}]",
                 client(1).messages());
 
         // don't inform player3 because of other room
@@ -1220,9 +1803,22 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
 
         // then
         assertEquals("[postField(message, room)]", receivedOnServer());
-        assertEquals("[{'command':'add', 'type':'field', 'data':[" +
-                        "{'id':1,'text':'message','room':'room','type':3,'topicId':1," +
-                        "'playerId':'player','playerName':'player-name','time':12345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'add',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':1,\n" +
+                        "      'playerId':'player',\n" +
+                        "      'playerName':'player-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message',\n" +
+                        "      'time':12345,\n" +
+                        "      'topicId':1,\n" +
+                        "      'type':3\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'field'\n" +
+                        "}]",
                 client(0).messages());
 
         assertEquals("Chat.Message(id=1, topicId=1, type=FIELD(3), room=room, " +
@@ -1268,15 +1864,41 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
                 chat.getMessageById(1).toString());
 
         // inform player1
-        assertEquals("[{'command':'add', 'type':'field', 'data':[" +
-                        "{'id':1,'text':'message','room':'room','type':3,'topicId':1," +
-                        "'playerId':'player','playerName':'player-name','time':12345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'add',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':1,\n" +
+                        "      'playerId':'player',\n" +
+                        "      'playerName':'player-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message',\n" +
+                        "      'time':12345,\n" +
+                        "      'topicId':1,\n" +
+                        "      'type':3\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'field'\n" +
+                        "}]",
                 client(0).messages());
 
         // inform player2 because of same field
-        assertEquals("[{'command':'add', 'type':'field', 'data':[" +
-                        "{'id':1,'text':'message','room':'room','type':3,'topicId':1," +
-                        "'playerId':'player','playerName':'player-name','time':12345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'add',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':1,\n" +
+                        "      'playerId':'player',\n" +
+                        "      'playerName':'player-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message',\n" +
+                        "      'time':12345,\n" +
+                        "      'topicId':1,\n" +
+                        "      'type':3\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'field'\n" +
+                        "}]",
                 client(1).messages());
 
         // inform player3 because of other room
@@ -1366,9 +1988,22 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
                 chat.getMessageById(1).toString());
 
         // inform player1
-        assertEquals("[{'command':'add', 'type':'field', 'data':[" +
-                        "{'id':1,'text':'message','room':'room','type':3,'topicId':1," +
-                        "'playerId':'player','playerName':'player-name','time':12345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'add',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':1,\n" +
+                        "      'playerId':'player',\n" +
+                        "      'playerName':'player-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message',\n" +
+                        "      'time':12345,\n" +
+                        "      'topicId':1,\n" +
+                        "      'type':3\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'field'\n" +
+                        "}]",
                 client(0).messages());
 
         // don't inform player2 because of other field
@@ -1421,9 +2056,22 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
 
         // then
         assertEquals("[postTopic(1, message, room)]", receivedOnServer());
-        assertEquals("[{'command':'add', 'type':'room', 'data':[" +
-                        "{'id':3,'text':'message','room':'room','type':2,'topicId':1," +
-                        "'playerId':'player','playerName':'player-name','time':12345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'add',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':3,\n" +
+                        "      'playerId':'player',\n" +
+                        "      'playerName':'player-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message',\n" +
+                        "      'time':12345,\n" +
+                        "      'topicId':1,\n" +
+                        "      'type':2\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'room'\n" +
+                        "}]",
                 client(0).messages());
 
         assertEquals("Chat.Message(id=3, topicId=1, type=ROOM_TOPIC(2), " +
@@ -1462,15 +2110,41 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
                 chat.getMessageById(3).toString());
 
         // inform player1
-        assertEquals("[{'command':'add', 'type':'room', 'data':[" +
-                        "{'id':3,'text':'message','room':'room','type':2,'topicId':1," +
-                        "'playerId':'player','playerName':'player-name','time':12345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'add',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':3,\n" +
+                        "      'playerId':'player',\n" +
+                        "      'playerName':'player-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message',\n" +
+                        "      'time':12345,\n" +
+                        "      'topicId':1,\n" +
+                        "      'type':2\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'room'\n" +
+                        "}]",
                 client(0).messages());
 
         // inform player2 because of same room
-        assertEquals("[{'command':'add', 'type':'room', 'data':[" +
-                        "{'id':3,'text':'message','room':'room','type':2,'topicId':1," +
-                        "'playerId':'player','playerName':'player-name','time':12345}]}]",
+        assertEquals("[{\n" +
+                        "  'command':'add',\n" +
+                        "  'data':[\n" +
+                        "    {\n" +
+                        "      'id':3,\n" +
+                        "      'playerId':'player',\n" +
+                        "      'playerName':'player-name',\n" +
+                        "      'room':'room',\n" +
+                        "      'text':'message',\n" +
+                        "      'time':12345,\n" +
+                        "      'topicId':1,\n" +
+                        "      'type':2\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  'type':'room'\n" +
+                        "}]",
                 client(1).messages());
 
         // don't inform player3 because of other room
