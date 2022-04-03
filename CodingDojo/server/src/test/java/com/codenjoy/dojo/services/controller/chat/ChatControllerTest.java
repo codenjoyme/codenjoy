@@ -34,6 +34,7 @@ import com.codenjoy.dojo.services.controller.AbstractControllerTest;
 import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.helper.Helpers;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.Answer;
@@ -74,6 +75,8 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         super.setup();
 
         with.chat.removeAll();
+        // this will enable debug mode and all errors will be detailed
+        with.debug.resume();
 
         setupChatControl();
     }
@@ -260,9 +263,14 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
 
         // then
         assertEquals("[get(1, room)]", receivedOnServer());
-        assertEquals("[{'command':'error', 'data':" +
-                        "{'error':'IllegalArgumentException'," +
-                        "'message':'There is no message with id '1' in room 'room''}}]",
+        assertEquals("[{\n" +
+                        "  'exception':'<...>',\n" +
+                        "  'message':'java.lang.IllegalArgumentException: There is no message with id '1' in room 'room'',\n" +
+                        "  'stackTrace':'<...>',\n" +
+                        "  'status':'INTERNAL_SERVER_ERROR',\n" +
+                        "  'ticketNumber':'<...>',\n" +
+                        "  'url':'/chat-ws/*'\n" +
+                        "}]",
                 client(0).messages());
     }
     
@@ -896,10 +904,14 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
 
         // then
         assertEquals("[delete(1, room)]", receivedOnServer());
-        assertEquals("[{'command':'error', 'data':" +
-                        "{'error':'IllegalArgumentException'," +
-                        "'message':'Player 'player' cant delete " +
-                                    "message with id '1' in room 'room''}}]",
+        assertEquals("[{\n" +
+                        "  'exception':'<...>',\n" +
+                        "  'message':'java.lang.IllegalArgumentException: Player 'player' cant delete message with id '1' in room 'room'',\n" +
+                        "  'stackTrace':'<...>',\n" +
+                        "  'status':'INTERNAL_SERVER_ERROR',\n" +
+                        "  'ticketNumber':'<...>',\n" +
+                        "  'url':'/chat-ws/*'\n" +
+                        "}]",
                 client(0).messages());
     }
 
@@ -920,9 +932,14 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         assertEquals("[getAllRoom(Filter(room=otherRoom, recipientId=null, count=1, " +
                         "afterId=null, beforeId=null, inclusive=null))]",
                 receivedOnServer());
-        assertEquals("[{'command':'error', 'data':" +
-                        "{'error':'IllegalArgumentException'," +
-                        "'message':'Player 'player' is not in room 'otherRoom''}}]",
+        assertEquals("[{\n" +
+                        "  'exception':'<...>',\n" +
+                        "  'message':'java.lang.IllegalArgumentException: Player 'player' is not in room 'otherRoom'',\n" +
+                        "  'stackTrace':'<...>',\n" +
+                        "  'status':'INTERNAL_SERVER_ERROR',\n" +
+                        "  'ticketNumber':'<...>',\n" +
+                        "  'url':'/chat-ws/*'\n" +
+                        "}]",
                 client(0).messages());
     }
 
@@ -977,9 +994,14 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         assertEquals("[getAllTopic(1, Filter(room=room, recipientId=null, count=1, " +
                         "afterId=null, beforeId=null, inclusive=null))]",
                 receivedOnServer());
-        assertEquals("[{'command':'error', 'data':" +
-                        "{'error':'IllegalArgumentException'," +
-                        "'message':'There is no message with id '1' in room 'room''}}]",
+        assertEquals("[{\n" +
+                        "  'exception':'<...>',\n" +
+                        "  'message':'java.lang.IllegalArgumentException: There is no message with id '1' in room 'room'',\n" +
+                        "  'stackTrace':'<...>',\n" +
+                        "  'status':'INTERNAL_SERVER_ERROR',\n" +
+                        "  'ticketNumber':'<...>',\n" +
+                        "  'url':'/chat-ws/*'\n" +
+                        "}]",
                 client(0).messages());
     }
 
@@ -1029,9 +1051,14 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         assertEquals("[getAllField(Filter(room=otherRoom, recipientId=null, count=1, " +
                         "afterId=null, beforeId=null, inclusive=null))]",
                 receivedOnServer());
-        assertEquals("[{'command':'error', 'data':" +
-                        "{'error':'IllegalArgumentException'," +
-                        "'message':'There is no player 'player' in room 'otherRoom''}}]",
+        assertEquals("[{\n" +
+                        "  'exception':'<...>',\n" +
+                        "  'message':'java.lang.IllegalArgumentException: There is no player 'player' in room 'otherRoom'',\n" +
+                        "  'stackTrace':'<...>',\n" +
+                        "  'status':'INTERNAL_SERVER_ERROR',\n" +
+                        "  'ticketNumber':'<...>',\n" +
+                        "  'url':'/chat-ws/*'\n" +
+                        "}]",
                 client(0).messages());
     }
 
@@ -1079,9 +1106,14 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
 
         // then
         assertEquals("[postRoom(message, otherRoom)]", receivedOnServer());
-        assertEquals("[{'command':'error', 'data':" +
-                        "{'error':'IllegalArgumentException'," +
-                        "'message':'Player 'player' is not in room 'otherRoom''}}]",
+        assertEquals("[{\n" +
+                        "  'exception':'<...>',\n" +
+                        "  'message':'java.lang.IllegalArgumentException: Player 'player' is not in room 'otherRoom'',\n" +
+                        "  'stackTrace':'<...>',\n" +
+                        "  'status':'INTERNAL_SERVER_ERROR',\n" +
+                        "  'ticketNumber':'<...>',\n" +
+                        "  'url':'/chat-ws/*'\n" +
+                        "}]",
                 client(0).messages());
     }
 
@@ -1161,9 +1193,14 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
 
         // then
         assertEquals("[postField(message, otherRoom)]", receivedOnServer());
-        assertEquals("[{'command':'error', 'data':" +
-                        "{'error':'IllegalArgumentException'," +
-                        "'message':'There is no player 'player' in room 'otherRoom''}}]",
+        assertEquals("[{\n" +
+                        "  'exception':'<...>',\n" +
+                        "  'message':'java.lang.IllegalArgumentException: There is no player 'player' in room 'otherRoom'',\n" +
+                        "  'stackTrace':'<...>',\n" +
+                        "  'status':'INTERNAL_SERVER_ERROR',\n" +
+                        "  'ticketNumber':'<...>',\n" +
+                        "  'url':'/chat-ws/*'\n" +
+                        "}]",
                 client(0).messages());
     }
 
@@ -1281,8 +1318,14 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         assertEquals("[get(1, room)]", receivedOnServer());
 
         // inform player1 because of player is a requester
-        assertEquals("[{'command':'error', 'data':{'error':'IllegalArgumentException'," +
-                        "'message':'There is no message with id '1' in room 'room''}}]",
+        assertEquals("[{\n" +
+                        "  'exception':'<...>',\n" +
+                        "  'message':'java.lang.IllegalArgumentException: There is no message with id '1' in room 'room'',\n" +
+                        "  'stackTrace':'<...>',\n" +
+                        "  'status':'INTERNAL_SERVER_ERROR',\n" +
+                        "  'ticketNumber':'<...>',\n" +
+                        "  'url':'/chat-ws/*'\n" +
+                        "}]",
                 client(0).messages());
 
         // inform player2 because player is not a requester
@@ -1348,9 +1391,14 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
 
         // then
         assertEquals("[postTopic(1, message, room)]", receivedOnServer());
-        assertEquals("[{'command':'error', 'data':" +
-                        "{'error':'IllegalArgumentException'," +
-                        "'message':'There is no message with id '1' in room 'room''}}]",
+        assertEquals("[{\n" +
+                        "  'exception':'<...>',\n" +
+                        "  'message':'java.lang.IllegalArgumentException: There is no message with id '1' in room 'room'',\n" +
+                        "  'stackTrace':'<...>',\n" +
+                        "  'status':'INTERNAL_SERVER_ERROR',\n" +
+                        "  'ticketNumber':'<...>',\n" +
+                        "  'url':'/chat-ws/*'\n" +
+                        "}]",
                 client(0).messages());
     }
 
