@@ -23,7 +23,6 @@ package com.codenjoy.dojo.services;
  */
 
 
-import com.codenjoy.dojo.utils.JsonUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jetty.websocket.api.Session;
@@ -199,7 +198,11 @@ public class WebSocketRunnerMock {
         @OnWebSocketMessage
         public void onMessage(String data) {
             log.info("Client got message: " + data);
-            messages.add(prettyPrint(cleanDebugInfo(data)));
+            messages.add(
+                    isJson(data)
+                            ? prettyPrint(cleanDebugInfo(data))
+                            : data
+            );
 
             if (answer == null) {
                 if (replyToServerImmediately) {
@@ -224,6 +227,15 @@ public class WebSocketRunnerMock {
         @OnWebSocketError
         public void onError(Session session, Throwable reason) {
             error = reason;
+        }
+    }
+
+    private boolean isJson(String data) {
+        try {
+            new JSONObject(data);
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 
