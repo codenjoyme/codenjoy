@@ -99,7 +99,7 @@ grpc:
   server:
     port: 9090
   executor:
-    pool.size: 5
+    pool.size: 1
   dojo:
     host: ${dojoserver.host}
     port: 9092

@@ -110,7 +110,13 @@ public class BoardData {
         return pool.select("SELECT template_url FROM board_data " +
                         "WHERE game_name = ?",
                 new Object[]{gameName},
-                rs -> rs.getString("template_url")
+                rs -> {
+                    if(rs.next()){
+                        return rs.getString("template_url");
+                    }else {
+                        throw new IllegalArgumentException("Invalid game name");
+                    }
+                }
         );
     }
 }
