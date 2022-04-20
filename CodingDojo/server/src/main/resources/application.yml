@@ -93,13 +93,19 @@ logging:
       reflections: error
 github:
   host:
-    name: ${gameserver.host}
+    name: ${CODE_EXECUTION_HOST:localhost}
     port: 8081
 grpc:
   server:
     port: 9090
   executor:
-    pool.size: 1
-  dojo:
-    host: ${dojoserver.host}
+    pool.size: 5
+  code-execution:
+    host: ${CODE_EXECUTION_HOST:localhost}
+    port: 9091
+  notifications:
+    host: ${NOTIFICATIONS_HOST:localhost}
     port: 9092
+keycloak:
+  host: ${KEYCLOACK_HOST:localhost}
+  port: ${KEYCLOACK_PORT:8180}

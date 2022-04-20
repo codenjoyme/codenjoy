@@ -6,7 +6,7 @@
 
     <artifactId>codenjoy-contest</artifactId>
     <version>1.1.1</version>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
 
     <parent>
         <groupId>com.codenjoy</groupId>
@@ -1007,6 +1007,7 @@
                 <!-- make war runnable with main class -->
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.6.2</version>
                 <configuration>
                     <!-- true - eсли хочу запускать так же и 'sh codenjoy-contest.war'
                          false - если только как 'java -jar codenjoy-contest.war' -->

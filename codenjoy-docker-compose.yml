@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  codenjoy:
+    image: codenjoy
+    container_name: codenjoy
+    hostname: codenjoy
+    ports:
+      - 8080:8080
+  code-execution:
+    image: code-execution
+    container_name: code-execution
+    hostname: code-execution
+    ports:
+      - 8081:8081
+  notifications:
+    image: notifications
+    container_name: notifications
+    hostname: notifications
+    ports:
+      - 8090:8090
+  keycloak:
+    image: dojobanica/keycloak:1
+    container_name: keycloak
+    hostname: keycloak
+    ports:
+      - 8180:8080

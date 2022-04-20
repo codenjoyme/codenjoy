@@ -42,8 +42,8 @@ public class GrpcConfig {
 
     public GrpcConfig(@Value("${grpc.executor.pool.size}") final int applicationExecutorPoolSize,
                       @Value("${grpc.server.port}") final int port,
-                      @Value("${grpc.dojo.host}") final String host,
-                      @Value("${grpc.dojo.port}") final int dojoPort,
+                      @Value("${grpc.notifications.host}") final String host,
+                      @Value("${grpc.notifications.port}") final int dojoPort,
                       final LeaderboardService leaderboardService,
                       final UserDetailsService userDetailsService,
                       final EventService eventService) {

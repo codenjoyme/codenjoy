@@ -23,6 +23,7 @@ package com.codenjoy.dojo.config.oauth2;
  */
 
 import com.fasterxml.jackson.databind.JsonNode;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Base64Utils;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -32,6 +33,12 @@ import java.util.Objects;
 
 @Component
 public class OAuth2CodeExecutionClient {
+
+    @Value("${keycloak.host}")
+    private String keycloakHost;
+
+    @Value("${keycloak.port}")
+    private String keycloakPort;
 
     private final WebClient webClient = WebClient.builder().build();
 
@@ -48,7 +55,7 @@ public class OAuth2CodeExecutionClient {
                 Base64Utils.encodeToString("client_id:client_secret".getBytes());
 
         return Objects.requireNonNull(webClient.post()
-                        .uri("host.docker.internal:8180/auth/realms/dojo-realm/protocol/openid-connect/token")
+                        .uri("http://" + keycloakHost + ":" + keycloakPort + "/auth/realms/dojo-realm/protocol/openid-connect/token")
                         .header("Authorization", "Basic " + encodedClientData)
                         .body(BodyInserters.fromFormData("grant_type", "client_credentials"))
                         .retrieve()

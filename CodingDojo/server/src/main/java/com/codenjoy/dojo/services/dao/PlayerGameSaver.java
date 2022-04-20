@@ -33,6 +33,7 @@ import com.codenjoy.dojo.services.jdbc.JDBCTimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.Date;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -163,7 +164,7 @@ public class PlayerGameSaver implements GameSaver {
 
     @Override
     public void updateScore(String playerId, String name, String gameName, long score, long time) {
-        pool.update("UPDATE saves " +
+        int update = pool.update("UPDATE saves " +
                         "SET time = ?, score = ?" +
                         "WHERE player_id = ? AND game_name = ?;",
                 new Object[]{JDBCTimeUtils.toString(new Date(time)),
@@ -171,8 +172,20 @@ public class PlayerGameSaver implements GameSaver {
                         playerId,
                         gameName
                 });
+        boolean isUpdateFailed = update != 1;
+
+        if (isUpdateFailed && scoreExists(playerId, gameName)) {
+            updateScore(playerId, name, gameName, score, time);
+        }
+
         boardService.updateLeaderboardScore(name, gameName, score);
     }
+
+    private boolean scoreExists(String playerId, String gameName) {
+        return pool.select("SELECT id FROM saves WHERE player_id  = ? AND gameName = ? ;",
+                new Object[]{playerId, gameName}, ResultSet::next);
+    }
+
 
     @Override
     public List<PlayerSave> loadAllSaves() {

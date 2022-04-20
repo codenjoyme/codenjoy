@@ -30,6 +30,7 @@ import com.codenjoy.dojo.config.grpc.EventsConfig;
 import com.codenjoy.dojo.services.dao.PlayerGameSaver;
 import io.grpc.stub.StreamObserver;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -37,7 +38,8 @@ import java.util.Map;
 @Service
 public class EventService extends EventServiceGrpc.EventServiceImplBase {
 
-    private static final String URL = "localhost:9091";
+    @Value("${grpc.code-execution.host}:${grpc.code-execution.port}")
+    private String URL;
 
     private final PlayerGameSaver playerGameSaver;
     private final EventsConfig eventsConfig;
