@@ -23,19 +23,22 @@ package com.codenjoy.dojo.services.controller.chat;
  */
 
 
-import com.codenjoy.dojo.profile.P;
 import com.codenjoy.dojo.services.Deal;
+import com.codenjoy.dojo.services.ErrorTicketService;
 import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.chat.ChatAuthority;
 import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.chat.ChatType;
 import com.codenjoy.dojo.services.chat.OnChange;
 import com.codenjoy.dojo.services.controller.Controller;
+import com.codenjoy.dojo.services.serializer.ModelAndViewSerializer;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
 import com.codenjoy.dojo.web.rest.pojo.PMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -51,18 +54,28 @@ public class ChatController implements Controller<String, ChatAuthority>, Tickab
     private static final String ERROR_TEMPLATE =
             "{\"command\":\"%s\", \"data\":%s}";
 
+    private final ErrorTicketService ticket;
     private final PlayerTransport transport;
     private final ChatService chatService;
     private final ObjectMapper mapper;
     private final List<ChatResponseHandler> handlers;
 
     // autowiring by name
-    public ChatController(PlayerTransport chatPlayerTransport, ChatService chatService) {
+    public ChatController(PlayerTransport chatPlayerTransport, ChatService chatService, ErrorTicketService ticket) {
+        this.ticket = ticket;
         transport = chatPlayerTransport;
         this.chatService = chatService;
         transport.setDefaultFilter(Object::toString);
-        this.mapper = new ObjectMapper();
+        mapper = createObjectMapper();
         handlers = new CopyOnWriteArrayList<>();
+    }
+
+    private ObjectMapper createObjectMapper() {
+        ObjectMapper result = new ObjectMapper();
+        SimpleModule module = new SimpleModule();
+        module.addSerializer(ModelAndView.class, new ModelAndViewSerializer());
+        result.registerModule(module);
+        return result;
     }
 
     @Override
@@ -71,9 +84,19 @@ public class ChatController implements Controller<String, ChatAuthority>, Tickab
         ChatAuthority authority = chatService.authority(id, chatListener());
         deal.setChat(authority);
         ChatResponseHandler handler = new ChatResponseHandler(deal, authority,
-                error -> sendState(ERROR, null, error, id));
+                error -> sendError(id, error));
         transport.registerPlayerEndpoint(id, handler);
         handlers.add(handler);
+    }
+
+    private void sendError(String id, Error error) {
+        Object data;
+        try {
+            data = ticket.get("/chat-ws/*", "application/json", error.exception());
+        } catch (Exception exception) {
+            data = ErrorTicketService.ERROR_MESSAGE;
+        }
+        sendState(ERROR, null, data, id);
     }
 
     @SneakyThrows

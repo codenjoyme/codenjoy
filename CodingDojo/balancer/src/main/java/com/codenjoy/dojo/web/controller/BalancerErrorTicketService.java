@@ -44,10 +44,10 @@ import java.util.concurrent.ConcurrentSkipListMap;
 // TODO такой же как в Server - подумать как устранить дублирование
 @Component
 @Slf4j
-public class ErrorTicketService {
+public class BalancerErrorTicketService {
 
     private static final String ERROR_MESSAGE = "Something wrong with your request. " +
-            "Please save you ticker number and ask site administrator.";
+            "Please save your ticket number and ask site administrator.";
     private final static SimpleDateFormat DAY_TIME_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
     @Autowired

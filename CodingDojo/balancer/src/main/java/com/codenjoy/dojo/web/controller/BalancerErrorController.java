@@ -40,15 +40,15 @@ import javax.servlet.http.HttpServletRequest;
 
 // TODO почти такой же как в Server - подумать как устранить дублирование
 @Controller
-@RequestMapping(ErrorController.URI)
-public class ErrorController implements org.springframework.boot.web.servlet.error.ErrorController {
+@RequestMapping(BalancerErrorController.URI)
+public class BalancerErrorController implements org.springframework.boot.web.servlet.error.ErrorController {
 
     public static final String URI = "/error";
     public static final String JAVAX_SERVLET_ERROR_MESSAGE = "javax.servlet.error.message";
     public static final String JAVAX_SERVLET_ERROR_EXCEPTION = "javax.servlet.error.exception";
 
     @Autowired
-    private ErrorTicketService ticket;
+    private BalancerErrorTicketService ticket;
 
     @RequestMapping()
     public ResponseEntity<ModelMap> error(HttpServletRequest req, ModelMap model) {

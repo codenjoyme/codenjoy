@@ -35,10 +35,10 @@ import javax.servlet.http.HttpServletRequest;
 
 // TODO такой же как в Server - подумать как устранить дублирование
 @ControllerAdvice
-public class GlobalExceptionHandler {
+public class BalancerGlobalExceptionHandler {
 
     @Autowired
-    private ErrorTicketService ticket;
+    private BalancerErrorTicketService ticket;
 
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<ModelMap> defaultErrorHandler(HttpServletRequest request, Exception e) {
