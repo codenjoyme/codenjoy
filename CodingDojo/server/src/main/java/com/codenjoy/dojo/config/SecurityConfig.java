@@ -107,6 +107,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             ErrorController.URI,
             RestSettingsController.URI + "/**",
             RestBoardController.URI + RestBoardController.HEALTH,
+            ManualController.MANUAL_URI + "/**",
 
             // all players board
             BoardController.URI + "/room/**",

@@ -59,6 +59,8 @@ public class Validator {
     private static final String NICK_NAME = "^[0-9A-Za-zА-Яа-яЁёҐґІіІіЄє ]{1,50}$";
     private static final String CUSTOM_QUERY_PARAMETER_NAME = "[A-Za-z][A-Za-z0-9]{0,29}$";
     private static final String CUSTOM_QUERY_PARAMETER_VALUE = "[A-Za-z0-9_.-]{0,30}$";
+    private static final String READABLE_LANGUAGE_CODE = "^[A-Za-z]{2}$";
+    private static final String READABLE_MANUAL_TYPE = "^[A-Za-z]{1,10}$";
 
     @Autowired protected Registration registration;
     @Autowired protected ConfigProperties properties;
@@ -76,6 +78,8 @@ public class Validator {
     private Pattern md5;
     private Pattern customQueryParameterName;
     private Pattern customQueryParameterValue;
+    private Pattern readableLanguageCode;
+    private Pattern readableManualType;
 
     public Validator() {
         email = Pattern.compile(EMAIL);
@@ -89,6 +93,8 @@ public class Validator {
         md5 = Pattern.compile(MD5);
         customQueryParameterName = Pattern.compile(CUSTOM_QUERY_PARAMETER_NAME);
         customQueryParameterValue = Pattern.compile(CUSTOM_QUERY_PARAMETER_VALUE);
+        readableLanguageCode = Pattern.compile(READABLE_LANGUAGE_CODE);
+        readableManualType = Pattern.compile(READABLE_MANUAL_TYPE);
     }
 
     public void checkPlayerId(String input) {
@@ -136,6 +142,28 @@ public class Validator {
         }
 
         return false;
+    }
+
+    public void checkLanguageCode(String input, boolean canBeNull) {
+        if (!isLanguageCode(input, canBeNull)) {
+            throw new IllegalArgumentException(String.format(
+                    "Language code is invalid: '%s'", input));
+        }
+    }
+
+    public boolean isLanguageCode(String input, boolean canBeNull) {
+        return is(input, canBeNull, readableLanguageCode);
+    }
+
+    public void checkManualType(String input, boolean canBeNull) {
+        if (!isManualType(input, canBeNull)) {
+            throw new IllegalArgumentException(String.format(
+                    "Manual type is invalid: '%s'", input));
+        }
+    }
+
+    public boolean isManualType(String input, boolean canBeNull) {
+        return is(input, canBeNull, readableManualType);
     }
 
     public void checkPlayerId(String input, boolean canBeNull) {
