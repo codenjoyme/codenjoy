@@ -30,8 +30,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.io.IOException;
-
 import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
 import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
 
@@ -41,7 +39,7 @@ import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
 public class ManualController {
     public static final String MANUAL_URI = "/manual";
     private static final String CODENJOY_DEFAULT_MANUAL_TYPE = "codenjoy";
-    private static final String EN_DEFAULT_LANGUANGE_FOR_MANUAL = "en";
+    private static final String EN_DEFAULT_LANGUAGE_FOR_MANUAL = "en";
 
     private Validator validator;
 
@@ -49,15 +47,15 @@ public class ManualController {
     public String manualForGameWithDefaultLanguage(
             @PathVariable String game,
             @RequestParam(required = false) String type
-    ) throws IOException {
-        return manualForGame(game, type, EN_DEFAULT_LANGUANGE_FOR_MANUAL);
+    ) {
+        return manualForGame(game, type, EN_DEFAULT_LANGUAGE_FOR_MANUAL);
     }
 
     @GetMapping(value = MANUAL_URI + "/{game}/{language}")
     public String manualForGame(
             @PathVariable String game,
             @RequestParam(required = false) String type,
-            @PathVariable String language) throws IOException {
+            @PathVariable String language) {
 
         validator.checkGame(game, CANT_BE_NULL);
         validator.checkLanguageCode(language, CAN_BE_NULL);
@@ -67,7 +65,7 @@ public class ManualController {
             type = CODENJOY_DEFAULT_MANUAL_TYPE;
         }
         if (Strings.isNullOrEmpty(language)) {
-            language = EN_DEFAULT_LANGUANGE_FOR_MANUAL;
+            language = EN_DEFAULT_LANGUAGE_FOR_MANUAL;
         }
 
         return getRedirectURI(game, type, language);
