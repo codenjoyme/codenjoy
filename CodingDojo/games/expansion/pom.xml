@@ -14,7 +14,7 @@
 
     <properties>
         <module.name>expansion</module.name>
-        <kotlin.version>1.4.30</kotlin.version>
+        <kotlin.version>1.6.0</kotlin.version>
     </properties>
 
     <repositories>
