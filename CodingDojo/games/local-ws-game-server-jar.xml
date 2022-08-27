@@ -62,7 +62,11 @@
             <directory>${project.build.outputDirectory}</directory>
             <outputDirectory>/</outputDirectory>
             <excludes>
-                <exclude>resources/**/*</exclude>
+                <!-- <include>resources/*/help/*/info.properties</include> -->
+                <exclude>resources/*/help/*.*</exclude>
+                <exclude>resources/*/img/**</exclude>
+                <exclude>resources/*/js/**</exclude>
+                <exclude>resources/*/sprite/**</exclude>
                 <exclude>com/codenjoy/dojo/*/client/ai/*.*</exclude>
                 <exclude>com/codenjoy/dojo/services/hash/*.*</exclude>
                 <exclude>com/codenjoy/dojo/services/algs/*.*</exclude>
