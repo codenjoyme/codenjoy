@@ -162,6 +162,25 @@ public class ChatServiceTest {
     }
 
     @Test
+    public void shouldMaskEscapeSymbols(){
+        // given
+        givenOnePlayers();
+
+        // when then
+        // player1 create room message with escaped symbols
+        with.time.nowIs(12345L);
+        with.chat.check(
+                chat(0).postRoom("<img src=x onerror=alert(document.domain)>", "room"),
+                "[PMessage(id=1, text=&lt;img src=x onerror=alert(document.domain)&gt;, room=room, type=1, topicId=null, \n" +
+                        "    playerId=player1, playerName=player1-name, time=12345)]");
+
+        assertListener(
+                "listener1-player1 created in room: [\n" +
+                        "    PMessage(id=1, text=&lt;img src=x onerror=alert(document.domain)&gt;, room=room, type=1, topicId=null, \n" +
+                        "        playerId=player1, playerName=player1-name, time=12345)]");
+    }
+
+    @Test
     public void shouldGetControl() {
         // given
         givenThreePlayers();
@@ -796,6 +815,10 @@ public class ChatServiceTest {
         createPlayerWithControl("player1", "room", "first");
         createPlayerWithControl("player2", "room", "first");
         createPlayerWithControl("player3", "room2", "first");
+    }
+
+    private void givenOnePlayers() {
+        createPlayerWithControl("player1", "room", "first");
     }
 
     private Deal createPlayerWithControl(String player, String room, String game) {
