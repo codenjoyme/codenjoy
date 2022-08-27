@@ -109,6 +109,9 @@ read_env() {
     done
 }
 
+eval_echo "echo JAVA_HOME=$JAVA_HOME"
+eval_echo "java -version"
+
 eval_echo "ROOT=\$(pwd)"
 eval_echo "read_env"
 eval_echo "java -jar ${param}host=\$HOST ${param}port=\$PORT ${param}timeout=\$TIMEOUT ${param}logDisable=\$LOG_DISABLE ${param}log=\"\$LOG_FILE\" ${param}logTime=\$LOG_TIME ${param}showPlayers=\"\$SHOW_PLAYERS\" ${param}random=\"\$RANDOM_SEED\" ${param}waitFor=\$WAIT_FOR ${param}settings=\"\$SETTINGS\" $GAME-engine.jar"
@@ -124,10 +127,13 @@ read GAME
 
 eval_echo "ROOT=$(pwd)/.."
 eval_echo "MVNW=$ROOT/mvnw"
+eval_echo "echo JAVA_HOME=$JAVA_HOME"
 eval_echo "GAME_ROOT=$ROOT/games/$GAME"
 eval_echo "ENGINE_ROOT=$ROOT/games/engine"
 eval_echo "JAVA_CLIENT_ROOT=$ROOT/clients/java"
 eval_echo "OUT=$(pwd)/out"
+eval_echo "java -version"
+eval_echo "$MVNW -version"
 
 if [[ ! -d "$GAME_ROOT" ]]; then
     color "Game $GAME does not exists!"
