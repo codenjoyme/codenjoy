@@ -27,7 +27,6 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
-import com.codenjoy.dojo.web.rest.pojo.PMessageShort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -59,6 +58,8 @@ public class Validator {
     private static final String NICK_NAME = "^[0-9A-Za-zА-Яа-яЁёҐґІіІіЄє ]{1,50}$";
     private static final String CUSTOM_QUERY_PARAMETER_NAME = "[A-Za-z][A-Za-z0-9]{0,29}$";
     private static final String CUSTOM_QUERY_PARAMETER_VALUE = "[A-Za-z0-9_.-]{0,30}$";
+    private static final String LANGUAGE_CODE = "^[A-Za-z]{2}$";
+    private static final String MANUAL_TYPE = "^[A-Za-z]{1,10}$";
 
     @Autowired protected Registration registration;
     @Autowired protected ConfigProperties properties;
@@ -76,6 +77,8 @@ public class Validator {
     private Pattern md5;
     private Pattern customQueryParameterName;
     private Pattern customQueryParameterValue;
+    private Pattern languageCode;
+    private Pattern manualType;
 
     public Validator() {
         email = Pattern.compile(EMAIL);
@@ -89,6 +92,8 @@ public class Validator {
         md5 = Pattern.compile(MD5);
         customQueryParameterName = Pattern.compile(CUSTOM_QUERY_PARAMETER_NAME);
         customQueryParameterValue = Pattern.compile(CUSTOM_QUERY_PARAMETER_VALUE);
+        languageCode = Pattern.compile(LANGUAGE_CODE);
+        manualType = Pattern.compile(MANUAL_TYPE);
     }
 
     public void checkPlayerId(String input) {
@@ -136,6 +141,32 @@ public class Validator {
         }
 
         return false;
+    }
+
+    // TODO test me
+    public void checkLanguageCode(String input, boolean canBeNull) {
+        if (!isLanguageCode(input, canBeNull)) {
+            throw new IllegalArgumentException(String.format(
+                    "Language code is invalid: '%s'", input));
+        }
+    }
+
+    // TODO test me
+    public boolean isLanguageCode(String input, boolean canBeNull) {
+        return is(input, canBeNull, languageCode);
+    }
+
+    // TODO test me
+    public void checkManualType(String input, boolean canBeNull) {
+        if (!isManualType(input, canBeNull)) {
+            throw new IllegalArgumentException(String.format(
+                    "Manual type is invalid: '%s'", input));
+        }
+    }
+
+    // TODO test me
+    public boolean isManualType(String input, boolean canBeNull) {
+        return is(input, canBeNull, manualType);
     }
 
     public void checkPlayerId(String input, boolean canBeNull) {
