@@ -42,40 +42,44 @@ public class ManualController {
     public static final String MANUAL_URI = "/manual";
     private static final String DEFAULT_TYPE = "codenjoy";
     private static final String DEFAULT_LANGUAGE = "en";
+    private static final String DEFAULT_CONTENT_TYPE = "html";
 
     private Validator validator;
 
     @GetMapping(value = MANUAL_URI + "/{game}")
     public String manualForGameWithDefaultLanguage(
             @PathVariable String game,
-            @RequestParam(required = false) String type)
+            @RequestParam(required = false) String type,
+            @RequestParam(required = false) String contentType)
     {
-        return manualForGame(game, type, DEFAULT_LANGUAGE);
+        return manualForGame(game, type, contentType, DEFAULT_LANGUAGE);
     }
 
     @GetMapping(value = MANUAL_URI + "/{game}/{language}")
     public String manualForGame(
             @PathVariable String game,
             @RequestParam(required = false) String type,
+            @RequestParam(required = false) String contentType,
             @PathVariable String language)
     {
         validator.checkGame(game, CANT_BE_NULL);
-        validator.checkLanguageCode(language, CAN_BE_NULL);
+        validator.checkLanguageCode(language, CANT_BE_NULL);
         validator.checkManualType(type, CAN_BE_NULL);
+        validator.checkContentType(contentType, CAN_BE_NULL);
 
         if (Strings.isNullOrEmpty(type)) {
             type = DEFAULT_TYPE;
         }
 
-        if (Strings.isNullOrEmpty(language)) {
-            language = DEFAULT_LANGUAGE;
+        if (Strings.isNullOrEmpty(contentType)) {
+            contentType = DEFAULT_CONTENT_TYPE;
         }
 
-        return getRedirectURI(game, type, language);
+        return getRedirectURI(game, type, contentType, language);
     }
 
-    private String getRedirectURI(String game, String type, String language) {
-        return String.format("redirect:/resources/%s/help/%s-manual-%s.md",
-                game, type, language);
+    private String getRedirectURI(String game, String type, String contentType, String language) {
+        return String.format("redirect:/resources/%s/help/%s-manual-%s.%s",
+                game, type, language, contentType);
     }
 }
