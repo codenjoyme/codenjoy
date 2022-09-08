@@ -116,7 +116,7 @@ winning the game.
 
 ## Points
 
-The parameters will change[*](index-md.md#ask) as the game progresses. 
+The parameters will change[(?)](#ask) as the game progresses. 
 
 ## Cases
 
