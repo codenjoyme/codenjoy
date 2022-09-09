@@ -173,7 +173,7 @@ winning the game.
 
 ## Points
 
-The parameters will change[*](index-md.md#ask) as the game progresses.
+The parameters will change[(?)](#ask) as the game progresses.
 The default values are shown below:
 
 There are bonus and penalty points in this game.

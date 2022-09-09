@@ -38,9 +38,12 @@ import static com.codenjoy.dojo.web.rest.RestSettingsController.SETTINGS;
 public class RestSettingsControllerTest extends AbstractRestControllerTest {
 
     public static final String NO_ROOM_NAME = null;
-    public static final String ACCESS_IS_DENIED = "org.springframework.security.access.AccessDeniedException: Access is denied";
-    private static final String PLEASE_JOIN = "java.lang.IllegalArgumentException: Please join the game to check room settings";
-    private static final String AUTH_ERROR = "org.springframework.security.authentication.AuthenticationCredentialsNotFoundException: An Authentication object was not found in the SecurityContext";
+
+    public static final String ACCESS_IS_DENIED =
+            "org.springframework.security.access.AccessDeniedException: Access is denied";
+
+    public static final String PLEASE_JOIN_GAME_TO_SEE_ROOM_SETTINGS =
+            "{'UNREGISTERED USER':'Please join the game to check room settings'}";
 
     private Settings first;
     private Settings second;
@@ -185,8 +188,8 @@ public class RestSettingsControllerTest extends AbstractRestControllerTest {
     public void shouldGetForPlayer() {
         // as admin (player not in game)
         // when then
-        assertGetError(PLEASE_JOIN,
-                "/rest/settings/player");
+        assertEquals(PLEASE_JOIN_GAME_TO_SEE_ROOM_SETTINGS,
+                quote(get("/rest/settings/player")));
 
         // as user (player in game)
         // when then
@@ -197,7 +200,7 @@ public class RestSettingsControllerTest extends AbstractRestControllerTest {
         // logout (player not in game)
         // when then
         with.login.asNone();
-        assertGetError(AUTH_ERROR,
-                "/rest/settings/player");
+        assertEquals(PLEASE_JOIN_GAME_TO_SEE_ROOM_SETTINGS,
+                quote(get("/rest/settings/player")));
     }
 }
