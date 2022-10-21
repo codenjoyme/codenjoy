@@ -62,6 +62,8 @@ public class Chat {
                     "time varchar(255), " +
                     "text varchar(" + MESSAGE_MAX_LENGTH + "));"
         );
+        pool.createIndex("messages", false, true, "type", "topic_id");
+        pool.createIndex("messages", false, true, "room", "topic_id", "recipient_id");
     }
 
     public void removeDatabase() {
