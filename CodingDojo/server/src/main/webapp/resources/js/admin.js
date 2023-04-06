@@ -37,6 +37,10 @@ function defaultRegistrationSettings() {
                 {'name' : 'Contest',    'title':'Java | Kotlin | .Net | JavaScript'},
                 {'name' : 'Befunge',    'title':'Befunge (esoteric language)'},
                 {'name' : 'eKids',      'title':'For Kids'}
+            ],
+            kata: [   // TODO вынести это как-то в настройки игры kata
+                {'name' : 'JavaScript', 'title':'JavaScript (browser version)'},
+                {'name' : 'Contest',    'title':'Java | Kotlin | .Net | JavaScript'}
             ]
         }
     };
