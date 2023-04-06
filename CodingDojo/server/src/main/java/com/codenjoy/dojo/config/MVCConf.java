@@ -22,30 +22,34 @@ package com.codenjoy.dojo.config;
  * #L%
  */
 
-import com.codenjoy.dojo.services.JarResourceHttpRequestHandler;
+import com.codenjoy.dojo.services.JarPathResourceResolver;
 import com.codenjoy.dojo.services.TimerService;
 import com.codenjoy.dojo.transport.auth.AuthenticationService;
 import com.codenjoy.dojo.transport.chat.ChatWebSocketServlet;
 import com.codenjoy.dojo.transport.control.ControlWebSocketServlet;
 import com.codenjoy.dojo.transport.screen.ScreenWebSocketServlet;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
+import lombok.SneakyThrows;
 import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.CacheControl;
+import org.springframework.web.context.support.ServletContextResource;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.handler.SimpleUrlHandlerMapping;
 import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+import javax.servlet.ServletContext;
+import java.util.Arrays;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
-
-import static com.codenjoy.dojo.services.JarResourceHttpRequestHandler.PREFIX;
 
 @Configuration
 public class MVCConf implements WebMvcConfigurer {
@@ -83,13 +87,20 @@ public class MVCConf implements WebMvcConfigurer {
     private AuthenticationService defaultAuthenticationService;
 
     @Bean
-    public ResourceHttpRequestHandler resourceHttpRequestHandler() {
-        return new JarResourceHttpRequestHandler(
-                getCache(),
-                "/resources/",
-                "classpath:/resources/",
-                "file:" + pluginsStatic,
-                PREFIX + pluginsResources);
+    @SneakyThrows
+    public ResourceHttpRequestHandler resourceHttpRequestHandler(ServletContext servletContext) {
+        return new ResourceHttpRequestHandler() {{
+            setCacheControl(getCache());
+
+            setLocations(Arrays.asList(
+                    new ServletContextResource(servletContext, "/resources/"),
+                    new ClassPathResource("classpath:/resources/"),
+                    new ClassPathResource("classpath*:**/resources/"),
+                    new UrlResource("file:" + pluginsStatic),
+                    new UrlResource("file:" + pluginsResources)));
+
+            setResourceResolvers(Arrays.asList(new JarPathResourceResolver()));
+        }};
     }
 
     private CacheControl getCache() {

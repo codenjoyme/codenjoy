@@ -25,10 +25,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
-
 <head>
     <link href="${ctx}/resources/favicon.ico" rel="icon">
     <link href="${ctx}/resources/css/custom.css" rel="stylesheet">
+    <link href="${resourceUrl}" rel="stylesheet">
+    <c:if test="${!empty gameOnly}">
+        <!-- TODO для игр, где нет этого файла будет ошибка в консоли и эксепшен в стектрейсе -->
+        <link href="${ctx}/resources/${gameOnly}/css/custom.css" rel="stylesheet">
+    </c:if>
 
     <c:choose>
         <c:when test="${debug}" >
@@ -40,8 +44,7 @@
     </c:choose>
 </head>
 
-<!-- TODO to remove games from here -->
-<c:if test="${!justBoard && page != 'register' && gameOnly != 'icancode' && gameOnly != 'expansion'}" >
+<c:if test="${!justBoard && page != 'register'}" >
     <sec:authorize access="isAuthenticated()">
         <body>
             <a href="${ctx}/process_logout" class="logout-link">Logout</a>
