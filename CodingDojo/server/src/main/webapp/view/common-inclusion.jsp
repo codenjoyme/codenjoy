@@ -28,9 +28,7 @@
 <head>
     <link href="${ctx}/resources/favicon.ico" rel="icon">
     <link href="${ctx}/resources/css/custom.css" rel="stylesheet">
-    <link href="${resourceUrl}" rel="stylesheet">
     <c:if test="${!empty gameOnly}">
-        <!-- TODO для игр, где нет этого файла будет ошибка в консоли и эксепшен в стектрейсе -->
         <link href="${ctx}/resources/${gameOnly}/css/custom.css" rel="stylesheet">
     </c:if>
 
