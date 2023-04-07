@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -32,82 +33,136 @@ import org.springframework.util.StreamUtils;
 import org.springframework.web.context.support.ServletContextResource;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
-import static com.codenjoy.dojo.utils.TestUtils.assertMatch;
+import static com.codenjoy.dojo.utils.TestUtils.isMatch;
+import static java.util.stream.Collectors.joining;
 import static org.junit.Assert.assertEquals;
 
+@Slf4j
 public class JarPathResourceResolverTest {
 
-    private JarPathResourceResolver resolver = new JarPathResourceResolver();
 
     @SneakyThrows
-    public String load(Resource resource)  {
+    public String load(Resource resource) {
         return StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
     }
 
     @Test
-    public void shouldLoadFromServletContext() {
-        // when
-        Resource resource = resolver.getResource("file1.txt",
-                new ServletContextResource(new MockServletContext(), "/resolver/"));
-
-        // then
-        assertEquals("ServletContext resource [/resolver/file1.txt]", resource.toString());
-        assertEquals("one", load(resource));
+    public void shouldProcessAllCases() {
+        assertAll(
+                "SERVLET /resolver/ file1.txt=>ServletContext resource [/resolver/file1.txt]=>one\n" +
+                "CLASSPATH classpath:/resolver file2.txt=>class path resource [resolver/file2.txt]=>two\n" +
+                "CLASSPATH classpath*:META-INF NOTICE=>URL [jar:file:*.jar!/META-INF/NOTICE]=>EXISTS\n" +
+                "URL file:src/test/resources/resolver file3.txt=>URL [file:src/test/resources/resolver/file3.txt]=>three\n" +
+                "URL file:../games/*/src/main/** Sample.java=>file [*/server/../games/sample/src/main/java/com/codenjoy/dojo/sample/model/Sample.java]=>EXISTS\n" +
+                "URL file:src/test/resources/resolver/*.jar!/resources/** file4.txt=>URL [jar:file:*/server/src/test/resources/resolver/jar4.jar!/resources/subfolder/file4.txt]=>four\n" +
+                "URL file:src/test/resources/resolver/*.jar!/resources/** file5.txt=>URL [jar:file:*/server/src/test/resources/resolver/jar5.jar!/resources/file5.txt]=>five\n" +
+        "");
     }
 
     @Test
-    public void shouldLoadFromClasspath() {
-        // when
-        Resource resource = resolver.getResource("file2.txt",
-                new ClassPathResource("classpath:/resolver/"));
+    public void shouldAddTrainingSlash() {
+        assertAll(
+                // NULL потому что для Serlvet нужен слеш в конце
+                "SERVLET /resolver file1.txt=>NULL=>NULL\n" +
+                "SERVLET /resolver/ file1.txt=>ServletContext resource [/resolver/file1.txt]=>one\n" +
+                "SERVLET /resolver /file1.txt=>NULL=>NULL\n" +
+                "SERVLET /resolver/ /file1.txt=>ServletContext resource [/resolver/file1.txt]=>one\n" +
 
-        // then
-        assertEquals("class path resource [resolver/file2.txt]", resource.toString());
-        assertEquals("two", load(resource));
+                "CLASSPATH classpath:/resolver file2.txt=>class path resource [resolver/file2.txt]=>two\n" +
+                "CLASSPATH classpath:/resolver/ file2.txt=>class path resource [resolver/file2.txt]=>two\n" +
+                "CLASSPATH classpath:/resolver// file2.txt=>class path resource [resolver/file2.txt]=>two\n" +
+                "CLASSPATH classpath:/resolver /file2.txt=>class path resource [resolver/file2.txt]=>two\n" +
+                "CLASSPATH classpath:/resolver //file2.txt=>class path resource [resolver/file2.txt]=>two\n" +
+                "CLASSPATH classpath:/resolver/ /file2.txt=>class path resource [resolver/file2.txt]=>two\n" +
+                "CLASSPATH classpath:/resolver// //file2.txt=>class path resource [resolver/file2.txt]=>two\n" +
+
+                "CLASSPATH classpath*:META-INF NOTICE=>URL [jar:file:*.jar!/META-INF/NOTICE]=>EXISTS\n" +
+                "CLASSPATH classpath*:META-INF/ NOTICE=>URL [jar:file:*.jar!/META-INF/NOTICE]=>EXISTS\n" +
+                "CLASSPATH classpath*:META-INF /NOTICE=>URL [jar:file:*.jar!/META-INF/NOTICE]=>EXISTS\n" +
+                "CLASSPATH classpath*:META-INF/ /NOTICE=>URL [jar:file:*.jar!/META-INF/NOTICE]=>EXISTS\n" +
+
+                "URL file:src/test/resources/resolver file3.txt=>URL [file:src/test/resources/resolver/file3.txt]=>three\n" +
+                "URL file:src/test/resources/resolver/ file3.txt=>URL [file:src/test/resources/resolver/file3.txt]=>three\n" +
+                "URL file:src/test/resources/resolver /file3.txt=>URL [file:src/test/resources/resolver/file3.txt]=>three\n" +
+                "URL file:src/test/resources/resolver/ /file3.txt=>URL [file:src/test/resources/resolver/file3.txt]=>three\n" +
+
+                "URL file:../games/*/src/main/** Sample.java=>file [*/server/../games/sample/src/main/java/com/codenjoy/dojo/sample/model/Sample.java]=>EXISTS\n" +
+                "URL file:../games/*/src/main/**/ Sample.java=>file [*/server/../games/sample/src/main/java/com/codenjoy/dojo/sample/model/Sample.java]=>EXISTS\n" +
+                "URL file:../games/*/src/main/** /Sample.java=>file [*/server/../games/sample/src/main/java/com/codenjoy/dojo/sample/model/Sample.java]=>EXISTS\n" +
+                "URL file:../games/*/src/main/**/ /Sample.java=>file [*/server/../games/sample/src/main/java/com/codenjoy/dojo/sample/model/Sample.java]=>EXISTS\n" +
+
+                "URL file:src/test/resources/resolver/*.jar!/resources/** file4.txt=>URL [jar:file:*/server/src/test/resources/resolver/jar4.jar!/resources/subfolder/file4.txt]=>four\n" +
+                "URL file:src/test/resources/resolver/*.jar!/resources/**/ file4.txt=>URL [jar:file:*/server/src/test/resources/resolver/jar4.jar!/resources/subfolder/file4.txt]=>four\n" +
+                "URL file:src/test/resources/resolver/*.jar!/resources/** /file4.txt=>URL [jar:file:*/server/src/test/resources/resolver/jar4.jar!/resources/subfolder/file4.txt]=>four\n" +
+                "URL file:src/test/resources/resolver/*.jar!/resources/**/ /file4.txt=>URL [jar:file:*/server/src/test/resources/resolver/jar4.jar!/resources/subfolder/file4.txt]=>four\n" +
+
+                "URL file:src/test/resources/resolver/*.jar!/resources/** file5.txt=>URL [jar:file:*/server/src/test/resources/resolver/jar5.jar!/resources/file5.txt]=>five\n" +
+                "URL file:src/test/resources/resolver/*.jar!/resources/**/ file5.txt=>URL [jar:file:*/server/src/test/resources/resolver/jar5.jar!/resources/file5.txt]=>five\n" +
+                "URL file:src/test/resources/resolver/*.jar!/resources/** /file5.txt=>URL [jar:file:*/server/src/test/resources/resolver/jar5.jar!/resources/file5.txt]=>five\n" +
+                "URL file:src/test/resources/resolver/*.jar!/resources/**/ /file5.txt=>URL [jar:file:*/server/src/test/resources/resolver/jar5.jar!/resources/file5.txt]=>five\n" +
+        "");
     }
 
-    @Test
-    public void shouldLoadFromClasspathIncludingJars() {
-        // when
-        Resource resource = resolver.getResource("NOTICE",
-                new ClassPathResource("classpath*:META-INF/"));
-
-        // then
-        assertMatch("URL [jar:file:*.jar!/META-INF/NOTICE]", resource.toString());
-        assertEquals(true, resource.exists());
+    private void assertAll(String data) {
+        assertEquals(data,
+                Arrays.stream(data.split("\n"))
+                        .peek(line -> log.info(String.format("Processing: '%s'\n", line)))
+                        .map(line -> line.split("=>"))
+                        .map(array -> array[0] + "=>" + call(array[0], array[1], array[2]))
+                        .collect(joining("\n")) + "\n");
     }
 
-    @Test
-    public void shouldLoadFromFileSystem() throws Exception {
+    private String call(String request, String expectedResource, String expectedContent) {
+        String[] parts = request.split(" ");
+        String type = parts[0];
+        String location = parts[1];
+        String file = parts[2];
+
         // when
-        Resource resource = resolver.getResource("file3.txt",
-                new UrlResource("file:src/test/resources/resolver/"));
+        JarPathResourceResolver resolver = new JarPathResourceResolver();
+        Resource resource = resolver.getResource(file, withResource(type, location));
 
         // then
-        assertEquals("URL [file:src/test/resources/resolver/file3.txt]", resource.toString());
-        assertEquals("three", load(resource));
+        return String.format("%s=>%s",
+                getResource(expectedResource, resource),
+                getContent(expectedContent, resource));
     }
 
-    @Test
-    public void shouldLoadFromJarsInFileSystem_case1() throws Exception {
-        // when
-        Resource resource = resolver.getResource("file4.txt",
-                new UrlResource("file:src/test/resources/resolver/*.jar!/resources/**/"));
-
-        // then
-        assertMatch("URL [jar:file:*/server/src/test/resources/resolver/jar4.jar!/resources/subfolder/file4.txt]", resource.toString());
-        assertEquals("four", load(resource));
+    private String getResource(String expectedResource, Resource resource) {
+        if (expectedResource.contains("*") && isMatch(expectedResource, toString(resource))) {
+            return expectedResource;
+        }
+        return toString(resource);
     }
 
-    @Test
-    public void shouldLoadFromJarsInFileSystem_case2() throws Exception {
-        // when
-        Resource resource = resolver.getResource("file5.txt",
-                new UrlResource("file:src/test/resources/resolver/*.jar!/resources/**/"));
+    private String getContent(String content, Resource resource) {
+        if (resource == null) {
+            return "NULL";
+        }
+        String exists = resource.exists() ? "EXISTS" : "NOT EXISTS";
+        return content.equals("EXISTS") ? exists : load(resource);
+    }
 
-        // then
-        assertMatch("URL [jar:file:*/server/src/test/resources/resolver/jar5.jar!/resources/file5.txt]", resource.toString());
-        assertEquals("five", load(resource));
+    @SneakyThrows
+    private Resource withResource(String type, String location) {
+        switch (type) {
+            case "SERVLET":
+                return new ServletContextResource(new MockServletContext(), location);
+            case "CLASSPATH":
+                return new ClassPathResource(location);
+            case "URL":
+                return new UrlResource(location);
+            default:
+                throw new IllegalArgumentException("Unknown type: " + type);
+        }
+    }
+
+    private String toString(Resource resource) {
+        if (resource == null) {
+            return "NULL";
+        }
+        return resource.toString().replaceAll("\\\\", "/");
     }
 }

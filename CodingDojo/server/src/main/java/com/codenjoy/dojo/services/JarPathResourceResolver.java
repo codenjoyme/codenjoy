@@ -41,6 +41,8 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
+import static org.apache.commons.lang3.StringUtils.stripEnd;
+import static org.apache.commons.lang3.StringUtils.stripStart;
 
 @Slf4j
 public class JarPathResourceResolver extends PathResourceResolver {
@@ -90,7 +92,9 @@ public class JarPathResourceResolver extends PathResourceResolver {
         }
 
         List<Resource> resources = null;
-        String path = base + file;
+
+        String path = join(file, base, "/");
+
         if (path.contains(EXT)) {
             resources = getResourcesFromJar(path);
         }
@@ -114,6 +118,10 @@ public class JarPathResourceResolver extends PathResourceResolver {
         }
 
         return resources.get(0);
+    }
+
+    private String join(String file, String base, String separator) {
+        return stripEnd(base, separator) + separator + stripStart(file, separator);
     }
 
     private String getBase(Resource location) throws IOException {
