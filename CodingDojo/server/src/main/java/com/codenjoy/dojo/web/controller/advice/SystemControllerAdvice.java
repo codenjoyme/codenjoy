@@ -42,13 +42,13 @@ public class SystemControllerAdvice {
     private Environment environment;
 
     @ModelAttribute(DEBUG_ATTRIBUTE)
-    public Boolean debugAdvice() {
+    public Boolean isDebugEnabled() {
         return Stream.of(environment.getActiveProfiles())
-                .anyMatch(p -> DEBUG_ATTRIBUTE.equalsIgnoreCase(p.toString()));
+                .anyMatch(DEBUG_ATTRIBUTE::equalsIgnoreCase);
     }
 
     @ModelAttribute(ACTIVE_PROFILES_ATTRIBUTE)
-    public List<String> setProfilesVar() {
+    public List<String> getActiveProfiles() {
         return Arrays.asList(environment.getActiveProfiles());
     }
 }
