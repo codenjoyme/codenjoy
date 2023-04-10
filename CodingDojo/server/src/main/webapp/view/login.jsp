@@ -60,14 +60,19 @@ License along with this program.  If not, see
                     <c:if test="${activeProfiles.contains('icancode')}">
                         <!-- TODO to remove from here -->
                         <a class="logo inline" href="#" title="Home"><img src="${ctx}/resources/img/robot-logo.png"></a>
-                        <span class="title icancode-title">ICanCode</span>
+                        <span class="title game-title">ICanCode</span>
                     </c:if>
                 </div>
                 <div id="navbar" class="navbar-collapse collapse">
                     <nav class="nav pull-right text-right">
                         <ul class="nav-list">
-                            <li class="title icancode-title inline"><a id="additional-link" href="#"></a></li>
-                            <li class="title icancode-title inline"><a id="help-link" href="#"></a></li>
+                            <li class="title game-title inline"><a id="additional-link" href="#"></a></li>
+                            <li class="title game-title inline"><a id="help-link" href="#"></a></li>
+                            <li class="inline">
+                                <a href="${ctx}/register">
+                                    <button class="btn-submit btn-small" id="register-button" type="button">Sign Up</button>
+                                </a>
+                            </li>
                             <sec:authorize access="isAuthenticated()">
                                 <li class="logo title inline"><img src="${ctx}/resources/img/profile.png"></li>
                             </sec:authorize>
@@ -140,9 +145,6 @@ License along with this program.  If not, see
                         </div>
                     </c:if>
                     <button class="btn-submit" id="submit-button" type="button">Sign in</button>
-                    <a href="${ctx}/register">
-                        <button class="btn-submit" id="register-button" type="button">Sign Up</button>
-                    </a>
                 </c:if>
             </div>
         </form:form>
