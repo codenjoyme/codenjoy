@@ -60,17 +60,17 @@ License along with this program.  If not, see
                     <c:if test="${activeProfiles.contains('icancode')}">
                         <!-- TODO to remove from here -->
                         <a class="logo inline" href="#" title="Home"><img src="${ctx}/resources/img/robot-logo.png"></a>
-                        <span class="title icancode-title">ICanCode</span>
+                        <span class="title game-title">ICanCode</span>
                     </c:if>
                 </div>
                 <div id="navbar" class="navbar-collapse collapse">
                     <nav class="nav pull-right text-right">
                         <ul class="nav-list">
-                            <li class="title icancode-title inline"><a id="additional-link" href="#"></a></li>
-                            <li class="title icancode-title inline"><a id="help-link" href="#"></a></li>
+                            <li class="title game-title inline"><a id="additional-link" href="#"></a></li>
+                            <li class="title game-title inline"><a id="help-link" href="#"></a></li>
                             <li class="inline">
                                 <a href="${ctx}/login">
-                                    <button class="btn-submit btn-small" type="button">Sign in</button>
+                                    <button class="btn-submit btn-small" id="login-button" type="button">Sign in</button>
                                 </a>
                             </li>
                             <sec:authorize access="isAuthenticated()">
