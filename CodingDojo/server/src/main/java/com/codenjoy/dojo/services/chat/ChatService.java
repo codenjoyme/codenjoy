@@ -257,12 +257,11 @@ public class ChatService {
     private PMessage postMessage(Integer topicId,
                                 String text, String room, String playerId)
     {
-        String escapedText = getEscapedText(text);
-        validator.checkChatMessageLength(escapedText);
+        validator.checkChatMessageLength(text);
 
         ChatType type = validateTopicAvailable(topicId, playerId, room);
 
-        return saveMessage(topicId, type, escapedText, room, playerId, FOR_ALL);
+        return saveMessage(topicId, type, text, room, playerId, FOR_ALL);
     }
 
     private String getEscapedText(String text) {
@@ -273,6 +272,7 @@ public class ChatService {
                                    String text, String room,
                                    String playerId, String recipientId)
     {
+        String escapedText = getEscapedText(text);
         return wrap(chat.saveMessage(
                 Chat.Message.builder()
                         .room(room)
@@ -281,7 +281,7 @@ public class ChatService {
                         .playerId(playerId)
                         .recipientId(recipientId)
                         .time(time.now())
-                        .text(text)
+                        .text(escapedText)
                         .build()));
     }
 

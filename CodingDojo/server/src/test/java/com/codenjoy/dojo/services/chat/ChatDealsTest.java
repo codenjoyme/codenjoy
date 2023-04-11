@@ -160,7 +160,7 @@ public class ChatDealsTest {
                 with.rooms.board(player1));
 
         with.chat.checkField(player1, room,
-                "[PMessage(id=3, text=GET_GOLD => +30, room=room, type=3, topicId=1, \n" +
+                "[PMessage(id=3, text=GET_GOLD =&gt; +30, room=room, type=3, topicId=1, \n" +
                         "    playerId=player1, playerName=player1-name, time=12346)]");
 
         with.chat.checkField(player2, room,
@@ -188,7 +188,7 @@ public class ChatDealsTest {
                 "[]");
 
         with.chat.checkField(player2, room,
-                "[PMessage(id=4, text=HERO_DIED => 0, room=room, type=3, topicId=1, \n" +
+                "[PMessage(id=4, text=HERO_DIED =&gt; 0, room=room, type=3, topicId=1, \n" +
                         "    playerId=player2, playerName=player2-name, time=12346)]");
 
         with.chat.cleanField(player1, room);
