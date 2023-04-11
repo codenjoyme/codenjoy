@@ -23,7 +23,7 @@ package com.codenjoy.dojo.tetris.model;
  */
 
 
-import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.dice.MockDice;
 import com.codenjoy.dojo.tetris.model.levels.random.EquiprobableRandomizer;
 import com.codenjoy.dojo.tetris.model.levels.random.Randomizer;
 import org.junit.Before;
@@ -41,12 +41,12 @@ import static org.mockito.Mockito.when;
 public class FiguresTest {
 
     private Type[] allTypes;
-    private Dice dice;
+    private MockDice dice;
 
     @Before
     public void setUp() throws Exception {
         allTypes = new Type[]{I, O, J, L, S, Z, T};
-        dice = mock(Dice.class);
+        dice = new MockDice();
     }
 
     @Test

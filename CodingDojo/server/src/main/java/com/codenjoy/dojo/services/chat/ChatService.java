@@ -31,6 +31,7 @@ import com.codenjoy.dojo.services.multiplayer.GameRoom;
 import com.codenjoy.dojo.services.multiplayer.Spreader;
 import com.codenjoy.dojo.web.controller.Validator;
 import com.codenjoy.dojo.web.rest.pojo.PMessage;
+import org.apache.commons.text.StringEscapeUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
@@ -256,14 +257,22 @@ public class ChatService {
     private PMessage postMessage(Integer topicId,
                                 String text, String room, String playerId)
     {
+        validator.checkChatMessageLength(text);
+
         ChatType type = validateTopicAvailable(topicId, playerId, room);
+
         return saveMessage(topicId, type, text, room, playerId, FOR_ALL);
+    }
+
+    private String getEscapedText(String text) {
+        return StringEscapeUtils.escapeHtml3(text);
     }
 
     protected PMessage saveMessage(Integer topicId, ChatType type,
                                    String text, String room,
                                    String playerId, String recipientId)
     {
+        String escapedText = getEscapedText(text);
         return wrap(chat.saveMessage(
                 Chat.Message.builder()
                         .room(room)
@@ -272,7 +281,7 @@ public class ChatService {
                         .playerId(playerId)
                         .recipientId(recipientId)
                         .time(time.now())
-                        .text(text)
+                        .text(escapedText)
                         .build()));
     }
 

@@ -32,6 +32,7 @@ import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.web.controller.Validator;
 import com.codenjoy.dojo.web.rest.pojo.PParameters;
+import com.codenjoy.dojo.web.rest.pojo.PPlayers;
 import com.codenjoy.dojo.web.rest.pojo.PlayerDetailInfo;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -53,6 +54,7 @@ public class RestAdminController {
 
     public static final String URI = "/rest/admin";
     public static final String ROOM = "/room/{room}";
+    public static final String GAME = "/game/{game}";
 
     private GameService gameService;
     private Validator validator;
@@ -108,6 +110,7 @@ public class RestAdminController {
                     .orElse(NullPlayer.INSTANCE);
 
             String game = player.getGame();
+            // TODO do not use map.containsKey just check that map.get() != null
             if (!result.containsKey(game)) {
                 result.put(game, new LinkedList<>());
             }
@@ -235,11 +238,27 @@ public class RestAdminController {
     }
 
     /**
-     * @param room имя комнаты, для которой мы хотим получить настройки
-     * @param game имя игры указывается тут, потому что этот метод будет
+     * @param game Имя игры, для которой мы хотим получить настройки.
+     * @return Базовые настройки для этой игры, они берутся за основу
+     *       кастомных настроек комнаты.
+     */
+    @GetMapping(GAME + "/settings")
+    public PParameters getSettings(@PathVariable("game") String game) {
+        validator.checkGameType(game);
+
+        return wrap(gameService.getGameType(game));
+    }
+
+    private PParameters wrap(GameType type) {
+        return new PParameters(type.getSettings().getParameters());
+    }
+
+    /**
+     * @param room Имя комнаты, для которой мы хотим получить настройки
+     * @param game Имя игры указывается тут, потому что этот метод будет
      *                 дергаться еще до первого зарегистрированного пользователя
      *                 в комнату, а потому откуда codenjoy знает про связку комната + игра?
-     * @return кастомные настройки для этой комнаты
+     * @return Кастомные настройки для этой комнаты.
      */
     @GetMapping(ROOM + "/settings/{game}")
     public PParameters getSettings(@PathVariable("room") String room,
@@ -248,10 +267,7 @@ public class RestAdminController {
         validator.checkRoom(room, CANT_BE_NULL);
         validator.checkGameType(game);
 
-        GameType type = gameService.getGameType(game, room);
-        Settings settings = type.getSettings();
-        List<Parameter> result = settings.getParameters();
-        return new PParameters(result);
+        return wrap(gameService.getGameType(game, room));
     }
 
     @PostMapping(ROOM + "/settings/{game}")
@@ -278,6 +294,17 @@ public class RestAdminController {
         validator.checkPlayerInRoom(id, room);
 
         playerService.remove(id);
+    }
+
+    @GetMapping(ROOM + "/gameOver")
+    public void gameOver(@PathVariable("room") String room,
+                         @RequestBody PPlayers players)
+    {
+        validator.checkRoom(room, CANT_BE_NULL);
+
+        for (String id : players.getIds()) {
+            playerService.remove(id);
+        }
     }
 
     @GetMapping(ROOM + "/gameOverAll")

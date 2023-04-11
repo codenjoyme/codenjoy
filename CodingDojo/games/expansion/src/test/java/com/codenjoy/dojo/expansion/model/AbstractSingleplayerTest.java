@@ -29,12 +29,12 @@ import com.codenjoy.dojo.expansion.services.GameSettings;
 import com.codenjoy.dojo.games.expansion.Forces;
 import com.codenjoy.dojo.games.expansion.ForcesMoves;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.dice.MockDice;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.json.JSONObject;
 import org.junit.Before;
-import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.LinkedList;
 import java.util.function.BiConsumer;
@@ -42,9 +42,7 @@ import java.util.function.BiConsumer;
 import static com.codenjoy.dojo.services.multiplayer.GamePlayer.DEFAULT_TEAM_ID;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class AbstractSingleplayerTest {
 
@@ -56,14 +54,14 @@ public class AbstractSingleplayerTest {
     protected LinkedList<Game> games;
     private GameRunner gameRunner;
     private PrinterFactoryImpl factory;
-    private Dice dice;
+    private MockDice dice;
     private EventListener listener;
     protected GameSettings settings;
     private Expansion current;
 
     @Before
     public void setup() {
-        dice = mock(Dice.class);
+        dice = new MockDice();
         listener = mock(EventListener.class);
 
         gameRunner = new GameRunner(){
@@ -100,7 +98,7 @@ public class AbstractSingleplayerTest {
     }
 
     protected void createNewGame(int room) {
-        gotoFreeRoom(room);
+        dice(room);
         createNewGame();
     }
 
@@ -120,11 +118,8 @@ public class AbstractSingleplayerTest {
         games.add(game);
     }
 
-    protected void gotoFreeRoom(int... levelOfRoom) {
-        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
-        for (int i : levelOfRoom) {
-            when = when.thenReturn(i);
-        }
+    protected void dice(Integer... next) {
+        dice.then(next);
     }
 
     protected void assertE(String expected, int index) {

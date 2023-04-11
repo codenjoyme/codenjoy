@@ -23,11 +23,15 @@ package com.codenjoy.dojo.web.rest;
  */
 
 import com.codenjoy.dojo.config.ThreeGamesConfiguration;
+import com.codenjoy.dojo.services.Deal;
 import com.codenjoy.dojo.utils.JsonUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.annotation.Import;
 
+import static com.codenjoy.dojo.services.mocks.ThirdGameSettings.Keys.PARAMETER5;
+import static com.codenjoy.dojo.services.mocks.ThirdGameSettings.Keys.PARAMETER6;
+import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_ENABLED;
 import static com.codenjoy.dojo.utils.smart.SmartAssert.assertEquals;
 
 @Import(ThreeGamesConfiguration.class)
@@ -218,4 +222,70 @@ public class RestBoardControllerTest extends AbstractRestControllerTest {
         assertEquals(expected2, JsonUtils.prettyPrint(get("/rest/player/somePlayer/" + code + "/wantsToPlay/second/validRoom2")));
     }
 
+    @Test
+    public void changeLevel() {
+        // given
+        String game = "third";
+        String ip = "ip";
+        String room = "room";
+        String player1 = "player1";
+        String player2 = "player2";
+
+        // will be SINGLE_LEVELS with 3 levels
+        with.rooms.settings(room, game)
+                .bool(ROUNDS_ENABLED, false)
+                .bool(PARAMETER6, true) // SINGLE_LEVELS
+                .integer(PARAMETER5, 3); // 3 levels
+
+        Deal deal1 = with.login.register(player1, ip, room, game);
+        deal1.getGame().getProgress().change(1, 2);
+        String code1 = deal1.getPlayer().getCode();
+
+        Deal deal2 = with.login.register(player2, ip, room, game);
+        deal2.getGame().getProgress().change(1, 0);
+        String code2 = deal2.getPlayer().getCode();
+
+        // then
+        assertEquals("{'current':1,'passed':2,'total':3,'valid':true}",
+                quote(get(String.format("/rest/player/%s/%s/level", player1, code1))));
+
+        assertEquals("{'current':1,'passed':0,'total':3,'valid':true}",
+                quote(get(String.format("/rest/player/%s/%s/level", player2, code2))));
+
+        // when
+        // player1 last passed is enough to change level up to 2
+        assertEquals("true",
+                get(String.format("/rest/player/%s/%s/level/2", player1, code1)));
+
+        // then
+        assertEquals("{'current':2,'passed':2,'total':3,'valid':true}",
+                quote(get(String.format("/rest/player/%s/%s/level", player1, code1))));
+
+        assertEquals("{'current':1,'passed':0,'total':3,'valid':true}",
+                quote(get(String.format("/rest/player/%s/%s/level", player2, code2))));
+
+        // when
+        // player2 last passed is not enough to change level up to 2
+        assertEquals("false",
+                get(String.format("/rest/player/%s/%s/level/2", player2, code2)));
+
+        // then
+        assertEquals("{'current':2,'passed':2,'total':3,'valid':true}",
+                quote(get(String.format("/rest/player/%s/%s/level", player1, code1))));
+
+        assertEquals("{'current':1,'passed':0,'total':3,'valid':true}",
+                quote(get(String.format("/rest/player/%s/%s/level", player2, code2))));
+
+        // when
+        // player1 last passed is enough to change level up to 3
+        assertEquals("true",
+                get(String.format("/rest/player/%s/%s/level/3", player1, code1)));
+
+        // then
+        assertEquals("{'current':3,'passed':2,'total':3,'valid':true}",
+                quote(get(String.format("/rest/player/%s/%s/level", player1, code1))));
+
+        assertEquals("{'current':1,'passed':0,'total':3,'valid':true}",
+                quote(get(String.format("/rest/player/%s/%s/level", player2, code2))));
+    }
 }

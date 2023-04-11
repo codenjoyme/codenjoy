@@ -22,7 +22,6 @@ package com.codenjoy.dojo.services.semifinal;
  * #L%
  */
 
-import com.codenjoy.dojo.services.nullobj.NullParameter;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -43,7 +42,9 @@ public class SemifinalStatus {
 
     public SemifinalStatus(int tick, int count, SemifinalSettings settings) {
         this.count = count;
-        if (settings.isEnabledValue() instanceof NullParameter) {
+        try {
+            settings.isEnabledValue();
+        } catch (IllegalArgumentException e) {
             this.enabled = false;
             return;
         }

@@ -71,7 +71,7 @@ public class AI2Solver implements Solver<Board> {
 
     @Override
     public String get(Board board) {
-        char[][] field = board.getField();
+        char[][] field = board.field();
 
         if (bestPath.isEmpty()) {
             startCalculating(field);

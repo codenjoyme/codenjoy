@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.chat.ChatAuthority;
 import com.codenjoy.dojo.services.info.MessagesListener;
 import com.codenjoy.dojo.services.lock.LockedGame;
 import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.nullobj.NullDeal;
 import com.codenjoy.dojo.services.nullobj.NullGame;
@@ -35,7 +36,6 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Optional;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import static com.codenjoy.dojo.services.multiplayer.GamePlayer.DEFAULT_TEAM_ID;
@@ -213,5 +213,9 @@ public class Deal implements Tickable {
 
     public ChatAuthority chat() {
         return chat;
+    }
+
+    public LevelProgress levelFromSave() {
+        return new LevelProgress(getGame().getSave());
     }
 }

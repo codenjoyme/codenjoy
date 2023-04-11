@@ -34,6 +34,7 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.QDirection;
+import com.codenjoy.dojo.services.dice.MockDice;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.codenjoy.dojo.utils.TestUtils;
@@ -41,15 +42,11 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.mockito.Mockito;
-import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.Arrays;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public abstract class AbstractMultiplayerTest {
 
@@ -105,7 +102,7 @@ public abstract class AbstractMultiplayerTest {
     protected int INCREASE = 2;
     protected int MOVE = 1;
 
-    Dice dice;
+    MockDice dice;
 
     protected SoftSpreader spreader;
 
@@ -113,7 +110,7 @@ public abstract class AbstractMultiplayerTest {
 
     @Before
     public void setup() {
-        dice = mock(Dice.class);
+        dice = new MockDice();
 
         settings = new GameSettings()
                 .leaveForceCount(1)
@@ -135,11 +132,8 @@ public abstract class AbstractMultiplayerTest {
         });
     }
 
-    private void dice(int... ints) {
-        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
-        for (int i : ints) {
-            when = when.thenReturn(i);
-        }
+    private void dice(Integer... next) {
+        dice.then(next);
     }
 
     protected void givenSize(int size) {

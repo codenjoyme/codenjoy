@@ -23,7 +23,7 @@ package com.codenjoy.dojo.tetris.model.levels.level;
  */
 
 
-import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.dice.MockDice;
 import com.codenjoy.dojo.tetris.model.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,15 +31,15 @@ import org.junit.Test;
 import java.util.Arrays;
 
 import static com.codenjoy.dojo.tetris.model.Type.*;
-import static org.junit.Assert.assertEquals;
 import static org.fest.reflect.core.Reflection.field;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
 public class EasyLevelsTest {
 
     private EasyLevels levels;
     private static final int LINES_REMOVED_FOR_NEXT_LEVEL = 10;
-    private Dice dice = mock(Dice.class);
+    private MockDice dice = new MockDice();
 
     @Before
     public void setUp() {

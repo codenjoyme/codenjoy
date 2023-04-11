@@ -207,7 +207,7 @@ public class GameServiceTest {
                 toString(list));
 
         // when
-        list.get(0).getSettings().getParameter(PARAMETER1.key()).update(123);
+        list.get(0).getSettings().parameter(PARAMETER1.key()).update(123);
 
         // then
         assertEquals("First[Parameter 1=123, Parameter 2=true]\n" +
@@ -222,7 +222,7 @@ public class GameServiceTest {
                 toString(list));
 
         // when
-        list.get(1).getSettings().getParameter(PARAMETER1.key()).update(234);
+        list.get(1).getSettings().parameter(PARAMETER1.key()).update(234);
 
         // then
         assertEquals("First[Parameter 1=234, Parameter 2=true]\n" +
@@ -237,7 +237,7 @@ public class GameServiceTest {
                 toString(list));
 
         // when
-        list.get(2).getSettings().getParameter(PARAMETER1.key()).update(345);
+        list.get(2).getSettings().parameter(PARAMETER1.key()).update(345);
 
         // then
         assertEquals("First[Parameter 1=234, Parameter 2=true]\n" +
@@ -252,7 +252,7 @@ public class GameServiceTest {
                 toString(list));
 
         // when
-        list.get(3).getSettings().getParameter(PARAMETER4.key()).update(false);
+        list.get(3).getSettings().parameter(PARAMETER4.key()).update(false);
 
         // then
         assertEquals("First[Parameter 1=234, Parameter 2=true]\n" +
@@ -267,7 +267,7 @@ public class GameServiceTest {
                 toString(list));
 
         // when
-        list.get(4).getSettings().getParameter(PARAMETER3.key()).update(456);
+        list.get(4).getSettings().parameter(PARAMETER3.key()).update(456);
 
         // then
         assertEquals("First[Parameter 1=234, Parameter 2=true]\n" +
@@ -282,7 +282,7 @@ public class GameServiceTest {
                 toString(list));
 
         // when
-        list.get(5).getSettings().getParameter(PARAMETER3.key()).update(567);
+        list.get(5).getSettings().parameter(PARAMETER3.key()).update(567);
 
         // then
         assertEquals("First[Parameter 1=234, Parameter 2=true]\n" +
@@ -297,7 +297,7 @@ public class GameServiceTest {
                 toString(list));
 
         // when
-        list.get(6).getSettings().getParameter(PARAMETER4.key()).update(false);
+        list.get(6).getSettings().parameter(PARAMETER4.key()).update(false);
 
         // then
         assertEquals("First[Parameter 1=234, Parameter 2=true]\n" +
@@ -312,7 +312,7 @@ public class GameServiceTest {
                 toString(list));
 
         // when
-        list.get(7).getSettings().getParameter(PARAMETER1.key()).update(678);
+        list.get(7).getSettings().parameter(PARAMETER1.key()).update(678);
 
         // then
         assertEquals("First[Parameter 1=234, Parameter 2=true]\n" +
@@ -329,7 +329,7 @@ public class GameServiceTest {
                 toString(list));
 
         // when
-        list.get(8).getSettings().getParameter(PARAMETER3.key()).update(789);
+        list.get(8).getSettings().parameter(PARAMETER3.key()).update(789);
 
         // then
         assertEquals("First[Parameter 1=234, Parameter 2=true]\n" +

@@ -244,6 +244,7 @@ public class PlayerServiceImplTest {
     }
 
     public GameType<?> getGameType(String game, String room) {
+        // TODO do not use map.containsKey just check that map.get() != null
         if (!gameTypes.containsKey(room)) {
             GameType<?> gameType = mock(GameType.class);
             setupGameType(gameType, game);

@@ -49,23 +49,22 @@ public class AISolver implements Solver<Board> {
         if (ball != null) {
             verticalBallDirection = ball.getY() - previousBallPosition + rateCoefficient;
             previousBallPosition = ball.getY();
-            List<Point> me = board.getMe();
-            String direction = getDirectionString(ball, me);
-            return direction;
+            List<Point> hero = board.getHero();
+            return getDirectionString(ball, hero);
         }
         return "";
     }
 
-    private String getDirectionString(Point ball, List<Point> me) {
+    private String getDirectionString(Point ball, List<Point> hero) {
         String direction = "";
         int ballY = ball.getY();
         Point myPosition;
         if (verticalBallDirection > 0) {
-            myPosition = me.get(0);
+            myPosition = hero.get(0);
         } else if (verticalBallDirection < 0){
-            myPosition = me.get(me.size() -1);
+            myPosition = hero.get(hero.size() -1);
         } else {
-            myPosition = me.get(me.size()/2);
+            myPosition = hero.get(hero.size()/2);
         }
         int myY = myPosition.getY();
         if (myY < ballY) {

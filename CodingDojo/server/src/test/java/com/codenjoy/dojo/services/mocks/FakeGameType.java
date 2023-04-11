@@ -25,7 +25,10 @@ package com.codenjoy.dojo.services.mocks;
 
 import com.codenjoy.dojo.client.AbstractBoard;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.AbstractGameType;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.joystick.NoDirectionJoystick;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
@@ -33,10 +36,10 @@ import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.CharElement;
+import com.codenjoy.dojo.services.printer.state.State;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsReader;
-import com.codenjoy.dojo.services.printer.state.State;
 import lombok.Getter;
 import lombok.Setter;
 import org.mockito.Mockito;
@@ -114,6 +117,11 @@ public abstract class FakeGameType extends AbstractGameType<Settings> {
         }
 
         @Override
+        public int size() {
+            return 0;
+        }
+
+        @Override
         public void tick() {
             if (player == null || player.getHero() == null) {
                 return;
@@ -139,16 +147,9 @@ public abstract class FakeGameType extends AbstractGameType<Settings> {
     public class ClientBoard extends AbstractBoard<CharElement> {
 
         @Override
-        public CharElement valueOf(char ch) {
-            return FakeGameType.this.valueOf(ch);
+        public CharElement[] elements() {
+            return FakeGameType.this.getPlots();
         }
-    }
-
-    public CharElement valueOf(char ch) {
-        return Arrays.stream(getPlots())
-                .filter(el -> el.ch() == ch)
-                .findFirst()
-                .get();
     }
 
     @Override

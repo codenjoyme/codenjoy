@@ -78,8 +78,8 @@ public class MainPageController {
         validator.checkGame(game, CANT_BE_NULL);
 
         String language = properties.getHelpLanguage();
-        String suffix = (isEmpty(language)) ? "" : ("-" + language);
-        return String.format("redirect:resources/%s/help/index%s.html", game, suffix);
+        language = isEmpty(language) ? "en" : language;
+        return String.format("redirect:manual/%s/%s", game, language);
     }
 
     @GetMapping("/")

@@ -563,6 +563,7 @@ public class DealsTest extends AbstractDealsTest {
 
         // then
         assertProgress("player", same);
+        assertEquals(same, deals.getLevel("player").toString());
 
         assertEquals(1, fields.size());
         verify(fields.get(0), never()).newGame(gamePlayers.get(0));
@@ -587,6 +588,7 @@ public class DealsTest extends AbstractDealsTest {
         // then
         String progress = "{'current':2,'passed':2,'total':3,'valid':true}";
         assertProgress("player", progress);
+        assertEquals(progress, deals.getLevel("player").toString());
         verifyPlayerEventListenerLevelChanged("player", progress);
 
         int newField = fields.size() - 1;

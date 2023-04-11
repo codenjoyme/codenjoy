@@ -53,6 +53,7 @@ public class FieldService {
     }
 
     public int id(GameField field) {
+        // TODO do not use map.containsKey just check that map.get() != null
         if (!fields.containsKey(field)) {
             throw new IllegalStateException("Found unregistered field");
         }

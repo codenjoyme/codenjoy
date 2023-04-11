@@ -23,8 +23,9 @@ package com.codenjoy.dojo.tetris.model;
  */
 
 
-import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.games.tetris.Element;
+import com.codenjoy.dojo.games.tetris.ElementUtils;
+import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.tetris.services.Event;
 
 import java.math.BigInteger;
@@ -127,7 +128,8 @@ public class GlassImpl implements Glass {
         }
 
         if (listener != null) {
-            listener.event(Event.figuresDropped(getLevel.get(), figure.type().getColor().index()));
+            listener.event(Event.figuresDropped(getLevel.get(),
+                    ElementUtils.index(figure.type().getColor())));
         }
     }
 

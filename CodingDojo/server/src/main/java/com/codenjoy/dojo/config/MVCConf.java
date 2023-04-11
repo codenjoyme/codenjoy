@@ -22,30 +22,38 @@ package com.codenjoy.dojo.config;
  * #L%
  */
 
-import com.codenjoy.dojo.services.JarResourceHttpRequestHandler;
+import com.codenjoy.dojo.services.JarPathResourceResolver;
 import com.codenjoy.dojo.services.TimerService;
 import com.codenjoy.dojo.transport.auth.AuthenticationService;
 import com.codenjoy.dojo.transport.chat.ChatWebSocketServlet;
 import com.codenjoy.dojo.transport.control.ControlWebSocketServlet;
 import com.codenjoy.dojo.transport.screen.ScreenWebSocketServlet;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
+import com.codenjoy.dojo.web.controller.advice.SystemControllerAdvice;
+import lombok.SneakyThrows;
 import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.CacheControl;
+import org.springframework.web.context.support.ServletContextResource;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.handler.SimpleUrlHandlerMapping;
 import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+import javax.servlet.ServletContext;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
-
-import static com.codenjoy.dojo.services.JarResourceHttpRequestHandler.PREFIX;
 
 @Configuration
 public class MVCConf implements WebMvcConfigurer {
@@ -82,14 +90,46 @@ public class MVCConf implements WebMvcConfigurer {
     @Autowired
     private AuthenticationService defaultAuthenticationService;
 
+    @Autowired
+    private SystemControllerAdvice controllerAdvice;
+
     @Bean
-    public ResourceHttpRequestHandler resourceHttpRequestHandler() {
-        return new JarResourceHttpRequestHandler(
-                getCache(),
-                "/resources/",
-                "classpath:/resources/",
-                "file:" + pluginsStatic,
-                PREFIX + pluginsResources);
+    public ResourceHttpRequestHandler resourceHttpRequestHandler(ServletContext servletContext) {
+        return new ResourceHttpRequestHandler() {{
+            setCacheControl(getCache());
+            setLocations(locations(servletContext));
+            setResourceResolvers(Arrays.asList(new JarPathResourceResolver()));
+        }};
+    }
+
+    @SneakyThrows
+    private List<Resource> locations(ServletContext servletContext) {
+        List<Resource> result = new LinkedList<>();
+
+        addLocationsForDebug(result);
+
+        // production code
+        result.add(new ServletContextResource(servletContext, "/resources/"));
+        result.add(new ClassPathResource("classpath:/resources/"));
+        result.add(new ClassPathResource("classpath*:**/resources/"));
+        result.add(new UrlResource("file:" + pluginsStatic));
+        result.add(new UrlResource("file:" + pluginsResources));
+
+        return result;
+    }
+
+    @SneakyThrows
+    private List<Resource> addLocationsForDebug(List<Resource> result) {
+        if (!controllerAdvice.isDebugEnabled()) {
+            return result;
+        }
+
+        // only for testing, so you can get the resources from the src/target folder
+        result.add(new UrlResource("file:../games/*/src/main/**"));
+        result.add(new UrlResource("file:src/main/**"));
+        result.add(new UrlResource("file:target/classes/**"));
+
+        return result;
     }
 
     private CacheControl getCache() {

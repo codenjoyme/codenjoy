@@ -23,9 +23,9 @@ package com.codenjoy.dojo.spacerace.services.ai;
  */
 
 import com.codenjoy.dojo.client.Solver;
+import com.codenjoy.dojo.games.spacerace.Board;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.games.spacerace.Board;
 
 public class AISolver implements Solver<Board> {
 
@@ -40,7 +40,7 @@ public class AISolver implements Solver<Board> {
     @Override
     public String get(final Board board) {
         String result = "";
-        int x = board.getMe().getX();
+        int x = board.getHero().getX();
 
         if (vpravo && (x < board.size() - 5)||(x < 5)){
             result = Direction.RIGHT.toString();

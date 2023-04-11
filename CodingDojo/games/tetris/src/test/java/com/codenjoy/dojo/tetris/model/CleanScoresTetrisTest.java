@@ -25,6 +25,7 @@ package com.codenjoy.dojo.tetris.model;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.dice.MockDice;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
@@ -45,7 +46,7 @@ public class CleanScoresTetrisTest {
 
     private Tetris game;
     private Hero hero;
-    private Dice dice = mock(Dice.class);
+    private MockDice dice = new MockDice();
     private EventListener listener;
     private Player player;
     private Figures queue;
@@ -108,7 +109,7 @@ public class CleanScoresTetrisTest {
     @Test
     public void shouldChangeLevel_whenAcceptCriteria() {
         // given
-        when(dice.next(anyInt())).thenReturn(0);
+        dice(0);
 
         givenFl("......." +
                 "......." +
@@ -132,7 +133,7 @@ public class CleanScoresTetrisTest {
                 ".......");
 
         // when
-        when(dice.next(anyInt())).thenReturn(1);
+        dice(1);
         hero.left();
         hero.down();
         game.tick();
@@ -149,7 +150,7 @@ public class CleanScoresTetrisTest {
                 ".OO....");
 
         // when
-        when(dice.next(anyInt())).thenReturn(1);
+        dice(1);
         hero.right();
         hero.down();
         game.tick();
@@ -166,7 +167,7 @@ public class CleanScoresTetrisTest {
                 ".OOOO..");
 
         // when
-        when(dice.next(anyInt())).thenReturn(2);
+        dice(2);
         hero.act();
         hero.down();
         game.tick();
@@ -183,7 +184,7 @@ public class CleanScoresTetrisTest {
                 ".OOOO..");
 
         // when
-        when(dice.next(anyInt())).thenReturn(2);
+        dice(2);
         hero.act();
         hero.down();
         game.tick();
@@ -200,13 +201,17 @@ public class CleanScoresTetrisTest {
                 ".OOOO..");
     }
 
+    private void dice(Integer... next) {
+        dice.then(next);
+    }
+
     @Test
     public void shouldResetLevelsNadGlass_whenCleanScores() {
         // given
         shouldChangeLevel_whenAcceptCriteria();
 
         // when
-        when(dice.next(anyInt())).thenReturn(0);
+        dice(0);
 
         game.clearScore();
         hero = game.getPlayer().getHero();
@@ -231,7 +236,7 @@ public class CleanScoresTetrisTest {
         shouldChangeLevel_whenAcceptCriteria();
 
         // when
-        when(dice.next(anyInt())).thenReturn(0);
+        dice(0);
 
         game.clearScore();
         hero = game.getPlayer().getHero();

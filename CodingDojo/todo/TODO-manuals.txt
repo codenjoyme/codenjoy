@@ -1,0 +1,14 @@
++Сделать возможным вставлять в md файлы во время склейки не только ${game} но и другие вещи, взятые из properties файла. info.properties
+Сделать возможным так же генерировать автоматически часть в MD так же как elements, а может выводить инфо в /rest/settings/player ?
+	## Points
+
+	The parameters will change[*](#ask.md#ask) as the game progresses. 
+	The default values are shown in the table below:
+
+	| Action | Settings name | Points |
+	|--------|--------|--------|
+	| Number of potions on the map | MASK_POTIONS_COUNT | 0[(?)](#ask) |
+	| Potion duration (ticks) | MASK_TICKS | 15[(?)](#ask) |
+	| Number of back doors on the map | BACKWAYS_COUNT | 5[(?)](#ask) |
++В молли не хватает описания очков
++Пофиксить ссылку на языки в заголовке http://127.0.0.1:8080/codenjoy-contest/resources/clifford/help/dojorena-manual-ru.html ак играть?  [RU] [EN]

@@ -24,6 +24,7 @@ package com.codenjoy.dojo.moebius.model;
 
 
 import com.codenjoy.dojo.games.moebius.Element;
+import com.codenjoy.dojo.games.moebius.ElementUtils;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
@@ -116,13 +117,13 @@ public class Line extends PointImpl implements State<Element, Player> {
 
     public Point to() {
         Point result = copy();
-        result.moveDelta(state().to());
+        result.moveDelta(ElementUtils.to.get(state()));
         return result;
     }
 
     public Point from() {
         Point result = copy();
-        result.moveDelta(state().from());
+        result.moveDelta(ElementUtils.from.get(state()));
         return result;
     }
 

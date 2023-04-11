@@ -146,6 +146,11 @@ public abstract class AbstractRestControllerTest {
     }
 
     @SneakyThrows
+    protected String get(String uri, String data) {
+        return get(200, uri, data);
+    }
+
+    @SneakyThrows
     protected String get(int status, String uri) {
         return process(status, MockMvcRequestBuilders.get(uri));
     }

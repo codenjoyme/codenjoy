@@ -23,9 +23,10 @@ package com.codenjoy.dojo.tetris.model;
  */
 
 
-import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.games.tetris.ElementUtils;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.dice.MockDice;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
@@ -35,20 +36,18 @@ import com.codenjoy.dojo.tetris.services.Event;
 import com.codenjoy.dojo.tetris.services.GameSettings;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.List;
 import java.util.function.Consumer;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
 public class TetrisTest {
 
     private Tetris game;
     private Hero hero;
-    private Dice dice;
+    private MockDice dice;
     private EventListener listener;
     private Player player;
     private PrinterFactory printer = new PrinterFactoryImpl();
@@ -58,15 +57,12 @@ public class TetrisTest {
 
     @Before
     public void setup() {
-        dice = mock(Dice.class);
+        dice = new MockDice();
         settings = new TestGameSettings();
     }
 
-    private void dice(int...ints) {
-        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
-        for (int i : ints) {
-            when = when.thenReturn(i);
-        }
+    private void dice(Integer... next) {
+        dice.then(next);
     }
 
     private void givenFl(String board) {
@@ -320,7 +316,7 @@ public class TetrisTest {
                 "IOOIJI." +
                 "IOOJJI.");
 
-        verify(listener).event(Event.figuresDropped(1, Type.O.getColor().index()));
+        verify(listener).event(Event.figuresDropped(1, ElementUtils.index(Type.O.getColor())));
 
         hero.down();
         game.tick();
@@ -550,7 +546,7 @@ public class TetrisTest {
     @Test
     public void shouldRemoveLine_whenO_and6x6() {
         int level = 1;
-        int figure = Type.O.getColor().index();
+        int figure = ElementUtils.index(Type.O.getColor());
         givenFl("......" +
                 "......" +
                 "......" +
@@ -615,7 +611,7 @@ public class TetrisTest {
     @Test
     public void shouldRemoveLine_whenO_and10x10() {
         int level = 1;
-        int figure = Type.O.getColor().index();
+        int figure = ElementUtils.index(Type.O.getColor());
         givenFl(".........." +
                 ".........." +
                 ".........." +
@@ -663,7 +659,7 @@ public class TetrisTest {
     @Test
     public void shouldRemoveLine_whenO_and11x11() {
         int level = 1;
-        int figure = Type.O.getColor().index();
+        int figure = ElementUtils.index(Type.O.getColor());
         givenFl("..........." +
                 "..........." +
                 "..........." +

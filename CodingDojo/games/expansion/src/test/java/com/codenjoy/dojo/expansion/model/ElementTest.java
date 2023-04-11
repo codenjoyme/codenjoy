@@ -23,32 +23,41 @@ package com.codenjoy.dojo.expansion.model;
  */
 
 
+import com.codenjoy.dojo.client.ElementsMap;
 import com.codenjoy.dojo.games.expansion.Element;
+import com.codenjoy.dojo.games.expansion.ElementUtils;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 public class ElementTest {
 
+    private static final ElementsMap<Element> elements = new ElementsMap<>(Element.values());
+    
     @Test
     public void testGetForce() {
-        assertEquals(Element.FORCE1, Element.getForce(0));
-        assertEquals(Element.FORCE2, Element.getForce(1));
-        assertEquals(Element.FORCE3, Element.getForce(2));
-        assertEquals(Element.FORCE4, Element.getForce(3));
+        assertEquals(Element.FORCE1, ElementUtils.force(0));
+        assertEquals(Element.FORCE2, ElementUtils.force(1));
+        assertEquals(Element.FORCE3, ElementUtils.force(2));
+        assertEquals(Element.FORCE4, ElementUtils.force(3));
 
-        assertEquals(Element.FORCE1, Element.valueOf('♥'));
-        assertEquals(Element.FORCE2, Element.valueOf('♦'));
-        assertEquals(Element.FORCE3, Element.valueOf('♣'));
-        assertEquals(Element.FORCE4, Element.valueOf('♠'));
+        assertEquals(Element.FORCE1, elements.get('♥'));
+        assertEquals(Element.FORCE2, elements.get('♦'));
+        assertEquals(Element.FORCE3, elements.get('♣'));
+        assertEquals(Element.FORCE4, elements.get('♠'));
     }
 
     @Test
     public void testGetAllElements() {
-        Element.valueOf('♥'); // because of lazy
-        assertEquals("{.=., └=└, -=-, ┐=┐, ┌=┌, $=$, O=O,  = , " +
-                "│=│, ─=─, G=G, ╝=╝, F=F, E=E, ╚=╚, B=B, ╗=╗, " +
-                "╔=╔, ║=║, ═=═, ♦=♦, ♥=♥, 4=4, 3=3, ♣=♣, 2=2, " +
-                "1=1, ┘=┘, ♠=♠}", Element.elementsMap.toString());
+        assertEquals("[ , $, -, ., 1, 2, 3, 4, B, E, F, G, O, ─, " +
+                "│, ┌, ┐, └, ┘, ═, ║, ╔, ╗, ╚, ╝, ♠, ♣, ♥, ♦]\n" +
+                "{EMPTY=-, FLOOR=., ANGLE_IN_LEFT=╔, WALL_FRONT=═, " +
+                "ANGLE_IN_RIGHT=┐, WALL_RIGHT=│, ANGLE_BACK_RIGHT=┘, " +
+                "WALL_BACK=─, ANGLE_BACK_LEFT=└, WALL_LEFT=║, " +
+                "WALL_BACK_ANGLE_LEFT=┌, WALL_BACK_ANGLE_RIGHT=╗, " +
+                "ANGLE_OUT_RIGHT=╝, ANGLE_OUT_LEFT=╚, SPACE= , " +
+                "FORCE1=♥, FORCE2=♦, FORCE3=♣, FORCE4=♠, EXIT=E, " +
+                "HOLE=O, BREAK=B, GOLD=$, BASE1=1, BASE2=2, BASE3=3, " +
+                "BASE4=4, FOG=F, BACKGROUND=G}", elements.toString());
     }
 }

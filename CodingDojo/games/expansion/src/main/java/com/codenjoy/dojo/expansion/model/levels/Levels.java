@@ -24,7 +24,7 @@ package com.codenjoy.dojo.expansion.model.levels;
 
 
 import com.codenjoy.dojo.games.expansion.Element;
-import com.codenjoy.dojo.services.LengthToXY;
+import com.codenjoy.dojo.services.BoardMap;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -89,10 +89,10 @@ public class Levels {
     }
 
     public static String loadFromFile(String name) {
-        StringBuffer buffer = loadLines(
+        StringBuilder buffer = loadLines(
                 "expansion/levels/" + name + ".lev",
-                StringBuffer::new,
-                (container, line) -> container.append(line)
+                StringBuilder::new,
+                StringBuilder::append
         );
         return buffer.toString();
     }
@@ -193,10 +193,10 @@ public class Levels {
     }
 
     public static String decorate(String level) {
-        LengthToXY.Map map = new LengthToXY.Map(level);
-        LengthToXY.Map out = new LengthToXY.Map(map.getSize());
-        for (int x = 0; x < map.getSize(); ++x) {
-            for (int y = 0; y < map.getSize(); ++y) {
+        BoardMap map = new BoardMap(level);
+        BoardMap out = new BoardMap(map.size());
+        for (int x = 0; x < map.size(); ++x) {
+            for (int y = 0; y < map.size(); ++y) {
                 char at = map.getAt(x, y);
                 if (at != '#') {
                     out.setAt(x, y, at);
@@ -357,12 +357,12 @@ public class Levels {
             }
         }
 
-        return out.getMap();
+        return out.map();
     }
 
-    private static boolean chk(String mask, int x, int y, LengthToXY.Map map) {
-        LengthToXY.Map mm = new LengthToXY.Map(mask);
-        LengthToXY.Map out = new LengthToXY.Map(mm.getSize());
+    private static boolean chk(String mask, int x, int y, BoardMap map) {
+        BoardMap mm = new BoardMap(mask);
+        BoardMap out = new BoardMap(mm.size());
         for (int xx = -1; xx <= 1; xx++) {
             for (int yy = -1; yy <= 1; yy++) {
                 char ch = ' ';
@@ -372,7 +372,7 @@ public class Levels {
                 out.setAt(xx + 1, yy + 1, ch);
             }
         }
-        String actual = TestUtils.injectN(out.getMap());
+        String actual = TestUtils.injectN(out.map());
         String expected = TestUtils.injectN(mask);
         return actual.equals(expected);
     }

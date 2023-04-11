@@ -44,6 +44,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -67,11 +68,12 @@ public class RestSettingsController {
     private Validator validator;
 
     @GetMapping("/player")
-    @Secured(GameAuthoritiesConstants.ROLE_USER)
     public Map<String, String> getForPlayer(@AuthenticationPrincipal Registration.User user) {
         if (user == null) {
-            throw new IllegalArgumentException(
-                    "Please join the game to check room settings");
+            return new HashMap<>() {{
+                put("UNREGISTERED USER",
+                        "Please join the game to check room settings");
+            }};
         }
         String id = user.getId();
 
@@ -114,8 +116,9 @@ public class RestSettingsController {
             return new JSONObject(parameters).toString();
         }
 
-        if (settings.hasParameter(key)) {
-            return settings.getParameter(key).getValue().toString();
+        Parameter<?> parameter = settings.getParameter(key, () -> null);
+        if (parameter != null) {
+            return parameter.getValue().toString();
         }
 
         return gameData.get(game, key);
@@ -149,8 +152,9 @@ public class RestSettingsController {
         GameType type = gameService.getGameType(game, room);
 
         Settings settings = type.getSettings();
-        if (settings.hasParameter(key)) {
-            settings.getParameter(key).update(value);
+        Parameter<?> parameter = settings.getParameter(key, () -> null);
+        if (parameter != null) {
+            parameter.update(value);
             return "{}";
         }
 

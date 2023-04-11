@@ -22,22 +22,33 @@ package com.codenjoy.dojo.services.controller.chat;
  * #L%
  */
 
-import lombok.Getter;
-import lombok.ToString;
-
-@Getter
-@ToString
 public class Error {
 
-    private final String error;
-    private final String message;
+    private Exception exception;
 
     public Error(Exception exception) {
-        this.error = exception.getClass().getSimpleName();
-        this.message = exception.getMessage();
+        this.exception = exception;
     }
 
     public interface OnError {
         void on(Error error);
+    }
+
+    public String getError() {
+        return exception.getClass().getSimpleName();
+    }
+
+    public String getMessage() {
+        return exception.getMessage();
+    }
+
+    public Exception exception() {
+        return exception;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Error(error=%s, message=%s)",
+                getError(), getMessage());
     }
 }

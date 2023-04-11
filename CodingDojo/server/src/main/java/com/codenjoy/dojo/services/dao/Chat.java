@@ -44,6 +44,8 @@ public class Chat {
     //      room чате во всех api.
     public static final String FOR_ALL = null;
 
+    public static final int MESSAGE_MAX_LENGTH = 12000;
+
     private final CrudPrimaryKeyConnectionThreadPool pool;
 
     public Chat(ConnectionThreadPoolFactory factory) {
@@ -58,8 +60,10 @@ public class Chat {
                     "player_id varchar(255), " +
                     "recipient_id varchar(255), " +
                     "time varchar(255), " +
-                    "text varchar(255));"
+                    "text varchar(" + MESSAGE_MAX_LENGTH + "));"
         );
+        pool.createIndex("messages", false, true, "type", "topic_id");
+        pool.createIndex("messages", false, true, "room", "topic_id", "recipient_id");
     }
 
     public void removeDatabase() {

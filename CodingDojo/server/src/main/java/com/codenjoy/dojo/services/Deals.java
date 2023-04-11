@@ -46,6 +46,13 @@ import static java.util.stream.Collectors.toList;
 
 @Component
 @FieldNameConstants
+// TODO It's a good idea to move this logic to engine
+//      and make all integration tests of the game such
+//      that they use real logic, not emulation.
+//      This way there will be fewer hallucinations after
+//      moving from well tested logic by unit tests to
+//      integration. After all, right now even SmokeTest
+//      creates the illusion of workability.
 public class Deals implements Iterable<Deal>, Tickable {
 
     public static final boolean ALL = true;
@@ -347,15 +354,20 @@ public class Deals implements Iterable<Deal>, Tickable {
                 .collect(toList());
     }
 
-    public void changeLevel(String id, int level) {
+    public LevelProgress getLevel(String id) {
+        return get(id).levelFromSave();
+    }
+
+    public boolean changeLevel(String id, int level) {
         Deal deal = get(id);
-        Game game = deal.getGame();
-        JSONObject save = game.getSave();
-        LevelProgress progress = new LevelProgress(save);
+        LevelProgress progress = deal.levelFromSave();
         if (progress.canChange(level)) {
             progress.change(level);
             reload(deal, progress.saveTo(new JSONObject()), Sweeper.on().lastAlone());
             deal.fireOnLevelChanged();
+            return true;
+        } else {
+            return false;
         }
     }
 

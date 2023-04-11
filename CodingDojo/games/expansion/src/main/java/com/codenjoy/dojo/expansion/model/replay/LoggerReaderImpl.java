@@ -23,15 +23,19 @@ package com.codenjoy.dojo.expansion.model.replay;
  */
 
 
-import com.codenjoy.dojo.games.expansion.Element;
 import com.codenjoy.dojo.expansion.model.levels.Levels;
 import com.codenjoy.dojo.expansion.services.GameSettings;
+import com.codenjoy.dojo.games.expansion.Element;
+import com.codenjoy.dojo.games.expansion.ElementUtils;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -113,7 +117,7 @@ public class LoggerReaderImpl implements LoggerReader {
         if (player.equals(playerId)) {
             this.hero = hero;
             basePosition = new PointImpl(new JSONObject(base));
-            baseColor = Element.getForce(Integer.valueOf(color));
+            baseColor = ElementUtils.force(Integer.parseInt(color));
         }
     }
 
@@ -166,7 +170,7 @@ public class LoggerReaderImpl implements LoggerReader {
         result.put("rounds", (inLobby) ? -1 : settings.roundTicks());
         result.put("round", (inLobby) ? -1 : settings.roundTicks() - tick);
         result.put("myBase", new JSONObject(getBasePosition(tick)));
-        result.put("myColor", baseColor.getIndex());
+        result.put("myColor", ElementUtils.index(baseColor));
         result.put("tick", (inLobby) ? 0 : tick);
         result.put("available", 0);
         result.put("showName", true);
