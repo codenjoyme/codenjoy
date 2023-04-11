@@ -77,6 +77,7 @@ public class DealSaver implements GameSaver {
         pool.createIndex("saves", false, true, "room_name");
         pool.createIndex("saves", false, true, "player_id");
         pool.createIndex("saves_players", true, true, "player_id", "room_name");
+        pool.createIndex("saves", false, true, "player_id", "time");
     }
 
     void removeDatabase() {
