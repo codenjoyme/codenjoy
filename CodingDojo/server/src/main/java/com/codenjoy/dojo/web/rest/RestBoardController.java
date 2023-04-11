@@ -27,6 +27,7 @@ import com.codenjoy.dojo.client.CodenjoyContext;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.web.controller.Validator;
 import com.codenjoy.dojo.web.rest.pojo.PlayerInfo;
 import com.codenjoy.dojo.web.rest.pojo.*;
@@ -80,9 +81,16 @@ public class RestBoardController {
     {
         validator.checkPlayerCode(id, code);
 
-        deals.changeLevel(id, level);
+        return deals.changeLevel(id, level);
+    }
 
-        return true;
+    @GetMapping("/player/{player}/{code}/level")
+    public synchronized LevelProgress getLevel(@PathVariable("player") String id,
+                                               @PathVariable("code") String code)
+    {
+        validator.checkPlayerCode(id, code);
+
+        return deals.getLevel(id);
     }
 
     // TODO ROOM тут наверное room надо, хотя вот ниже есть метод...
