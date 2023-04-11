@@ -354,15 +354,20 @@ public class Deals implements Iterable<Deal>, Tickable {
                 .collect(toList());
     }
 
-    public void changeLevel(String id, int level) {
+    public LevelProgress getLevel(String id) {
+        return get(id).levelFromSave();
+    }
+
+    public boolean changeLevel(String id, int level) {
         Deal deal = get(id);
-        Game game = deal.getGame();
-        JSONObject save = game.getSave();
-        LevelProgress progress = new LevelProgress(save);
+        LevelProgress progress = deal.levelFromSave();
         if (progress.canChange(level)) {
             progress.change(level);
             reload(deal, progress.saveTo(new JSONObject()), Sweeper.on().lastAlone());
             deal.fireOnLevelChanged();
+            return true;
+        } else {
+            return false;
         }
     }
 
