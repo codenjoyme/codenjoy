@@ -14,7 +14,7 @@
 
         <commons-lang3.version>3.11</commons-lang3.version>
         <groovy-all.version>3.0.7</groovy-all.version>
-        <json.version>20180813</json.version> <!-- do not update -->
+        <json.version>20230227</json.version> <!-- do not update -->
 
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <maven-gmaven-plugin.version>1.0</maven-gmaven-plugin.version>
