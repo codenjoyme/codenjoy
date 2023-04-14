@@ -22,7 +22,7 @@
         
         <!-- please do not update these versions
              they are not in spring boot  -->
-        <json.version>20180813</json.version> <!-- do not update -->
+        <json.version>20230227</json.version> <!-- do not update -->
         <commons-collections.version>4.4</commons-collections.version>
         <reflections.version>0.9.11</reflections.version> <!-- do not update -->
         <fest-reflect.version>1.4.1</fest-reflect.version>
