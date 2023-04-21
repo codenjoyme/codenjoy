@@ -26,6 +26,7 @@ package com.codenjoy.dojo.services;
 import com.codenjoy.dojo.client.Utils;
 import com.codenjoy.dojo.services.printer.CharElement;
 import com.codenjoy.dojo.utils.JsonUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
@@ -220,7 +221,7 @@ public class GuiPlotColorDecoderTest {
 
         // when then
         assertEquals(fix("ABCD"),
-                decoder.encodeForBrowser("12\n34").toString());
+                decoder.encodeForBrowser("12\n34"));
 
         assertEncode(decoder, "{'layers':['ABCD','DABC']}",
                 "{'layers':['1234'\n,'4123']}");
@@ -506,6 +507,37 @@ public class GuiPlotColorDecoderTest {
             assertEquals(expected,
                     Utils.injectN(decoder.encodeForBrowser(map).toString()));
         }
+    }
 
+    @Test
+    public void shouldBuildBoards_whenSameBoard() {
+        // given
+        Game game = mock(Game.class);
+        GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(Element.values());
+        when(game.getBoardAsString(true)).thenReturn("1111222233334444");
+        when(game.getBoardAsString(false)).thenReturn("1111222211112222");
+        when(game.sameBoard()).thenReturn(true);
+
+        // when
+        ImmutablePair<Object, Object> boards = decoder.buildBoards(game, "player");
+
+        // then
+        assertEquals("(AAAABBBBCCCCDDDD,1111222233334444)", boards.toString());
+    }
+
+    @Test
+    public void shouldBuildBoards_whenNotSameBoard() {
+        // given
+        Game game = mock(Game.class);
+        GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(Element.values());
+        when(game.getBoardAsString(true)).thenReturn("1111222233334444");
+        when(game.getBoardAsString(false)).thenReturn("1111222211112222");
+        when(game.sameBoard()).thenReturn(false);
+
+        // when
+        ImmutablePair<Object, Object> boards = decoder.buildBoards(game, "player");
+
+        // then
+        assertEquals("(AAAABBBBCCCCDDDD,1111222211112222)", boards.toString());
     }
 }

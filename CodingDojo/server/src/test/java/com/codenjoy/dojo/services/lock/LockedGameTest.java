@@ -29,9 +29,9 @@ import org.junit.Test;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+import static org.mockito.Mockito.*;
 
 public class LockedGameTest {
 
@@ -79,4 +79,33 @@ public class LockedGameTest {
         assertEquals(false, LockedGame.equals(game2, game));
     }
 
+    @Test
+    public void testDelegate_getBoardAsString() {
+        // given
+        Game game = mock(Game.class);
+        when(game.getBoardAsString(any())).thenReturn("board");
+        Game lockedGame = getLockedGame().wrap(game);
+
+        // when
+        String result = (String) lockedGame.getBoardAsString(true, 1, "string");
+
+        // then
+        assertEquals("board", result);
+        verify(game).getBoardAsString(true, 1, "string");
+    }
+
+    @Test
+    public void testDelegate_sameBoard() {
+        // given
+        Game game = mock(Game.class);
+        when(game.sameBoard()).thenReturn(true);
+        Game lockedGame = getLockedGame().wrap(game);
+
+        // when
+        boolean result = lockedGame.sameBoard();
+
+        // then
+        assertEquals(true, result);
+        verify(game).sameBoard();
+    }
 }

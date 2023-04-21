@@ -24,7 +24,10 @@ package com.codenjoy.dojo.expansion.model.replay;
 
 
 import com.codenjoy.dojo.expansion.services.GameSettings;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Game;
+import com.codenjoy.dojo.services.Joystick;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
@@ -74,7 +77,7 @@ public class ReplayGame implements Game {
     }
 
     @Override
-    public Object getBoardAsString() {
+    public Object getBoardAsString(Object... parameters) {
         return loggerReader.getBoard(tick);
     }
 
