@@ -113,10 +113,20 @@ public class LockedGame implements Game {
     }
 
     @Override
-    public Object getBoardAsString() {
+    public boolean sameBoard() {
         lock.writeLock().lock();
         try {
-            return game.getBoardAsString();
+            return game.sameBoard();
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    @Override
+    public Object getBoardAsString(Object... parameters) {
+        lock.writeLock().lock();
+        try {
+            return game.getBoardAsString(parameters);
         } finally {
             lock.writeLock().unlock();
         }

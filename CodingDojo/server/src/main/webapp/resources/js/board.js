@@ -31,6 +31,7 @@ pages.board = function() {
     setup.code = getSettings('code');
     setup.allPlayersScreen = getSettings('allPlayersScreen');
     setup.contextPath = getSettings('contextPath');
+    setup.unauthorized = (setup.code == null) || (setup.authorizedPlayerId == null);
 
     if (!!setup.setupGame) {
         setup.setupGame();

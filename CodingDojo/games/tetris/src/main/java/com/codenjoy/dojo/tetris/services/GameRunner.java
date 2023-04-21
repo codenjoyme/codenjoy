@@ -116,7 +116,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public PrinterFactory getPrinterFactory() {
-        return PrinterFactory.get((BoardReader reader, Printer<String> printer, Player player) -> {
+        return PrinterFactory.get((BoardReader reader, Printer<String> printer, Player player, Object... parameters) -> {
             String data = printer.print();
             String board = LevelUtils.clear(data).replace(" ", ".");
 

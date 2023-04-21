@@ -26,12 +26,15 @@ package com.codenjoy.dojo.services;
 import com.codenjoy.dojo.services.multiplayer.types.LevelsType;
 import com.codenjoy.dojo.services.printer.CharElement;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.stream.Collector;
 
+@Slf4j
 @AllArgsConstructor
 public class GuiPlotColorDecoder {
 
@@ -108,4 +111,19 @@ public class GuiPlotColorDecoder {
                     StringBuilder::append,
                     StringBuilder::toString);
     }
+
+    public ImmutablePair<Object, Object>  buildBoards(Game game, String playerId) {
+        // TODO вот например для mollymage всем отдаются одни и те же борды, отличие только в паре спрайтов
+        try {
+            // TODO дольше всего выполняется getBoardAsString, прооптимизировать!
+            Object screenBoard = game.getBoardAsString(true);
+            Object clientBoard = game.sameBoard() ? screenBoard : game.getBoardAsString(false);
+
+            return new ImmutablePair(encodeForBrowser(screenBoard), encodeForClient(clientBoard));
+        } catch (Exception e) {
+            log.error("Error during draw board for player: " + playerId, e);
+            throw e;
+        }
+    }
+
 }

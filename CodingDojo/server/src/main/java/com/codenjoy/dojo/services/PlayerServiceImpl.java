@@ -51,6 +51,8 @@ import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import com.codenjoy.dojo.web.rest.pojo.PTeam;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.fest.reflect.core.Reflection;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,7 +74,7 @@ import static java.util.stream.Collectors.toMap;
 public class PlayerServiceImpl implements PlayerService {
     
     private ReadWriteLock lock = new ReentrantReadWriteLock(true);
-    private Map<Player, String> cacheBoards = new HashMap<>();
+    private Map<Player, Pair> boards = new HashMap<>();
 
     @Autowired protected Deals deals;
     @Autowired private DealsView dealsView;
@@ -377,11 +379,11 @@ public class PlayerServiceImpl implements PlayerService {
         for (Deal deal : deals.active()) {
             Player player = deal.getPlayer();
             try {
-                String board = cacheBoards.get(player);
+                Object clientBoard = boards.get(player).getRight();
                 // TODO в конце концов если if (pair == null || pair.noSockets()) то
                 //      ничего не отправляется, и зря гоняли но вроде как из кеша берем,
                 //      так что проблем быть не должно.
-                requested += playerController.requestControl(player, board);
+                requested += playerController.requestControl(player, clientBoard);
             } catch (Exception e) {
                 log.error("Unable to send control request to player " + player.getId() +
                         " URL: " + player.getCallbackUrl(), e);
@@ -398,7 +400,7 @@ public class PlayerServiceImpl implements PlayerService {
 
     private Map<ScreenRecipient, ScreenData> buildScreenData() {
         Map<ScreenRecipient, ScreenData> map = new HashMap<>();
-        cacheBoards.clear();
+        boards.clear();
 
         Map<String, GameData> gameDataMap = dealsView.getGamesDataMap();
         for (Deal deal : deals) {
@@ -407,18 +409,11 @@ public class PlayerServiceImpl implements PlayerService {
             try {
                 String gameType = deal.getGameType().name();
                 GameData gameData = gameDataMap.get(player.getId());
+                GuiPlotColorDecoder decoder = gameData.getDecoder();
 
-                // TODO вот например для бомбера всем отдаются одни и те же борды, отличие только в паре спрайтов
-                Object encoded = null;
-                try {
-                    Object board = game.getBoardAsString(); // TODO дольше всего строчка выполняется, прооптимизировать!
-
-                    GuiPlotColorDecoder decoder = gameData.getDecoder();
-                    cacheBoards.put(player, decoder.encodeForClient(board));
-                    encoded = decoder.encodeForBrowser(board);
-                } catch (Exception e) {
-                    log.error("Error during draw board for player: " + player.getId(), e);
-                }
+                ImmutablePair data = decoder.buildBoards(game, player.getId());
+                boards.put(player, data);
+                Object screenBoard = data.getLeft();
 
                 int boardSize = gameData.getBoardSize();
                 Object score = player.getScore();
@@ -429,7 +424,7 @@ public class PlayerServiceImpl implements PlayerService {
                 Map<String, HeroData> coordinates = gameData.getCoordinates();
                 Map<String, String> readableNames = gameData.getReadableNames();
                 map.put(player, new PlayerData(boardSize,
-                        encoded,
+                        screenBoard,
                         gameType,
                         score,
                         message,
