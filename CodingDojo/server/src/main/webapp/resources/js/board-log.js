@@ -36,6 +36,7 @@ pages.boardLog = function() {
     setup.showBody = true;
     setup.sprites = null;
     setup.heroInfo = null;
+    setup.unauthorized = false;
 
     setup.game = getSettings('game');
     setup.room = getSettings('room');
