@@ -37,8 +37,8 @@ pages.boardOnly = function() {
     setup.showBody = true;
     setup.sprites = null;
     setup.heroInfo = null;
-    setup.unauthorized = false;
-    
+    setup.boardOnly = true;
+
     if (window.location.href.includes("click=true")) {
         setup.canvasCursor = 'pointer';
     

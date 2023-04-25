@@ -212,7 +212,7 @@ var setupCsrf = function() {
     }
 }
 
-var pages = pages || {};
+var pages = pages || {}; // here is pages processor
 
 $(document).ready(function() {
     setupCsrf();
