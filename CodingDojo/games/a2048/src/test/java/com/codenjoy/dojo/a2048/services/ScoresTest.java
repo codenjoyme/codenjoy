@@ -85,10 +85,38 @@ public class ScoresTest extends AbstractScoresTest {
     }
 
     @Test
+    public void shouldCleanScore_whenCumulative() {
+        // given
+        settings.initScore(CUMULATIVELY);
+
+        // when then
+        assertEvents("0:\n" +
+                "SUM,10 > +10 = 10\n" +
+                "SUM,20 > +20 = 30\n" +
+                "SUM,30 > +30 = 60\n" +
+                "(CLEAN) > -60 = 0\n" +
+                "SUM,10 > +10 = 10\n" +
+                "SUM,20 > +20 = 30\n" +
+                "SUM,30 > +30 = 60");
+    }
+
+    @Test
     public void shouldNotCollect_whenSame() {
         assertEvents("0:\n" +
                 "SUM,10 > +10 = 10\n" +
                 "SUM,10 > +0 = 10\n" +
                 "SUM,10 > +0 = 10");
+    }
+
+    @Test
+    public void shouldCleanScore() {
+        assertEvents("0:\n" +
+                "SUM,10 > +10 = 10\n" +
+                "SUM,20 > +10 = 20\n" +
+                "SUM,30 > +10 = 30\n" +
+                "(CLEAN) > -30 = 0\n" +
+                "SUM,10 > +10 = 10\n" +
+                "SUM,20 > +10 = 20\n" +
+                "SUM,30 > +10 = 30");
     }
 }
