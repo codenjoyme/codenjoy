@@ -26,11 +26,8 @@ package com.codenjoy.dojo.a2048.services;
 import com.codenjoy.dojo.a2048.TestGameSettings;
 import com.codenjoy.dojo.services.event.EventObject;
 import com.codenjoy.dojo.services.event.ScoresMap;
-import com.codenjoy.dojo.services.settings.SettingsReader;
 import com.codenjoy.dojo.utils.scorestest.AbstractScoresTest;
 import org.junit.Test;
-
-import java.util.function.Function;
 
 import static com.codenjoy.dojo.services.event.Mode.CUMULATIVELY;
 
@@ -42,8 +39,8 @@ public class ScoresTest extends AbstractScoresTest {
     }
 
     @Override
-    public Function<SettingsReader, ? extends ScoresMap<?>> scores() {
-        return Scores::new;
+    protected Class<? extends ScoresMap<?>> scores() {
+        return Scores.class;
     }
 
     @Override
