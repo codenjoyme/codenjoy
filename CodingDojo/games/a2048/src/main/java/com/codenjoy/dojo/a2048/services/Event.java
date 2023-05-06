@@ -36,11 +36,6 @@ public class Event implements EventObject<Event.Type, Integer> {
         WIN;
     }
 
-    @Override
-    public String toString() {
-        return event + ((value != 0)?("(" + value + ")"):"");
-    }
-
     public Event(Type event) {
         this.event = event;
     }
@@ -58,5 +53,10 @@ public class Event implements EventObject<Event.Type, Integer> {
     @Override
     public Type type() {
         return event;
+    }
+
+    @Override
+    public String toString() {
+        return _toString();
     }
 }
