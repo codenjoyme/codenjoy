@@ -22,12 +22,9 @@ package com.codenjoy.dojo.hex.services;
  * #L%
  */
 
-import com.codenjoy.dojo.services.event.EventObject;
+import com.codenjoy.dojo.services.event.SingleValueEvent;
 
-public class Event implements EventObject<Event.Type, Integer> {
-
-    private Type type;
-    private int value;
+public class Event extends SingleValueEvent<Event.Type, Integer> {
 
     public enum Type {
         WIN,
@@ -35,40 +32,12 @@ public class Event implements EventObject<Event.Type, Integer> {
     }
 
     public Event(Event.Type type, int value) {
-        this.type = type;
-        this.value = value;
-    }
-
-    @Override
-    public String toString() {
-        return type + ((value != 0)?("(" + value + ")"):"");
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Event event = (Event) o;
-
-        if (value != event.value) return false;
-        if (this.type != event.type) return false;
-
-        return true;
+        super(type, value);
     }
 
     @Override
     public int hashCode() {
-        return value;
+        return value();
     }
 
-    @Override
-    public Integer value() {
-        return value;
-    }
-
-    @Override
-    public Type type() {
-        return type;
-    }
 }
