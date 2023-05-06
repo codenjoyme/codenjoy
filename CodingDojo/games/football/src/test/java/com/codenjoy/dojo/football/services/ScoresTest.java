@@ -27,12 +27,17 @@ import com.codenjoy.dojo.services.event.ScoresMap;
 import com.codenjoy.dojo.utils.scorestest.AbstractScoresTest;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.football.services.GameSettings.Keys.LOSE_PENALTY;
+import static com.codenjoy.dojo.football.services.GameSettings.Keys.WIN_SCORE;
+
 
 public class ScoresTest extends AbstractScoresTest {
 
     @Override
     public GameSettings settings() {
-        return new TestGameSettings();
+        return new TestGameSettings()
+                .integer(WIN_SCORE, 1)
+                .integer(LOSE_PENALTY, -1);
     }
 
     @Override
@@ -47,11 +52,11 @@ public class ScoresTest extends AbstractScoresTest {
 
     @Test
     public void shouldCollectScores() {
-        assertEvents("0:\n" +
-                "WIN > +1 = 1\n" +
-                "WIN > +1 = 2\n" +
-                "WIN > +1 = 3\n" +
-                "LOSE > -1 = 2");
+        assertEvents("100:\n" +
+                "WIN > +1 = 101\n" +
+                "WIN > +1 = 102\n" +
+                "WIN > +1 = 103\n" +
+                "LOSE > -1 = 102");
     }
 
     @Test
@@ -62,25 +67,33 @@ public class ScoresTest extends AbstractScoresTest {
 
     @Test
     public void shouldCleanScore() {
-        assertEvents("140:\n" +
-                "WIN > +1 = 141\n" +
-                "WIN > +1 = 142\n" +
-                "(CLEAN) > -142 = 0\n" +
+        assertEvents("100:\n" +
+                "WIN > +1 = 101\n" +
+                "WIN > +1 = 102\n" +
+                "(CLEAN) > -102 = 0\n" +
                 "WIN > +1 = 1\n" +
                 "WIN > +1 = 2");
     }
 
     @Test
     public void shouldCollectScores_whenWin() {
-        assertEvents("140:\n" +
-                "WIN > +1 = 141\n" +
-                "WIN > +1 = 142");
+        // given
+        settings.integer(WIN_SCORE, 1);
+
+        // when then
+        assertEvents("100:\n" +
+                "WIN > +1 = 101\n" +
+                "WIN > +1 = 102");
     }
 
     @Test
     public void shouldCollectScores_whenLose() {
-        assertEvents("140:\n" +
-                "LOSE > -1 = 139\n" +
-                "LOSE > -1 = 138");
+        // given
+        settings.integer(LOSE_PENALTY, -1);
+
+        // when then
+        assertEvents("100:\n" +
+                "LOSE > -1 = 99\n" +
+                "LOSE > -1 = 98");
     }
 }
