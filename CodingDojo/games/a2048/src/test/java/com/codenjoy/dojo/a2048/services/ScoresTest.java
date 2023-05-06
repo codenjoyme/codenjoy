@@ -54,7 +54,7 @@ public class ScoresTest extends AbstractScoresTest {
     }
 
     @Test
-    public void shouldCollectScores() {
+    public void shouldCollectScores_whenMoreThenMax() {
         assertEvents("0:\n" +
                 "SUM,10 > +10 = 10\n" +
                 "SUM,20 > +10 = 20\n" +
@@ -63,10 +63,10 @@ public class ScoresTest extends AbstractScoresTest {
 
     @Test
     public void shouldNotCollect_whenLessThenMax() {
-        assertEvents("40:\n" +
-                "SUM,10 > +0 = 40\n" +
-                "SUM,20 > +0 = 40\n" +
-                "SUM,30 > +0 = 40");
+        assertEvents("100:\n" +
+                "SUM,10 > +0 = 100\n" +
+                "SUM,20 > +0 = 100\n" +
+                "SUM,30 > +0 = 100");
     }
 
     @Test
@@ -75,10 +75,10 @@ public class ScoresTest extends AbstractScoresTest {
         settings.initScore(CUMULATIVELY);
 
         // when then
-        assertEvents("40:\n" +
-                "SUM,10 > +10 = 50\n" +
-                "SUM,20 > +20 = 70\n" +
-                "SUM,30 > +30 = 100");
+        assertEvents("100:\n" +
+                "SUM,10 > +10 = 110\n" +
+                "SUM,20 > +20 = 130\n" +
+                "SUM,30 > +30 = 160");
     }
 
     @Test
