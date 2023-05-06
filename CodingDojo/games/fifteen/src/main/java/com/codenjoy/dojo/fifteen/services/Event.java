@@ -22,13 +22,9 @@ package com.codenjoy.dojo.fifteen.services;
  * #L%
  */
 
-import com.codenjoy.dojo.services.event.EventObject;
+import com.codenjoy.dojo.services.event.DoubleValueEvent;
 
-public class Event implements EventObject<Event.Type, Event> {
-
-    private Type type;
-    private int moveCount;
-    private int number;
+public class Event extends DoubleValueEvent<Event.Type, Integer, Integer> {
 
     public enum Type {
         WIN,
@@ -36,36 +32,18 @@ public class Event implements EventObject<Event.Type, Event> {
     }
 
     public Event(Type type) {
-        this.type = type;
+        super(type);
     }
 
     public Event(Type type, int moveCount, int number) {
-        this.type = type;
-        this.moveCount = moveCount;
-        this.number = number;
-    }
-
-    public int number() {
-        return number;
+        super(type, moveCount, number);
     }
 
     public int moveCount() {
-        return moveCount;
+        return value();
     }
 
-    @Override
-    public Type type() {
-        return type;
-    }
-
-    @Override
-    public String toString() {
-        return (type == Type.WIN)
-                ? "Event[WIN]"
-                : "Event[" +
-                type +
-                ", moveCount=" + moveCount +
-                ", number=" + number +
-                ']';
+    public int number() {
+        return value2();
     }
 }

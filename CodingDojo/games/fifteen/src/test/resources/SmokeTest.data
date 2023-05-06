@@ -17,7 +17,7 @@
 2: 1:
 2: 1:Scores: 0
 2: 1:Answer: RIGHT
-2: 1:Fire Event: Event[BONUS, moveCount=3, number=0]
+2: 1:Fire Event: BONUS(3, 0)
 ------------------------------------------
 3: 1:******
 3: 1:*mlbo*
@@ -348,7 +348,7 @@
 35: 1:
 35: 1:Scores: 0
 35: 1:Answer: LEFT
-35: 1:Fire Event: Event[BONUS, moveCount=34, number=0]
+35: 1:Fire Event: BONUS(34, 0)
 ------------------------------------------
 36: 1:******
 36: 1:*dmlb*
@@ -389,7 +389,7 @@
 39: 1:
 39: 1:Scores: 0
 39: 1:Answer: UP
-39: 1:Fire Event: Event[BONUS, moveCount=5, number=0]
+39: 1:Fire Event: BONUS(5, 0)
 ------------------------------------------
 40: 1:******
 40: 1:*dmlb*
@@ -640,7 +640,7 @@
 64: 1:
 64: 1:Scores: 0
 64: 1:Answer: DOWN
-64: 1:Fire Event: Event[BONUS, moveCount=26, number=0]
+64: 1:Fire Event: BONUS(26, 0)
 ------------------------------------------
 65: 1:******
 65: 1:*cdlb*
@@ -2611,7 +2611,7 @@
 261: 1:
 261: 1:Scores: 0
 261: 1:Answer: LEFT
-261: 1:Fire Event: Event[BONUS, moveCount=198, number=0]
+261: 1:Fire Event: BONUS(198, 0)
 ------------------------------------------
 262: 1:******
 262: 1:*dgmb*

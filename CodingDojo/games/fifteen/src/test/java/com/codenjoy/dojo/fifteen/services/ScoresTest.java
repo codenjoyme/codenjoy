@@ -68,8 +68,8 @@ public class ScoresTest extends AbstractScoresTest {
     @Test
     public void shouldCollectScores_whenBonus() {
         assertEvents("1140:\n" +
-                "BONUS,2,5 > +250 = 390\n" +
-                "BONUS,3,7 > +233 = 623");
+                "BONUS,2,5 > +250 = 1390\n" +
+                "BONUS,3,7 > +233 = 1623");
     }
 
     @Test
