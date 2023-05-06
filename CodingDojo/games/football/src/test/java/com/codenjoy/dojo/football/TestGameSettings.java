@@ -24,12 +24,14 @@ package com.codenjoy.dojo.football;
 
 import com.codenjoy.dojo.football.services.GameSettings;
 
+import static com.codenjoy.dojo.football.services.GameSettings.Keys.LOSE_PENALTY;
+
 public class TestGameSettings extends GameSettings {
 
     /**
      * Here you can override the settings for all tests.
      */
     public TestGameSettings() {
-
+        integer(LOSE_PENALTY, -1);
     }
 }
