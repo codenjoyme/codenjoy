@@ -22,49 +22,16 @@ package com.codenjoy.dojo.expansion.services;
  * #L%
  */
 
-import com.codenjoy.dojo.services.event.EventObject;
+import com.codenjoy.dojo.services.event.SingleValueEvent;
 
-public class Event implements EventObject<Event.Type, Integer> {
-
-    private Type type;
-    private int score;
+public class Event extends SingleValueEvent<Event.Type, Integer> {
 
     public enum Type {
-        WIN, LOSE;
+        WIN,
+        LOSE;
     }
 
-    public Event(Type type, int score) {
-        this.type = type;
-        this.score = score;
-    }
-
-    public Event(Type type) {
-        this(type, 0);
-    }
-
-    @Override
-    public String toString() {
-        return String.format("Event{%s=%s}",
-                type, score);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        return _equals(o);
-    }
-
-    @Override
-    public int hashCode() {
-        return _hashCode();
-    }
-
-    @Override
-    public Integer value() {
-        return score;
-    }
-
-    @Override
-    public Event.Type type() {
-        return type;
+    public Event(Type type, int value) {
+        super(type, value);
     }
 }

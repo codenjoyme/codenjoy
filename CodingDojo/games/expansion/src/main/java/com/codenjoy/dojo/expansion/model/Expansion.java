@@ -53,7 +53,7 @@ public class Expansion implements Tickable, IField {
     public static Event WIN_MULTIPLE;
     public static Event DRAW_MULTIPLE;
     public static final Event WIN_SINGLE = new Event(Event.Type.WIN, 0);
-    public static final Event LOSE = new Event(Event.Type.LOSE);
+    public static final Event LOSE = new Event(Event.Type.LOSE, 0);
 
     private static final Logger log = LoggerFactory.getLogger(Expansion.class);
 

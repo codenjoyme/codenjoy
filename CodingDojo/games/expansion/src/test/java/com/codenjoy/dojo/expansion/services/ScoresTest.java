@@ -41,7 +41,7 @@ public class ScoresTest {
     private SettingsReader settings;
 
     public void lose() {
-        scores.event(new Event(LOSE));
+        scores.event(new Event(LOSE, 0));
     }
 
     public void win(int goldCount) {

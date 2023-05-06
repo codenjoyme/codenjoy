@@ -283,7 +283,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
         spreader.tickAll();
         spreader.tickAll();
 
-        verify(PLAYER1).event(new Event(LOSE));
+        verify(PLAYER1).event(new Event(LOSE, 0));
         verifyNoMoreInteractions(PLAYER2);
         verify(PLAYER3).event(WIN());
         verifyNoMoreInteractions(PLAYER4);
@@ -355,7 +355,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
         spreader.tickAll();
 
         verifyNoMoreInteractions(PLAYER1);
-        verify(PLAYER2).event(new Event(LOSE));
+        verify(PLAYER2).event(new Event(LOSE, 0));
         verifyNoMoreInteractions(PLAYER3);
         verifyNoMoreInteractions(PLAYER4);
 
@@ -440,7 +440,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
         verifyNoMoreInteractions(PLAYER1);
         verifyNoMoreInteractions(PLAYER2);
         verifyNoMoreInteractions(PLAYER3);
-        verify(PLAYER4).event(new Event(LOSE));
+        verify(PLAYER4).event(new Event(LOSE, 0));
 
         assertEquals(true, spreader.player(PLAYER1).isAlive());
         assertEquals(true, spreader.player(PLAYER2).isAlive());
@@ -994,7 +994,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                 "-=#-=#-=#-=#-=#-=#\n", PLAYER1);
 
         verify(PLAYER1).event(WIN());
-        verify(PLAYER2).event(new Event(LOSE));
+        verify(PLAYER2).event(new Event(LOSE, 0));
 
         // when
         spreader.tickAll();
@@ -2010,7 +2010,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
         spreader.tickAll();
 
         verify(PLAYER1).event(WIN());
-        verify(PLAYER2).event(new Event(LOSE));
+        verify(PLAYER2).event(new Event(LOSE, 0));
 
         assertE("-----" +
                 "-♥-♦-" +
@@ -2102,7 +2102,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
         spreader.tickAll();
 
         verify(PLAYER2).event(WIN());
-        verify(PLAYER1).event(new Event(LOSE));
+        verify(PLAYER1).event(new Event(LOSE, 0));
 
         assertE("-----" +
                 "-♦-♥-" +
