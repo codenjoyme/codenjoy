@@ -23,34 +23,15 @@ package com.codenjoy.dojo.collapse.services;
  */
 
 
-import com.codenjoy.dojo.services.event.EventObject;
+import com.codenjoy.dojo.services.event.SingleValueEvent;
 
-public class Event implements EventObject<Event.Type, Integer> {
-
-    private Type type;
-    private int count;
+public class Event extends SingleValueEvent<Event.Type, Integer> {
 
     public enum Type {
         SUCCESS;
     }
 
-    public Event(Type type, int count) {
-        this.type = type;
-        this.count = count;
-    }
-
-    @Override
-    public Integer value() {
-        return count;
-    }
-
-    @Override
-    public Type type() {
-        return type;
-    }
-
-    @Override
-    public String toString() {
-        return _toString();
+    public Event(Type type, int value) {
+        super(type, value);
     }
 }
