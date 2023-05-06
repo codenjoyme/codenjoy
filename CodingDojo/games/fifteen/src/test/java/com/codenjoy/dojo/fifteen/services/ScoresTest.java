@@ -28,11 +28,16 @@ import com.codenjoy.dojo.services.event.ScoresMap;
 import com.codenjoy.dojo.utils.scorestest.AbstractScoresTest;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.fifteen.services.GameSettings.Keys.BONUS_SCORE;
+import static com.codenjoy.dojo.fifteen.services.GameSettings.Keys.WIN_SCORE;
+
 public class ScoresTest extends AbstractScoresTest {
 
     @Override
     public GameSettings settings() {
-        return new TestGameSettings();
+        return new TestGameSettings()
+                .integer(WIN_SCORE, 30)
+                .integer(BONUS_SCORE, 100);
     }
 
     @Override
@@ -52,32 +57,40 @@ public class ScoresTest extends AbstractScoresTest {
 
     @Test
     public void shouldCollectScores() {
-        assertEvents("140:\n" +
-                "BONUS,2,5 > +250 = 390\n" +
-                "BONUS,3,7 > +233 = 623\n" +
-                "WIN > +30 = 653");
+        assertEvents("100:\n" +
+                "BONUS,2,5 > +250 = 350\n" +
+                "BONUS,3,7 > +233 = 583\n" +
+                "WIN > +30 = 613");
     }
 
     @Test
     public void shouldCollectScores_whenWin() {
-        assertEvents("140:\n" +
-                "WIN > +30 = 170\n" +
-                "WIN > +30 = 200");
+        // given
+        settings.integer(WIN_SCORE, 30);
+
+        // when then
+        assertEvents("100:\n" +
+                "WIN > +30 = 130\n" +
+                "WIN > +30 = 160");
     }
 
     @Test
     public void shouldCollectScores_whenBonus() {
-        assertEvents("1140:\n" +
-                "BONUS,2,5 > +250 = 1390\n" +
-                "BONUS,3,7 > +233 = 1623");
+        // given
+        settings.integer(BONUS_SCORE, 100);
+
+        // when then
+        assertEvents("100:\n" +
+                "BONUS,2,5 > +250 = 350\n" +
+                "BONUS,3,7 > +233 = 583");
     }
 
     @Test
     public void shouldClean() {
-        assertEvents("140:\n" +
-                "WIN > +30 = 170\n" +
-                "WIN > +30 = 200\n" +
-                "(CLEAN) > -200 = 0\n" +
+        assertEvents("100:\n" +
+                "WIN > +30 = 130\n" +
+                "WIN > +30 = 160\n" +
+                "(CLEAN) > -160 = 0\n" +
                 "WIN > +30 = 30\n" +
                 "WIN > +30 = 60");
     }
