@@ -27,21 +27,22 @@ import com.codenjoy.dojo.services.event.EventObject;
 
 public class Event implements EventObject<Event.Type, Integer> {
 
+    private Type type;
+    private int count;
+
     public enum Type {
         SUCCESS;
+
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Event[%s:%s]", type, count);
     }
 
     public Event(Type type, int count) {
         this.type = type;
         this.count = count;
-    }
-
-    private Type type;
-    private int count;
-
-    @Override
-    public Event.Type type() {
-        return type;
     }
 
     @Override
@@ -50,7 +51,7 @@ public class Event implements EventObject<Event.Type, Integer> {
     }
 
     @Override
-    public String toString() {
-        return String.format("Event[%s:%s]", type, count);
+    public Event.Type type() {
+        return type;
     }
 }
