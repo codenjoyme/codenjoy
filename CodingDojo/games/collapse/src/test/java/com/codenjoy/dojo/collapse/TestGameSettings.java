@@ -30,6 +30,5 @@ public class TestGameSettings extends GameSettings {
      * Here you can override the settings for all tests.
      */
     public TestGameSettings() {
-
     }
 }

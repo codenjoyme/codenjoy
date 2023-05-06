@@ -29,11 +29,14 @@ import com.codenjoy.dojo.services.event.ScoresMap;
 import com.codenjoy.dojo.utils.scorestest.AbstractScoresTest;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.collapse.services.GameSettings.Keys.SUCCESS_SCORE;
+
 public class ScoresTest extends AbstractScoresTest {
 
     @Override
     public GameSettings settings() {
-        return new TestGameSettings();
+        return new TestGameSettings()
+                .integer(SUCCESS_SCORE, 1);
     }
 
     @Override
