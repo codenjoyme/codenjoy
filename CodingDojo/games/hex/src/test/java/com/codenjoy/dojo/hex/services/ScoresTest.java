@@ -63,7 +63,7 @@ public class ScoresTest extends AbstractScoresTest {
     }
 
     @Test
-    public void cantBeLessThanZero() {
+    public void shouldNotLessThanZero() {
         assertEvents("0:\n" +
                 "LOSE,1 > +0 = 0");
     }
