@@ -32,12 +32,6 @@ public class Event implements EventObject<Event.Type, Integer> {
 
     public enum Type {
         SUCCESS;
-
-    }
-
-    @Override
-    public String toString() {
-        return String.format("Event[%s:%s]", type, count);
     }
 
     public Event(Type type, int count) {
@@ -51,7 +45,12 @@ public class Event implements EventObject<Event.Type, Integer> {
     }
 
     @Override
-    public Event.Type type() {
+    public Type type() {
         return type;
+    }
+
+    @Override
+    public String toString() {
+        return _toString();
     }
 }
