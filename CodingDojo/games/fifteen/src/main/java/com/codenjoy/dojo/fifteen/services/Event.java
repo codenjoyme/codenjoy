@@ -30,8 +30,13 @@ public class Event implements EventObject<Event.Type, Event> {
     private int moveCount;
     private int number;
 
-    public static Event BONUS(int moveCount, int number) {
-        return new Event(Type.BONUS, moveCount, number);
+    public enum Type {
+        WIN,
+        BONUS;
+    }
+
+    public Event(Type type) {
+        this.type = type;
     }
 
     public Event(Type type, int moveCount, int number) {
@@ -48,11 +53,6 @@ public class Event implements EventObject<Event.Type, Event> {
         return moveCount;
     }
 
-    public enum Type {
-        WIN,
-        BONUS;
-    }
-
     @Override
     public Type type() {
         return type;
@@ -63,9 +63,9 @@ public class Event implements EventObject<Event.Type, Event> {
         return (type == Type.WIN)
                 ? "Event[WIN]"
                 : "Event[" +
-                    type +
-                    ", moveCount=" + moveCount +
-                    ", number=" + number +
-                    ']';
+                type +
+                ", moveCount=" + moveCount +
+                ", number=" + number +
+                ']';
     }
 }

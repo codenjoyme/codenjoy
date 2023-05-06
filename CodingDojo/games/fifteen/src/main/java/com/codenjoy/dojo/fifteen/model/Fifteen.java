@@ -34,6 +34,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+import static com.codenjoy.dojo.fifteen.services.Event.Type.BONUS;
+import static com.codenjoy.dojo.fifteen.services.Event.Type.WIN;
+
 public class Fifteen implements Field {
 
     private final Level level;
@@ -63,11 +66,11 @@ public class Fifteen implements Field {
 
             Bonus bonus = hero.pullBonus();
             if (bonus != null) {
-                player.event(Event.BONUS(bonus.moveCount(), bonus.number()));
+                player.event(new Event(BONUS, bonus.moveCount(), bonus.number()));
             }
 
             if (isAllPositionCorrect()) {
-                player.event(Event.Type.WIN);
+                player.event(new Event(WIN));
                 player.getHero().die();
             }
         }
