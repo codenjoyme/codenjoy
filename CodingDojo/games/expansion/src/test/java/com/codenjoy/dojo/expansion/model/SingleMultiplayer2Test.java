@@ -10,12 +10,12 @@ package com.codenjoy.dojo.expansion.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -24,6 +24,7 @@ package com.codenjoy.dojo.expansion.model;
 
 
 import com.codenjoy.dojo.expansion.model.levels.Levels;
+import com.codenjoy.dojo.expansion.services.Event;
 import com.codenjoy.dojo.games.expansion.Forces;
 import com.codenjoy.dojo.games.expansion.ForcesMoves;
 import com.codenjoy.dojo.services.QDirection;
@@ -34,7 +35,7 @@ import org.junit.Test;
 
 import java.util.*;
 
-import static com.codenjoy.dojo.expansion.services.Event.LOSE;
+import static com.codenjoy.dojo.expansion.services.Event.Type.LOSE;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.utils.TestUtils.injectNN;
 import static org.junit.Assert.assertEquals;
@@ -47,12 +48,12 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
 
     private static final String MULTIPLE_LEVEL =
             "╔═════┐" +
-            "║4.E.1│" +
-            "║.....│" +
-            "║E...E│" +
-            "║.....│" +
-            "║3.E.2│" +
-            "└─────┘";
+                    "║4.E.1│" +
+                    "║.....│" +
+                    "║E...E│" +
+                    "║.....│" +
+                    "║3.E.2│" +
+                    "└─────┘";
 
     @Test
     public void shouldOnlyMultipleLevel() {
@@ -282,7 +283,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
         spreader.tickAll();
         spreader.tickAll();
 
-        verify(PLAYER1).event(LOSE());
+        verify(PLAYER1).event(new Event(LOSE));
         verifyNoMoreInteractions(PLAYER2);
         verify(PLAYER3).event(WIN());
         verifyNoMoreInteractions(PLAYER4);
@@ -354,7 +355,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
         spreader.tickAll();
 
         verifyNoMoreInteractions(PLAYER1);
-        verify(PLAYER2).event(LOSE());
+        verify(PLAYER2).event(new Event(LOSE));
         verifyNoMoreInteractions(PLAYER3);
         verifyNoMoreInteractions(PLAYER4);
 
@@ -439,7 +440,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
         verifyNoMoreInteractions(PLAYER1);
         verifyNoMoreInteractions(PLAYER2);
         verifyNoMoreInteractions(PLAYER3);
-        verify(PLAYER4).event(LOSE());
+        verify(PLAYER4).event(new Event(LOSE));
 
         assertEquals(true, spreader.player(PLAYER1).isAlive());
         assertEquals(true, spreader.player(PLAYER2).isAlive());
@@ -993,7 +994,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                 "-=#-=#-=#-=#-=#-=#\n", PLAYER1);
 
         verify(PLAYER1).event(WIN());
-        verify(PLAYER2).event(LOSE());
+        verify(PLAYER2).event(new Event(LOSE));
 
         // when
         spreader.tickAll();
@@ -2009,7 +2010,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
         spreader.tickAll();
 
         verify(PLAYER1).event(WIN());
-        verify(PLAYER2).event(LOSE());
+        verify(PLAYER2).event(new Event(LOSE));
 
         assertE("-----" +
                 "-♥-♦-" +
@@ -2101,7 +2102,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
         spreader.tickAll();
 
         verify(PLAYER2).event(WIN());
-        verify(PLAYER1).event(LOSE());
+        verify(PLAYER1).event(new Event(LOSE));
 
         assertE("-----" +
                 "-♦-♥-" +

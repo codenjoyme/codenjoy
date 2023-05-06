@@ -45,6 +45,7 @@ import org.mockito.Mockito;
 
 import java.util.Arrays;
 
+import static com.codenjoy.dojo.expansion.services.Event.Type.WIN;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
 
@@ -90,12 +91,12 @@ public abstract class AbstractMultiplayerTest {
 
     @NotNull
     Event WIN() {
-        return Event.WIN(settings.winScore());
+        return new Event(WIN, settings.winScore());
     }
 
     @NotNull
     Event DRAW() {
-        return Event.WIN(settings.drawScore());
+        return new Event(WIN, settings.drawScore());
     }
 
 

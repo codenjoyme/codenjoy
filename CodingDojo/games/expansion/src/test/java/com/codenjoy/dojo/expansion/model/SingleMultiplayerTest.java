@@ -26,6 +26,8 @@ package com.codenjoy.dojo.expansion.model;
 import com.codenjoy.dojo.expansion.services.Event;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.expansion.services.Event.Type.WIN;
+
 public class SingleMultiplayerTest extends AbstractMultiplayerTest {
 
     protected boolean isSingleTrainingOrMultiple() {
@@ -503,7 +505,7 @@ public class SingleMultiplayerTest extends AbstractMultiplayerTest {
                 "-=#-=#-=#-=#-=#-=#-=#\n" +
                 "-=#-=#-=#-=#-=#-=#-=#\n", player);
 
-        verify(player).event(Event.WIN(0));
+        verify(player).event(new Event(WIN, 0));
         reset(player);
         verifyNoMoreInteractions(player);
 

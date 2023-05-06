@@ -22,74 +22,49 @@ package com.codenjoy.dojo.expansion.services;
  * #L%
  */
 
-public class Event {
+import com.codenjoy.dojo.services.event.EventObject;
 
-    public static Event WIN(int score) {
-        return new Event(score);
-    }
+public class Event implements EventObject<Event.Type, Integer> {
 
-    public static Event LOSE() {
-        return new Event();
-    }
+    private Type type;
+    private int score;
 
     public enum Type {
         WIN, LOSE;
-
     }
-    private Type type;
 
-    private int score;
-
-    public Event(int score) {
-        type = Type.WIN;
+    public Event(Type type, int score) {
+        this.type = type;
         this.score = score;
     }
 
-    public Event() {
-        type = Type.LOSE;
-        this.score = 0;
-    }
-
-    public int getScore() {
-        return score;
-    }
-
-    public Type getType() {
-        return type;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        Event events = (Event) o;
-
-        if (score != events.score) {
-            return false;
-        }
-
-        return type == events.type;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = 0;
-        if (type != null) {
-            result = type.hashCode();
-        }
-
-        result = 31 * result + score;
-        return result;
+    public Event(Type type) {
+        this(type, 0);
     }
 
     @Override
     public String toString() {
         return String.format("Event{%s=%s}",
                 type, score);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return _equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return _hashCode();
+    }
+
+    @Override
+    public Integer value() {
+        return score;
+    }
+
+    @Override
+    public Event.Type type() {
+        return type;
     }
 }

@@ -23,11 +23,12 @@ package com.codenjoy.dojo.expansion.model;
  */
 
 
-import com.codenjoy.dojo.utils.JsonUtils;
 import com.codenjoy.dojo.expansion.model.levels.LevelsTest;
 import com.codenjoy.dojo.expansion.services.Event;
+import com.codenjoy.dojo.utils.JsonUtils;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.expansion.services.Event.Type.WIN;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
 
@@ -74,7 +75,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
         hero(PLAYER1, 1, 2).right();
         spreader.tickAll();
 
-        verify(PLAYER1).event(Event.WIN(0));
+        verify(PLAYER1).event(new Event(WIN, 0));
         reset(PLAYER1);
 
         assertL("╔══┐" +
@@ -117,7 +118,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
         spreader.tickAll();
 
         // then
-        verify(PLAYER1).event(Event.WIN(0));
+        verify(PLAYER1).event(new Event(WIN, 0));
         reset(PLAYER1);
 
         assertL("╔══┐" +
@@ -180,7 +181,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
         spreader.tickAll();
 
         // then
-        verify(PLAYER1).event(Event.WIN(0));
+        verify(PLAYER1).event(new Event(WIN, 0));
         reset(PLAYER1);
 
         assertL("╔══┐" +
@@ -298,7 +299,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
                 "-=#-=#-=#-=#-=#-=#-=#\n" +
                 "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
 
-        verify(PLAYER1).event(Event.WIN(0));
+        verify(PLAYER1).event(new Event(WIN, 0));
         reset(PLAYER1);
         verifyNoMoreInteractions(PLAYER2);
 
@@ -368,7 +369,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
         hero(PLAYER1, 1, 2).right();
         spreader.tickAll();
 
-        verify(PLAYER1).event(Event.WIN(0));
+        verify(PLAYER1).event(new Event(WIN, 0));
         reset(PLAYER1);
         verifyNoMoreInteractions(PLAYER2);
 
@@ -445,7 +446,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
 
         // then
         verifyNoMoreInteractions(PLAYER1);
-        verify(PLAYER2).event(Event.WIN(0));
+        verify(PLAYER2).event(new Event(WIN, 0));
         reset(PLAYER2);
 
         // when
@@ -487,7 +488,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
         spreader.tickAll();
 
         // then
-        verify(PLAYER1).event(Event.WIN(0));
+        verify(PLAYER1).event(new Event(WIN, 0));
         reset(PLAYER1);
         verifyNoMoreInteractions(PLAYER2);
 
@@ -552,7 +553,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
 
         // then
         verifyNoMoreInteractions(PLAYER1);
-        verify(PLAYER2).event(Event.WIN(0));
+        verify(PLAYER2).event(new Event(WIN, 0));
         reset(PLAYER2);
 
         assertL("╔══┐" +
@@ -665,7 +666,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
         hero(PLAYER1, 1, 1).right();
         spreader.tickAll(); // player1 finished
 
-        verify(PLAYER1).event(Event.WIN(0));
+        verify(PLAYER1).event(new Event(WIN, 0));
         reset(PLAYER1);
 
         hero(PLAYER2, 2, 2).down();
@@ -674,7 +675,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
         spreader.tickAll(); // player1 started // player2 finished
 
 
-        verify(PLAYER2).event(Event.WIN(0));
+        verify(PLAYER2).event(new Event(WIN, 0));
         reset(PLAYER2);
 
         spreader.reloadLevelForWinner(PLAYER2);

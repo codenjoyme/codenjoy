@@ -29,6 +29,8 @@ import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.expansion.services.Event.Type.LOSE;
+import static com.codenjoy.dojo.expansion.services.Event.Type.WIN;
 import static com.codenjoy.dojo.expansion.services.Scores.DETAILS;
 import static com.codenjoy.dojo.expansion.services.Scores.SCORE;
 import static org.junit.Assert.assertEquals;
@@ -39,11 +41,11 @@ public class ScoresTest {
     private SettingsReader settings;
 
     public void lose() {
-        scores.event(Event.LOSE());
+        scores.event(new Event(LOSE));
     }
 
     public void win(int goldCount) {
-        scores.event(Event.WIN(goldCount));
+        scores.event(new Event(WIN, goldCount));
     }
 
     @Before

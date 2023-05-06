@@ -46,6 +46,7 @@ import org.junit.Test;
 import java.util.List;
 import java.util.function.Supplier;
 
+import static com.codenjoy.dojo.expansion.services.Event.Type.WIN;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -724,7 +725,7 @@ public class GameTest {
         field.tick();
 
         // then
-        verify(listener).event(Event.WIN(0));
+        verify(listener).event(new Event(WIN, 0));
 
         assertE("-----" +
                 "-----" +
@@ -1622,7 +1623,7 @@ public class GameTest {
         field.tick();
 
         // then
-        verify(listener).event(Event.WIN(0));
+        verify(listener).event(new Event(WIN, 0));
 
         assertL("╔══┐" +
                 "║1E│" +
