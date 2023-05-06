@@ -29,6 +29,9 @@ import com.codenjoy.dojo.services.event.ScoresMap;
 import com.codenjoy.dojo.utils.scorestest.AbstractScoresTest;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.hex.services.GameSettings.Keys.LOSE_PENALTY;
+import static com.codenjoy.dojo.hex.services.GameSettings.Keys.WIN_SCORE;
+
 public class ScoresTest extends AbstractScoresTest {
 
     @Override
@@ -53,10 +56,10 @@ public class ScoresTest extends AbstractScoresTest {
 
     @Test
     public void shouldCollectScores() {
-        assertEvents("0:\n" +
-                "WIN,1 > +2 = 2\n" +
-                "WIN,2 > +4 = 6\n" +
-                "LOSE,1 > -1 = 5");
+        assertEvents("100:\n" +
+                "WIN,1 > +2 = 102\n" +
+                "WIN,2 > +4 = 106\n" +
+                "LOSE,1 > -1 = 105");
     }
 
     @Test
@@ -67,25 +70,33 @@ public class ScoresTest extends AbstractScoresTest {
 
     @Test
     public void shouldCleanScore() {
-        assertEvents("140:\n" +
-                "WIN,1 > +2 = 142\n" +
-                "WIN,2 > +4 = 146\n" +
-                "(CLEAN) > -146 = 0\n" +
+        assertEvents("100:\n" +
+                "WIN,1 > +2 = 102\n" +
+                "WIN,2 > +4 = 106\n" +
+                "(CLEAN) > -106 = 0\n" +
                 "WIN,1 > +2 = 2\n" +
                 "WIN,2 > +4 = 6");
     }
 
     @Test
     public void shouldCollectScores_whenWin() {
-        assertEvents("140:\n" +
-                "WIN,1 > +2 = 142\n" +
-                "WIN,2 > +4 = 146");
+        // given
+        settings.integer(WIN_SCORE, 2);
+
+        // when then
+        assertEvents("100:\n" +
+                "WIN,1 > +2 = 102\n" +
+                "WIN,2 > +4 = 106");
     }
 
     @Test
     public void shouldCollectScores_whenLose() {
-        assertEvents("140:\n" +
-                "LOSE,1 > -1 = 139\n" +
-                "LOSE,2 > -2 = 137");
+        // given
+        settings.integer(LOSE_PENALTY, -1);
+
+        // when then
+        assertEvents("100:\n" +
+                "LOSE,1 > -1 = 99\n" +
+                "LOSE,2 > -2 = 97");
     }
 }
