@@ -24,111 +24,83 @@ package com.codenjoy.dojo.moebius.services;
 
 
 import com.codenjoy.dojo.moebius.TestGameSettings;
-import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.event.Calculator;
-import com.codenjoy.dojo.services.event.ScoresImpl;
-import org.junit.Before;
+import com.codenjoy.dojo.services.event.EventObject;
+import com.codenjoy.dojo.services.event.ScoresMap;
+import com.codenjoy.dojo.utils.scorestest.AbstractScoresTest;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.moebius.services.GameSettings.Keys.LOSE_PENALTY;
 import static com.codenjoy.dojo.moebius.services.GameSettings.Keys.WIN_SCORE;
-import static org.junit.Assert.assertEquals;
 
-public class ScoresTest {
+public class ScoresTest extends AbstractScoresTest {
 
-    private PlayerScores scores;
-    private GameSettings settings;
-
-    public void gameOver() {
-        scores.event(new Event(Event.Type.GAME_OVER));
+    @Override
+    public GameSettings settings() {
+        return new TestGameSettings()
+                .integer(WIN_SCORE, 1)
+                .integer(LOSE_PENALTY, -1);
     }
 
-    public void win(int lines) {
-        scores.event(new Event(Event.Type.WIN, lines));
+    @Override
+    protected Class<? extends ScoresMap> scores() {
+        return Scores.class;
     }
 
-    @Before
-    public void setup() {
-        settings = new TestGameSettings();
+    @Override
+    protected Class<? extends EventObject> events() {
+        return Event.class;
     }
 
-    private void givenScores(int score) {
-        scores = new ScoresImpl<>(score, new Calculator<>(new Scores(settings)));
+    @Override
+    protected Class<? extends Enum> eventTypes() {
+        return Event.Type.class;
     }
 
     @Test
     public void shouldCollectScores() {
-        // given
-        givenScores(140);
-
-        // when
-        win(1);
-        win(2);
-        win(3);
-        win(4);
-
-        gameOver();
-
-        // then
-        assertEquals(140
-                    + (1 + 2 + 3 + 4) * settings.integer(WIN_SCORE)
-                    + settings.integer(LOSE_PENALTY),
-                scores.getScore());
+        assertEvents("100:\n" +
+                "WIN,1 > +1 = 101\n" +
+                "WIN,2 > +2 = 103\n" +
+                "WIN,3 > +3 = 106\n" +
+                "WIN,4 > +4 = 110\n" +
+                "GAME_OVER > -1 = 109");
     }
 
     @Test
     public void shouldNotBeLessThanZero() {
-        // given
-        givenScores(0);
-
-        // when
-        gameOver();
-
-        // then
-        assertEquals(0, scores.getScore());
+        assertEvents("2:\n" +
+                "GAME_OVER > -1 = 1\n" +
+                "GAME_OVER > -1 = 0\n" +
+                "GAME_OVER > +0 = 0");
     }
 
     @Test
     public void shouldClearScore() {
-        // given
-        givenScores(0);
-        win(10);
-
-        // when
-        scores.clear();
-
-        // then
-        assertEquals(0, scores.getScore());
+        assertEvents("100:\n" +
+                "WIN,1 > +1 = 101\n" +
+                "(CLEAN) > -101 = 0\n" +
+                "WIN,4 > +4 = 4");
     }
 
     @Test
     public void shouldCollectScores_whenWin() {
         // given
-        givenScores(140);
+        settings.integer(WIN_SCORE, 1);
 
-        // when
-        win(1);
-        win(2);
-
-        // then
-        assertEquals(140
-                    + (1 + 2) * settings.integer(WIN_SCORE)
-                    + settings.integer(LOSE_PENALTY),
-                scores.getScore());
+        // when then
+        assertEvents("100:\n" +
+                "WIN,1 > +1 = 101\n" +
+                "WIN,2 > +2 = 103");
     }
 
     @Test
     public void shouldCollectScores_whenGameOver() {
         // given
-        givenScores(140);
+        settings.integer(LOSE_PENALTY, -1);
 
-        // when
-        gameOver();
-        gameOver();
-
-        // then
-        assertEquals(140
-                    + 2 * settings.integer(LOSE_PENALTY),
-                scores.getScore());
+        // when then
+        assertEvents("100:\n" +
+                "GAME_OVER > -1 = 99\n" +
+                "GAME_OVER > -1 = 98");
     }
 }

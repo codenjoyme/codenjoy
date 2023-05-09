@@ -23,39 +23,20 @@ package com.codenjoy.dojo.moebius.services;
  */
 
 
-import com.codenjoy.dojo.services.event.EventObject;
+import com.codenjoy.dojo.services.event.SingleValueEvent;
 
-public class Event implements EventObject<Event.Type, Integer> {
-
-    private Type event;
-    private int value;
+public class Event extends SingleValueEvent<Event.Type, Integer> {
 
     public enum Type {
         GAME_OVER,
         WIN;
     }
 
-    @Override
-    public String toString() {
-        return event + ((value != 0)?("(" + value + ")"):"");
+    public Event(Type type) {
+        super(type);
     }
 
-    public Event(Type event) {
-        this.event = event;
-    }
-
-    public Event(Type event, int value) {
-        this.event = event;
-        this.value = value;
-    }
-
-    @Override
-    public Integer value() {
-        return value;
-    }
-
-    @Override
-    public Type type() {
-        return event;
+    public Event(Type type, int value) {
+        super(type, value);
     }
 }
