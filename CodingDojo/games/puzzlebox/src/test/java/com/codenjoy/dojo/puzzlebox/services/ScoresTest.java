@@ -77,7 +77,7 @@ public class ScoresTest {
     }
 
     @Test
-    public void shouldStillZeroAfterDead() {
+    public void shouldNotBeLessThanZero() {
         // given
         settings.integer(FILL_SCORE, -1);
         givenScores(0);
