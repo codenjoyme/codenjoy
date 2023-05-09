@@ -91,7 +91,7 @@ public class ScoresTest {
     }
 
     @Test
-    public void shouldClearScore() {
+    public void shouldCleanScore() {
         // given
         scores = new Scores("{'score':0}");
         win(1);

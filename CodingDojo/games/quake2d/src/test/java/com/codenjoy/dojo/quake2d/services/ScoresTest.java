@@ -91,7 +91,7 @@ public class ScoresTest {
     }
 
     @Test
-    public void shouldClearScore() {
+    public void shouldCleanScore() {
         // given
         givenScores(0);
         kill();

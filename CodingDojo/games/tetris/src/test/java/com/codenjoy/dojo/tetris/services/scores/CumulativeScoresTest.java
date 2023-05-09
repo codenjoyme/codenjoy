@@ -103,7 +103,7 @@ public class CumulativeScoresTest {
     }
 
     @Test
-    public void shouldClearScore() {
+    public void shouldCleanScore() {
         // given
         givenScores(0);
 
