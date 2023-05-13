@@ -71,6 +71,7 @@ eval_echo "copy_to_javascript_client 'mollymage'"
 eval_echo "copy_to_javascript_client 'sample'"
 eval_echo "copy_to_javascript_client 'verland'"
 eval_echo "copy_to_javascript_client 'rawelbbub'"
+eval_echo "copy_to_javascript_client 'namdreab'"
 
 eval_echo "copy_to_balancer 'rawelbbub'"
 eval_echo "copy_to_balancer 'mollymage'"
