@@ -65,6 +65,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.stubbing.OngoingStubbing;
 import org.mockito.verification.VerificationMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -205,7 +206,7 @@ public class PlayerServiceImplTest {
         playerCaptor = ArgumentCaptor.forClass(Player.class);
         boardCaptor = ArgumentCaptor.forClass(String.class);
 
-        when(printer.print(any(), any())).thenReturn("1234");
+        printerPrint().thenReturn("1234");
 
         when(saver.loadGame(any())).thenReturn(PlayerSave.NULL);
 
@@ -402,7 +403,7 @@ public class PlayerServiceImplTest {
     public void shouldSendCoordinatesToPlayerBoard() {
         // given
         Player user1 = createPlayer(USER1);
-        when(printer.print(any(), any())).thenReturn("1234");
+        printerPrint().thenReturn("1234");
 
         // when
         playerService.tick();
@@ -416,8 +417,7 @@ public class PlayerServiceImplTest {
     public void shouldSendPlayerBoardFromJsonBoard() {
         // given
         Player user1 = createPlayer(USER1);
-        when(printer.print(any(), any()))
-                .thenReturn(new JSONObject("{'layers':['1234','4321']}"));
+        printerPrint().thenReturn(new JSONObject("{'layers':['1234','4321']}"));
 
         // when
         playerService.tick();
@@ -632,7 +632,7 @@ public class PlayerServiceImplTest {
     public void shouldRequestControl_fromAllPlayers_withGlassState() {
         // given
         createPlayer(USER1);
-        when(printer.print(any(), any())).thenReturn("1234");
+        printerPrint().thenReturn("1234");
 
         // when
         playerService.tick();
@@ -640,6 +640,10 @@ public class PlayerServiceImplTest {
         // then
         verify(playerController).requestControl(playerCaptor.capture(), boardCaptor.capture());
         assertEquals("1234", boardCaptor.getValue());
+    }
+
+    private OngoingStubbing<Object> printerPrint() {
+        return when(printer.print(any(), any(), any()));
     }
 
     @Test
@@ -671,7 +675,7 @@ public class PlayerServiceImplTest {
         createPlayer(USER1, "game", "room1");
         createPlayer(USER2, "game", "room2");
 
-        when(printer.print(any(), any()))
+        printerPrint()
                 .thenReturn("1234")
                 .thenReturn("4321");
 
@@ -1529,7 +1533,7 @@ public class PlayerServiceImplTest {
     }
 
     private void setup(Game game) {
-        when(game.getBoardAsString()).thenReturn("123");
+        when(game.getBoardAsString(any())).thenReturn("123");
         when(game.isGameOver()).thenReturn(false);
         when(game.getHero()).thenReturn(new HeroDataImpl(pt(0, 0),
                 MultiplayerType.SINGLE.isSingleplayer()));
