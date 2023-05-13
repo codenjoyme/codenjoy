@@ -978,7 +978,7 @@
                         <goals>
                             <goal>create</goal>
                         </goals>
-                        <phase>validate</phase>
+                        <phase>process-sources</phase>
                     </execution>
                     <execution>
                         <id>default</id>
