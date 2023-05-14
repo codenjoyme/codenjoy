@@ -22,50 +22,28 @@ package com.codenjoy.dojo.fifteen.services;
  * #L%
  */
 
-import com.codenjoy.dojo.services.event.EventObject;
+import com.codenjoy.dojo.services.event.DoubleValueEvent;
 
-public class Event implements EventObject<Event.Type, Event> {
-
-    private Type type;
-    private int moveCount;
-    private int number;
-
-    public static Event BONUS(int moveCount, int number) {
-        return new Event(Type.BONUS, moveCount, number);
-    }
-
-    public Event(Type type, int moveCount, int number) {
-        this.type = type;
-        this.moveCount = moveCount;
-        this.number = number;
-    }
-
-    public int number() {
-        return number;
-    }
-
-    public int moveCount() {
-        return moveCount;
-    }
+public class Event extends DoubleValueEvent<Event.Type, Integer, Integer> {
 
     public enum Type {
         WIN,
         BONUS;
     }
 
-    @Override
-    public Type type() {
-        return type;
+    public Event(Type type) {
+        super(type);
     }
 
-    @Override
-    public String toString() {
-        return (type == Type.WIN)
-                ? "Event[WIN]"
-                : "Event[" +
-                    type +
-                    ", moveCount=" + moveCount +
-                    ", number=" + number +
-                    ']';
+    public Event(Type type, int moveCount, int number) {
+        super(type, moveCount, number);
+    }
+
+    public int moveCount() {
+        return value();
+    }
+
+    public int number() {
+        return value2();
     }
 }

@@ -23,85 +23,75 @@ package com.codenjoy.dojo.fifteen.services;
  */
 
 import com.codenjoy.dojo.fifteen.TestGameSettings;
-import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.event.Calculator;
-import com.codenjoy.dojo.services.event.ScoresImpl;
-import org.junit.Before;
+import com.codenjoy.dojo.services.event.EventObject;
+import com.codenjoy.dojo.services.event.ScoresMap;
+import com.codenjoy.dojo.utils.scorestest.AbstractScoresTest;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.fifteen.services.GameSettings.Keys.BONUS_SCORE;
 import static com.codenjoy.dojo.fifteen.services.GameSettings.Keys.WIN_SCORE;
-import static org.junit.Assert.assertEquals;
 
-public class ScoresTest {
+public class ScoresTest extends AbstractScoresTest {
 
-    private static final int MOVE_COUNT = 2;
-    private static final int NUMBER = 5;
-
-    private PlayerScores scores;
-    private GameSettings settings;
-
-    public void win() {
-        scores.event(Event.Type.WIN);
+    @Override
+    public GameSettings settings() {
+        return new TestGameSettings()
+                .integer(WIN_SCORE, 30)
+                .integer(BONUS_SCORE, 100);
     }
 
-    public void bonus() {
-        scores.event(Event.BONUS(MOVE_COUNT, NUMBER));
+    @Override
+    protected Class<? extends ScoresMap> scores() {
+        return Scores.class;
     }
 
-    @Before
-    public void setup() {
-        settings = new TestGameSettings();
+    @Override
+    protected Class<? extends EventObject> events() {
+        return Event.class;
+    }
+
+    @Override
+    protected Class<? extends Enum> eventTypes() {
+        return Event.Type.class;
     }
 
     @Test
     public void shouldCollectScores() {
-        // given
-        givenScores(140);
-
-        // when
-        bonus();
-        bonus();
-        win();
-
-        // then
-        assertEquals(140
-                    + 2 * settings.integer(BONUS_SCORE) * NUMBER / MOVE_COUNT
-                    + settings.integer(WIN_SCORE),
-                scores.getScore());
-    }
-
-    private void givenScores(int score) {
-        scores = new ScoresImpl<>(score, new Calculator<>(new Scores(settings)));
+        assertEvents("100:\n" +
+                "BONUS,2,5 > +250 = 350\n" +
+                "BONUS,3,7 > +233 = 583\n" +
+                "WIN > +30 = 613");
     }
 
     @Test
     public void shouldCollectScores_whenWin() {
         // given
-        givenScores(140);
+        settings.integer(WIN_SCORE, 30);
 
-        // when
-        win();
-        win();
-
-        // then
-        assertEquals(140
-                    + 2 * settings.integer(WIN_SCORE),
-                scores.getScore());
+        // when then
+        assertEvents("100:\n" +
+                "WIN > +30 = 130\n" +
+                "WIN > +30 = 160");
     }
 
     @Test
     public void shouldCollectScores_whenBonus() {
         // given
-        givenScores(140);
+        settings.integer(BONUS_SCORE, 100);
 
-        // when
-        bonus();
-        bonus();
+        // when then
+        assertEvents("100:\n" +
+                "BONUS,2,5 > +250 = 350\n" +
+                "BONUS,3,7 > +233 = 583");
+    }
 
-        // then
-        assertEquals(140
-                        + 2 * settings.integer(BONUS_SCORE) * NUMBER / MOVE_COUNT,
-                scores.getScore());
+    @Test
+    public void shouldClean() {
+        assertEvents("100:\n" +
+                "WIN > +30 = 130\n" +
+                "WIN > +30 = 160\n" +
+                "(CLEAN) > -160 = 0\n" +
+                "WIN > +30 = 30\n" +
+                "WIN > +30 = 60");
     }
 }

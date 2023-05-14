@@ -220,7 +220,7 @@ public class GameTest {
                 "☼333☼" +
                 "☼☼☼☼☼");
 
-        assertEvent("Event[SUCCESS:4]");
+        assertEvent("SUCCESS(4)");
 
         // when
         joystick.act(1, 3);
@@ -234,7 +234,7 @@ public class GameTest {
                 "☼   ☼" +
                 "☼☼☼☼☼");
 
-        assertEvent("Event[SUCCESS:4]");
+        assertEvent("SUCCESS(4)");
     }
 
     // если в ходе моих перемещений образуются конгломераты :)
@@ -259,7 +259,7 @@ public class GameTest {
                 "☼   ☼" +
                 "☼☼☼☼☼");
 
-        assertEvent("Event[SUCCESS:9]");
+        assertEvent("SUCCESS(9)");
     }
 
     private void assertEvent(String expected) {

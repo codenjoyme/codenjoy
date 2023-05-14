@@ -38,6 +38,7 @@
         <maven-buildnumber-plugin.version>1.4</maven-buildnumber-plugin.version>
         <maven-scm-jgit.version>1.11.2</maven-scm-jgit.version>
         <maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
+        <maven-exec-plugin.version>3.1.0</maven-exec-plugin.version>
         <maven-markdown-page-generator.version>2.3.1-codenjoy</maven-markdown-page-generator.version>
     </properties>
 
@@ -270,10 +271,10 @@
                             <!-- Плагин отвечает за очистку папки
                                  target перед сборкой -->
                             <id>[##1]-clean-target</id>
-                            <phase>clean</phase>
                             <goals>
                                 <goal>clean</goal>
                             </goals>
+                            <phase>clean</phase>
                         </execution>
                         <execution>
                             <id>default-clean</id>
@@ -290,10 +291,10 @@
                             <!-- Плагин добавляет git hash текущего коммита
                                  из которого делается сборка -->
                             <id>[##2]-generate-git-commit-hash</id>
-                            <phase>validate</phase>
                             <goals>
                                 <goal>create</goal>
                             </goals>
+                            <phase>process-sources</phase>
                         </execution>
                         <execution>
                             <id>default</id>
@@ -355,17 +356,84 @@
                     </configuration>
                 </plugin>
                 <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven-compiler.version}</version>
+                    <executions>
+                        <execution>
+                            <!-- Плагин отвечает за компиляцию
+                                 классов -->
+                            <id>[##4]-compile-java</id>
+                            <goals>
+                                <goal>compile</goal>
+                            </goals>
+                            <phase>compile</phase>
+                        </execution>
+                        <execution>
+                            <id>default-compile</id>
+                            <phase>none</phase>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <encoding>utf8</encoding>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>${maven-exec-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <!-- Плагин отвечает за генерацию
+                                 всех мануалов -->
+                            <id>[##5]-generate-manuals</id>
+                            <goals>
+                                <goal>java</goal>
+                            </goals>
+                            <phase>process-classes</phase>
+                            <configuration>
+                                <mainClass>com.codenjoy.dojo.services.generator.manual.ManualGeneratorRunner</mainClass>
+                                <arguments>
+                                    <argument>./</argument>
+                                    <argument>${module.name}</argument>
+                                    <argument>all</argument>
+                                </arguments>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <!-- Плагин отвечает за копирование
+                                 генерацию всех Elements артефактов -->
+                            <id>[##6]-generate-elements</id>
+                            <goals>
+                                <goal>java</goal>
+                            </goals>
+                            <phase>process-classes</phase>
+                            <configuration>
+                                <mainClass>com.codenjoy.dojo.services.generator.ElementGeneratorRunner</mainClass>
+                                <arguments>
+                                    <argument>./</argument>
+                                    <argument>${module.name}</argument>
+                                    <argument>all</argument>
+                                    <argument>all</argument>
+                                </arguments>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
                     <groupId>com.ruleoftech</groupId>
                     <artifactId>markdown-page-generator-plugin</artifactId>
                     <version>${maven-markdown-page-generator.version}</version>
                     <executions>
                         <execution>
                             <!-- Плагин превращает markdown в html -->
-                            <id>[##4]-convert-markdown-to-html</id>
+                            <id>[##7]-convert-markdown-to-html</id>
                             <goals>
                                 <goal>generate</goal>
                             </goals>
-                            <phase>process-sources</phase>
+                            <phase>process-classes</phase>
                         </execution>
                     </executions>
                     <configuration>
@@ -389,11 +457,11 @@
                         <execution>
                             <!-- Плагин отвечает за копирование
                                  ресурсов -->
-                            <id>[##5]-copy-resources</id>
+                            <id>[##8]-copy-resources</id>
                             <goals>
                                 <goal>resources</goal>
                             </goals>
-                            <phase>generate-resources</phase>
+                            <phase>process-classes</phase>
                         </execution>
                         <execution>
                             <id>default-resources</id>
@@ -408,31 +476,6 @@
                     </configuration>
                 </plugin>
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>${maven-compiler.version}</version>
-                    <executions>
-                        <execution>
-                            <!-- Плагин отвечает за компиляцию
-                                 классов -->
-                            <id>[##6]-compile-java</id>
-                            <goals>
-                                <goal>compile</goal>
-                            </goals>
-                            <phase>compile</phase>
-                        </execution>
-                        <execution>
-                            <id>default-compile</id>
-                            <phase>none</phase>
-                        </execution>
-                    </executions>
-                    <configuration>
-                        <encoding>utf8</encoding>
-                        <source>${java.version}</source>
-                        <target>${java.version}</target>
-                    </configuration>
-                </plugin>
-                <plugin>
                     <groupId>org.pitest</groupId>
                     <artifactId>pitest-maven</artifactId>
                     <version>${pitest.version}</version>
@@ -440,7 +483,7 @@
                         <execution>
                             <!-- Плагин отвечает за мутационное тестирование.
                                  Включается для игр ключом -Pmutation -->
-                            <id>[##7]-mutation-testing</id>
+                            <id>[##9]-mutation-testing</id>
                             <goals>
                                 <goal>mutationCoverage</goal>
                             </goals>
@@ -469,7 +512,7 @@
                             <!-- Плагин отвечает за тестирование.
                                  В данном случае позволяет исключать тесты
                                  во время mvn билда c ключом -Dmaven.test.excludes -->
-                            <id>[##8]-java-testing</id>
+                            <id>[##10]-java-testing</id>
                             <goals>
                                 <goal>test</goal>
                             </goals>
@@ -492,7 +535,7 @@
                         <execution>
                             <!-- Плагин добавляет jar с сырцами engine
                                  в target -->
-                            <id>[##9]-attach-engine-sources</id>
+                            <id>[##11]-attach-engine-sources</id>
                             <goals>
                                 <goal>jar</goal>
                             </goals>
@@ -512,7 +555,7 @@
                         <execution>
                             <!-- Плагин отвечает за сборку jar
                                  файла -->
-                            <id>[##10]-make-jar</id>
+                            <id>[##12]-make-jar</id>
                             <goals>
                                 <goal>jar</goal>
                             </goals>

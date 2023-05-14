@@ -77,7 +77,7 @@ public class ScoresTest {
     }
 
     @Test
-    public void shouldStillZeroAfterDead() {
+    public void shouldNotBeLessThanZero() {
         // given
         givenScores(0);
 
@@ -89,7 +89,7 @@ public class ScoresTest {
     }
 
     @Test
-    public void shouldClearScore() {
+    public void shouldCleanScore() {
         // given
         givenScores(0);
         win();

@@ -24,59 +24,49 @@ package com.codenjoy.dojo.a2048.services;
 
 
 import com.codenjoy.dojo.a2048.TestGameSettings;
-import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.event.Calculator;
-import com.codenjoy.dojo.services.event.ScoresImpl;
-import org.junit.Before;
+import com.codenjoy.dojo.services.event.EventObject;
+import com.codenjoy.dojo.services.event.ScoresMap;
+import com.codenjoy.dojo.utils.scorestest.AbstractScoresTest;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.services.event.Mode.CUMULATIVELY;
-import static org.junit.Assert.assertEquals;
 
-public class ScoresTest {
+public class ScoresTest extends AbstractScoresTest {
 
-    private PlayerScores scores;
-    private GameSettings settings;
-
-    public void sum(int sum) {
-        scores.event(new Event(Event.Type.SUM, sum));
+    @Override
+    public GameSettings settings() {
+        return new TestGameSettings();
     }
 
-    @Before
-    public void setup() {
-        settings = new TestGameSettings();
+    @Override
+    protected Class<? extends ScoresMap> scores() {
+        return Scores.class;
     }
 
-    private void givenScores(int score) {
-        scores = new ScoresImpl<>(score, new Calculator<>(new Scores(settings)));
+    @Override
+    protected Class<? extends EventObject> events() {
+        return Event.class;
     }
 
-    @Test
-    public void shouldCollectScores() {
-        // given
-        givenScores(0);
-
-        // when
-        sum(10);
-        sum(20);
-        sum(30);
-
-        // then
-        assertEquals(30, scores.getScore());
+    @Override
+    protected Class<? extends Enum> eventTypes() {
+        return Event.Type.class;
     }
 
     @Test
-    public void shouldNoCollect_whenLessThenMax() {
-        // given
-        givenScores(40);
+    public void shouldCollectScores_whenMoreThenMax() {
+        assertEvents("0:\n" +
+                "SUM,10 > +10 = 10\n" +
+                "SUM,20 > +10 = 20\n" +
+                "SUM,30 > +10 = 30");
+    }
 
-        // when
-        sum(10);
-        sum(20);
-        sum(30);
-
-        // then
-        assertEquals(40, scores.getScore());
+    @Test
+    public void shouldNotCollect_whenLessThenMax() {
+        assertEvents("100:\n" +
+                "SUM,10 > +0 = 100\n" +
+                "SUM,20 > +0 = 100\n" +
+                "SUM,30 > +0 = 100");
     }
 
     @Test
@@ -84,28 +74,46 @@ public class ScoresTest {
         // given
         settings.initScore(CUMULATIVELY);
 
-        givenScores(40);
-
-        // when
-        sum(10);
-        sum(20);
-        sum(30);
-
-        // then
-        assertEquals(100, scores.getScore());
+        // when then
+        assertEvents("100:\n" +
+                "SUM,10 > +10 = 110\n" +
+                "SUM,20 > +20 = 130\n" +
+                "SUM,30 > +30 = 160");
     }
 
     @Test
-    public void shouldNoCollect_whenSame() {
+    public void shouldCleanScore_whenCumulative() {
         // given
-        givenScores(0);
+        settings.initScore(CUMULATIVELY);
 
-        // when
-        sum(10);
-        sum(10);
-        sum(10);
+        // when then
+        assertEvents("0:\n" +
+                "SUM,10 > +10 = 10\n" +
+                "SUM,20 > +20 = 30\n" +
+                "SUM,30 > +30 = 60\n" +
+                "(CLEAN) > -60 = 0\n" +
+                "SUM,10 > +10 = 10\n" +
+                "SUM,20 > +20 = 30\n" +
+                "SUM,30 > +30 = 60");
+    }
 
-        // then
-        assertEquals(10, scores.getScore());
+    @Test
+    public void shouldNotCollect_whenSame() {
+        assertEvents("0:\n" +
+                "SUM,10 > +10 = 10\n" +
+                "SUM,10 > +0 = 10\n" +
+                "SUM,10 > +0 = 10");
+    }
+
+    @Test
+    public void shouldCleanScore() {
+        assertEvents("0:\n" +
+                "SUM,10 > +10 = 10\n" +
+                "SUM,20 > +10 = 20\n" +
+                "SUM,30 > +10 = 30\n" +
+                "(CLEAN) > -30 = 0\n" +
+                "SUM,10 > +10 = 10\n" +
+                "SUM,20 > +10 = 20\n" +
+                "SUM,30 > +10 = 30");
     }
 }

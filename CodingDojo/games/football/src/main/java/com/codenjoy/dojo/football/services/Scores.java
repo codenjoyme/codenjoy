@@ -25,6 +25,7 @@ package com.codenjoy.dojo.football.services;
 import com.codenjoy.dojo.services.event.ScoresMap;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
+import static com.codenjoy.dojo.football.services.GameSettings.Keys.LOSE_PENALTY;
 import static com.codenjoy.dojo.football.services.GameSettings.Keys.WIN_SCORE;
 
 public class Scores extends ScoresMap<Void> {
@@ -34,6 +35,9 @@ public class Scores extends ScoresMap<Void> {
 
         put(Event.WIN,
                 value -> settings.integer(WIN_SCORE));
+
+        put(Event.LOSE,
+                value -> settings.integer(LOSE_PENALTY));
     }
 }
 

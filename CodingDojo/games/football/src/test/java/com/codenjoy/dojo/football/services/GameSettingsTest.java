@@ -34,6 +34,7 @@ public class GameSettingsTest {
         assertEquals("NUMBER_OF_PLAYERS =[Game] Number of players\n" +
                     "IS_NEED_AI        =[Game] Is need AI\n" +
                     "WIN_SCORE         =[Score] Win score\n" +
+                    "LOSE_PENALTY      =[Score] Lose penalty\n" +
                     "LEVEL_MAP         =[Level] Level map",
                 TestUtils.toString(new GameSettings().allKeys()));
     }

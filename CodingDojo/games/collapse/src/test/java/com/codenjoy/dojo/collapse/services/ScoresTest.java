@@ -24,78 +24,67 @@ package com.codenjoy.dojo.collapse.services;
 
 
 import com.codenjoy.dojo.collapse.TestGameSettings;
-import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.event.Calculator;
-import com.codenjoy.dojo.services.event.ScoresImpl;
-import org.junit.Before;
+import com.codenjoy.dojo.services.event.EventObject;
+import com.codenjoy.dojo.services.event.ScoresMap;
+import com.codenjoy.dojo.utils.scorestest.AbstractScoresTest;
 import org.junit.Test;
 
-import static com.codenjoy.dojo.collapse.services.Event.Type.SUCCESS;
 import static com.codenjoy.dojo.collapse.services.GameSettings.Keys.SUCCESS_SCORE;
-import static org.junit.Assert.assertEquals;
 
-public class ScoresTest {
+public class ScoresTest extends AbstractScoresTest {
 
-    private PlayerScores scores;
-    private GameSettings settings;
-
-    public void success(int count) {
-        scores.event(new Event(SUCCESS, count));
+    @Override
+    public GameSettings settings() {
+        return new TestGameSettings()
+                .integer(SUCCESS_SCORE, 1);
     }
 
-    @Before
-    public void setup() {
-        settings = new TestGameSettings();
+    @Override
+    protected Class<? extends ScoresMap> scores() {
+        return Scores.class;
     }
 
-    private void givenScores(int score) {
-        scores = new ScoresImpl<>(score, new Calculator<>(new Scores(settings)));
+    @Override
+    protected Class<? extends EventObject> events() {
+        return Event.class;
+    }
+
+    @Override
+    protected Class<? extends Enum> eventTypes() {
+        return Event.Type.class;
     }
 
     @Test
     public void shouldCollectScores() {
-        // given
-        givenScores(140);
-
-        // when
-        success(1);
-        success(1);
-        success(1);
-        success(1);
-
-        // then
-        assertEquals(140
-                    + 4 * settings.integer(SUCCESS_SCORE),
-                scores.getScore());
+        assertEvents("140:\n" +
+                "SUCCESS,1 > +1 = 141\n" +
+                "SUCCESS,1 > +1 = 142\n" +
+                "SUCCESS,1 > +1 = 143\n" +
+                "SUCCESS,1 > +1 = 144");
     }
 
     @Test
-    public void shouldCollectScoresIfMoreThanOne_caseMultiple() {
-        // given
-        givenScores(140);
-
-        // when
-        success(5);
-        success(5);
-
-        // then
-        assertEquals(140
-                    + 2 * (1 + 2 + 3 + 4 + 5) * settings.integer(SUCCESS_SCORE),
-                scores.getScore());
+    public void shouldCollectScores_whenMoreThanOne_caseMultiple() {
+        assertEvents("140:\n" +
+                "SUCCESS,5 > +15 = 155\n" +
+                "SUCCESS,5 > +15 = 170");
     }
 
     @Test
-    public void shouldCollectScoresIfMoreThanOne_caseSingle() {
-        // given
-        givenScores(140);
+    public void shouldCollectScores_whenMoreThanOne_caseSingle() {
+        assertEvents("140:\n" +
+                "SUCCESS,15 > +120 = 260");
+    }
 
-        // when
-        success(15);
-
-        // then
-        assertEquals(140
-                    + (1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12 + 13 + 14 + 15)
-                        * settings.integer(SUCCESS_SCORE),
-                scores.getScore());
+    @Test
+    public void shouldClean() {
+        assertEvents("140:\n" +
+                "SUCCESS,1 > +1 = 141\n" +
+                "SUCCESS,1 > +1 = 142\n" +
+                "SUCCESS,1 > +1 = 143\n" +
+                "(CLEAN) > -143 = 0\n" +
+                "SUCCESS,1 > +1 = 1\n" +
+                "SUCCESS,1 > +1 = 2\n" +
+                "SUCCESS,1 > +1 = 3");
     }
 }

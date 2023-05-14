@@ -136,12 +136,12 @@ public class Scores implements PlayerScores {
     public void event(Object input) {
         Event events = (Event)input;
 
-        int score = events.getScore();
+        int score = events.value();
         rounds().put(score);
 
-        if (events.getType() == Event.Type.WIN) {
+        if (events.type() == Event.Type.WIN) {
             this.score += score;
-        } else if (events.getType() == Event.Type.LOSE) {
+        } else if (events.type() == Event.Type.LOSE) {
             this.score -= score;
         }
         this.score = Math.max(0, this.score);

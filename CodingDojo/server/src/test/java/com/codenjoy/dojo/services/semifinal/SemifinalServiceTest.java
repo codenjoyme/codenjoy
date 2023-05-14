@@ -1332,7 +1332,7 @@ public class SemifinalServiceTest extends AbstractDealsTest {
     }
 
     @Test
-    public void shouldClearScores_whenSettingsEnabled() {
+    public void shouldCleanScore_whenSettingsEnabled() {
         // given
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(100);

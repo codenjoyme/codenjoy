@@ -42,6 +42,7 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         NUMBER_OF_PLAYERS,
         IS_NEED_AI,
         WIN_SCORE,
+        LOSE_PENALTY,
         LEVEL_MAP;
 
         private String key;
@@ -66,6 +67,7 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         integer(IS_NEED_AI, 1);
 
         integer(WIN_SCORE, 1);
+        integer(LOSE_PENALTY, 0);
 
         multiline(LEVEL_MAP,
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
