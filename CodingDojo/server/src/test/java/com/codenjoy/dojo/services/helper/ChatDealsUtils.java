@@ -24,7 +24,7 @@ package com.codenjoy.dojo.services.helper;
 
 import com.codenjoy.dojo.services.Deal;
 import com.codenjoy.dojo.services.Deals;
-import com.codenjoy.dojo.services.chat.ChatAuthority;
+import com.codenjoy.dojo.services.chat.ChatPost;
 import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.services.dao.Registration;
 
@@ -47,7 +47,7 @@ public class ChatDealsUtils {
     }
 
     public static void setupChat(Deal deal) {
-        deal.setChat(mock(ChatAuthority.class));
+        deal.setChat(mock(ChatPost.class));
     }
 
     public static void setupChat(Controller chatController) {

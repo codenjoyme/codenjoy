@@ -98,7 +98,7 @@ public class ChatHelper {
         check(getField(player, room), expected);
     }
 
-    private List<PMessage> getField(String player, String room) {
+    public List<PMessage> getField(String player, String room) {
         return chatService.getFieldMessages(player,
                 Filter.room(room)
                         .count(Integer.MAX_VALUE)

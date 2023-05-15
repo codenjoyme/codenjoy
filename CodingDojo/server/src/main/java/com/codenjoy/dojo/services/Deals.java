@@ -70,9 +70,6 @@ public class Deals implements Iterable<Deal>, Tickable {
     @Autowired
     protected RoomService roomService;
 
-    @Autowired
-    protected TimeService timeService;
-
     public void onAdd(Consumer<Deal> consumer) {
         this.onAdd = consumer;
     }

@@ -45,7 +45,7 @@ public class InactivityServiceTest extends AbstractDealsTest {
     public void setup() {
         super.setup();
         deals = spy(deals);
-        timeService = spy(timeService);
+        timeService = spy(new TimeService());
         inactivity = new InactivityService(deals, timeService);
     }
 

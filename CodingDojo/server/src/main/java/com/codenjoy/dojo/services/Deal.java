@@ -23,7 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 
-import com.codenjoy.dojo.services.chat.ChatAuthority;
+import com.codenjoy.dojo.services.chat.ChatPost;
 import com.codenjoy.dojo.services.info.MessagesListener;
 import com.codenjoy.dojo.services.lock.LockedGame;
 import com.codenjoy.dojo.services.multiplayer.GameField;
@@ -54,7 +54,7 @@ public class Deal implements Tickable {
     private Player player;
     private Game game;
     private LazyJoystick joystick;
-    private ChatAuthority chat;
+    private ChatPost chat;
     private MessagesListener messages;
 
     public Deal(Player player, Game game, String room) {
@@ -193,7 +193,7 @@ public class Deal implements Tickable {
         return gameType.getMultiplayerType(gameType.getSettings());
     }
 
-    public void setChat(ChatAuthority chat) {
+    public void setChat(ChatPost chat) {
         this.chat = chat;
         if (chat != null) {
             messages = (playerId, message) -> {
@@ -211,7 +211,7 @@ public class Deal implements Tickable {
         }
     }
 
-    public ChatAuthority chat() {
+    public ChatPost chat() {
         return chat;
     }
 
