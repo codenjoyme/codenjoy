@@ -23,7 +23,6 @@ package com.codenjoy.dojo.services.multiplayer;
  */
 
 import com.codenjoy.dojo.services.Deal;
-import com.codenjoy.dojo.services.FieldService;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.helper.ChatDealsUtils;

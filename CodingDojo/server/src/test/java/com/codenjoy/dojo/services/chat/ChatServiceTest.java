@@ -26,11 +26,11 @@ import com.codenjoy.dojo.CodenjoyContestApplication;
 import com.codenjoy.dojo.config.Constants;
 import com.codenjoy.dojo.config.TestSqliteDBLocations;
 import com.codenjoy.dojo.services.Deal;
-import com.codenjoy.dojo.services.FieldService;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.helper.Helpers;
+import com.codenjoy.dojo.services.multiplayer.FieldService;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.utils.smart.SmartAssert;
 import com.codenjoy.dojo.web.rest.pojo.PMessage;
@@ -856,5 +856,35 @@ public class ChatServiceTest {
                         id, playerId, type.name().toLowerCase(), messages));
             }
         };
+    }
+
+    @Test
+    public void shouldLoadLastIdFromChat() {
+        // given
+        // random values, don't look for systems here
+        // room chat
+        with.chat.post("room1", "player1", null, ChatType.ROOM);    // 1
+        with.chat.post("room2", "player2", null, ChatType.ROOM);    // 2
+        with.chat.post("room1", "player3", null, ChatType.ROOM);    // 3
+        with.chat.post("room2", "player2", null, ChatType.ROOM);    // 4
+        // room topic chat
+        with.chat.post("room1", "player1", 1, ChatType.ROOM_TOPIC); // 5
+        with.chat.post("room2", "player2", 2, ChatType.ROOM_TOPIC); // 6
+        with.chat.post("room1", "player1", 1, ChatType.ROOM_TOPIC); // 7
+        with.chat.post("room2", "player2", 2, ChatType.ROOM_TOPIC); // 8
+        with.chat.post("room2", "player2", 2, ChatType.ROOM_TOPIC); // 9
+        // field chat
+        with.chat.post("room1", "player1", 1, ChatType.FIELD);      // 10
+        with.chat.post("room1", "player1", 5, ChatType.FIELD);      // 11 max fieldId
+        with.chat.post("room1", "player2", 4, ChatType.FIELD);      // 12
+        with.chat.post("room2", "player3", 3, ChatType.FIELD);      // 13
+        // field topic  chat
+        with.chat.post("room1", "player1", 10, ChatType.FIELD_TOPIC); // 14
+        with.chat.post("room1", "player1", 11, ChatType.FIELD_TOPIC); // 15
+        with.chat.post("room1", "player2", 10, ChatType.FIELD_TOPIC); // 16
+        with.chat.post("room2", "player3", 13, ChatType.FIELD_TOPIC); // 17
+
+        // when then
+        assertEquals(5, chat.getLastFieldId());
     }
 }

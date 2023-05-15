@@ -26,6 +26,7 @@ import com.codenjoy.dojo.CodenjoyContestApplication;
 import com.codenjoy.dojo.config.Constants;
 import com.codenjoy.dojo.config.TestSqliteDBLocations;
 import com.codenjoy.dojo.services.helper.Helpers;
+import com.codenjoy.dojo.services.multiplayer.FieldService;
 import com.codenjoy.dojo.services.multiplayer.Spreader;
 import com.codenjoy.dojo.utils.smart.SmartAssert;
 import org.junit.After;

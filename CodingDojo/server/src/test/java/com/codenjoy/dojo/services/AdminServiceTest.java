@@ -32,6 +32,7 @@ import com.codenjoy.dojo.services.helper.Helpers;
 import com.codenjoy.dojo.services.incativity.InactivitySettingsImpl;
 import com.codenjoy.dojo.services.mocks.FirstInactivityGameType;
 import com.codenjoy.dojo.services.mocks.SecondSemifinalGameType;
+import com.codenjoy.dojo.services.multiplayer.FieldService;
 import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.utils.smart.SmartAssert;
 import com.codenjoy.dojo.web.controller.admin.AdminSettings;

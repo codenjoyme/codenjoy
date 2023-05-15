@@ -33,8 +33,6 @@ import org.junit.Assert;
 import org.mockito.stubbing.Answer;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
@@ -102,17 +100,5 @@ public class TestUtils {
         Assert.assertEquals("User codes mismatch", expected.getCode(), actual.getCode());
         Assert.assertEquals("User data mismatch", expected.getData(), actual.getData());
         Assert.assertTrue("User passwords mismatch", passwordEncoder.matches(originPassword, actual.getPassword()));
-    }
-
-    public static void assertException(String expected, Runnable runnable) {
-        try {
-            runnable.run();
-            fail("Expected exception");
-        } catch (Throwable throwable) {
-            assertEquals(expected,
-                    throwable.getClass().getSimpleName() +
-                            ": " +
-                            throwable.getMessage());
-        }
     }
 }

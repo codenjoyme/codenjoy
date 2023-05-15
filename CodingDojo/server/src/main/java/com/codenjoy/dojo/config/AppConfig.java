@@ -22,10 +22,13 @@ package com.codenjoy.dojo.config;
  * #L%
  */
 
+import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.log.DebugService;
+import com.codenjoy.dojo.services.multiplayer.FieldService;
 import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
 import com.codenjoy.dojo.transport.ws.PlayerTransportImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -66,5 +69,10 @@ public class AppConfig {
     @Bean
     public RoomService roomService() {
         return new RoomService();
+    }
+
+    @Bean
+    public FieldService fieldService(@Autowired Chat chat) {
+        return new FieldService(chat.getLastFieldId());
     }
 }
