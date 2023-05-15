@@ -32,7 +32,7 @@ import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.multiplayer.Spreader;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.room.RoomService;
-import com.codenjoy.dojo.utils.test.TestUtils;
+import com.codenjoy.dojo.utils.test.DealsUtils;
 import lombok.SneakyThrows;
 import org.junit.After;
 import org.junit.Before;
@@ -165,7 +165,7 @@ public class ActionLoggerTest {
         Player player = new Player(id, "127.0.0.1", mockGameType(game), score, null);
         player.setInfo(mock(Information.class));
 
-        TestUtils.Env env = TestUtils.getDeal(deals, player, room,
+        DealsUtils.Env env = DealsUtils.getDeal(deals, player, room,
                 inv -> {
                     GameField field = mock(GameField.class);
                     when(field.reader()).thenReturn(mock(BoardReader.class));

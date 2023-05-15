@@ -32,7 +32,7 @@ import com.codenjoy.dojo.services.multiplayer.Spreader;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.utils.JsonUtils;
-import com.codenjoy.dojo.utils.test.TestUtils;
+import com.codenjoy.dojo.utils.test.DealsUtils;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
@@ -127,7 +127,7 @@ public class SaveServiceImplTest {
             return field;
         };
 
-        TestUtils.Env env = TestUtils.getDeal(
+        DealsUtils.Env env = DealsUtils.getDeal(
                 deals,
                 player,
                 room,
