@@ -65,10 +65,9 @@ public class DealsViewTest {
 
     @Before
     public void setup() {
-        deals = new Deals();
-        deals.spreader = new Spreader(){{
-            fields = mock(FieldService.class);
-        }};
+        FieldService fieldService = mock(FieldService.class);
+        Spreader spreader = new Spreader(fieldService);
+        deals = new Deals(spreader, null);
         ChatDealsUtils.setupChat(deals, null);
         dealsView = new DealsView();
         dealsView.service = deals;

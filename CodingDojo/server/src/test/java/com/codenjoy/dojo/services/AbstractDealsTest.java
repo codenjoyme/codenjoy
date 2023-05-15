@@ -63,12 +63,11 @@ public class AbstractDealsTest {
 
     @Before
     public void setup() {
-        deals = new Deals();
-        roomService = deals.roomService = new RoomService();
+        roomService = new RoomService();
         timeService = new TimeService();
-        spreader = deals.spreader = new Spreader(){{
-            fields = mock(FieldService.class);
-        }};
+        fieldService = mock(FieldService.class);
+        spreader = new Spreader(fieldService);
+        deals = new Deals(spreader, roomService);
         when(fieldSaves.getSave()).thenReturn(null);
     }
 

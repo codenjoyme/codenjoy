@@ -45,13 +45,10 @@ import static com.codenjoy.dojo.utils.smart.SmartAssert.assertEquals;
 import static com.codenjoy.dojo.utils.smart.SmartAssert.assertSame;
 import static org.mockito.Mockito.*;
 
-// TODO try @SpringBootTest
 public class SpreaderTest {
 
-    private final Spreader spreader = new Spreader(){{
-        fields = SpreaderTest.this.fieldService = mock(FieldService.class);
-    }};
-    private FieldService fieldService;
+    private FieldService fieldService = mock(FieldService.class);
+    private final Spreader spreader = new Spreader(fieldService);
     private final String room = "room";
     private final MultiplayerType multiplayerType = MultiplayerType.MULTIPLE;
     private final MultiplayerType levelsType = MultiplayerType.ALL_SINGLE.apply(5);

@@ -31,8 +31,6 @@ import com.codenjoy.dojo.web.controller.Validator;
 import com.google.common.collect.Multimap;
 import lombok.experimental.FieldNameConstants;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -44,7 +42,6 @@ import java.util.stream.Stream;
 import static com.codenjoy.dojo.services.controller.screen.ScreenResponseHandler.distinctByKey;
 import static java.util.stream.Collectors.toList;
 
-@Component
 @FieldNameConstants
 // TODO It's a good idea to move this logic to engine
 //      and make all integration tests of the game such
@@ -64,11 +61,13 @@ public class Deals implements Iterable<Deal>, Tickable {
     private Consumer<Deal> onRemove;
     private ReadWriteLock lock = new ReentrantReadWriteLock();
 
-    @Autowired
-    protected Spreader spreader;
+    private RoomService roomService;
+    private Spreader spreader;
 
-    @Autowired
-    protected RoomService roomService;
+    public Deals(Spreader spreader, RoomService roomService) {
+        this.roomService = roomService;
+        this.spreader = spreader;
+    }
 
     public void onAdd(Consumer<Deal> consumer) {
         this.onAdd = consumer;

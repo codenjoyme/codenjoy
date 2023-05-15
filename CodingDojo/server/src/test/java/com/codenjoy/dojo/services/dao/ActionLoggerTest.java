@@ -86,12 +86,10 @@ public class ActionLoggerTest {
         logger.setTicks(1);
         time = 100;
 
-        deals = new Deals(){{
-            ActionLoggerTest.this.roomService = this.roomService = mock(RoomService.class);
-            this.spreader = new Spreader(){{
-                fields = mock(FieldService.class);
-            }};
-        }};
+        roomService = mock(RoomService.class);
+        FieldService fields = mock(FieldService.class);
+        Spreader spreader = new Spreader(fields);
+        deals = new Deals(spreader, roomService);
         ChatDealsUtils.setupChat(deals, null);
         allRoomsAreActive();
     }

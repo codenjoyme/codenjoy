@@ -67,16 +67,14 @@ public class DealsMultiplayerTest {
 
     @Before
     public void setup() {
-        deals = new Deals();
-
-        deals.roomService = mock(RoomService.class);
-        deals.spreader = new Spreader(){{
-            fields = mock(FieldService.class);
-        }};
+        FieldService fieldService = mock(FieldService.class);
+        Spreader spreader = new Spreader(fieldService);
+        RoomService roomService = mock(RoomService.class);
+        deals = new Deals(spreader, roomService);
         ChatDealsUtils.setupChat(deals, null);
 
         // по умолчанию все комнаты активны
-        when(deals.roomService.isActive(anyString())).thenReturn(true);
+        when(roomService.isActive(anyString())).thenReturn(true);
 
         printerFactory = mock(PrinterFactory.class);
 

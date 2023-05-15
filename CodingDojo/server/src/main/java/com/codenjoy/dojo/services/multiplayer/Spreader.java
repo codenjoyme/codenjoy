@@ -27,8 +27,6 @@ import com.codenjoy.dojo.services.Player;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;
@@ -39,11 +37,13 @@ import java.util.function.Supplier;
 import static java.util.stream.Collectors.toList;
 
 @Slf4j
-@Component
 public class Spreader {
 
-    @Autowired
-    protected FieldService fields;
+    private FieldService fields;
+
+    public Spreader(FieldService fields) {
+        this.fields = fields;
+    }
 
     private Multimap<String, GameRoom> rooms = LinkedHashMultimap.create();
 

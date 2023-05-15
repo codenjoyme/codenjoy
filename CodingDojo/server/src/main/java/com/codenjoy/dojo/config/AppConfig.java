@@ -22,9 +22,11 @@ package com.codenjoy.dojo.config;
  * #L%
  */
 
+import com.codenjoy.dojo.services.Deals;
 import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.log.DebugService;
 import com.codenjoy.dojo.services.multiplayer.FieldService;
+import com.codenjoy.dojo.services.multiplayer.Spreader;
 import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
 import com.codenjoy.dojo.transport.ws.PlayerTransportImpl;
@@ -74,5 +76,15 @@ public class AppConfig {
     @Bean
     public FieldService fieldService(@Autowired Chat chat) {
         return new FieldService(chat.getLastFieldId());
+    }
+
+    @Bean
+    public Deals deals(@Autowired Spreader spreader, @Autowired RoomService roomService) {
+        return new Deals(spreader, roomService);
+    }
+
+    @Bean
+    public Spreader spreader(@Autowired FieldService fieldService) {
+        return new Spreader(fieldService);
     }
 }

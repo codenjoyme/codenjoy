@@ -76,11 +76,11 @@ public class PlayerServiceImplIntegrationTest {
     public void setup() {
         service = new PlayerServiceImpl() {
             {
+                FieldService fieldService = mock(FieldService.class);
+                Spreader spreader = new Spreader(fieldService);
+
                 PlayerServiceImplIntegrationTest.this.deals
-                        = this.deals = new Deals();
-                this.deals.spreader = new Spreader(){{
-                    fields = mock(FieldService.class);
-                }};
+                        = this.deals = new Deals(spreader, roomService);
 
                 PlayerServiceImplIntegrationTest.this.playerController
                         = this.playerController = mock(Controller.class);
