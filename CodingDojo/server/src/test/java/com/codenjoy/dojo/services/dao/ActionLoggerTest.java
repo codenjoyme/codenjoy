@@ -44,6 +44,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import static com.codenjoy.dojo.client.Utils.split;
+import static com.codenjoy.dojo.utils.TestUtils.mockGameType;
 import static java.util.stream.Collectors.joining;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -162,7 +163,7 @@ public class ActionLoggerTest {
 
     private void addPlayer(Deals deals, String board, int scoreValue, String id, String room, String game) {
         PlayerScores score = getScore(scoreValue);
-        Player player = new Player(id, "127.0.0.1", PlayerTest.mockGameType(game), score, null);
+        Player player = new Player(id, "127.0.0.1", mockGameType(game), score, null);
         player.setInfo(mock(Information.class));
 
         TestUtils.Env env = TestUtils.getDeal(deals, player, room,

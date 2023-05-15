@@ -55,9 +55,6 @@ import static java.util.stream.Collectors.toMap;
 @Component("gameService")
 public class GameServiceImpl implements GameService {
 
-    // TODO кажется это старый код комнат, его можно убрать после окончательной имплементации комнат
-    public static final String ROOMS_SEPARATOR = "-";
-
     private Map<String, GameType> cache = new TreeMap<>();
 
     @Autowired
@@ -148,12 +145,8 @@ public class GameServiceImpl implements GameService {
     @Override
     public List<String> getOnlyGames() {
         return getGames().stream()
-                .map(GameServiceImpl::removeNumbers)
+                .map(GameUtils::removeNumbers)
                 .collect(Collectors.toList());
-    }
-
-    public static String removeNumbers(String game) {
-        return game.split(ROOMS_SEPARATOR)[0];
     }
 
     @Override
