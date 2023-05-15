@@ -24,7 +24,6 @@ package com.codenjoy.dojo.services.dao;
 
 
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.helper.ChatDealsUtils;
 import com.codenjoy.dojo.services.info.Information;
 import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.multiplayer.FieldService;
@@ -45,6 +44,7 @@ import java.util.concurrent.TimeUnit;
 
 import static com.codenjoy.dojo.client.Utils.split;
 import static com.codenjoy.dojo.utils.TestUtils.mockGameType;
+import static com.codenjoy.dojo.utils.TestUtils.setupChat;
 import static java.util.stream.Collectors.joining;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -90,7 +90,7 @@ public class ActionLoggerTest {
         FieldService fields = mock(FieldService.class);
         Spreader spreader = new Spreader(fields);
         deals = new Deals(spreader, roomService);
-        ChatDealsUtils.setupChat(deals, null);
+        setupChat(deals, null);
         allRoomsAreActive();
     }
 

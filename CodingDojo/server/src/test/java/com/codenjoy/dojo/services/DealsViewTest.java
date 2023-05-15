@@ -24,7 +24,6 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.services.controller.Controller;
-import com.codenjoy.dojo.services.helper.ChatDealsUtils;
 import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.services.hero.HeroDataImpl;
 import com.codenjoy.dojo.services.info.Information;
@@ -45,6 +44,7 @@ import java.util.*;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.utils.JsonUtils.prettyPrint;
+import static com.codenjoy.dojo.utils.TestUtils.setupChat;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
@@ -68,7 +68,7 @@ public class DealsViewTest {
         FieldService fieldService = mock(FieldService.class);
         Spreader spreader = new Spreader(fieldService);
         deals = new Deals(spreader, null);
-        ChatDealsUtils.setupChat(deals, null);
+        setupChat(deals, null);
         dealsView = new DealsView();
         dealsView.service = deals;
 

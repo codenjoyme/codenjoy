@@ -22,7 +22,6 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
-import com.codenjoy.dojo.services.helper.ChatDealsUtils;
 import com.codenjoy.dojo.services.info.Information;
 import com.codenjoy.dojo.services.multiplayer.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
@@ -39,6 +38,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import static com.codenjoy.dojo.utils.TestUtils.setupChat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.mockito.ArgumentMatchers.any;
@@ -71,7 +71,7 @@ public class DealsMultiplayerTest {
         Spreader spreader = new Spreader(fieldService);
         RoomService roomService = mock(RoomService.class);
         deals = new Deals(spreader, roomService);
-        ChatDealsUtils.setupChat(deals, null);
+        setupChat(deals, null);
 
         // по умолчанию все комнаты активны
         when(roomService.isActive(anyString())).thenReturn(true);

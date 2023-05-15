@@ -23,7 +23,6 @@ package com.codenjoy.dojo.services;
  */
 
 import com.codenjoy.dojo.client.Closeable;
-import com.codenjoy.dojo.services.helper.ChatDealsUtils;
 import com.codenjoy.dojo.services.info.Information;
 import com.codenjoy.dojo.services.multiplayer.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
@@ -38,6 +37,7 @@ import org.junit.Before;
 
 import java.util.*;
 
+import static com.codenjoy.dojo.utils.TestUtils.setupChat;
 import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -159,7 +159,7 @@ public class AbstractDealsTest {
         ais.put(player, ai);
         player.setAi(ai);
 
-        ChatDealsUtils.setupChat(deals, deal -> lazyJoysticks.add(deal.getJoystick()));
+        setupChat(deals, deal -> lazyJoysticks.add(deal.getJoystick()));
 
         TestUtils.Env env =
                 TestUtils.getDeal(
