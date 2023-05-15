@@ -32,6 +32,7 @@ import com.codenjoy.dojo.services.multiplayer.Spreader;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.utils.JsonUtils;
+import com.codenjoy.dojo.utils.test.TestUtils;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;

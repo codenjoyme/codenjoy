@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -36,10 +37,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.*;
 
-import static com.codenjoy.dojo.services.TestUtils.assertUsersEqual;
+import static com.codenjoy.dojo.client.Utils.split;
 import static com.codenjoy.dojo.services.security.GameAuthorities.ADMIN;
 import static com.codenjoy.dojo.services.security.GameAuthorities.USER;
-import static com.codenjoy.dojo.client.Utils.split;
 import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
@@ -337,6 +337,16 @@ public class RegistrationTest {
         assertUsersEqual(expectedUser1.setReadableName("updatedName1").setEmail("updatedEmail1"),
                 actualUser1, "pass1", PASSWORD_ENCODER);
         assertUsersEqual(expectedUser2, actualUser2, "pass2", PASSWORD_ENCODER);
+    }
+
+    public static void assertUsersEqual(Registration.User expected, Registration.User actual, String originPassword, PasswordEncoder passwordEncoder) {
+        Assert.assertEquals("User ids mismatch", expected.getId(), actual.getId());
+        Assert.assertEquals("User readable names mismatch", expected.getReadableName(), actual.getReadableName());
+        Assert.assertEquals("User emails approval statuses mismatch", expected.getApproved(), actual.getApproved());
+        Assert.assertEquals("User emails approval statuses mismatch", expected.getApproved(), actual.getApproved());
+        Assert.assertEquals("User codes mismatch", expected.getCode(), actual.getCode());
+        Assert.assertEquals("User data mismatch", expected.getData(), actual.getData());
+        Assert.assertTrue("User passwords mismatch", passwordEncoder.matches(originPassword, actual.getPassword()));
     }
 
     @Test
