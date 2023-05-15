@@ -25,7 +25,7 @@ package com.codenjoy.dojo.cucumber.page;
 import com.codenjoy.dojo.client.*;
 import com.codenjoy.dojo.services.GameService;
 import com.codenjoy.dojo.services.GameType;
-import com.codenjoy.dojo.services.mocks.FakeGameType;
+import com.codenjoy.dojo.utils.test.mocks.FakeGameType;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;

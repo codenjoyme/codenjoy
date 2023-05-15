@@ -27,9 +27,9 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
+import com.codenjoy.dojo.utils.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -219,8 +219,7 @@ public class Validator {
     }
 
     public static boolean isEmpty(String input) {
-        return StringUtils.isEmpty(input)
-                || input.equalsIgnoreCase("null");
+        return Strings.isEmpty(input);
     }
 
     public boolean isGameName(String input, boolean canBeNull) {

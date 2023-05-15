@@ -24,9 +24,9 @@ package com.codenjoy.dojo.web.rest;
 
 import com.codenjoy.dojo.config.ThreeGamesConfiguration;
 import com.codenjoy.dojo.services.Deal;
-import com.codenjoy.dojo.services.mocks.ThirdGameSettings;
-import com.codenjoy.dojo.services.mocks.ThirdGameType;
 import com.codenjoy.dojo.services.multiplayer.GameRoom;
+import com.codenjoy.dojo.utils.test.mocks.ThirdGameSettings;
+import com.codenjoy.dojo.utils.test.mocks.ThirdGameType;
 import com.codenjoy.dojo.web.rest.pojo.PTeam;
 import org.json.JSONArray;
 import org.junit.Before;

@@ -40,10 +40,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
 
-import static com.codenjoy.dojo.services.mocks.ThirdGameSettings.Keys.PARAMETER5;
-import static com.codenjoy.dojo.services.mocks.ThirdGameSettings.Keys.PARAMETER6;
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.*;
 import static com.codenjoy.dojo.utils.smart.SmartAssert.assertEquals;
+import static com.codenjoy.dojo.utils.test.mocks.ThirdGameSettings.Keys.PARAMETER5;
+import static com.codenjoy.dojo.utils.test.mocks.ThirdGameSettings.Keys.PARAMETER6;
 import static java.util.stream.Collectors.toList;
 
 @RunWith(SpringRunner.class)

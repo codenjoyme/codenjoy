@@ -23,10 +23,10 @@ package com.codenjoy.dojo.services;
  */
 
 
-import com.codenjoy.dojo.services.mocks.FirstGameType;
-import com.codenjoy.dojo.services.mocks.SecondGameType;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.room.RoomService;
+import com.codenjoy.dojo.utils.test.mocks.FirstGameType;
+import com.codenjoy.dojo.utils.test.mocks.SecondGameType;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,9 +34,9 @@ import java.io.File;
 import java.util.*;
 
 import static com.codenjoy.dojo.client.Utils.split;
-import static com.codenjoy.dojo.services.mocks.FirstGameSettings.Keys.PARAMETER1;
-import static com.codenjoy.dojo.services.mocks.SecondGameSettings.Keys.PARAMETER3;
-import static com.codenjoy.dojo.services.mocks.SecondGameSettings.Keys.PARAMETER4;
+import static com.codenjoy.dojo.utils.test.mocks.FirstGameSettings.Keys.PARAMETER1;
+import static com.codenjoy.dojo.utils.test.mocks.SecondGameSettings.Keys.PARAMETER3;
+import static com.codenjoy.dojo.utils.test.mocks.SecondGameSettings.Keys.PARAMETER4;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 

@@ -23,6 +23,7 @@ package com.codenjoy.dojo.config;
  */
 
 import com.codenjoy.dojo.services.log.DebugService;
+import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
 import com.codenjoy.dojo.transport.ws.PlayerTransportImpl;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,7 +31,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 @Configuration
@@ -61,5 +61,10 @@ public class AppConfig {
                                      @Value("${log.filter}") String[] filter)
     {
         return new DebugService(active, Arrays.asList(filter));
+    }
+
+    @Bean
+    public RoomService roomService() {
+        return new RoomService();
     }
 }

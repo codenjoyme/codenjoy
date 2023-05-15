@@ -29,10 +29,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.annotation.Import;
 
-import static com.codenjoy.dojo.services.mocks.ThirdGameSettings.Keys.PARAMETER5;
-import static com.codenjoy.dojo.services.mocks.ThirdGameSettings.Keys.PARAMETER6;
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_ENABLED;
 import static com.codenjoy.dojo.utils.smart.SmartAssert.assertEquals;
+import static com.codenjoy.dojo.utils.test.mocks.ThirdGameSettings.Keys.PARAMETER5;
+import static com.codenjoy.dojo.utils.test.mocks.ThirdGameSettings.Keys.PARAMETER6;
 
 @Import(ThreeGamesConfiguration.class)
 public class RestBoardControllerTest extends AbstractRestControllerTest {
