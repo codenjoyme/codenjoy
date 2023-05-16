@@ -316,7 +316,7 @@ public class PlayerServiceImpl implements PlayerService {
                 || !game.equals(player.getGame())
                 || !room.equals(oldDeal.getRoom()); // TODO ROOM test me
         if (newPlayer) {
-            deals.remove(player.getId(), Sweeper.on().lastAlone());
+            deals.remove(player.getId(), Sweeper.on());
 
             Deal deal = deals.deal(save, room, id, callbackUrl, gameType, time.now());
 
@@ -482,7 +482,7 @@ public class PlayerServiceImpl implements PlayerService {
             log.debug("Unregistered user {} from game {}",
                     player.getId(), player.getGame());
 
-            deals.remove(player.getId(), Sweeper.on().lastAlone());
+            deals.remove(player.getId(), Sweeper.on());
         } finally {
             lock.writeLock().unlock();
         }

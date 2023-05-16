@@ -1087,7 +1087,7 @@ public class DealsMultiplayerTest {
     }
 
     private void remove(int index) {
-        deals.remove(players.get(index).getId(), Sweeper.on().lastAlone());
+        deals.remove(players.get(index).getId(), Sweeper.on());
     }
 
     private void nextLevel(int index) {
