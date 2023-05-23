@@ -72,6 +72,8 @@ public class GameServiceImpl implements GameService {
     @Value("${plugins.game.package}")
     private String gamePackage;
 
+    protected boolean disableTesting = true;
+
     @PostConstruct
     public void init() {
         removeAll();
@@ -84,6 +86,9 @@ public class GameServiceImpl implements GameService {
         roomService.removeAll();
         for (Class<? extends GameType> clazz : allGames()) {
             GameType gameType = loadGameType(clazz);
+            if (disableTesting && gameType.isTesting()) {
+                continue;
+            }
             String name = gameType.name();
             cache.put(name, gameType);
             // создаем комнаты для каждой игры сразу

@@ -58,6 +58,7 @@ public class GameServiceTest {
             {
                 excludeGames = new String[0];
                 roomService = GameServiceTest.this.roomService = new RoomService();
+                disableTesting = false;
             }
 
             @Override
