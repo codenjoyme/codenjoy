@@ -34,32 +34,29 @@ import static org.fest.assertions.Assertions.assertThat;
 
 @RunWith(Parameterized.class)
 public class FigureImplColorTest {
-    private int expectedColorCode;
-    private Type figureType;
 
-    public FigureImplColorTest(Type figureType, int expectedColorCode) {
-        this.figureType = figureType;
-        this.expectedColorCode = expectedColorCode;
-    }
+    @Parameterized.Parameter(0)
+    public Type figureType;
 
-    @Parameterized.Parameters
-    public static Collection<Object[]> data() {
-        Object[][] data = new Object[][] {
-                { Type.I, 0b001},
-                { Type.J, 0b010},
-                { Type.L, 0b011},
-                { Type.O, 0b100},
-                { Type.S, 0b101},
-                { Type.T, 0b110},
-                { Type.Z, 0b111},
+    @Parameterized.Parameter(1)
+    public int expectedColorCode;
+
+    @Parameterized.Parameters(name = "{index}: {0}")
+    public static Object[][] data() {
+        return new Object[][] {
+                {Type.I, 0b001},
+                {Type.J, 0b010},
+                {Type.L, 0b011},
+                {Type.O, 0b100},
+                {Type.S, 0b101},
+                {Type.T, 0b110},
+                {Type.Z, 0b111},
         };
-        return Arrays.asList(data);
     }
 
     @Test
     public void shouldReturnValidColorCode() {
         FigureImpl figure = new FigureImpl(0, 0, figureType, "#");
         assertThat(figure.rowCodes(false)).isEqualTo(new int[]{expectedColorCode});
-
     }
 }
