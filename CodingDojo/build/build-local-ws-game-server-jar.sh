@@ -140,7 +140,7 @@ if [[ ! -d "$GAME_ROOT" ]]; then
 else
     eval_echo "$MVNW -f $JAVA_CLIENT_ROOT/pom.xml clean install -DskipTests=true"
     eval_echo "$MVNW -f $ENGINE_ROOT/pom.xml clean install -DskipTests=true"
-    eval_echo "$MVNW -f $GAME_ROOT/pom.xml clean compile assembly:single -DskipTests=true -DgitDir=$ROOT -Pjar-local"
+    eval_echo "$MVNW -f $GAME_ROOT/pom.xml clean package assembly:single -DskipTests=true -DgitDir=$ROOT -Pjar-local"
     eval_echo "mkdir $OUT"
     eval_echo "SOURCE=$GAME_ROOT/target/$GAME-engine.jar"
     eval_echo "DEST=$OUT/$GAME-engine.jar"

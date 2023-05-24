@@ -11,7 +11,8 @@
           <option name="goals">
             <list>
               <option value="clean" />
-              <option value="install" />
+              <option value="package" />
+              <option value="assembly:single" />
               <option value="-Pjar-local" />
               <option value="-DskipTests=true" />
             </list>
