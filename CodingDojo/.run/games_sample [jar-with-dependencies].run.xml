@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="server [run icancode]" type="MavenRunConfiguration" factoryName="Maven">
+  <configuration default="false" name="games/sample [jar-with-dependencies]" type="MavenRunConfiguration" factoryName="Maven">
     <MavenSettings>
       <option name="myGeneralSettings" />
       <option name="myRunnerSettings" />
@@ -11,13 +11,9 @@
           <option name="goals">
             <list>
               <option value="clean" />
-              <option value="spring-boot:run" />
-              <option value="-DMAVEN_OPTS=-Xmx1024m" />
-              <option value="-Dspring.profiles.active=postgres,debug" />
-              <option value="-Dcontext=/codenjoy-contest" />
-              <option value="-Dpage.main.unauthorized=false" />
-              <option value="-Dserver.port=8080" />
-              <option value="-Picancode" />
+              <option value="install" />
+              <option value="-Pjar-with-dependencies" />
+              <option value="-DskipTests=true" />
             </list>
           </option>
           <option name="pomFileName" value="pom.xml" />
@@ -25,15 +21,14 @@
             <map />
           </option>
           <option name="resolveToWorkspace" value="false" />
-          <option name="workingDirPath" value="$PROJECT_DIR$/server" />
+          <option name="workingDirPath" value="$PROJECT_DIR$/games/sample" />
         </MavenRunnerParameters>
       </option>
     </MavenSettings>
     <method v="2">
-      <option name="RunConfigurationTask" enabled="true" run_configuration_name="games [install]" run_configuration_type="MavenRunConfiguration" />
       <option name="RunConfigurationTask" enabled="true" run_configuration_name="client/java [install]" run_configuration_type="MavenRunConfiguration" />
+      <option name="RunConfigurationTask" enabled="true" run_configuration_name="games [install only]" run_configuration_type="MavenRunConfiguration" />
       <option name="RunConfigurationTask" enabled="true" run_configuration_name="engine [install]" run_configuration_type="MavenRunConfiguration" />
-      <option name="RunConfigurationTask" enabled="true" run_configuration_name="games/icancode [install]" run_configuration_type="MavenRunConfiguration" />
     </method>
   </configuration>
 </component>

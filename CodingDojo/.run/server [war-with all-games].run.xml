@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="games/mollymage [install]" type="MavenRunConfiguration" factoryName="Maven">
+  <configuration default="false" name="server [war-with all-games]" type="MavenRunConfiguration" factoryName="Maven">
     <MavenSettings>
       <option name="myGeneralSettings" />
       <option name="myRunnerSettings" />
@@ -11,7 +11,8 @@
           <option name="goals">
             <list>
               <option value="clean" />
-              <option value="install" />
+              <option value="package" />
+              <option value="-DallGames" />
               <option value="-DskipTests=true" />
             </list>
           </option>
@@ -20,7 +21,7 @@
             <map />
           </option>
           <option name="resolveToWorkspace" value="false" />
-          <option name="workingDirPath" value="$PROJECT_DIR$/games/mollymage" />
+          <option name="workingDirPath" value="$PROJECT_DIR$/server" />
         </MavenRunnerParameters>
       </option>
     </MavenSettings>

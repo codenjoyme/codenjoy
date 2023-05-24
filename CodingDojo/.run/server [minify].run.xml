@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="server [run-with mollymage]" type="MavenRunConfiguration" factoryName="Maven">
+  <configuration default="false" name="server [minify]" type="MavenRunConfiguration" factoryName="Maven">
     <MavenSettings>
       <option name="myGeneralSettings" />
       <option name="myRunnerSettings" />
@@ -10,14 +10,7 @@
           </option>
           <option name="goals">
             <list>
-              <option value="clean" />
-              <option value="spring-boot:run" />
-              <option value="-DMAVEN_OPTS=-Xmx1024m" />
-              <option value="-Dspring.profiles.active=postgres,debug" />
-              <option value="-Dcontext=/codenjoy-contest" />
-              <option value="-Dpage.main.unauthorized=false" />
-              <option value="-Dserver.port=8080" />
-              <option value="-Pmollymage" />
+              <option value="com.samaxes.maven:minify-maven-plugin:2.0.0-codenjoy" />
             </list>
           </option>
           <option name="pomFileName" value="pom.xml" />

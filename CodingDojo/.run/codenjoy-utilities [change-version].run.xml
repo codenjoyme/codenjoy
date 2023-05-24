@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="client-runner [install]" type="MavenRunConfiguration" factoryName="Maven">
+  <configuration default="false" name="codenjoy-utilities [change-version]" type="MavenRunConfiguration" factoryName="Maven">
     <MavenSettings>
       <option name="myGeneralSettings" />
       <option name="myRunnerSettings" />
@@ -11,7 +11,8 @@
           <option name="goals">
             <list>
               <option value="clean" />
-              <option value="package" />
+              <option value="compile" />
+              <option value="-Pchange-version" />
             </list>
           </option>
           <option name="pomFileName" value="pom.xml" />
@@ -19,7 +20,7 @@
             <map />
           </option>
           <option name="resolveToWorkspace" value="false" />
-          <option name="workingDirPath" value="$PROJECT_DIR$/client-runner" />
+          <option name="workingDirPath" value="$PROJECT_DIR$/utilities" />
         </MavenRunnerParameters>
       </option>
     </MavenSettings>

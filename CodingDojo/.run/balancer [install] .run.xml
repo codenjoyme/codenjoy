@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="games/icancode [install]" type="MavenRunConfiguration" factoryName="Maven">
+  <configuration default="false" name="balancer [install] " type="MavenRunConfiguration" factoryName="Maven">
     <MavenSettings>
       <option name="myGeneralSettings" />
       <option name="myRunnerSettings" />
@@ -20,7 +20,7 @@
             <map />
           </option>
           <option name="resolveToWorkspace" value="false" />
-          <option name="workingDirPath" value="$PROJECT_DIR$/games/icancode" />
+          <option name="workingDirPath" value="$PROJECT_DIR$/balancer" />
         </MavenRunnerParameters>
       </option>
     </MavenSettings>

@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="games/a2048 [install]" type="MavenRunConfiguration" factoryName="Maven">
+  <configuration default="false" name="games/sample [test mutation]" type="MavenRunConfiguration" factoryName="Maven">
     <MavenSettings>
       <option name="myGeneralSettings" />
       <option name="myRunnerSettings" />
@@ -11,8 +11,8 @@
           <option name="goals">
             <list>
               <option value="clean" />
-              <option value="install" />
-              <option value="-DskipTests=true" />
+              <option value="test" />
+              <option value="-Pmutation" />
             </list>
           </option>
           <option name="pomFileName" value="pom.xml" />
@@ -20,7 +20,7 @@
             <map />
           </option>
           <option name="resolveToWorkspace" value="false" />
-          <option name="workingDirPath" value="$PROJECT_DIR$/games/a2048" />
+          <option name="workingDirPath" value="$PROJECT_DIR$/games/sample" />
         </MavenRunnerParameters>
       </option>
     </MavenSettings>

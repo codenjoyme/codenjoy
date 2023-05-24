@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="server [run a2048]" type="MavenRunConfiguration" factoryName="Maven">
+  <configuration default="false" name="server [run-oauth2-with sample]" type="MavenRunConfiguration" factoryName="Maven">
     <MavenSettings>
       <option name="myGeneralSettings" />
       <option name="myRunnerSettings" />
@@ -13,11 +13,20 @@
               <option value="clean" />
               <option value="spring-boot:run" />
               <option value="-DMAVEN_OPTS=-Xmx1024m" />
-              <option value="-Dspring.profiles.active=postgres,debug" />
+              <option value="-Dspring.profiles.active=sqlite,oauth2,debug" />
               <option value="-Dcontext=/codenjoy-contest" />
               <option value="-Dpage.main.unauthorized=false" />
+              <option value="-Dspring.security.oauth2.client.registration.dojo.redirect-uri-template=http://localhost:3000/codenjoy-contest/login/oauth2/code/dojo" />
+              <option value="-Dserver.forward-headers-strategy=framework" />
               <option value="-Dserver.port=8080" />
-              <option value="-Pa2048" />
+              <option value="-DOAUTH2_AUTH_SERVER_URL=http://localhost:3000/api/v1/auth" />
+              <option value="-DOAUTH2_AUTH_URI=/protocol/openid-connect/auth" />
+              <option value="-DOAUTH2_TOKEN_URI=/protocol/openid-connect/token" />
+              <option value="-DOAUTH2_USERINFO_URI=/protocol/openid-connect/userinfo" />
+              <option value="-DOAUTH2_CLIENT_ID=%CLIENT_ID%" />
+              <option value="-DOAUTH2_CLIENT_SECRET=%CLIENT_SECRET%" />
+              <option value="-DCLIENT_NAME=dojo" />
+              <option value="-Psample" />
             </list>
           </option>
           <option name="pomFileName" value="pom.xml" />
@@ -29,11 +38,6 @@
         </MavenRunnerParameters>
       </option>
     </MavenSettings>
-    <method v="2">
-      <option name="RunConfigurationTask" enabled="true" run_configuration_name="client/java [install]" run_configuration_type="MavenRunConfiguration" />
-      <option name="RunConfigurationTask" enabled="true" run_configuration_name="games [install only]" run_configuration_type="MavenRunConfiguration" />
-      <option name="RunConfigurationTask" enabled="true" run_configuration_name="engine [install]" run_configuration_type="MavenRunConfiguration" />
-      <option name="RunConfigurationTask" enabled="true" run_configuration_name="games/a2048 [install]" run_configuration_type="MavenRunConfiguration" />
-    </method>
+    <method v="2" />
   </configuration>
 </component>

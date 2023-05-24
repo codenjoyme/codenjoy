@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="server [run-with all-games]" type="MavenRunConfiguration" factoryName="Maven">
+  <configuration default="false" name="client-runner [package]" type="MavenRunConfiguration" factoryName="Maven">
     <MavenSettings>
       <option name="myGeneralSettings" />
       <option name="myRunnerSettings" />
@@ -11,13 +11,7 @@
           <option name="goals">
             <list>
               <option value="clean" />
-              <option value="spring-boot:run" />
-              <option value="-DMAVEN_OPTS=-Xmx1024m" />
-              <option value="-Dspring.profiles.active=sqlite,debug" />
-              <option value="-Dcontext=/codenjoy-contest" />
-              <option value="-Dpage.main.unauthorized=false" />
-              <option value="-Dserver.port=8080" />
-              <option value="-DallGames" />
+              <option value="package" />
             </list>
           </option>
           <option name="pomFileName" value="pom.xml" />
@@ -25,7 +19,7 @@
             <map />
           </option>
           <option name="resolveToWorkspace" value="false" />
-          <option name="workingDirPath" value="$PROJECT_DIR$/server" />
+          <option name="workingDirPath" value="$PROJECT_DIR$/client-runner" />
         </MavenRunnerParameters>
       </option>
     </MavenSettings>

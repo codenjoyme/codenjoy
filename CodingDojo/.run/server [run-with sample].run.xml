@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="server [run clifford]" type="MavenRunConfiguration" factoryName="Maven">
+  <configuration default="false" name="server [run-with sample]" type="MavenRunConfiguration" factoryName="Maven">
     <MavenSettings>
       <option name="myGeneralSettings" />
       <option name="myRunnerSettings" />
@@ -13,11 +13,11 @@
               <option value="clean" />
               <option value="spring-boot:run" />
               <option value="-DMAVEN_OPTS=-Xmx1024m" />
-              <option value="-Dspring.profiles.active=postgres,debug" />
+              <option value="-Dspring.profiles.active=sqlite,debug" />
               <option value="-Dcontext=/codenjoy-contest" />
               <option value="-Dpage.main.unauthorized=false" />
               <option value="-Dserver.port=8080" />
-              <option value="-Pclifford" />
+              <option value="-Psample" />
             </list>
           </option>
           <option name="pomFileName" value="pom.xml" />
@@ -29,11 +29,6 @@
         </MavenRunnerParameters>
       </option>
     </MavenSettings>
-    <method v="2">
-      <option name="RunConfigurationTask" enabled="true" run_configuration_name="client/java [install]" run_configuration_type="MavenRunConfiguration" />
-      <option name="RunConfigurationTask" enabled="true" run_configuration_name="games [install only]" run_configuration_type="MavenRunConfiguration" />
-      <option name="RunConfigurationTask" enabled="true" run_configuration_name="engine [install]" run_configuration_type="MavenRunConfiguration" />
-      <option name="RunConfigurationTask" enabled="true" run_configuration_name="games/clifford [install]" run_configuration_type="MavenRunConfiguration" />
-    </method>
+    <method v="2" />
   </configuration>
 </component>
