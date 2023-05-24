@@ -282,7 +282,7 @@ location of the `.git` directory. You can also use
 After assembly, a file `<GAMENAME>-engine.jar` will 
 appear in `target`.
 
-Another way to do this - just call `CodingDojo/build/build-game-jar-local.sh`
+Another way to do this - just call `CodingDojo/build/build-local-ws-game-server-jar.sh`
 then enter game name and copy jar from `CodingDojo/build/out` folder.
 
 So you can run this jar:
