@@ -31,7 +31,7 @@
 - TBD
 
 Чтобы самостоятельно сгенерировать jar с таким легковестным WS-сервером достаточно 
-запустить в исходниках [\CodingDojo\build\build-game-jar-local.sh](https://github.com/codenjoyme/codenjoy/blob/master/CodingDojo/build/build-game-jar-local.sh),
+запустить в исходниках [\CodingDojo\build\build-local-ws-game-server-jar.sh](https://github.com/codenjoyme/codenjoy/blob/master/CodingDojo/build/build-local-ws-game-server-jar.sh),
 указать название игры и ожидать результата в папке `.\out`. После сборки там 
 будет располагаться несколько файлов: 
 - `<GAMENAME>-engine.jar` - сам сервер.

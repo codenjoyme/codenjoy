@@ -39,6 +39,7 @@ import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.tetris.model.*;
+import com.codenjoy.dojo.tetris.model.Player;
 import com.codenjoy.dojo.tetris.model.levels.LevelsFactory;
 import com.codenjoy.dojo.tetris.services.ai.AISolver;
 import com.codenjoy.dojo.utils.LevelUtils;

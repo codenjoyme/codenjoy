@@ -24,17 +24,13 @@ package com.codenjoy.dojo.services.controller.chat;
 
 
 import com.codenjoy.dojo.services.Deal;
-import com.codenjoy.dojo.services.FieldService;
 import com.codenjoy.dojo.services.PlayerService;
-import com.codenjoy.dojo.services.chat.ChatAuthority;
-import com.codenjoy.dojo.services.chat.ChatService;
-import com.codenjoy.dojo.services.chat.Filter;
-import com.codenjoy.dojo.services.chat.OnChange;
+import com.codenjoy.dojo.services.chat.*;
 import com.codenjoy.dojo.services.controller.AbstractControllerTest;
 import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.helper.Helpers;
-import org.json.JSONObject;
+import com.codenjoy.dojo.services.multiplayer.FieldService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.Answer;
@@ -125,7 +121,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         // when
         createPlayer("player", "room", "first");
         Deal deal = deals.get("player");
-        ChatAuthority chat = deal.chat();
+        ChatPost chat = deal.chat();
 
         // then
         with.time.nowIs(12345L);
@@ -133,7 +129,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
 
         assertEquals("[PMessage(id=1, text=message1, room=room, type=3, topicId=1, " +
                         "playerId=player, playerName=player-name, time=12345)]",
-                chat.getAllField(Filter.room("room").count(10).get()).toString());
+                with.chat.getField("player", "room").toString());
     }
 
     @Test

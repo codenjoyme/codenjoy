@@ -244,7 +244,7 @@ Create java-client executable jar
 To package an existing java client into an executable 
 jar, run the following command:
 ```
-mvn clean compile assembly:single -DskipTests=true -DgitDir=. -Pjar-with-dependencies
+mvn clean package assembly:single -DskipTests=true -DgitDir=. -Pjar-with-dependencies
 ```
 Here the `gitDir` parameter is used to specify the 
 location of the `.git` directory. You can also use 
@@ -273,7 +273,7 @@ For example MollyMage game contains a
 in which the game starts. If your game has the same 
 file, you can run the command:
 ```
-mvn clean compile assembly:single -DskipTests=true -DgitDir=. -Pjar-local
+mvn clean package assembly:single -DskipTests=true -DgitDir=. -Pjar-local
 ```
 Here the `gitDir` parameter is used to specify the 
 location of the `.git` directory. You can also use 
@@ -282,7 +282,7 @@ location of the `.git` directory. You can also use
 After assembly, a file `<GAMENAME>-engine.jar` will 
 appear in `target`.
 
-Another way to do this - just call `CodingDojo/build/build-game-jar-local.sh`
+Another way to do this - just call `CodingDojo/build/build-local-ws-game-server-jar.sh`
 then enter game name and copy jar from `CodingDojo/build/out` folder.
 
 So you can run this jar:

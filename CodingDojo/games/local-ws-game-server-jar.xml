@@ -62,11 +62,18 @@
             <directory>${project.build.outputDirectory}</directory>
             <outputDirectory>/</outputDirectory>
             <excludes>
-                <!-- <include>resources/*/help/*/info.properties</include> -->
-                <exclude>resources/*/help/*.*</exclude>
+                <!-- dont exclude resources/<game>/help/<lang>/info.properties -->
+                <exclude>resources/*/help/*/*.md</exclude>
+                <exclude>resources/*/help/*.md</exclude>
+                <exclude>resources/*/help/*/*.html</exclude>
+                <exclude>resources/*/help/*.html</exclude>
+
                 <exclude>resources/*/img/**</exclude>
                 <exclude>resources/*/js/**</exclude>
+                <exclude>resources/*/css/**</exclude>
                 <exclude>resources/*/sprite/**</exclude>
+                <!-- TODO <exclude>resources/user/engine-libs.zip</exclude> -->
+                <!-- TODO <exclude>manuals/**</exclude> -->
                 <exclude>com/codenjoy/dojo/*/client/ai/*.*</exclude>
                 <exclude>com/codenjoy/dojo/services/hash/*.*</exclude>
                 <exclude>com/codenjoy/dojo/services/algs/*.*</exclude>

@@ -22,7 +22,6 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
-import com.codenjoy.dojo.services.helper.ChatDealsUtils;
 import com.codenjoy.dojo.services.info.Information;
 import com.codenjoy.dojo.services.multiplayer.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
@@ -39,6 +38,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import static com.codenjoy.dojo.utils.TestUtils.setupChat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.mockito.ArgumentMatchers.any;
@@ -67,16 +67,14 @@ public class DealsMultiplayerTest {
 
     @Before
     public void setup() {
-        deals = new Deals();
-
-        deals.roomService = mock(RoomService.class);
-        deals.spreader = new Spreader(){{
-            fields = mock(FieldService.class);
-        }};
-        ChatDealsUtils.setupChat(deals, null);
+        FieldService fieldService = mock(FieldService.class);
+        Spreader spreader = new Spreader(fieldService);
+        RoomService roomService = mock(RoomService.class);
+        deals = new Deals(spreader, roomService);
+        setupChat(deals, null);
 
         // по умолчанию все комнаты активны
-        when(deals.roomService.isActive(anyString())).thenReturn(true);
+        when(roomService.isActive(anyString())).thenReturn(true);
 
         printerFactory = mock(PrinterFactory.class);
 
@@ -1089,7 +1087,7 @@ public class DealsMultiplayerTest {
     }
 
     private void remove(int index) {
-        deals.remove(players.get(index).getId(), Sweeper.on().lastAlone());
+        deals.remove(players.get(index).getId(), Sweeper.on());
     }
 
     private void nextLevel(int index) {

@@ -24,14 +24,15 @@ package com.codenjoy.dojo.services.dao;
 
 
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.helper.ChatDealsUtils;
 import com.codenjoy.dojo.services.info.Information;
 import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory;
+import com.codenjoy.dojo.services.multiplayer.FieldService;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.multiplayer.Spreader;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.room.RoomService;
+import com.codenjoy.dojo.utils.test.DealsUtils;
 import lombok.SneakyThrows;
 import org.junit.After;
 import org.junit.Before;
@@ -43,6 +44,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import static com.codenjoy.dojo.client.Utils.split;
+import static com.codenjoy.dojo.utils.TestUtils.mockGameType;
+import static com.codenjoy.dojo.utils.TestUtils.setupChat;
 import static java.util.stream.Collectors.joining;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -84,13 +87,11 @@ public class ActionLoggerTest {
         logger.setTicks(1);
         time = 100;
 
-        deals = new Deals(){{
-            ActionLoggerTest.this.roomService = this.roomService = mock(RoomService.class);
-            this.spreader = new Spreader(){{
-                fields = mock(FieldService.class);
-            }};
-        }};
-        ChatDealsUtils.setupChat(deals, null);
+        roomService = mock(RoomService.class);
+        FieldService fields = mock(FieldService.class);
+        Spreader spreader = new Spreader(fields);
+        deals = new Deals(spreader, roomService);
+        setupChat(deals, null);
         allRoomsAreActive();
     }
 
@@ -161,10 +162,10 @@ public class ActionLoggerTest {
 
     private void addPlayer(Deals deals, String board, int scoreValue, String id, String room, String game) {
         PlayerScores score = getScore(scoreValue);
-        Player player = new Player(id, "127.0.0.1", PlayerTest.mockGameType(game), score, null);
+        Player player = new Player(id, "127.0.0.1", mockGameType(game), score, null);
         player.setInfo(mock(Information.class));
 
-        TestUtils.Env env = TestUtils.getDeal(deals, player, room,
+        DealsUtils.Env env = DealsUtils.getDeal(deals, player, room,
                 inv -> {
                     GameField field = mock(GameField.class);
                     when(field.reader()).thenReturn(mock(BoardReader.class));

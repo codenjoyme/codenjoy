@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Random;
 
 import static com.codenjoy.dojo.client.Utils.split;
+import static com.codenjoy.dojo.utils.TestUtils.mockGameType;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
@@ -70,7 +71,7 @@ public class DealSaverTest {
         PlayerScores scores = getScores(10);
         Information info = getInfo("Some info");
         GameService gameService = getGameService(scores);
-        Player player = new Player("vasia", "http://127.0.0.1:8888", PlayerTest.mockGameType("game"), scores, info);
+        Player player = new Player("vasia", "http://127.0.0.1:8888", mockGameType("game"), scores, info);
         player.setRoom("room");
 
         // when
@@ -138,8 +139,8 @@ public class DealSaverTest {
     @Test
     public void shouldGetSavedList() {
         // given
-        Player player1 = new Player("vasia", "http://127.0.0.1:8888", PlayerTest.mockGameType("game"), getScores(10), getInfo("Some other info"));
-        Player player2 = new Player("katia", "http://127.0.0.3:7777", PlayerTest.mockGameType("game"), getScores(20), getInfo("Some info"));
+        Player player1 = new Player("vasia", "http://127.0.0.1:8888", mockGameType("game"), getScores(10), getInfo("Some other info"));
+        Player player2 = new Player("katia", "http://127.0.0.3:7777", mockGameType("game"), getScores(20), getInfo("Some info"));
         player1.setRoom("room");
         player2.setRoom("room");
 
@@ -161,9 +162,9 @@ public class DealSaverTest {
     @Test
     public void shouldGetSavedList_caseInRoom() {
         // given
-        Player player1 = new Player("vasia", "http://127.0.0.1:8888", PlayerTest.mockGameType("game"), getScores(10), getInfo("Some other info"));
-        Player player2 = new Player("katia", "http://127.0.0.3:7777", PlayerTest.mockGameType("game"), getScores(20), getInfo("Some info"));
-        Player player3 = new Player("maria", "http://127.0.0.5:9999", PlayerTest.mockGameType("game"), getScores(30), getInfo("Some another info"));
+        Player player1 = new Player("vasia", "http://127.0.0.1:8888", mockGameType("game"), getScores(10), getInfo("Some other info"));
+        Player player2 = new Player("katia", "http://127.0.0.3:7777", mockGameType("game"), getScores(20), getInfo("Some info"));
+        Player player3 = new Player("maria", "http://127.0.0.5:9999", mockGameType("game"), getScores(30), getInfo("Some another info"));
         player1.setRoom("room");
         player2.setRoom("room");
         player3.setRoom("otherRoom");
@@ -207,9 +208,9 @@ public class DealSaverTest {
     @Test
     public void shouldLoadAll_onlyLast() throws InterruptedException {
         // given
-        Player player1 = new Player("vasia", "http://127.0.0.1:8888", PlayerTest.mockGameType("game"), getScores(10), getInfo("Some other info"));
-        Player player2 = new Player("katia", "http://127.0.0.3:7777", PlayerTest.mockGameType("game"), getScores(20), getInfo("Some info"));
-        Player player3 = new Player("maria", "http://127.0.0.5:9999", PlayerTest.mockGameType("game"), getScores(30), getInfo("Some another info"));
+        Player player1 = new Player("vasia", "http://127.0.0.1:8888", mockGameType("game"), getScores(10), getInfo("Some other info"));
+        Player player2 = new Player("katia", "http://127.0.0.3:7777", mockGameType("game"), getScores(20), getInfo("Some info"));
+        Player player3 = new Player("maria", "http://127.0.0.5:9999", mockGameType("game"), getScores(30), getInfo("Some another info"));
         player1.setRoom("room");
         player2.setRoom("room");
         player3.setRoom("otherRoom");
@@ -239,9 +240,9 @@ public class DealSaverTest {
     @Test
     public void shouldLoadAll_onlyLast_whenChangeAllData() throws InterruptedException {
         // given
-        Player player1 = new Player("vasia", "http://127.0.0.1:8888", PlayerTest.mockGameType("game"), getScores(10), getInfo("Some other info"));
-        Player player2 = new Player("katia", "http://127.0.0.3:7777", PlayerTest.mockGameType("game"), getScores(20), getInfo("Some info"));
-        Player player3 = new Player("maria", "http://127.0.0.5:9999", PlayerTest.mockGameType("game"), getScores(30), getInfo("Some another info"));
+        Player player1 = new Player("vasia", "http://127.0.0.1:8888", mockGameType("game"), getScores(10), getInfo("Some other info"));
+        Player player2 = new Player("katia", "http://127.0.0.3:7777", mockGameType("game"), getScores(20), getInfo("Some info"));
+        Player player3 = new Player("maria", "http://127.0.0.5:9999", mockGameType("game"), getScores(30), getInfo("Some another info"));
         player1.setRoom("room");
         player2.setRoom("room");
         player3.setRoom("otherRoom");
@@ -253,8 +254,8 @@ public class DealSaverTest {
 
         Thread.sleep(100);
         long now2 = System.currentTimeMillis();
-        player1 = new Player("vasia", "http://127.22.22.1:8888", PlayerTest.mockGameType("game"), getScores(100), getInfo("Some other info"));
-        player3 = new Player("maria", "http://127.33.33.5:9999", PlayerTest.mockGameType("game"), getScores(300), getInfo("Some another info"));
+        player1 = new Player("vasia", "http://127.22.22.1:8888", mockGameType("game"), getScores(100), getInfo("Some other info"));
+        player3 = new Player("maria", "http://127.33.33.5:9999", mockGameType("game"), getScores(300), getInfo("Some another info"));
         player1.setRoom("otherRoom");
         player3.setRoom("room");
         saver.saveGame(player1, "{'key':'updated_value1'}", now2);
@@ -281,9 +282,9 @@ public class DealSaverTest {
     @Test
     public void shouldSaveAll() {
         // given
-        Player player1 = new Player("vasia", "http://127.0.0.1:8888", PlayerTest.mockGameType("game"), getScores(10), getInfo("Some other info"));
-        Player player2 = new Player("katia", "http://127.0.0.3:7777", PlayerTest.mockGameType("game"), getScores(20), getInfo("Some info"));
-        Player player3 = new Player("maria", "http://127.0.0.5:9999", PlayerTest.mockGameType("game"), getScores(30), getInfo("Some another info"));
+        Player player1 = new Player("vasia", "http://127.0.0.1:8888", mockGameType("game"), getScores(10), getInfo("Some other info"));
+        Player player2 = new Player("katia", "http://127.0.0.3:7777", mockGameType("game"), getScores(20), getInfo("Some info"));
+        Player player3 = new Player("maria", "http://127.0.0.5:9999", mockGameType("game"), getScores(30), getInfo("Some another info"));
 
         Game game = mock(Game.class);
         when(game.getSave()).thenReturn(
@@ -342,9 +343,9 @@ public class DealSaverTest {
     }
 
     public void givenSituation() {
-        Player player1 = new Player("vasia", "http://127.0.0.1:8888", PlayerTest.mockGameType("game"), getScores(10), getInfo("Some other info"));
-        Player player2 = new Player("katia", "http://127.0.0.3:7777", PlayerTest.mockGameType("game"), getScores(20), getInfo("Some info"));
-        Player player3 = new Player("maria", "http://127.0.0.5:9999", PlayerTest.mockGameType("game"), getScores(30), getInfo("Some another info"));
+        Player player1 = new Player("vasia", "http://127.0.0.1:8888", mockGameType("game"), getScores(10), getInfo("Some other info"));
+        Player player2 = new Player("katia", "http://127.0.0.3:7777", mockGameType("game"), getScores(20), getInfo("Some info"));
+        Player player3 = new Player("maria", "http://127.0.0.5:9999", mockGameType("game"), getScores(30), getInfo("Some another info"));
 
         long now = System.currentTimeMillis();
         player1.setRoom("room");
@@ -402,7 +403,7 @@ public class DealSaverTest {
     public void saveGame_withProvideTeamId() {
         // given
         int teamId = 3;
-        Player player = new Player("katia", "http://127.0.0.3:7777", PlayerTest.mockGameType("game"), getScores(20), getInfo("Some info"));
+        Player player = new Player("katia", "http://127.0.0.3:7777", mockGameType("game"), getScores(20), getInfo("Some info"));
         player.setRoom("room");
 
         // when
@@ -416,7 +417,7 @@ public class DealSaverTest {
     @Test
     public void saveGame_withNoProvidedTeamId_useDefault() {
         // given
-        Player player = new Player("katia", "http://127.0.0.3:7777", PlayerTest.mockGameType("game"), getScores(20), getInfo("Some info"));
+        Player player = new Player("katia", "http://127.0.0.3:7777", mockGameType("game"), getScores(20), getInfo("Some info"));
         player.setRoom("room");
 
         // when

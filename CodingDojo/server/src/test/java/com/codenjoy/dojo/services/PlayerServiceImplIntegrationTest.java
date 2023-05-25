@@ -33,10 +33,7 @@ import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.helper.ChatDealsUtils;
 import com.codenjoy.dojo.services.mocks.AISolverStub;
 import com.codenjoy.dojo.services.mocks.BoardStub;
-import com.codenjoy.dojo.services.multiplayer.GameField;
-import com.codenjoy.dojo.services.multiplayer.GamePlayer;
-import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
-import com.codenjoy.dojo.services.multiplayer.Spreader;
+import com.codenjoy.dojo.services.multiplayer.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.room.RoomService;
@@ -79,11 +76,11 @@ public class PlayerServiceImplIntegrationTest {
     public void setup() {
         service = new PlayerServiceImpl() {
             {
+                FieldService fieldService = mock(FieldService.class);
+                Spreader spreader = new Spreader(fieldService);
+
                 PlayerServiceImplIntegrationTest.this.deals
-                        = this.deals = new Deals();
-                this.deals.spreader = new Spreader(){{
-                    fields = mock(FieldService.class);
-                }};
+                        = this.deals = new Deals(spreader, roomService);
 
                 PlayerServiceImplIntegrationTest.this.playerController
                         = this.playerController = mock(Controller.class);

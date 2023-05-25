@@ -19,6 +19,7 @@
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <maven-gmaven-plugin.version>1.0</maven-gmaven-plugin.version>
         <maven-gmavenplus-plugin.version>1.13.1</maven-gmavenplus-plugin.version>
+        <httpclient.version>4.5.2</httpclient.version>
     </properties>
 
     <profiles>
@@ -78,6 +79,11 @@
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>${json.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${httpclient.version}</version>
         </dependency>
     </dependencies>
 

@@ -26,10 +26,7 @@ package com.codenjoy.dojo.services.controller.chat;
 import com.codenjoy.dojo.services.Deal;
 import com.codenjoy.dojo.services.ErrorTicketService;
 import com.codenjoy.dojo.services.Tickable;
-import com.codenjoy.dojo.services.chat.ChatAuthority;
-import com.codenjoy.dojo.services.chat.ChatService;
-import com.codenjoy.dojo.services.chat.ChatType;
-import com.codenjoy.dojo.services.chat.OnChange;
+import com.codenjoy.dojo.services.chat.*;
 import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.services.serializer.ModelAndViewSerializer;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
@@ -82,7 +79,7 @@ public class ChatController implements Controller<String, ChatAuthority>, Tickab
     public void register(Deal deal) {
         String id = deal.getPlayerId();
         ChatAuthority authority = chatService.authority(id, chatListener());
-        deal.setChat(authority);
+        deal.setChat(new ChatPostImpl(authority));
         ChatResponseHandler handler = new ChatResponseHandler(deal, authority,
                 error -> sendError(id, error));
         transport.registerPlayerEndpoint(id, handler);

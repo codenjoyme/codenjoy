@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services.mocks;
  */
 
 import com.codenjoy.dojo.services.incativity.InactivitySettings;
+import com.codenjoy.dojo.utils.test.mocks.FirstGameSettings;
 
 public class FirstInactivityGameSettings extends FirstGameSettings
         implements InactivitySettings<FirstGameSettings> {

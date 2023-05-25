@@ -24,14 +24,10 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.services.controller.Controller;
-import com.codenjoy.dojo.services.helper.ChatDealsUtils;
 import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.services.hero.HeroDataImpl;
 import com.codenjoy.dojo.services.info.Information;
-import com.codenjoy.dojo.services.multiplayer.GameField;
-import com.codenjoy.dojo.services.multiplayer.GamePlayer;
-import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
-import com.codenjoy.dojo.services.multiplayer.Spreader;
+import com.codenjoy.dojo.services.multiplayer.*;
 import com.codenjoy.dojo.services.printer.CharElement;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.SimpleParameter;
@@ -48,6 +44,7 @@ import java.util.*;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.utils.JsonUtils.prettyPrint;
+import static com.codenjoy.dojo.utils.TestUtils.setupChat;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
@@ -68,11 +65,10 @@ public class DealsViewTest {
 
     @Before
     public void setup() {
-        deals = new Deals();
-        deals.spreader = new Spreader(){{
-            fields = mock(FieldService.class);
-        }};
-        ChatDealsUtils.setupChat(deals, null);
+        FieldService fieldService = mock(FieldService.class);
+        Spreader spreader = new Spreader(fieldService);
+        deals = new Deals(spreader, null);
+        setupChat(deals, null);
         dealsView = new DealsView();
         dealsView.service = deals;
 

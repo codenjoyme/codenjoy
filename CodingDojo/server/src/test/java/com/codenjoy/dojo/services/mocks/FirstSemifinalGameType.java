@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services.mocks;
 
 
 import com.codenjoy.dojo.services.settings.SettingsImpl;
+import com.codenjoy.dojo.utils.test.mocks.FirstGameType;
 
 public class FirstSemifinalGameType extends FirstGameType {
 

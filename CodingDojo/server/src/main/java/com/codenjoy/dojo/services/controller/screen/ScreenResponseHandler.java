@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services.controller.screen;
  */
 
 
+import com.codenjoy.dojo.services.Deals;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.annotations.PerformanceOptimized;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
@@ -39,10 +40,6 @@ import org.eclipse.jetty.websocket.api.Session;
 import org.json.JSONObject;
 
 import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toMap;
@@ -80,7 +77,7 @@ public class ScreenResponseHandler implements ResponseHandler {
                 .filter(entry -> request.isMyRoom(entry.getKey()))
                 .filter(entry -> request.isAllPlayers() || request.isFor(entry.getKey()));
         if (request.isAllPlayers()) {
-            stream = stream.filter(distinctByKey(entry -> entry.getValue().getGroup().toString()));
+            stream = stream.filter(Deals.distinctByKey(entry -> entry.getValue().getGroup().toString()));
         }
         return toString(stream);
     }
@@ -96,11 +93,6 @@ public class ScreenResponseHandler implements ResponseHandler {
     @SneakyThrows
     private String toJson(Object data) {
         return mapper.writeValueAsString(data);
-    }
-
-    public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
-        Set<Object> seen = ConcurrentHashMap.newKeySet();
-        return t -> seen.add(keyExtractor.apply(t));
     }
 
     @Override

@@ -36,6 +36,7 @@ public class Level extends AbstractLevel {
         super(map);
     }
 
+    @Override
     public List<Hero> heroes() {
         return find(Hero::new,
                 HERO1,

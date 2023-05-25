@@ -213,7 +213,7 @@ public class BoardController {
         }
 
         populateBoardAttributes(model, request, id, null, game,
-                room, GameServiceImpl.removeNumbers(game),
+                room, GameUtils.removeNumbers(game),
                 id, user.get().getReadableName(), false);
 
         return "board-log";

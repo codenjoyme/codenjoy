@@ -22,13 +22,13 @@ package com.codenjoy.dojo.services.helper;
  * #L%
  */
 
-import com.codenjoy.dojo.services.FieldService;
 import com.codenjoy.dojo.services.GameService;
 import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.SaveService;
 import com.codenjoy.dojo.services.chat.PlayersCache;
 import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.multiplayer.FieldService;
 import com.codenjoy.dojo.services.semifinal.SemifinalService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Lazy;

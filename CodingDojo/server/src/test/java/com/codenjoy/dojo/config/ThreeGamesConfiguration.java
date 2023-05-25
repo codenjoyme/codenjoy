@@ -24,9 +24,9 @@ package com.codenjoy.dojo.config;
 
 import com.codenjoy.dojo.services.GameServiceImpl;
 import com.codenjoy.dojo.services.GameType;
-import com.codenjoy.dojo.services.mocks.FirstGameType;
-import com.codenjoy.dojo.services.mocks.SecondGameType;
-import com.codenjoy.dojo.services.mocks.ThirdGameType;
+import com.codenjoy.dojo.utils.test.mocks.FirstGameType;
+import com.codenjoy.dojo.utils.test.mocks.SecondGameType;
+import com.codenjoy.dojo.utils.test.mocks.ThirdGameType;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 

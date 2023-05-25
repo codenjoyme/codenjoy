@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services.mocks;
  */
 
 import com.codenjoy.dojo.services.semifinal.SemifinalSettings;
+import com.codenjoy.dojo.utils.test.mocks.SecondGameSettings;
 
 public class SecondSemifinalGameSettings extends SecondGameSettings
         implements SemifinalSettings<SecondGameSettings> {

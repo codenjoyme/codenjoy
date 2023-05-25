@@ -91,7 +91,7 @@ call %RUN% :init_colors
     call %RUN% :eval_echo ‘%MVNW% clean install -DskipTests=%SKIP_TESTS%‘
 
     call %RUN% :color ‘%CL_HEADER%‘ ‘Сreate executable jar...‘
-    call %RUN% :eval_echo ‘%MVNW% compile assembly:single -Pjar-with-dependencies -DskipTests=%SKIP_TESTS%‘
+    call %RUN% :eval_echo ‘%MVNW% package assembly:single -Pjar-with-dependencies -DskipTests=%SKIP_TESTS%‘
 
     call %RUN% :eval_echo ‘copy %ROOT%\target\client-exec.jar %ROOT%\‘
     call %RUN% :color ‘%CL_INFO%‘ ‘The executable file is located here: %ROOT%\client-exec.jar‘

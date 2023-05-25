@@ -27,8 +27,8 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
-import com.codenjoy.dojo.services.settings.SettingsReader;
 import com.codenjoy.dojo.utils.smart.SmartAssert;
+import com.codenjoy.dojo.utils.test.AbstractDealsTest;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -56,6 +56,7 @@ public class SemifinalServiceTest extends AbstractDealsTest {
         semifinal.deals = deals;
         semifinal.saver = mock(GameSaver.class);
         GameService gameService = mock(GameService.class);
+        TimeService timeService = new TimeService();
         semifinal.scoresCleaner = spy(new ScoresCleaner(deals, semifinal.saver, roomService, gameService, timeService));
         semifinal.clean();
         roomService.removeAll();

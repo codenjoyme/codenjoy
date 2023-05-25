@@ -157,7 +157,7 @@
                             <archive>
                                 <manifest>
                                     <addClasspath>false</addClasspath>
-                                    <mainClass>com.codenjoy.dojo.${module.name}.client.YourSolver</mainClass>
+                                    <mainClass>com.codenjoy.dojo.${module.name}.services.ai.AISolver</mainClass>
                                 </manifest>
                             </archive>
                             <descriptorRefs>

@@ -26,6 +26,7 @@ import com.codenjoy.dojo.services.multiplayer.Sweeper;
 import com.codenjoy.dojo.services.settings.CheckBox;
 import com.codenjoy.dojo.services.settings.EditBox;
 import com.codenjoy.dojo.services.settings.Settings;
+import com.codenjoy.dojo.utils.test.AbstractDealsTest;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -40,12 +41,13 @@ import static org.mockito.Mockito.*;
 public class InactivityServiceTest extends AbstractDealsTest {
 
     private InactivityService inactivity;
+    private TimeService timeService;
 
     @Before
     public void setup() {
         super.setup();
         deals = spy(deals);
-        timeService = spy(timeService);
+        timeService = spy(new TimeService());
         inactivity = new InactivityService(deals, timeService);
     }
 

@@ -24,13 +24,15 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.services.dao.Registration;
-import com.codenjoy.dojo.services.helper.ChatDealsUtils;
 import com.codenjoy.dojo.services.info.Information;
+import com.codenjoy.dojo.services.multiplayer.FieldService;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.multiplayer.Spreader;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
+import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.utils.JsonUtils;
+import com.codenjoy.dojo.utils.test.DealsUtils;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,6 +44,7 @@ import java.util.*;
 
 import static com.codenjoy.dojo.services.PlayerSave.NULL;
 import static com.codenjoy.dojo.services.PlayerServiceImplTest.setupTimeService;
+import static com.codenjoy.dojo.utils.TestUtils.setupChat;
 import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -65,11 +68,11 @@ public class SaveServiceImplTest {
     @Before
     public void setup() {
         saveService = new SaveServiceImpl(){{
-            this.deals = SaveServiceImplTest.this.deals = new Deals();
-            ChatDealsUtils.setupChat(deals, null);
-            this.deals.spreader = new Spreader(){{
-                fields = mock(FieldService.class);
-            }};
+            RoomService roomService = mock(RoomService.class);
+            FieldService fieldService = mock(FieldService.class);
+            Spreader spreader = new Spreader(fieldService);
+            this.deals = SaveServiceImplTest.this.deals = new Deals(spreader, roomService);
+            setupChat(deals, null);
             this.players = SaveServiceImplTest.this.playerService = mock(PlayerService.class);
             this.saver = SaveServiceImplTest.this.saver = mock(GameSaver.class);
             this.registration = SaveServiceImplTest.this.registration = mock(Registration.class);
@@ -124,7 +127,7 @@ public class SaveServiceImplTest {
             return field;
         };
 
-        TestUtils.Env env = TestUtils.getDeal(
+        DealsUtils.Env env = DealsUtils.getDeal(
                 deals,
                 player,
                 room,
