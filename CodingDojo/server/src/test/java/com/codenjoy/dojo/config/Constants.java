@@ -31,3 +31,4 @@ public class Constants {
 
     public static final String DATABASE_TYPE = SQLiteProfile.NAME;
 }
+
