@@ -18,6 +18,7 @@ All you need to develop a game is jdk11, maven3, git client and IDE Idea.
 - make a fork (or copy the sample project) from [the current repository](https://github.com/codenjoyme/codenjoy-game)
 - pull the project to your computer
 - install [maven3](https://maven.apache.org/download.cgi) (download the archive and unzip it to `c:\java`)
+  * If any problems with build, please use version [3.6.3](https://dlcdn.apache.org/maven/maven-3/3.6.3/binaries/)
 - add the `M2_HOME` environment variable that points to the root of `c:\java\apache-maven-3.x.x`
 - add the `;%M2_HOME%\bin` string at the end of the `Path` variable
 - install jdk, if necessary (also to the folder `c:\java`)
@@ -37,9 +38,16 @@ C:\Users\user>
 ```
 - download and install [IntelliJ IDEA Community version](https://www.jetbrains.com/idea/download/)
 - install [Lombok plugin](https://plugins.jetbrains.com/plugin/6317-lombok) for idea
-- clone and install our changes of maven plugins 
-  * in `master` branch [markdown-page-generator-plugin](https://github.com/codenjoyme/markdown-page-generator-plugin/tree/master) 
+- [Optional] clone and install our changes of maven plugins
+  * in `master` branch [markdown-page-generator-plugin](https://github.com/codenjoyme/markdown-page-generator-plugin/tree/master)
   * in `master` branch [minify-maven-plugin](https://github.com/codenjoyme/minify-maven-plugin/tree/es6-support)
+  * otherwise you will get it from codenjoy maven repository located on GitHub
+    ```
+    <snapshotRepository>
+        <id>codenjoy-snapshots</id>
+        <url>https://github.com/codenjoyme/codenjoy-repo/raw/master/snapshots</url>
+    </snapshotRepository>
+    ```
 
 Run Codenjoy server from sources
 --------------------------------
