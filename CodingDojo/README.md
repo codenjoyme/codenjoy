@@ -37,6 +37,9 @@ C:\Users\user>
 ```
 - download and install [IntelliJ IDEA Community version](https://www.jetbrains.com/idea/download/)
 - install [Lombok plugin](https://plugins.jetbrains.com/plugin/6317-lombok) for idea
+- clone and install our changes of maven plugins 
+  * in `master` branch [markdown-page-generator-plugin](https://github.com/codenjoyme/markdown-page-generator-plugin/tree/master) 
+  * in `es6-support` branch [minify-maven-plugin](https://github.com/codenjoyme/minify-maven-plugin/tree/es6-support)
 
 Run Codenjoy server from sources
 --------------------------------
