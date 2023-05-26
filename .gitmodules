@@ -109,3 +109,6 @@
 [submodule "CodingDojo/games/knibert"]
 	path = CodingDojo/games/knibert
 	url = https://github.com/codenjoyme/codenjoy-knibert.git
+[submodule "CodingDojo/games/questoria"]
+	path = CodingDojo/games/questoria
+	url = https://github.com/codenjoyme/codenjoy-questoria.git
