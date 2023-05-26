@@ -101,6 +101,7 @@
         <module>vacuum</module>
         <module>verland</module>
         <module>xonix</module>
+        <module>questoria</module>
     </modules>
 
     <profiles>
