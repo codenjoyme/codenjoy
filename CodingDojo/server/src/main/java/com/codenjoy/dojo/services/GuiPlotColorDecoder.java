@@ -118,8 +118,11 @@ public class GuiPlotColorDecoder {
             // TODO дольше всего выполняется getBoardAsString, прооптимизировать!
             Object screenBoard = game.getBoardAsString(true);
             Object clientBoard = game.sameBoard() ? screenBoard : game.getBoardAsString(false);
+            // TODO do not change order, encodeForBrowser method can change screenBoard object
+            String forClient = encodeForClient(clientBoard);
+            Object forBrowser = encodeForBrowser(screenBoard);
 
-            return new ImmutablePair(encodeForBrowser(screenBoard), encodeForClient(clientBoard));
+            return new ImmutablePair(forBrowser, forClient);
         } catch (Exception e) {
             log.error("Error during draw board for player: " + playerId, e);
             throw e;

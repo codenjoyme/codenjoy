@@ -33,6 +33,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -229,6 +230,10 @@ public class GuiPlotColorDecoderTest {
 
     private String fix(String json) {
         return json.replace("'","\"");
+    }
+
+    private String fix2(String json) {
+        return json.replace("\"","'");
     }
 
     @Test
@@ -539,5 +544,23 @@ public class GuiPlotColorDecoderTest {
 
         // then
         assertEquals("(AAAABBBBCCCCDDDD,1111222211112222)", boards.toString());
+    }
+
+    @Test
+    public void shouldBuildBoards_whenSameBoard_caseLayeredBoard() {
+        // given
+        JSONObject board = new JSONObject("{'key1':'value1','layers':['1111222211112222','3333444433334444','1111444411114444'],'key2':'value2'}}");
+
+        Game game = mock(Game.class);
+        GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(Element.values());
+        when(game.getBoardAsString(anyBoolean())).thenReturn(board);
+        when(game.sameBoard()).thenReturn(true);
+
+        // when
+        ImmutablePair<Object, Object> boards = decoder.buildBoards(game, "player");
+
+        // then
+        assertEquals("({'key1':'value1','key2':'value2','layers':['AAAABBBBAAAABBBB','CCCCDDDDCCCCDDDD','AAAADDDDAAAADDDD']}," +
+                "{'key1':'value1','key2':'value2','layers':['1111222211112222','3333444433334444','1111444411114444']})", fix2(boards.toString()));
     }
 }
