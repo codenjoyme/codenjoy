@@ -69,8 +69,10 @@ eval_echo "ssh-add ~/.ssh/*_rsa"
 
 eval_echo "git checkout develop"
 eval_echo "git pull origin develop"
+eval_echo "git merge master"
 eval_echo "git pull origin master"
 eval_echo "git pull origin dojorena-release"
+eval_echo "git merge dojorena-release"
 eval_echo "git push origin develop"
 
 eval_echo "git checkout master"
