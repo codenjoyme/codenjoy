@@ -19,7 +19,7 @@
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <maven-gmaven-plugin.version>1.0</maven-gmaven-plugin.version>
         <maven-gmavenplus-plugin.version>1.13.1</maven-gmavenplus-plugin.version>
-        <httpclient.version>4.5.2</httpclient.version>
+        <httpclient.version>4.5.13</httpclient.version>
     </properties>
 
     <profiles>
