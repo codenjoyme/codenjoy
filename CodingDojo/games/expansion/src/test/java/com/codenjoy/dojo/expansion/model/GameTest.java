@@ -813,7 +813,7 @@ public class GameTest {
         field.newGame(player);
         hero = field.getPlayers().get(0).getHero();
 
-        printer = new LayeredViewPrinter(
+        printer = new LayeredViewPrinter<>(
                 () -> field.layeredReader(),
                 () -> player,
                 Levels.COUNT_LAYERS);

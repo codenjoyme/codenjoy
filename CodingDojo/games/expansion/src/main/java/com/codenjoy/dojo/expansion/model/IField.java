@@ -86,7 +86,7 @@ public interface IField extends GameField<Player, Hero> {
 
     String id();
 
-    LayeredBoardReader layeredReader();
+    LayeredBoardReader<Player> layeredReader();
 
     long ticker();
 }

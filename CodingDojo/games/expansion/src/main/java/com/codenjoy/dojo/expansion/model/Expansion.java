@@ -583,8 +583,8 @@ public class Expansion implements Tickable, IField {
         return lg.id();
     }
 
-    public LayeredBoardReader layeredReader() {
-        return new LayeredBoardReader() {
+    public LayeredBoardReader<Player> layeredReader() {
+        return new LayeredBoardReader<>() {
             @Override
             public int size() {
                 return Expansion.this.size();
@@ -609,8 +609,8 @@ public class Expansion implements Tickable, IField {
             }
 
             @Override
-            public Point viewCenter(Object player) {
-                return ((Player)player).getHero().getPosition();
+            public Point viewCenter(Player player) {
+                return player.getHero().getPosition();
             }
 
             @Override
