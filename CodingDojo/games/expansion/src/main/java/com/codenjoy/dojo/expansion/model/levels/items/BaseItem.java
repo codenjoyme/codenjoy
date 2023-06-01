@@ -23,10 +23,10 @@ package com.codenjoy.dojo.expansion.model.levels.items;
  */
 
 
-import com.codenjoy.dojo.games.expansion.Element;
 import com.codenjoy.dojo.expansion.model.Player;
 import com.codenjoy.dojo.expansion.model.levels.Cell;
 import com.codenjoy.dojo.expansion.model.levels.Item;
+import com.codenjoy.dojo.games.expansion.Element;
 
 import java.util.Arrays;
 import java.util.List;
@@ -59,7 +59,7 @@ public abstract class BaseItem implements Item {
         if (cell == null) {
             return Arrays.asList();
         }
-        List<Item> items = cell.getItems();
+        List<Item> items = cell.items();
         items.remove(this);
         return items;
     }
@@ -77,7 +77,7 @@ public abstract class BaseItem implements Item {
     public Cell removeFromCell() {
         Cell cell = getCell();
         if (cell != null) {
-            cell.removeItem(this);
+            cell.remove(this);
             setCell(null);
         }
         return cell;

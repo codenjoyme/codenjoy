@@ -23,11 +23,11 @@ package com.codenjoy.dojo.expansion.model.levels;
  */
 
 
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.expansion.model.levels.items.Air;
 import com.codenjoy.dojo.expansion.model.levels.items.Hero;
 import com.codenjoy.dojo.expansion.model.levels.items.HeroForces;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -49,12 +49,12 @@ public class CellImpl extends PointImpl implements Cell {
 
     @Override
     public void captureBy(HeroForces income) {
-        addItem(income);
+        add(income);
         preformAction(income, true);
     }
 
     @Override
-    public void addItem(Item item) {
+    public void add(Item item) {
         items.add(item);
         item.setCell(this);
     }
@@ -74,7 +74,7 @@ public class CellImpl extends PointImpl implements Cell {
     }
 
     @Override
-    public boolean isPassable() {
+    public boolean passable() {
         for (Item item : items) {
             if (item.hasFeature(IMPASSABLE)) {
                 return false;
@@ -85,7 +85,7 @@ public class CellImpl extends PointImpl implements Cell {
     }
 
     @Override
-    public <T extends Item> T getItem(Class<T> type) {
+    public <T extends Item> T item(Class<T> type) {
         for (Item item : items) {
             if (item.getClass() == type) {
                 return (T)item;
@@ -95,7 +95,7 @@ public class CellImpl extends PointImpl implements Cell {
     }
 
     @Override
-    public <T extends Item> T getItem(int layer) {
+    public <T extends Item> T item(int layer) {
         if (items.size() <= layer) {
             return (T) new Air();
         }
@@ -104,7 +104,7 @@ public class CellImpl extends PointImpl implements Cell {
     }
 
     @Override
-    public <T extends Item> List<T> getItems(Class<T> clazz) {
+    public <T extends Item> List<T> items(Class<T> clazz) {
         List<T> result = new LinkedList<>();
         for (Item item : items) {
             // TODO to replace on class == class
@@ -116,19 +116,19 @@ public class CellImpl extends PointImpl implements Cell {
     }
 
     @Override
-    public <T extends Item> List<T> getItems() {
+    public <T extends Item> List<T> items() {
         return (List<T>) new LinkedList<>(items);
     }
 
     @Override
-    public void removeItem(Item item) {
+    public void remove(Item item) {
         items.remove(item);
         preformAction(item, false);
     }
 
     @Override
     public boolean busy(Hero hero) {
-        HeroForces item = getItem(HeroForces.class);
+        HeroForces item = item(HeroForces.class);
         return (item != null) && item.itsMe(hero);
     }
 
