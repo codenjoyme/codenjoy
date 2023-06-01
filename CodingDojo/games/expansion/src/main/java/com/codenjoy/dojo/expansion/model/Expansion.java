@@ -35,7 +35,7 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.multiplayer.TriFunction;
-import com.codenjoy.dojo.services.printer.layeredview.LayeredBoardReader;
+import com.codenjoy.dojo.services.printer.layeredview.LayeredField;
 import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
 import com.codenjoy.dojo.services.printer.state.State;
 import com.codenjoy.dojo.utils.JsonUtils;
@@ -48,7 +48,7 @@ import java.util.*;
 
 import static com.codenjoy.dojo.expansion.services.Event.Type.WIN;
 
-public class Expansion implements Tickable, IField {
+public class Expansion extends LayeredField<Player, Hero> implements Tickable, IField {
 
     public static Event WIN_MULTIPLE;
     public static Event DRAW_MULTIPLE;
@@ -583,45 +583,36 @@ public class Expansion implements Tickable, IField {
         return lg.id();
     }
 
-    public LayeredBoardReader<Player> layeredReader() {
-        return new LayeredBoardReader<>() {
-            @Override
-            public int size() {
-                return Expansion.this.size();
-            }
+    @Override
+    public int viewSize() {
+        int viewSize = Expansion.this.level.viewSize();
+        return (viewSize == -1) ? size() : viewSize;
+    }
 
-            @Override
-            public int viewSize() {
-                int viewSize = Expansion.this.level.viewSize();
-                return (viewSize == -1) ? size() : viewSize;
-            }
-
-            @Override
-            public TriFunction<Integer, Integer, Integer, State> elements() {
-                Level level = Expansion.this.getCurrentLevel();
-                return (x, y, layer) -> {
-                    if (layer == 2) {
-                        return new ForcesState(level.cell(x, y).item(HeroForces.class));
-                    } else {
-                        return level.cell(x, y).item(layer);
-                    }
-                };
-            }
-
-            @Override
-            public Point viewCenter(Player player) {
-                return player.getHero().getPosition();
-            }
-
-            @Override
-            public Object[] itemsInSameCell(State item, int layer) {
-                if (item instanceof ForcesState) {
-                    return new Object[0];
-                }
-                // TODO передавать дальше int layer и вообще сделать как в icancode от 2020-04-20
-                return ((Item) item).getItemsInSameCell().toArray();
+    @Override
+    public TriFunction<Integer, Integer, Integer, State> elements() {
+        Level level = Expansion.this.getCurrentLevel();
+        return (x, y, layer) -> {
+            if (layer == 2) {
+                return new ForcesState(level.cell(x, y).item(HeroForces.class));
+            } else {
+                return level.cell(x, y).item(layer);
             }
         };
+    }
+
+    @Override
+    public Point viewCenter(Player player) {
+        return player.getHero().getPosition();
+    }
+
+    @Override
+    public Object[] itemsInSameCell(State item, int layer) {
+        if (item instanceof ForcesState) {
+            return new Object[0];
+        }
+        // TODO передавать дальше int layer и вообще сделать как в icancode от 2020-04-20
+        return ((Item) item).getItemsInSameCell().toArray();
     }
 
     @Override

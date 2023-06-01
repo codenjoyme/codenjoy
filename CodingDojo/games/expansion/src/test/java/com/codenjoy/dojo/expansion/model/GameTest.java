@@ -53,7 +53,7 @@ import static org.mockito.Mockito.*;
 
 public class GameTest {
 
-    private IField field;
+    private Expansion field;
     private Printer<PrinterData> printer;
 
     private Hero hero;
@@ -814,7 +814,7 @@ public class GameTest {
         hero = field.getPlayers().get(0).getHero();
 
         printer = new LayeredViewPrinter<>(
-                () -> field.layeredReader(),
+                () -> field,
                 () -> player,
                 Levels.COUNT_LAYERS);
     }

@@ -30,7 +30,6 @@ import com.codenjoy.dojo.expansion.model.levels.items.Start;
 import com.codenjoy.dojo.games.expansion.ForcesMoves;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.printer.BoardReader;
-import com.codenjoy.dojo.services.printer.layeredview.LayeredBoardReader;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -85,8 +84,6 @@ public interface IField extends GameField<Player, Hero> {
     int getRoundTicks();
 
     String id();
-
-    LayeredBoardReader<Player> layeredReader();
 
     long ticker();
 }
