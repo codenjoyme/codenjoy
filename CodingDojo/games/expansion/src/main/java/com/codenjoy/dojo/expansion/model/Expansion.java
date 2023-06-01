@@ -34,6 +34,7 @@ import com.codenjoy.dojo.games.expansion.ForcesMoves;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
+import com.codenjoy.dojo.services.multiplayer.TriFunction;
 import com.codenjoy.dojo.services.printer.layeredview.LayeredBoardReader;
 import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
 import com.codenjoy.dojo.services.printer.state.State;
@@ -44,7 +45,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.function.BiFunction;
 
 import static com.codenjoy.dojo.expansion.services.Event.Type.WIN;
 
@@ -597,13 +597,13 @@ public class Expansion implements Tickable, IField {
             }
 
             @Override
-            public BiFunction<Integer, Integer, State> elements() {
-                Cell[] cells = Expansion.this.getCurrentLevel().cells();
-                return (index, layer) -> {
+            public TriFunction<Integer, Integer, Integer, State> elements() {
+                Level level = Expansion.this.getCurrentLevel();
+                return (x, y, layer) -> {
                     if (layer == 2) {
-                        return new ForcesState(cells[index].getItem(HeroForces.class));
+                        return new ForcesState(level.cell(x, y).getItem(HeroForces.class));
                     } else {
-                        return cells[index].getItem(layer);
+                        return level.cell(x, y).getItem(layer);
                     }
                 };
             }
@@ -615,12 +615,11 @@ public class Expansion implements Tickable, IField {
 
             @Override
             public Object[] itemsInSameCell(State item, int layer) {
-                if (item instanceof Item) {
-                    // TODO передавать дальше int layer и вообще сделать как в icancode от 2020-04-20
-                    return ((Item) item).getItemsInSameCell().toArray();
-                } else {
+                if (item instanceof ForcesState) {
                     return new Object[0];
                 }
+                // TODO передавать дальше int layer и вообще сделать как в icancode от 2020-04-20
+                return ((Item) item).getItemsInSameCell().toArray();
             }
         };
     }
