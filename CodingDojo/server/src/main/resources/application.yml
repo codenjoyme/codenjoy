@@ -88,3 +88,6 @@ logging:
       eclipse.jetty: info
       springframework.mvc: info
       reflections: error
+
+testing:
+  disable: true

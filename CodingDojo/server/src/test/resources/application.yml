@@ -94,3 +94,6 @@ logging:
     org:
       eclipse.jetty: info
       springframework.mvc: info
+
+testing:
+  disable: false
