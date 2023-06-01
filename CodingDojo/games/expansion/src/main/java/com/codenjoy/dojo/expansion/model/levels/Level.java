@@ -93,7 +93,7 @@ public class Level extends AbstractLevel {
             Hero hero = heroes.get(index);
             HeroForces oldItem = cell.item(HeroForces.class);
             if (oldItem != null) {
-                oldItem.removeFromCell();
+                oldItem.leaveCell();
             }
             cell.captureBy(new ChHeroForces(hero));
         });

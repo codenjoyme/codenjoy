@@ -32,6 +32,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public abstract class BaseItem implements Item {
+
     private Cell cell;
     private FeatureItem feature;
     protected Element element;
@@ -50,7 +51,7 @@ public abstract class BaseItem implements Item {
     }
 
     @Override
-    public Cell getCell() {
+    public Cell cell() {
         return cell;
     }
 
@@ -69,18 +70,16 @@ public abstract class BaseItem implements Item {
     }
 
     @Override
-    public void setCell(Cell value) {
-        cell = value;
+    public void joinCell(Cell cell) {
+        this.cell = cell;
     }
 
     @Override
-    public Cell removeFromCell() {
-        Cell cell = getCell();
-        if (cell != null) {
-            cell.remove(this);
-            setCell(null);
+    public void leaveCell() {
+        if (cell() != null) {
+            cell().remove(this);
+            joinCell(null);
         }
-        return cell;
     }
 
     @Override
@@ -123,7 +122,7 @@ public abstract class BaseItem implements Item {
     }
 
     @Override
-    public boolean hasFeature(FeatureItem feature) {
+    public boolean has(FeatureItem feature) {
         return feature != null && feature.equals(this.feature);
     }
 

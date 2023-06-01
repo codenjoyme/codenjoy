@@ -25,7 +25,6 @@ package com.codenjoy.dojo.expansion.model.attack;
 
 import com.codenjoy.dojo.client.ElementsMap;
 import com.codenjoy.dojo.expansion.TestGameSettings;
-import com.codenjoy.dojo.expansion.model.levels.Cell;
 import com.codenjoy.dojo.expansion.model.levels.items.HeroForces;
 import com.codenjoy.dojo.expansion.services.GameSettings;
 import com.codenjoy.dojo.games.expansion.Element;
@@ -65,9 +64,9 @@ public class DefenderHasAdvantageAttackTest {
         }
 
         @Override
-        public Cell removeFromCell() {
+        public void leaveCell() {
             removed = true;
-            return super.removeFromCell();
+            super.leaveCell();
         }
 
         @Override

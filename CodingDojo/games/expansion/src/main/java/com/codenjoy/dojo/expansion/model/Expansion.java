@@ -404,7 +404,7 @@ public class Expansion implements Tickable, IField {
         Cell cell = level.cell(x, y);
         HeroForces force = cell.item(HeroForces.class);
         if (force != null && force.itsMe(hero)) {
-            force.removeFromCell();
+            force.leaveCell();
         }
     }
 
@@ -487,7 +487,7 @@ public class Expansion implements Tickable, IField {
     public void removeFromCell(Hero hero) {
         for (HeroForces forces : level.items(HeroForces.class)) {
             if (forces.itsMe(hero)) {
-                forces.removeFromCell();
+                forces.leaveCell();
             }
         }
         for (Start start : level.items(Start.class)) { // TODO test me

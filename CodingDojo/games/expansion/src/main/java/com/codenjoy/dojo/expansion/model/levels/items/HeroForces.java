@@ -63,7 +63,7 @@ public class HeroForces extends FieldItem {
     }
 
     public Forces getForces() {
-        return new Forces(this.getCell(), count);
+        return new Forces(this.cell(), count);
     }
 
     public boolean itsMe(Hero hero) {
@@ -83,7 +83,7 @@ public class HeroForces extends FieldItem {
             System.out.println("Hero leave negative count on cell!");
         }
         if (this.count == 0) {
-            removeFromCell();
+            leaveCell();
         }
         return count;
     }

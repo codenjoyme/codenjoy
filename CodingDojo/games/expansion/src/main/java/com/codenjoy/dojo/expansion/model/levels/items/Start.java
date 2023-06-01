@@ -43,7 +43,7 @@ public class Start extends BaseItem {
     }
 
     public boolean isFree() {
-        return getCell().items(HeroForces.class).isEmpty();
+        return cell().items(HeroForces.class).isEmpty();
     }
 
     public boolean isOwnedBy(Hero hero) {

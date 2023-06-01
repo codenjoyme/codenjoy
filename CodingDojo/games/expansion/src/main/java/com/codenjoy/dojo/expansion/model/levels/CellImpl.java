@@ -56,7 +56,7 @@ public class CellImpl extends PointImpl implements Cell {
     @Override
     public void add(Item item) {
         items.add(item);
-        item.setCell(this);
+        item.joinCell(this);
     }
 
     private void preformAction(Item coming, boolean comeInOrLeave) {
@@ -76,7 +76,7 @@ public class CellImpl extends PointImpl implements Cell {
     @Override
     public boolean passable() {
         for (Item item : items) {
-            if (item.hasFeature(IMPASSABLE)) {
+            if (item.has(IMPASSABLE)) {
                 return false;
             }
         }

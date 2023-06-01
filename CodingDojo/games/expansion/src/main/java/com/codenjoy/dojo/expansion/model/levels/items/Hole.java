@@ -23,8 +23,8 @@ package com.codenjoy.dojo.expansion.model.levels.items;
  */
 
 
-import com.codenjoy.dojo.games.expansion.Element;
 import com.codenjoy.dojo.expansion.model.levels.Item;
+import com.codenjoy.dojo.games.expansion.Element;
 
 public class Hole extends BaseItem {
 
@@ -36,7 +36,7 @@ public class Hole extends BaseItem {
     public void action(Item item, boolean comeInOrLeave) {
         if (comeInOrLeave) {
             if (item instanceof HeroForces) {
-                item.removeFromCell();
+                item.leaveCell();
             }
         }
     }

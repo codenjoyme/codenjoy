@@ -23,10 +23,12 @@ package com.codenjoy.dojo.expansion.model.levels.items;
  */
 
 
-import com.codenjoy.dojo.games.expansion.Command;
-import com.codenjoy.dojo.expansion.model.*;
+import com.codenjoy.dojo.expansion.model.BusyMapException;
+import com.codenjoy.dojo.expansion.model.Expansion;
+import com.codenjoy.dojo.expansion.model.IField;
 import com.codenjoy.dojo.expansion.services.CodeSaver;
 import com.codenjoy.dojo.expansion.services.GameSettings;
+import com.codenjoy.dojo.games.expansion.Command;
 import com.codenjoy.dojo.games.expansion.Forces;
 import com.codenjoy.dojo.games.expansion.ForcesMoves;
 import com.codenjoy.dojo.services.Point;
@@ -88,7 +90,7 @@ public class Hero extends PlayerHero<IField> implements MessageJoystick, Tickabl
 
     private void resetOn(IField field) {
         resetFlags();
-        position = occupyFreeBase().getCell().copy();
+        position = occupyFreeBase().cell().copy();
         field.reset();
 
         field.startMoveForces(this, position.getX(), position.getY(), settings().initialForce())
@@ -264,7 +266,7 @@ public class Hero extends PlayerHero<IField> implements MessageJoystick, Tickabl
     }
 
     public Point getBasePosition() {
-        return getBase().getCell().copy();
+        return getBase().cell().copy();
     }
 
     public int getForcesPerTick() {
