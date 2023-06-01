@@ -42,7 +42,7 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
-public class Player extends LayeredGamePlayer<Hero, IField> {
+public class Player extends LayeredGamePlayer<Hero, Field> {
 
     private static final Logger log = LoggerFactory.getLogger(Player.class);
 
@@ -90,7 +90,7 @@ public class Player extends LayeredGamePlayer<Hero, IField> {
         return ElementUtils.index(hero.getBase().element());
     }
 
-    public IField getField() {
+    public Field getField() {
         return field;
     }
 

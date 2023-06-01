@@ -25,7 +25,7 @@ package com.codenjoy.dojo.expansion.model.levels.items;
 
 import com.codenjoy.dojo.expansion.model.BusyMapException;
 import com.codenjoy.dojo.expansion.model.Expansion;
-import com.codenjoy.dojo.expansion.model.IField;
+import com.codenjoy.dojo.expansion.model.Field;
 import com.codenjoy.dojo.expansion.services.CodeSaver;
 import com.codenjoy.dojo.expansion.services.GameSettings;
 import com.codenjoy.dojo.games.expansion.Command;
@@ -46,7 +46,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Hero extends PlayerHero<IField> implements MessageJoystick, Tickable {
+public class Hero extends PlayerHero<Field> implements MessageJoystick, Tickable {
 
     private static final Logger log = LoggerFactory.getLogger(Hero.class);
 
@@ -78,7 +78,7 @@ public class Hero extends PlayerHero<IField> implements MessageJoystick, Tickabl
     }
 
     @Override
-    public void init(IField field) {
+    public void init(Field field) {
         super.init(field);
         resetOn(field);
     }
@@ -88,7 +88,7 @@ public class Hero extends PlayerHero<IField> implements MessageJoystick, Tickabl
         return (GameSettings) super.settings();
     }
 
-    private void resetOn(IField field) {
+    private void resetOn(Field field) {
         resetFlags();
         position = occupyFreeBase().cell().copy();
         field.reset();

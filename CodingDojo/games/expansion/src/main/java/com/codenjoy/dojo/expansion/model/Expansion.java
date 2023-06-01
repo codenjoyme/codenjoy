@@ -48,7 +48,7 @@ import java.util.*;
 
 import static com.codenjoy.dojo.expansion.services.Event.Type.WIN;
 
-public class Expansion extends LayeredField<Player, Hero> implements Tickable, IField {
+public class Expansion extends LayeredField<Player, Hero> implements Tickable, Field {
 
     public static Event WIN_MULTIPLE;
     public static Event DRAW_MULTIPLE;

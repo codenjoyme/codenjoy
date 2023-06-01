@@ -34,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public interface IField extends GameField<Player, Hero> {
+public interface Field extends GameField<Player, Hero> {
 
     void increase(Hero hero, List<ForcesMoves> increase);
 

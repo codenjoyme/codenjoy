@@ -24,7 +24,7 @@ package com.codenjoy.dojo.expansion.model.levels;
 
 
 import com.codenjoy.dojo.client.ElementsMap;
-import com.codenjoy.dojo.expansion.model.IField;
+import com.codenjoy.dojo.expansion.model.Field;
 import com.codenjoy.dojo.expansion.model.levels.items.*;
 import com.codenjoy.dojo.games.expansion.Element;
 import com.codenjoy.dojo.games.expansion.ElementUtils;
@@ -189,7 +189,7 @@ public class Level extends AbstractLevel {
         return result;
     }
 
-    public void field(IField field) {
+    public void field(Field field) {
         List<FieldItem> items = items(FieldItem.class);
 
         for (int i = 0; i < items.size(); ++i) {
