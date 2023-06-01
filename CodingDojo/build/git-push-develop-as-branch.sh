@@ -69,15 +69,26 @@ eval_echo "ssh-add ~/.ssh/*_rsa"
 
 eval_echo "CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)"
 
-color "Please enter branch name or press Enter for current branch '$CURRENT_BRANCH'"
-read BRANCH
+if [[ -n "$1" ]]; then
+    BRANCH="$1"
+    color "Branch '$BRANCH' is selected."
+else
+    color "Please enter branch name or press Enter for current branch '$CURRENT_BRANCH'"
+    read BRANCH
 
-if [[ "$BRANCH" == "" ]]; then
-    eval_echo "BRANCH=$CURRENT_BRANCH"
+    if [[ "$BRANCH" == "" ]]; then
+        eval_echo "BRANCH=$CURRENT_BRANCH"
+    fi
 fi
 
-color "Do we need to commit submudules: y/n?"
-read submodule_commit
+if [[ -n "$2" ]]; then
+    submodule_commit="$2"
+    color "Submodule commit option '$submodule_commit' is selected."
+else
+    color "Do we need to commit submodules: y/n?"
+    read submodule_commit
+fi
+
 if [[ "$submodule_commit" == "y" ]]; then
 	eval_echo "git submodule foreach git push origin master"
 fi
