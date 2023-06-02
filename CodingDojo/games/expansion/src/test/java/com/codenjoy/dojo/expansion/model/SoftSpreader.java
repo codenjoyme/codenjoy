@@ -250,8 +250,8 @@ public class SoftSpreader {
                 });
     }
 
-    public IField field(int player) {
-        return (IField) games.get(player).getField();
+    public Field field(int player) {
+        return (Field) games.get(player).getField();
     }
 
     public List<Hero> heroes() {

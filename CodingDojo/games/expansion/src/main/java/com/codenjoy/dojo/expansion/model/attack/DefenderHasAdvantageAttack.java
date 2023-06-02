@@ -113,6 +113,6 @@ public class DefenderHasAdvantageAttack implements Attack {
 
     private void remove(List<HeroForces> forces, HeroForces force) {
         forces.remove(force);
-        force.removeFromCell();
+        force.leaveCell();
     }
 }

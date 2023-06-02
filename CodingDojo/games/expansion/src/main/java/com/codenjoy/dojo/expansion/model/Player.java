@@ -23,7 +23,6 @@ package com.codenjoy.dojo.expansion.model;
  */
 
 
-import com.codenjoy.dojo.expansion.model.levels.Levels;
 import com.codenjoy.dojo.expansion.model.levels.items.Hero;
 import com.codenjoy.dojo.expansion.services.Event;
 import com.codenjoy.dojo.expansion.services.GameSettings;
@@ -32,10 +31,7 @@ import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.hero.HeroData;
-import com.codenjoy.dojo.services.multiplayer.GamePlayer;
-import com.codenjoy.dojo.services.printer.Printer;
-import com.codenjoy.dojo.services.printer.layeredview.LayeredViewPrinter;
-import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
+import com.codenjoy.dojo.services.printer.layeredview.LayeredGamePlayer;
 import com.codenjoy.dojo.utils.JsonUtils;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -45,31 +41,22 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
-public class Player extends GamePlayer<Hero, IField> {
+public class Player extends LayeredGamePlayer<Hero, Field> {
 
     private static final Logger log = LoggerFactory.getLogger(Player.class);
 
     private String name;
-    private Printer<PrinterData> printer;
     private boolean isWin;
 
     public Player(EventListener listener, String name, GameSettings settings) {
         super(listener, settings);
         this.name = name;
         isWin = false;
-        setupPrinter();
     }
 
     @Override
     public boolean shouldLeave() {
         return !hero.isAlive();
-    }
-
-    private void setupPrinter() {
-        printer = new LayeredViewPrinter(
-                () -> field.layeredReader(),
-                () -> this,
-                Levels.COUNT_LAYERS);
     }
 
     public void event(Event event) {
@@ -101,7 +88,7 @@ public class Player extends GamePlayer<Hero, IField> {
         return ElementUtils.index(hero.getBase().element());
     }
 
-    public IField getField() {
+    public Field getField() {
         return field;
     }
 
@@ -190,10 +177,6 @@ public class Player extends GamePlayer<Hero, IField> {
     }
 
     public LogState lg = new LogState();
-
-    public Printer<PrinterData> getPrinter() {
-        return printer;
-    }
 
     @Override
     public String toString() {
