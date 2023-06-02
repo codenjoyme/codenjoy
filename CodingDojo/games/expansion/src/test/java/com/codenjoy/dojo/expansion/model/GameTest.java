@@ -815,8 +815,7 @@ public class GameTest {
 
         printer = new LayeredViewPrinter<>(
                 () -> game,
-                () -> player,
-                Levels.COUNT_LAYERS);
+                () -> player);
     }
 
     @Test

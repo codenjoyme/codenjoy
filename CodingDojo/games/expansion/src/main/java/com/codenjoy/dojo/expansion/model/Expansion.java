@@ -25,6 +25,7 @@ package com.codenjoy.dojo.expansion.model;
 import com.codenjoy.dojo.expansion.model.levels.Cell;
 import com.codenjoy.dojo.expansion.model.levels.Item;
 import com.codenjoy.dojo.expansion.model.levels.Level;
+import com.codenjoy.dojo.expansion.model.levels.Levels;
 import com.codenjoy.dojo.expansion.model.levels.items.*;
 import com.codenjoy.dojo.expansion.model.replay.GameLogger;
 import com.codenjoy.dojo.expansion.services.Event;
@@ -581,6 +582,11 @@ public class Expansion extends LayeredField<Player, Hero> implements Tickable, F
     @Override
     public String id() {
         return lg.id();
+    }
+
+    @Override
+    public int countLayers() {
+        return Levels.COUNT_LAYERS;
     }
 
     @Override

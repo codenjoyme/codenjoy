@@ -23,7 +23,6 @@ package com.codenjoy.dojo.expansion.model;
  */
 
 
-import com.codenjoy.dojo.expansion.model.levels.Levels;
 import com.codenjoy.dojo.expansion.model.levels.items.Hero;
 import com.codenjoy.dojo.expansion.services.Event;
 import com.codenjoy.dojo.expansion.services.GameSettings;
@@ -53,11 +52,6 @@ public class Player extends LayeredGamePlayer<Hero, Field> {
         super(listener, settings);
         this.name = name;
         isWin = false;
-    }
-
-    @Override
-    public int layersCount() {
-        return Levels.COUNT_LAYERS;
     }
 
     @Override
