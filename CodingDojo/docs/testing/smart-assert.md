@@ -1,21 +1,21 @@
-В методологии Unit тестирования принят подход атомарности тестирования, когда 
-1 тест тестирует 1 аспект системы и желательно содержит 1 assert, поломка которого
-естественно приводит к остановке выполнения этого теста. 
+In the Unit testing methodology, the approach of atomicity of testing is accepted, when
+1 test tests 1 aspect of the system and preferably contains 1 assert, the breakdown of which
+naturally leads to the termination of the execution of this test.
 
-Эту рекомендацию мы оставили для идеального мира и отходим от нее в наших тестах. 
-В реальном мире, в котором тесты выполняются не всегда молниеносно, 
-представляют собой не только unit, но и integration/system (что требует для настройки
-системы до самого момента тестирования много действий и времени), 
-часто требуется более 1 assert на 1 test. 
+We left this recommendation for the ideal world and deviate from it in our tests.
+In the real world, where tests are not always lightning fast,
+represent not only unit, but also integration/system (which requires for setting up
+the system until the very moment of testing a lot of actions and time),
+often requires more than 1 assert per 1 test.
 
-На проекте мы используем несколько подходов для ускорения взаимодействия с тестами.
+On the project, we use several approaches to speed up interaction with tests.
 
-Во-первых, мы проверяем assert'ом не конкретные поля тестируемого 
-объекта один за другим, а его toString представление, проверяя сразу
-все содержимое объекта. Этот подход частично позаимствован из
-`approvals` подхода одноименной библиотеки для тестирования. 
+Firstly, we check not specific fields of the tested
+object one by one, but its toString representation, checking immediately
+all the contents of the object. This approach is partially borrowed from
+`approvals` approach of the eponymous library for testing.
 
-Например, так тесты мы писали раньше:
+For example, this is how we used to write tests:
 
 ```java
     @Test
@@ -39,16 +39,17 @@
     }
 ```
 
-Если он поломается на любом из assert'ов ты увидишь только
+If it breaks on any of the assert's you'll see only:
+
 ```
 позиция X змейки
 Expected: 4
 But was:  5 
 ```
 
-И это тебе не скажет почти ничего о том, что не так со змейкой на поле.
+And this will tell you almost nothing about what's wrong with the snake in the field.
 
-Теперь мы пишем свои тесты так:
+Now we write our tests this way:
 
 ```java
     @Test
@@ -109,26 +110,26 @@ But was:  5
     }
 ```
 
-Во-вторых (еще один подход) подобные тесты выглядят как документация. 
-Мы прикладываем для этого немалые усилия, поддерживая тестовый фреймворк в 
-надлежащем уровне. Каждый раз, выделяя (extract method) низкоуровневую 
-функциональность из самого теста, увеличивая читбельность и устраняя 
-дублирование. Мы знаем, что тесты системы - это отдельный проект 
-тестирующий production часть, со своей собственной доменной моделью, сервисами, 
-утилитами и конечно же OOP/Рефакторингами и даже тестами. Да-да, весьма редко, 
-но все же иногда появляются тесты на тесты - чаще конечно тесты тестируются в связке 
-с production кодом, путем его поломки в месте, которое тестируется. Это одно из
-рекомендаций TDD подхода, о котором читай в другой статье.    
+Secondly (another approach) such tests look like documentation.
+We make considerable efforts for this, maintaining the test framework in
+the proper level. Each time, highlighting (extract method) low-level
+functionality from the test itself, increasing readability and eliminating
+duplication. We know that the tests of the system are a separate project
+testing the production part, with its own domain model, services,
+utilities and of course OOP/Refactoring and even tests. Yes, yes, very rarely,
+but still sometimes there are tests for tests - more often of course tests are tested in conjunction
+with production code, by breaking it in the place that is tested. This is one of
+recommendations of the TDD approach, which you can read in another article.
 
-В-третьих, каждый assert в случае поломки максимально информативен - 
-ты будешь видеть всю ситуацию на поле, а не какой-то махонький аспект. 
-А твоя любимая ide поможет тебе и удобно покажет diff двух строковых представлений: 
-expected и actual.
+Thirdly, each assert in case of fail is maximally informative -
+you will see the whole situation in the field, and not some small aspect.
+And your favorite ide will help you and conveniently show you the diff of two string representations:
+expected and actual.
 
-В-четвертых, выполнения теста не остановится на поломанном assert по той причине, 
-что мы пользуемся не Assert.assertEquals из набора jUnit, а оберткой над ним -
- SmartAssert.assertEquals. Последний накапливает все ошибки и слетает тогда, 
-когда мы попросим - делаем мы это в @After блоке теста. 
+Fourthly, the execution of the test will not stop at the broken assert for the reason that
+we do not use Assert.assertEquals from the jUnit set, but a wrapper over it -
+SmartAssert.assertEquals. The latter accumulates all errors and flies off when 
+we ask - we do this in the @After block of the test.
 
 ```java
     @After
@@ -137,29 +138,29 @@ expected и actual.
     }
 ```
 
-Если поломанных assert более чем 1, ты увидишь несколько блоков 
-`Expected: smth But was:  smthOther` подряд. По каждому из них можно будет посмотреть 
-diff с помощью твоей любимой ide. Это очень ускоряет, когда активно работаешь с тестами.
+If there are more than 1 broken assert, you will see several blocks
+`Expected: smth But was: smthOther` in a row. For each of them you can see
+diff using your favorite ide. This greatly speeds up when you are actively working with tests.
 
-Мы так же используем нотацию `shouldЧтоБудет_whenОпределенныеДействия`. 
-Возможны модификации `shouldЧтоБудет_whenОпределенныеДействия_caseУсловие1_ofЧегоТоТамЕще`. 
+We also use the notation `shouldWhatWill_whenCertainActions`.
+Modifications are possible `shouldWhatWill_whenCertainActions_caseCondition1_ofSomethingElseThere`.
 
-А внутри теста мы выделяем несколько блоков, отмечая их комментариями 
-`// given`, `// when` и `// then`.  
+And inside the test we highlight several blocks, marking them with comments
+`// given`, `// when` and `// then`.
 
-Ты можешь обратить внимание, что часто тесты у нас так же часто являются функциональными, 
-то есть тестируют несколько `// when // then` частей идущих подряд - они тестируют не 
-конкретное состояние, а историю. Это делает тесты более хрупкими и неудобными 
-в обращении, если только не использовать все вышеперечисленные подходы. 
+You may notice that our tests are often also functional, 
+that is, they test several `// when // then` parts that go in a row - they test not
+a specific state, but a story. This makes the tests more fragile and inconvenient
+in use, unless you use all of the above approaches.
 
-Еще один подход в тестировании мы называем `paranoic mode` который гласит, 
-пиши тесты не для того, чтобы подтвердить, что ты все сделал правильно, а для того,
-чтобы найти еще одну ошибку из многих, которые ты оставил в коде. Мы верим, 
-что программисты пишут баги. Если программист более опытный это не значит, что багов 
-у него меньше чем у менее опытного коллеги - частота генерации багов у них приблизительно
-одинаковая. Более опытный коллега просто пишет более злые баги. Их сложнее отловить. 
-А раз так - мы часто пишем избыточные тесты, сетку тестов разных типов 
-unit/integration/system/smoke/acceptance, каждый из которых лишь предлог взглянуть на код
-с другой точки зрения с одной целью - найти багу. После эи все тесты остаются 
-и помогают в регрессии - мы активно рефакторим свой код, и меньше беспокоимся 
-за возможные его поломки в ходе реорганизации.  
+Another approach in testing we call `paranoic mode` which says,
+write tests not to confirm that you did everything right, but to
+find another bug from the many that you left in the code. We believe that
+programmers write bugs. If the programmer is more experienced, this does not mean that the bugs
+he has less than a less experienced colleague - the frequency of bug generation is approximately
+the same. A more experienced colleague just writes more evil bugs.
+They are harder to catch. And if so - we often write redundant tests, a grid of tests of different types
+unit/integration/system/smoke/acceptance, each of which is only an excuse to look at the code
+from a different point of view with one goal - to find a bug. After this, all tests remain
+and help in regression - we actively refactor our code, and worry less
+for possible breakage during reorganization.
