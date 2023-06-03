@@ -86,17 +86,18 @@ public class DealsService {
         deals.onRemove(consumer);
     }
 
+    // TODO cant convert to rest because of return Deal
     public Deal get(String id) {
         return deals.get(id);
     }
 
-    // TODO cant convert to rest because of gameType
+    // TODO cant convert to rest because of gameType and return Deal
     public Deal deal(PlayerSave save, String room, String id, String callbackUrl, GameType gameType, long now) {
         deals.remove(id, Sweeper.on());
         return deals.deal(save, room, id, callbackUrl, gameType, now);
     }
 
-    // TODO cant convert to rest because of predicate
+    // TODO cant convert to rest because of predicate and return Deal
     public List<Deal> getAll(Predicate<Deal> filter) {
         return deals.getAll(filter);
     }
@@ -134,11 +135,12 @@ public class DealsService {
         deals.reloadAll(shuffle);
     }
 
+    // TODO cant convert to rest because of return Object
     public Map<String, Object> getScores() {
         return dealsView.getScores();
     }
 
-    // TODO this method breaks encapsulation
+    // TODO cant convert to rest because of return Deal
     public List<Deal> all() {
         return deals.all();
     }
@@ -177,7 +179,6 @@ public class DealsService {
         return deals.size();
     }
 
-    // TODO cant convert to rest because of filter
     private int requestControls(Predicate<Deal> filter) {
         int requested = 0;
 
