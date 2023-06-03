@@ -71,7 +71,7 @@ public class SaveServiceImplTest {
             RoomService roomService = mock(RoomService.class);
             FieldService fieldService = mock(FieldService.class);
             Spreader spreader = new Spreader(fieldService);
-            this.deals = SaveServiceImplTest.this.deals = new Deals(spreader, roomService);
+            this.deals = SaveServiceImplTest.this.deals = new Deals(spreader);
             setupChat(deals, null);
             this.players = SaveServiceImplTest.this.playerService = mock(PlayerService.class);
             this.saver = SaveServiceImplTest.this.saver = mock(GameSaver.class);

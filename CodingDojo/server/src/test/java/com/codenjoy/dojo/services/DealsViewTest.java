@@ -67,7 +67,7 @@ public class DealsViewTest {
     public void setup() {
         FieldService fieldService = mock(FieldService.class);
         Spreader spreader = new Spreader(fieldService);
-        deals = new Deals(spreader, null);
+        deals = new Deals(spreader);
         setupChat(deals, null);
         dealsView = new DealsView();
         dealsView.service = deals;

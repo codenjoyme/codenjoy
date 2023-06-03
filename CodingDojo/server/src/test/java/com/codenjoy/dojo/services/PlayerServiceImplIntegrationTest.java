@@ -80,7 +80,7 @@ public class PlayerServiceImplIntegrationTest {
                 Spreader spreader = new Spreader(fieldService);
 
                 PlayerServiceImplIntegrationTest.this.deals
-                        = this.deals = new Deals(spreader, roomService);
+                        = this.deals = new Deals(spreader);
 
                 PlayerServiceImplIntegrationTest.this.playerController
                         = this.playerController = mock(Controller.class);

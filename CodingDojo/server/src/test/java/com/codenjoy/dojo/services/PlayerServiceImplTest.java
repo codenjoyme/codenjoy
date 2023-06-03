@@ -55,6 +55,7 @@ import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.semifinal.SemifinalService;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import com.codenjoy.dojo.transport.screen.ScreenSender;
+import com.codenjoy.dojo.utils.TestUtils;
 import lombok.SneakyThrows;
 import org.fest.reflect.core.Reflection;
 import org.json.JSONObject;
@@ -229,6 +230,7 @@ public class PlayerServiceImplTest {
 
         // по умолчанию все комнаты будут активными и открытыми для регистрации
         when(roomService.isActive(anyString())).thenReturn(true);
+        when(roomService.isRoomActive(any(Deal.class))).thenReturn(true);
         when(roomService.isOpened(anyString())).thenReturn(true);
         setRegistrationOpened(true);
 
@@ -463,11 +465,6 @@ public class PlayerServiceImplTest {
         assertHostsCaptured(USER1_URL, USER2_URL);
     }
 
-    // тикаются ли борды в этой комнате
-    protected void setActive(String room, boolean active) {
-        when(roomService.isActive(room)).thenReturn(active);
-    }
-
     // открыта ли эта комната для регистрации
     protected void setRegistrationOpened(String room, boolean opened) {
         when(roomService.isOpened(room)).thenReturn(opened);
@@ -618,7 +615,7 @@ public class PlayerServiceImplTest {
         Player user2 = createPlayer(USER2, "game1", "room2");
         Player user3 = createPlayer(USER3, "game2", "room3");
 
-        setActive("room1", false);
+        TestUtils.setActive(roomService, "room1", false);
 
         // when
         playerService.tick();

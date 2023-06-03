@@ -31,6 +31,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Calendar;
+import java.util.List;
 
 import static com.codenjoy.dojo.services.incativity.InactivitySettings.Keys.INACTIVITY_ENABLED;
 import static com.codenjoy.dojo.services.incativity.InactivitySettings.Keys.INACTIVITY_TIMEOUT;
@@ -48,7 +49,7 @@ public class InactivityServiceTest extends AbstractDealsTest {
         super.setup();
         deals = spy(deals);
         timeService = spy(new TimeService());
-        inactivity = new InactivityService(deals, timeService);
+        inactivity = new InactivityService(deals, timeService, roomService);
     }
 
     private void gavenPlayers(int timeout, long now) {
@@ -72,11 +73,15 @@ public class InactivityServiceTest extends AbstractDealsTest {
         return calendar.getTimeInMillis();
     }
 
+    private List<Deal> active() {
+        return deals.getAll(roomService::isRoomActive);
+    }
+
     private void setupInactivitySettings(int timeout, boolean enabled, boolean value) {
-        if (deals.active().isEmpty()) {
+        if (active().isEmpty()) {
             fail("There are no active players");
         }
-        for (Deal deal : deals.active()) {
+        for (Deal deal : active()) {
             Settings settings = deal.getGameType().getSettings();
 
             when(settings.hasParameter(INACTIVITY_ENABLED.key()))
@@ -102,7 +107,7 @@ public class InactivityServiceTest extends AbstractDealsTest {
 
         setupInactivitySettings(timeout, true, true);
 
-        assertPlayers("[player1, player2, player3, player4]", deals.active());
+        assertPlayers("[player1, player2, player3, player4]", active());
 
         // when
         inactivity.tick();
@@ -113,7 +118,7 @@ public class InactivityServiceTest extends AbstractDealsTest {
         verify(deals).remove(eq(players.get(2).getId()), any(Sweeper.class));
         verify(deals, never()).remove(eq(players.get(3).getId()), any(Sweeper.class));
 
-        assertPlayers("[player1, player4]", deals.active());
+        assertPlayers("[player1, player4]", active());
     }
 
     @Test
@@ -127,15 +132,19 @@ public class InactivityServiceTest extends AbstractDealsTest {
 
         setupInactivitySettings(timeout, false, false);
 
-        assertPlayers("[player1, player2, player3, player4]", deals.active());
+        assertPlayers("[player1, player2, player3, player4]", active());
 
         // when
-        deals.tick();
+        tick();
 
         // then
         verify(deals, never()).remove(any(String.class), any(Sweeper.class));
 
-        assertPlayers("[player1, player2, player3, player4]", deals.active());
+        assertPlayers("[player1, player2, player3, player4]", active());
+    }
+
+    private void tick() {
+        deals.tick(roomService::isRoomActive);
     }
 
     @Test
@@ -149,14 +158,14 @@ public class InactivityServiceTest extends AbstractDealsTest {
 
         setupInactivitySettings(timeout, true, false);
 
-        assertPlayers("[player1, player2, player3, player4]", deals.active());
+        assertPlayers("[player1, player2, player3, player4]", active());
 
         // when
-        deals.tick();
+        tick();
 
         // then
         verify(deals, never()).remove(any(String.class), any(Sweeper.class));
 
-        assertPlayers("[player1, player2, player3, player4]", deals.active());
+        assertPlayers("[player1, player2, player3, player4]", active());
     }
 }

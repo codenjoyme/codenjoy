@@ -32,6 +32,7 @@ import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.multiplayer.Spreader;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.room.RoomService;
+import com.codenjoy.dojo.utils.TestUtils;
 import com.codenjoy.dojo.utils.test.DealsUtils;
 import lombok.SneakyThrows;
 import org.junit.After;
@@ -63,6 +64,8 @@ public class ActionLoggerTest {
 
     @Before
     public void setup() {
+        roomService = mock(RoomService.class);
+
         String dbFile = "target/logs.db" + new Random().nextInt();
         logger = new ActionLogger(
                     new SqliteConnectionThreadPoolFactory(false, dbFile,
@@ -76,6 +79,8 @@ public class ActionLoggerTest {
             {
                 // пригодится, когда будем дожидаться завершения сохранения
                 ActionLoggerTest.this.executor = executor;
+
+                roomService = ActionLoggerTest.this.roomService;
             }
 
             @Override
@@ -87,10 +92,9 @@ public class ActionLoggerTest {
         logger.setTicks(1);
         time = 100;
 
-        roomService = mock(RoomService.class);
         FieldService fields = mock(FieldService.class);
         Spreader spreader = new Spreader(fields);
-        deals = new Deals(spreader, roomService);
+        deals = new Deals(spreader);
         setupChat(deals, null);
         allRoomsAreActive();
     }
@@ -118,11 +122,12 @@ public class ActionLoggerTest {
     }
 
     private void allRoomsAreActive() {
-        when(roomService.isActive(anyString())).thenReturn(true);
+        TestUtils.setActive(roomService, anyString(), true);
     }
 
     private void thisRoomIsNotActive(String room) {
-        when(roomService.isActive(room)).thenReturn(false);
+        TestUtils.setActive(roomService, room, false);
+
     }
 
     @SneakyThrows

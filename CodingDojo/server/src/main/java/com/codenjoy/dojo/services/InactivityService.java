@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.incativity.InactivitySettings;
 import com.codenjoy.dojo.services.multiplayer.Sweeper;
+import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.settings.Settings;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,10 +37,11 @@ public class InactivityService implements Tickable {
 
     private final Deals deals;
     private final TimeService timeService;
+    private final RoomService roomService;
 
     @Override
     public void tick() {
-        for (Deal game : deals.active()) {
+        for (Deal game : deals.getAll(roomService::isRoomActive)) {
             GameType gameType = game.getGameType();
             Settings settings = gameType.getSettings();
             Player player = game.getPlayer();

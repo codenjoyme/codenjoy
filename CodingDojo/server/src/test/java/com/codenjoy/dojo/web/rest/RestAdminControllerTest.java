@@ -87,7 +87,7 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
 
     public void assertPlayersInActiveRooms(String expected) {
         assertEquals(expected,
-                deals.active().stream()
+                deals.getAll(rooms::isRoomActive).stream()
                     .map(deal -> deal.getPlayer().getId() + "->" + deal.getRoom())
                     .collect(toList())
                     .toString());

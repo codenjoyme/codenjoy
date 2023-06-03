@@ -79,8 +79,8 @@ public class AppConfig {
     }
 
     @Bean
-    public Deals deals(@Autowired Spreader spreader, @Autowired RoomService roomService) {
-        return new Deals(spreader, roomService);
+    public Deals deals(@Autowired Spreader spreader) {
+        return new Deals(spreader);
     }
 
     @Bean

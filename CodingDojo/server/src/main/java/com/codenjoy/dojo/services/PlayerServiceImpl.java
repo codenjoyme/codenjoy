@@ -343,7 +343,7 @@ public class PlayerServiceImpl implements PlayerService {
             actionLogger.log(deals);
             autoSaver.tick();
 
-            deals.tick();
+            deals.tick(roomService::isRoomActive);
             sendScreenUpdates();
             requestControls();
 
@@ -365,7 +365,7 @@ public class PlayerServiceImpl implements PlayerService {
     private void requestControls() {
         int requested = 0;
 
-        for (Deal deal : deals.active()) {
+        for (Deal deal : deals.getAll(roomService::isRoomActive)) {
             Player player = deal.getPlayer();
             try {
                 Object clientBoard = boards.get(player).getRight();
