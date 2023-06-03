@@ -1,159 +1,159 @@
-Рекомендации при проведении CodeReview:
+Recommendations for CodeReview:
 
-1. Запустить все тесты модуля.
-1. Запустить все тесты системы (даже если я фиксил один модуль, который 
-   точно ничего не затронет).
-1. Сделать само-кодревью перед тем как коммитить (надеть на себя шляпу  
-   тролля и искать что плохо).
-1. Убрать по возможности все TODO свои и немного тех, что было раньше  
-   (ну либо сразу после этого коммита поработать отдельно над TODO).
-1. Подумать над тем, как улучшить code coverage, в том числе запуская  
-   мутационные тесты.
-1. Посмотреть на статический анализатор кода.
-1. Посмотреть на ворнинги IDE, если удастся поднгять Warning до Error  
-   при этом - супер).
-1. Изменяя что-то в одном файле думать сразу про все места в проекте, где  
-   подобное можно поменять так, чтобы эволюция системы была видна не от  
-   файла к файлу, а от коммита к коммиту.
-1. Обязательно читать все коммиты ребят - с тем, чтобы научиться новому.
-1. Обязательно пересматривать что сделал на следующий день - будут другие  
-   мысли как этот код можно было написать лучше.
-1. Использовать ChatGPT, чтобы посмотреть, как еще можно было сделать этот  
-   кусок кода - часто в нем находятся интересные вещи, о которых не 
-   думал никогда раньше. 
-1. Если есть время - не бояться экспериментировать и сделать решение  
-   несколькими способами. Это кажется нелогичным, но это вклад в твою  
-   будущую интуицию, когда ты чувствуешь как делать лучше и как лучше 
-   точно НЕ делать.
-1. Меняя любые вещи - стараться следовать принципу baby steps - не более  
-   одного несложного фикса (рефакторинга) на коммит. Это поможет и  
-   ревьюеру когда будем смотреть код и тебе, когда надо будет неуспешный  
-   эксперимент откатить (не по Сtrl-Z а по git rollback).
-1. Хорошие описания коммитов. Одно полноценное предложение с описанием  
-   "что и почему" лучше, чем 2 слова. 2 предложения лучше, чем 1. 3 - лучше,  
-   чем 2.
-1. Не использовать git amend - существует не так много причин, оправдывающих  
-   усложнение работы кодервьюеру. Единственное, что приходит - это после 
-   того как сделал коммит, если нашел очепятку или поломанный тест 
-   (ибо невнимательный) - быстро долить. Но это имеет смысл, если прошло 
-   пару минут после коммита и то что ты доделал - его неотъемлемая часть.
-1. Предлагать PR и давать его на ревью, а не мержить, а потом сказать:   
-   "посмотри мой код, я там сегодня залил".
-1. Иметь привычку участникам команды брать новые задачи в той зоне в которой  
-   недавно делал ревью. Так ты сможешь сделать свой вклад в код не только  
-   теоретически, но и практически. Обычно всегда есть что поправить после  
-   любого коммита и последующего за ним ревью с исправлениями.
-1. Не делать ревью после ревью, после ревью, после ревью. Если тебя не  
-   поняли сразу, лучше созвониться и поработать и поработать в паре. 
-   Рекомендация о коллективном владении кода так же подходит, но при условии,
-   что автор не будет обижаться что его реализацию позже исправят.
-1. Ревьюеру должно быть удобно просмотреть все коммиты которые пошли на  
-   ревью. Если он что-то может пропустить - скорее всего он это пропустит.
-1. Обсуждая кодревью замечания лучше созвониться, а не чатиться в туле для 
-   кодревью. 
-1. Избегайте холиваров. Если холивары начинаются - лучше созвониться или привлечь
-   третью сторону. Холивары - это стратегически плохо для команды. Делись 
-   причинами побудившими тебя выбрать такой стиль написания кода, а не тем, 
-   что выбранный тобой метод единственно верный. Всегда существуют альтернативы. 
-1. Будь готов, что во время ревью ты как ревьюер так же научишься новому. Кодревью
-   это процесс обмена знаниями больше, чем процесс проверки кода.
-1. Каждое код ревью замечание лучше выностить в базу знаний.
-1. Базу знаний кодревью стоит обсуждать с командой на еженедельной основе.
-1. Все новички на проекте читают проектные кодревью конвеншены на старте.
-1. Если можно "подкрутить гайки" у статических анализаторов или ворнингах  
-   IDE для какого-то конкретного кодревью замечания - это стоит сделать сразу.
-1. Если автор хочет чтобы его похвалили, ему стоит об этом сказать сразу  
-   команде и нге использовать кодревью процесс для похвалы. Чаще всего  
-   кодревью покажет где не так хорошо и как можно сделать лучше. Этот  
-   инструмент для получения новых знаний.
-1. Ревьюеру стоит так же научиться отмечать места, которые  
-   были сделаны хорошо. Особенно, если в прошлый раз было замечание к исправлению на  
-   эту тему. В нашей культуре больше критики, чем похвалы. Надо себя форсить  
-   хвалить за что-то, даже самое незначительное. Если что-то кажется несущественным 
-   для тебя, это не значит, что оно такое же незначительное для автора.
-1. Стоит смотреть не только то что исправлено, но и общий контекст - класс,  
-   в котором произведено исправление, пакет в котором размещен класс. Зная больше про  
-   существующее API можно подобрать больше рекомендаций. Кодревью это не  
-   столько про то, что сделано - сколько про то что еще не сделано.
-1. Кроме того выбранный стиль реализации может отличаться от привычного в проекте  
-   (пусть даже устаревшего по меркам индустрии). Важно чтобы  
-   общий стиль сохранялся - это уменьшит количество энтропии (мера хаоса  
-   системы). В будущем можно принять решение, что что-то должно быть  
-   исправлено во всем проекте - и после реализации этой задачи общие  
-   рекомендации будут дополнены новыми, которые "ОК" для индустрии.
-1. Часто в ходе комплексного ревью (всего модуля) появляется идея, что  
-   может быть дополнительно улучшено - но при этом рекомендация 
-   не ложится как замечание к Автору. Стоит выносить такие идеи в ишью 
-   трекинг систему.
+1. Run all the tests of the module.
+1. Run all system tests (even if I fixed one module, which
+   definitely won't affect anything).
+1. Do a self-core review before committing (put on my hat  
+   troll hat and look for what's bad).
+1. Remove, if possible, all your TODOs and a few of those that were there before  
+   (or immediately after this commit work on TODOs separately).
+1. Think about how to improve code coverage, including running  
+   mutation tests.
+1. Look at the static code analyzer.
+1. Look at IDE warnings, if you manage to bring up Warning to Error  
+   at that - super). 
+1. When changing something in a file, think about all the places in the 
+   project where you can change it so that you can see the evolution of the 
+   system not from commit to commit, rather than from file to file. 
+1. Make sure you read all the commits - to learn something new. 
+1. Make sure you review what you did the next day - you will have second
+   new ideas on how to make this code better. Use ChatGPT to see how else you 
+   could have done this piece of code - you'll often find interesting things 
+   in it that you hadn't thought about before.
+1. If you have time - don't be afraid to experiment and make the solution  
+   in more than one way. It seems counterintuitive, but it's a contribution to your  
+   future intuition when you have a sense of how to do better and how to
+   definitely NOT to do.
+1. When changing anything - try to follow the principle of baby steps - no more than  
+   one simple fix (refactoring) per commit. This will also help the  
+   reviewer when we look at the code and for you when we need to roll back an unsuccessful   
+   experiment (not by Сtrl-Z, but by git rollback).
+1. Good commit descriptions. One complete sentence with a description of  
+   "what and why" is better than 2 words. 2 sentences are better than 1. 3 is better  
+   than 2.
+1. Don't use the git amendment - there aren't many reasons to justify  
+   complicating the coderviewer's job. The only one that comes up is after
+   you've made a commit, if you find a typo or a broken test
+   (for being inattentive) - quickly refill it. But this only makes sense if it's been
+   a couple of minutes since you commit and what you've done is an integral part of it.
+1. Propose PR and give it for review, rather than merge, and then say:  
+   "look at my code, I uploaded it there today".
+1. Have the habit of team members taking new tasks in the area where  
+   recently did a review. This way you can make your contribution to the code not only  
+   theoretically, but also practically. Usually there is always something to fix after  
+   any commit and subsequent review with fixes.
+1. Don't do a review after a review, after a review, after a review. If you're not  
+   understood immediately, it's better to call and work and work in pairs. 
+   The recommendation on collective code ownership also applies, but only if the author  
+   won't be offended that his implementation will be fixed later.
+1. The reviewer should be able to easily view all the commits that went to  
+   review. If he can miss something - most likely he will miss it.
+1. When discussing code review comments, it is better to call than to chat in the  
+   tool for code review.
+1. Avoid holivars. If holivars start - it's better to call or attract
+   a third party. Holivars are strategically bad for the team. Share
+   the reasons that prompted you to choose this style of code writing, not the
+   that the method you have chosen is the only correct one.
+   There are always alternatives.
+1. Be prepared that during the review you as a reviewer will also learn something new. Code review
+   this is a process of knowledge exchange more than a code check process.
+1. Each code review comment is better put into the knowledge base.
+1. The code review knowledge base should be discussed with the team on a weekly basis.
+1. All newcomers to the project read the project code review conventions at the start.
+1. If you can "tweak the nuts and bolts" of static analyzers or warnings
+   IDE for a specific code review comment - it should be done immediately.
+1. If the author wants to be praised, he should tell the team about it immediately
+   and do not use the code review process for praise. More often
+   code review will show where it's not so good and how you can do better. This
+   a tool for gaining new knowledge.
+1. The reviewer should also learn to mark places that
+   were done well. Especially if last time there was a comment to fix on
+   this topic. In our culture, more criticism than praise. Need to force yourself
+   praise for something, even the most insignificant. If something seems insignificant to you
+   for you, it doesn't mean it's just as insignificant for the author.
+1. It is worth looking at not only what is fixed, but also the general context - class,
+   in which the correction was made, the package in which the class is located. Knowing more about
+   existing API can pick up more recommendations. Code review this is not
+   so much about what is done - how much about what is not done yet.
+1. Besides the selected implementation style may differ from the usual in the project  
+   (even if outdated by industry standards). It is important that  
+   the overall style is preserved - this will reduce the amount of entropy (measure of chaos  
+   system). In the future, you can decide that something should be  
+   fixed throughout the project - and after implementing this task, the general  
+   recommendations will be supplemented with new ones that are "OK" for the industry.
+1. Often, during a comprehensive review (the entire module), the idea arises that  
+   can be additionally improved - but at the same time the recommendation  
+   does not lie as a remark to the Author. It is worth taking out such ideas in the issue  
+   tracking system.
 
-Чеклист по CodeReview позаимствованный из ChatGPT (c которым есть согласие):
+Checklist for CodeReview borrowed from ChatGPT (with which there is an agreement):
 
-1. Уделяй время изучению кода перед началом обзора.
-1. Будь внимателен к комментариям автора и попробуй понять их намерение.
-1. Соответствует ли код установленным стандартам оформления?
-1. Все ли имена переменных и функций ясно отражают их назначение?
-1. Нет ли дублирования кода? Если есть, рекомендуй использовать функции  
-   или классы для повторного использования.
-1. Читаем ли код и понятен ли он без необходимости дополнительных комментариев?
-1. Правильно ли обрабатываются исключительные ситуации и ошибки?
-1. Содержит ли код "магические числа" и "магические строки"? Вместо этого  
-   код должен использовать константы или переменные.
-1. Обрати внимание на эффективность кода и возможные улучшения производительности.
-1. Безопасен ли код, содержит ли он уязвимости?
-1. Все ли неиспользуемые переменные и импорты удалены?
-1. Хорошо ли структурирован код, разбит ли на функции или модули?
-1. Все ли комментарии в коде актуальны и информативны?
-1. Покрыт ли код достаточным количеством тестов?
-1. Не содержит ли код избыточной или недостижимой логики? 
-1. Превышает ли длина функций и классов разумный предел?
-1. Не содержит ли код "жесткой" зависимости от конкретной реализации или платформы?
-1. Не содержит ли код лишних операций, которые могут замедлить его работу?
-1. Не использует ли код устаревшие или ненадежные методы и функции?
-1. Следует ли читаемость и стиль кода установленным руководствам по  
-   оформлению кода (Java Code conventions).
-1. Не содержит ли код ошибок, таких как опечатки, неправильное использование  
-   операторов и т.д.?
-1. Не содержит ли код ненужных или неработающих частей?
-1. Не вызывает ли код блокировки, дедлоки или другие проблемы с параллели?
-1. код правильно обрабатывает и валидирует входные данные?
-1. Все ли функции и методы хорошо документированы?
-1. Не содержит ли код неэффективных или ненужных операций?
-1. Все ли ресурсы, такие как файлы или сетевые подключения, правильно  
-   управляются и освобождаются после использования?
-1. Не содержит ли код недостижимого кода или недостижимых ветвей?
-1. Не использует ли код устаревшие библиотеки или API?
-1. Не содержит ли код слишком сложных или запутанных конструкций?
-1. Не содержит ли код закомментированного кода или отладочных выводов?
-1. Не содержит ли код "магических" операций, которые могут быть трудными  
-   для понимания без комментариев?
-1. Не содержит ли код неявных зависимостей или побочных эффектов?
-1. Не содержит ли код ненужных или избыточных условных операторов?
-1. Не содержит ли код повторяющихся блоков кода, которые могут быть вынесены  
-   в отдельные функции или методы?
-1. Не содержит ли код ошибок в обработке потоков или параллельных операций?
-1. Не содержит ли код незащищенного доступа к конфиденциальным данным или  
-   личной информации?
-1. Не содержит ли код неправильного использования API или библиотек?
-1. Не содержит ли код потенциально бесконечных циклов или рекурсивных  
-   вызовов без базового случая?
-1. Не содержит ли код "захардкоженных" путей или значений, которые могут  
-   измениться в будущем?
-1. Не содержит ли код неэффективного использования памяти или ресурсов?
-1. Не содержит ли код неясных или двусмысленных комментариев?
-1. Не содержит ли код потенциально опасных операций, таких как исполнение  
-   внешних команд или SQL-инъекции?
-1. Не содержит ли код неправильного или неадекватного обработки ошибок?
-1. Не содержит ли код проблем с многопоточностью, такими как состояни
-1. Правильно ли использует код объектно-ориентированные принципы, такие  
-   как инкапсуляция, наследование и полиморфизм?
-1. Соблюдаются ли принципы SOLID?
-1. Соблюдается ли принцип KISS?
-1. Соблюдается ли принцип DRY?
-1. Соблюдается ли принцип YAAGNI?
-1. Не содержит ли код ненужных или неиспользуемых: переменных, функций  
-   или методов, классов, модулей, пакетов, библиотек, зависимостей, ресурсов  
-   или файлов?
-1. Не содержит ли код излишней сложности или избыточных деталей?
-1. Не содержит ли код "запахов кода" (code smells), таких как длинные  
-   методы, большое количество параметров или плохое именование переменных?
-1. Соответствует ли код целям проекта и решает поставленную задачу эффективно?
+1. Spend time studying the code before you start reviewing.
+1. Be attentive to the author's comments and try to understand their intention.
+1. Does the code comply with the established design standards?
+1. Do all variable and function names clearly reflect their purpose?
+1. Is there any code duplication? If so, recommend using functions  
+   or classes for reuse.
+1. Does the code read and understand without the need for additional comments?
+1. Are exceptions and errors handled correctly?
+1. Contains the code "magic numbers" and "magic strings"? Instead of this  
+   the code should use constants or variables.
+1. Pay attention to the efficiency of the code and possible performance improvements.
+1. Is the code safe, does it contain vulnerabilities?
+1. Are all unused variables and imports removed?
+1. Is the code well structured, is it divided into functions or modules?
+1. Are all comments in the code relevant and informative?
+1. Is the code covered by a sufficient number of tests?
+1. Does the code contain redundant or unreachable logic?
+1. Does the length of functions and classes exceed a reasonable limit?
+1. Does the code contain a "hard" dependency on a specific implementation or platform?
+1. Does the code contain unnecessary operations that can slow it down?
+1. Does the code use outdated or unreliable methods and functions?
+1. Does the readability and style of the code comply with established guidelines  
+   code design (Java Code conventions).
+1. Does the code contain errors such as typos, incorrect use
+   operators, etc.?
+1. Does the code contain unnecessary or non-working parts?
+1. Does the code cause blocking, deadlock or other parallel problems?
+1. Does the code correctly handle and validate input data?
+1. Are all functions and methods well documented?
+1. Does the code contain inefficient or unnecessary operations?
+1. Are all resources, such as files or network connections, properly
+   managed and released after use?
+1. Does the code contain unreachable code or unreachable branches?
+1. Does the code use outdated libraries or APIs?
+1. Does the code contain too complex or confusing constructs?
+1. Does the code contain commented code or debug outputs?
+1. Does the code contain "magic" operations that can be difficult
+   to understand without comments?
+1. Does the code contain implicit dependencies or side effects?
+1. Does the code contain unnecessary or redundant conditional operators?
+1. Does the code contain repeated blocks of code that can be extracted  
+   into separate functions or methods?
+1. Does the code contain errors in stream processing or parallel operations?
+1. Does the code contain unprotected access to confidential data or  
+   personal information?
+1. Does the code contain incorrect use of APIs or libraries?
+1. Does the code contain potentially infinite loops or recursive  
+   calls without a base case?
+1. Does the code contain "hardcoded" paths or values that can
+    change in the future?
+1. Does the code contain inefficient use of memory or resources?
+1. Does the code contain unclear or ambiguous comments?
+1. Does the code contain potentially dangerous operations, such as execution  
+   external commands or SQL injections?
+1. Does the code contain incorrect or inadequate error handling?
+1. Does the code contain problems with multithreading, such as state
+1. Does the code use object-oriented principles correctly, such as encapsulation, 
+   inheritance and polymorphism?
+1. Are SOLID principles observed?
+1. Is the KISS principle observed?
+1. Is the DRY principle observed?
+1. Is the YAAGNI principle observed?
+1. Does the code contain unnecessary or unused: variables, functions
+   or methods, classes, modules, packages, libraries, dependencies, resources
+   or files?
+1. Does the code contain unnecessary complexity or redundant details?
+1. Does the code contain "code smells", such as long
+   methods, a large number of parameters or poor variable naming?
+1. Does the code meet the goals of the project and solve the problem efficiently?

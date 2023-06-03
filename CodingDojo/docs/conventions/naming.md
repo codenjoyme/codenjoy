@@ -1,88 +1,85 @@
-Именование в проекте можно поделить на несколько составляющих, им и 
-будет отведен каждый раздел этого документа:
-* методы
-* классы
-* тестовый код
-* поля
-* переменные
-* константы
+Naming convention in the project can be divided into several components, and
+each section of this document will be devoted to them:
+* methods
+* classes
+* test code
+* fields
+* variables
+* constants
 
-Прежде стоит сказать, что за основу взят 
-[jcc 97го года](https://www.oracle.com/technetwork/java/codeconventions-150003.pdf).
-Отличия от него будут описаны тут и аргументированы. 
+First of all, it should be said that the basis was taken
+[jcc 97th year](https://www.oracle.com/technetwork/java/codeconventions-150003.pdf).
+Differences from it will be described here and argued.
 
-Основной принцип в построении имен - лаконичность.
-В названии должен содержаться минимум 1 ключевое слово, которое сообщает об
-основном предназначении конструкции. Остальные слова в названии должны
-помогать основному слову. Если есть возможность взять информацию из контекста: 
-локальных переменных, метода, поля, класса, пакета - лучше не перегружать 
-этой информацией выбираемое имя. Например:
+The main principle in naming is conciseness.
+The name should contain at least 1 keyword that reports
+the main purpose of the structure. The remaining words in the name should
+help the main word. If there is an opportunity to take information from the context:
+local variables, method, field, class, package - it is better not to overload
+this information with the selected name. For example:
 
 * `String stringPetNameVariable;`  
-  + слово `string` из названия можно исключить так, как рядом есть одноименный тип
-  + слово `variable` исключаем - по коду видно, что это переменная 
-  + слово `pet` исключаем - из названия название класса видно, что это Pet
-  + остается `String name`
-  
-То же правда для методов, констант, классов - просто начни удалять 1 слово за другим 
-из названия и смотри, получится ли у читателя достать получить эту же информацию 
-из контекста. 
+  + the word `string` from the name can be excluded, as there is a type with the same name nearby
+  + the word `variable` is excluded - from the code it can be seen that this is a variable
+  + the word `pet` is excluded - from the name of the class it can be seen that this is Pet
+  + remains `String name`
 
-Если остается 1 слово - отлично. 2 терпимо для методов, констант и классов, но 
-надо бы подумать, если дело касается локальных переменных, полей или параметров 
-метода. 3 слова - чаще всего перебор и можно попробовать "покрутить" имя еще. 
-4 слова - точно перебор. 
+If there is 1 word left, great. 2 is tolerable for methods, constants and classes, but
+you need to think if it comes to local variables, fields or method parameters.
+3 words - most often a bust and you can try to "twist" the name again.
+4 words - exactly bust.
 
-## <a id="method"></a> Методы
+## <a id="method"></a> Methods
 
-В названии метода самое главное 1 слово - глагол, сообщающий о главном действии
-совершаемым методом. Метод часто делает что-то одно, в противном случае 
-его надо разбить на два или более. 
+The most important thing in the method name is 1 word - a verb that reports the main action
+the method is committed. The method often does one thing, otherwise
+it should be divided into two or more.
 
-### <a id="get-set"></a> Get-Set методы
+### <a id="get-set"></a> Get-Set methods
 
-Для get/set методов если есть возможность исключается слова get/set, т.к. 
-из контекста понятно, что делает метод. get - без параметров, но с return type. 
-set - с 1 параметром, но void. Имя - точно соответствует имени поля. 
+For get/set methods, if possible, the words get/set are excluded, because
+from the context it is clear what the method does. get - without parameters, but with return type.
+set - with 1 parameter, but void. The name - exactly corresponds to the name of the field.
 
-Часто используется Lombok для генерации этих пустых методов, особенно если pojo
-планируется отдавать фреймворку или библиотеке которая ждет внутри методы 
-getSomething/setSomething. Если pojo не покидает пределы проекта - get/set 
-опускается для увеличения читабельности.  
+Lombok is often used to generate these empty methods, especially if pojo
+it is planned to be given to a framework or library that expects inside methods
+getSomething/setSomething. If pojo does not leave the project - get/set
+omitted to increase readability.
 
-## <a id="class"></a> Классы
+## <a id="class"></a> Class
 
-Главным словом в названии класса - есть имя существительное, которое будет 
-определять суть объекта. Дополнительные слова помогают понимать больше. Слово 
-из названия стоит исключать, если это слово можно встретить где-то еще в 
-окружении класса: пакет, поля класса, типы полей или если это удаление не 
-приводит к ухудшению читабельности. 
+The main word in the class name is a noun that will
+determine the essence of the object. Additional words help to understand more. Word
+from the name should be excluded if this word can be found somewhere else in
+class environment: package, class fields, field types or if this removal is not
+leads to a deterioration in readability.
 
-## <a id="test"></a> Тесты
+## <a id="test"></a> Tests
 
-В именах тестовых методов допустим символ нижнего подчеркивания. 
+In the names of test methods, the underscore character is allowed.
 
-Используется нотация `shouldSomething_whenSometin` иногда требуются пояснения 
-в виде дополнений `shouldSomething_whenSometin_caseInfo`. При выборе имени 
-для нового метода стоит осмотреться по сторонам и изучить названия других методов
-чтобы новый тестовый метод был со-культурным в этом тестовом классе.
+The notation `shouldSomething_whenSometin` is used, sometimes explanations are required
+in the form of additions `shouldSomething_whenSometin_caseInfo`. When choosing a name
+for a new method, you should look around and study the names of other methods
+so that the new test method is co-cultural in this test class.
 
-## <a id="variable"></a> Переменные
+## <a id="variable"></a> Variables
 
-Локальные переменные стоит делать максимально короткими. При условии, что метод
-будет небольшим (1-3-5-7 строк) лишняя перегруженность словами локальных переменных
-усложнит читабельность. 1 слово - золотая середина. 
+Local variables should be made as short as possible. Provided that the method
+will be small (1-3-5-7 lines) extra overload of words of local variables
+will complicate readability. 1 word is the golden mean.
 
-Переменная, возвращаемая из метода - всегда называется result, остальное понятно
-из контекста: имя метода, тип возвращаемого результата.
+The variable returned from the method is always called result, the rest is clear
+from the context: method name, type of returned result.
 
-Все сокращения (за исключением `Point pt`) превращаем в нормальное имя, например:
-`i` -> `index`, `с` -> `count`. В лямбдах так же не используются сокращения. 
+All abbreviations (except `Point pt`) are turned into a normal name, for example:
+`i` -> `index`, `с` -> `count`. Abbreviations are also not used in lambdas.
 
-Почему `Point` - исключение? Читабельность. Часто слово point в методах используется 
-часто и если использовать `point` а не сокращение `pt` то читабельность ухудшается. 
+Why `Point` - an exception? Readability. The word point is often used in methods
+often and if you use `point` instead of the abbreviation `pt` then readability deteriorates.
 
-```private void removeBlasts() {
+```
+private void removeBlasts() {
     blasts().clear();
 
     for (Point pt : destroyedObjects) {
@@ -100,11 +97,13 @@ getSomething/setSomething. Если pojo не покидает пределы п
 }
 ```
 
-Если следовать общим конвенциям, получится хуже. В небольшом методе на 9 строк,
-7 слов point - это явно перебор. Таких методов в играх много, где в коде будет 
-больше слов point чем других. 
+If you follow the general conventions, it will be worse. In a small method on 9 lines,
+7 words point is clearly overkill. There are many such methods in games, where in the code there will be
+more words point than others.
 
-```private void removeBlasts() {
+
+```
+private void removeBlasts() {
     blasts().clear();
 
     for (Point point : destroyedObjects) {
@@ -122,12 +121,12 @@ getSomething/setSomething. Если pojo не покидает пределы п
 }
 ```
 
-## <a id="field"></a> Поля
+## <a id="field"></a> Fields
 
-Хорошее имя поля состоит из 1 слова, хуже если 2. В имени не стоит использовать
-слова, которые содержатся в контексте: названии класса, пакете, типе поля. 
+Good field name consists of 1 word, worse if 2. In the name you should not use
+words that are contained in the context: class name, package, field type.
 
-## <a id="constant"></a> Константы
+## <a id="constant"></a> Constants
 
-Тут так же работает правило лаконичности - не используй слов, которые уже есть
-в окружении константы: тип константы, имя класса, пакет. 
+Here also works the rule of conciseness - do not use words that already exist
+in the environment of the constant: type of constant, class name, package.

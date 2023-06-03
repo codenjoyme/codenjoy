@@ -1,50 +1,50 @@
-Во время разработки запускай все тесты модуля с которым работаешь сейчас. 
-Это позволит быстро обнаружить ошибки, которые ты неосознанно внес в код. 
-Если изменения были проведены в нескольких строчках и тесты поломались - 
-тебе проще понять, где ошибка не прибегая к debug. 
+During development, run all tests of the module you are working with now.
+This will quickly detect errors that you have inadvertently introduced into the code.
+If changes were made in a few lines and the tests broke -
+it's easier for you to understand where the error is without resorting to debug.
 
-Если же ты откладываешь запуск тестов "на потом", то ошибки будут 
-накапливаться. Перед подготовкой pull request, когда ты думаешь, что 
-вся работа уже сделана, запустив все тесты ты с удивлением обнаружишь - 
-тесты поломались и в других местах. А так как изменений сделано много - 
-тебе придется долго разбираться, где именно ошибки, были ли эти ошибки в 
-коде до твоих изменений или ты их внес. Тут тебе останется из инструментов 
-только debug - дорогостоящий инструмент, т.к. ты практически не 
-контролируешь его. Можно только надеяться, что ты сможешь воспроизвести 
-ошибку и продолжать монотонно нажимать клавишу Step Over. Ошибка за 
-ошибкой - все, что ты накопил во время разработки фичи. 
+If you postpone running the tests "later", then errors will 
+accumulate. Before preparing a pull request, when you think that
+all the work is already done, running all the tests you will be surprised -
+the tests broke and in other places. And since there are many changes -
+you will have to figure out for a long time where exactly the errors were, were these errors in
+code before your changes or you introduced them. Here you will have from the tools
+only debug - an expensive tool, because you practically do not
+control it. You can only hope that you can reproduce
+error and continue to monotonously press the Step Over key. Error for
+error - all that you have accumulated during the development of the feature.
 
-В противовес debug ты можешь baby steps подход и все виды тестов. 
+In contrast to debug, you can use the baby steps approach and all types of tests.
 
-Мы стараемся делать тесты такими, чтобы время выполнения их было минимальным.
-Но бывают и такие тесты, которые запускаются дольше. Их соответственно 
-будет хотеться запускать реже. Потому как компромисс можно предложить 
-такую очередность (от более быстрого, но менее информативного до более долгого):
-- \[миллисекунды\] Запустить юнит тесты класса, в котором сейчас работаешь.
-- \[секунды\] Запустить юнит тесты пакета содержащего изменяемы класс.
-- \[десятки секунд\] Запустить все тесты модуля (проекта).
-- \[минуты\] Запускать все тесты зависимых модулей (например java-client 
-  используется в engine, который в свою очередь используется в каждой игре, 
-  которые добавлены как плагин в server).
-- \[10 минут\] Запускать все тесты проекта через maven командой 
-  `mvn clean install --fail-at-end`. 
+We try to make the tests so that the time to execute them is minimal.
+But there are also tests that take longer to run. Their accordingly
+you will want to run less often. Because the compromise can be offered
+such a sequence (from faster but less informative to longer):
+- \[milliseconds\] Run the unit tests of the class you are currently working on.
+- \[seconds\] Run the unit tests of the package containing the mutable class.
+- \[tens of seconds\] Run all tests of the module (project).
+- \[minutes\] Run all tests of dependent modules (for example, java-client
+  used in the engine, which in turn is used in each game,
+  which are added as a plugin to the server).
+- \[10 minutes\] Run all project tests via maven command
+  `mvn clean install --fail-at-end`.
 
-Важно так же отметить, что есть отличие в запуске тестов через maven и в IDE.
-Плагин intellij idea запускает тесты так, что при каждом запуске нового теста
-пересоздается тестовый контекст (класс). Maven же запускает тесты в одном
-контексте. Поэтому, если ты запускаешь тесты через maven, то ты можешь
-получить ошибку, которую не получишь, если запустить тесты через IDE.
-Связано это с тем, что тесты могут менять состояние класса, а другие тесты
-могут не ожидать этого. И это "всплывает" в самом конце, что не добавляет 
-приятных эмоций. Вот ты уже готов коммитить - а тут оказывается что надо дебажить тесты.
-Потому запускай так много тестов, как можешь так часто как получается - 
-остальное откладывай на потом, но не на долго. 
+It is also important to note that there is a difference in running tests via maven and in IDE.
+The intellij idea plugin runs tests so that each time a new test is run
+the test context (class) is recreated. Maven runs tests in one
+context. Therefore, if you run tests via maven, you can
+get an error that you won't get if you run tests via IDE.
+This is due to the fact that tests can change the state of the class, and other tests
+may not expect this. And this "pops up" at the very end, which does not add
+pleasant emotions. Here you are ready to commit - and it turns out that you need to debug the tests.
+Therefore, run as many tests as you can as often as you can -
+the rest is postponed for later, but not for long.
 
-Так же хорошая рекомендация запускать все тесты перед началом работы над фичей,
-а так же до git pull и сразу после него. Так ты точно будешь знать, что поломки
-которые появились не твои - и тогда сможешь подсветить это команде. 
+It is also a good recommendation to run all tests before starting work on a feature,
+as well as before git pull and immediately after it. So you will definitely know that the breakdowns
+that appeared are not yours - and then you can highlight it to the team.
 
-Важно понимать, что поломанный тест - это твой квест, если:
-- это случилось у тебя на локали, даже если это не твой тест или функционал, 
-  найти автора и разобраться с ним вместе - твоя задача.
-- это случилось у кого-то из команды, но в твоем PR.
+It is important to understand that a broken test is your quest if:
+- it happened to you locally, even if it is not your test or functionality,
+  find the author and figure it out with him together - your task.
+- it happened to someone on the team, but in your PR.
