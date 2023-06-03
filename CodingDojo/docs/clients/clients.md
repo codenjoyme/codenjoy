@@ -1,31 +1,30 @@
-Клиентами мы называем проекты, которые позволяют игроку на ивенте 
-с помощью WebSocket подключаться к серверу и играть от имени их героя.
-Именно в клиентах пишется код искусственного интеллекта. 
+Clients we call projects that allow the player in an event
+using WebSocket to connect to the server and play on behalf of their hero.
+It is in the clients that the artificial intelligence code is written.
 
-Так как мы используем WebSocket технологию - это позволяет нам получить такие 
-преимущества:
-- можно играть на любом языке программирования, лишь бы была 
-релизована WebSocket библиотека для него.
-- можно играть на своей локальной машине (в любимой ide), не загружая код 
-никуда на сервер - просто запустил процесс на локали и играешь, 
-потушил процесс - герой стоит на месте.
-- можно дебажить в production environment - каждую секунду сервер 
-запрашивает команду действия для героя у клиента, отправляя ему тестовое 
-представление борды (поля) и тут есть возможность остановить debugger код
-клиента и исследовать состояние. Все это время бот будет стоять обездвиженным
-и игра на сервере естественно не остановится.
+Since we use WebSocket technology - this allows us to get
+advantages:
+- You can play in any programming language, as long as the
+  WebSocket library for it has been released.
+- You can play on your local machine (your favorite ide) without uploading the code
+  anywhere on the server - just run the process locally and play,
+  turn off the process - the hero stands still.
+- you can debug in production environment - every second the server
+  requests a client action command for the hero by sending it a test
+  the board representation (fields) and here you have an opportunity to stop the 
+  debugger code client and check its state. All this time the bot will stand motionless
+  and the game on the server of course will not stop.
 
-Чтобы клиенту максимально упростить жизнь мы разрабатываем новые и поддерживаем
-для него существующие клиенты для популярных языков программирования. Каждый клиент
-при этом должен: 
-- поддерживать все существующие игры
-- давать возможность запускаться на чистой системе (без предустановленных программ)
-  - из *.bat файлов для Windows
-  - из *.sh файлов для Linux/MacOS
-  - из Dockerfile для ценителей Docker
-Потому эти скрипты умеют:
-- загрузить нужные инструменты из Интернета
-- установить их в локальную папку (или использовать предустановленные) 
-- а затем скомпилировать
-- и запустить клиента 
-- а так же тесты для него
+To make life as easy as possible for the client we develop new and support
+existing clients for popular programming languages. Each client must:
+- support all existing games
+- allow to run on a clean system (without preinstalled programs)
+  - from *.bat files for Windows
+  - *.sh files for Linux/MacOS
+  - from a Dockerfile for Docker connoisseurs.
+    That's why these scripts are able to:
+- download the tools you need from the Internet
+- install them in a local folder (or use a preinstalled one)
+- and then compile
+- and run the client
+- as well as tests for it

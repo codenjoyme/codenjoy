@@ -1,41 +1,41 @@
-Если твои bugreport в чате выглядят односложно, например:
+If your chat bugreport looks one-sided, e.g.
 
-`git clone почему то стал фейлится`
+`git clone for some reason started to fail`
 
-Стоит обратить внимание на статью 
-[Егора Егорова 'Об эффективных багрепортах'](https://egorfine.com/ru/articles/effective-bugreports/).
+You should pay attention to the article
+[Egor Egorov 'About effective bugreports'](https://egorfine.com/articles/effective-bugreports/).
 
-После твой bugreport может стать более развернутым:
+After your bugreport may become more detailed:
 
 ```
-при выполнении команды
+when executing the command
 
-    > git clone --recursive https://github.com/codenjoyme/codenjoy.git
+    > git clone --recursive
 
-проект не склонировался из за ошибки
+the project was not cloned due to an error
 
     > fatal: remote error: upload-pack: not our ref ac25b66cdb4ee0b4fee633e3b91c3a0d22018256
     > fatal: the remote end hung up unexpectedly
     > Fetched in submodule path 'CodingDojo/client-runner', but it did not contain ac25b66cdb4ee0b4fee633e3b91c3a0d22018256. Direct fetching of that commit failed.
+    
+cloned under the console MINGW64 under windows10
 
-клонировал под косолью MINGW64 под windows10
-
-полный лог приложен (git-clone-error.txt)
+all log attached (git-clone-error.txt)
 ```
 
-Конечно же полный bugreport может быть избыточным и часто достаточно  
-куска лога (от первой warning/error до последней; лучше в текстовом виде, 
-но можно и скриншотом) и условий запуска (как этого добиться). 
+Of course the full bugreport can be redundant and often enough
+a piece of log (from the first warning/error to the last; better in text form,
+but you can also use a screenshot) and launch conditions (how to achieve this).
 
-Но если не давать деталей, то потенциальному исполнителю придется 
-задавать дополнительные уточняющие вопросы, на которые ты как 
-автор request'а обязательно ответишь, но только как их увидишь. 
-Скорее всего ты ожидал решения, но получишь только уточняющие вопросы - 
-это все время. А раз так - можно ускориться.
+But if you don't give details, then the potential performer will have to
+ask additional clarifying questions, to which you, as the author of the request,
+will definitely answer, but only when you see them.
+Most likely you expected a solution, but you will only get clarifying questions -
+this is all the time. And if so - you can speed up.
 
-Хорошая привычка перед тем как ты что-то пишешь в любом запросе, сразу же 
-задавать себе вопрос: "а что дополнительно могут спросить меня, 
-прочитав мой запрос?" И сражу же ответить на эти вопросы в request.
+A good habit before you write something in any request, immediately
+ask yourself the question: "what else can they ask me,
+reading my request?" And immediately answer these questions in the request.
 
-Ну и периодически перечитывать статью 
-[Егора Егорова 'Об эффективных багрепортах'](https://egorfine.com/ru/articles/effective-bugreports/).
+Well, and periodically reread the article
+[Egor Egorov 'About effective bugreports'](https://egorfine.com/articles/effective-bugreports/).

@@ -1,62 +1,62 @@
-Проект состоит из основного репозитория и серии саб-репозиториев. Саб-репозитории создаются 
-для отдельных игр, клиентов для игры на определенном языке программирования и отдельных приложений
-и их компонентов. Сделано это для удобства контрибьюта, т.к. проект является опенсорсным и разные 
-люди могут контрибьютить разные части проекта.
+The project consists of a main repository and a series of sub-repositories. Sub-repositories are created
+for individual games, clients for playing in a particular programming language, and individual applications
+and their components. This is done for the convenience of the contribute, because the project is open source and different
+people can contribute different parts of the project.
 
-В основоном репозитории мы используем облегченную версию git-flow. А во всех остальных сабмодулях 
-используется trunk-based development. Почему так? Чтобы упростить операционку по заливанию изменений. 
-Мы пробовали git-flow везде и это приводило к путанице большей, чем мы ощущали от этого пользу. 
+In the main repository, we use a lightweight version of git-flow. And in all other submodules
+trunk-based development is used. Why is that? To simplify the operation of pouring changes.
+We tried git-flow everywhere and it led to more confusion than we felt from this benefit.
 
-В основном репозитории мы используем следующие ветки: master, develop, dojorena-release, feature/*.
-master - ветка, которая содержит последнюю стабильную версию проекта. 
-develop - ветка, которая содержит последние изменения над которыми работают разработчики.
-dojorena-release - ветка, которая содержит изменения готовые для релиза на dojorena.io. 
-Там же мы маркируем тегами версии, которые пошли на production (dojorena.io).
-feature/* - ветки, которые содержат изменения над которыми работают разработчики сейчас.
+In the main repository, we use the following branches: master, develop, dojorena-release, feature/*.
+master - a branch that contains the latest stable version of the project.
+develop - a branch that contains the latest changes that developers are working on.
+dojorena-release - a branch that contains changes ready for release on dojorena.io.
+There we also mark the tags of the versions that went to production (dojorena.io).
+feature /* - branches that contain changes that developers are working on now.
 
-В сабмодулях используется trunk-based development. Т.е. ветка master является основной веткой
-разработки. В ней содержится последняя стабильная версия. Ветка develop не используется.
-Ветки feature/* так же не используются. Стоит быть предельно внимательным при работе с сабмодулями,
-т.к. ваша поломка может повлиять на работу других разработчиков, которые решили подтянуть master себе. 
-Не стоит беспокоиться, что отправленные изменения заафектают master в основном репозитории. 
-Так как он ничего не знает про ваши изменения. Чтобы ваши изменения появились в основном репозитории
-необходимо закоммитить новые hash саб-репозиториев в основном. 
+Submodules use trunk-based development. I.e. the master branch is the main development branch.
+It contains the latest stable version. The develop branch is not used.
+The feature/* branches are also not used. You should be extremely careful when working with submodules,
+because your breakdown can affect the work of other developers who decided to pull the master to themselves.
+Do not worry that the changes sent will affect the master in the main repository.
+Since he knows nothing about your changes. To make your changes appear in the main repository
+you need to commit new hashes of sub-repositories in the main one.
 
-Предлагая pull-request в основной репозиторий, необходимо убедиться, что все тесты во всех сабмодулях
-проходят успешно. pull-request делается c feature/* ветки в develop ветку основного репозитория.
-К нему так же должны быть приложены все необходимые изменения в сабмодулях (в master). Так же 
-стоит прилинковать таску из kanban доски на GitHub проекте в pull-request.
+When proposing a pull-request to the main repository, you must make sure that all tests in all submodules
+pass successfully. pull-request is made with the feature/* branch in the develop branch of the main repository.
+It should also include all the necessary changes in the submodules (in master). Also
+it is worth linking the task from the kanban board on the GitHub project in the pull-request.
 
-После code review Лидер проекта может принять изменения в develop ветку основного репозитория. 
-После этого разработчик может удалить feature/* ветку из основного репозитория и закрыть задачу 
-переместив ее в колонку "Done" на kanban доске.
+After code review, the Project Leader can accept changes to the develop branch of the main repository.
+After that, the developer can delete the feature/* branch from the main repository and close the task
+moving it to the "Done" column on the kanban board.
 
-Для удобства работы с сабмодулями мы используем скрипт, который позволяет сделать это автоматически.
-Скрипт находится в `./build/git-push-develop-as-branch.sh`. Он позволяет предложить текущую ветку 
-(обычно это develop) под видом feature/*, а так же отправит на сервер ее и все сабмодули (в их master 
-ветках). При этом пароль на ключик будет спрашиваться только один раз. Мы используем git:// протокол.
+For convenience of working with submodules, we use a script that allows you to do this automatically.
+The script is located in `./build/git-push-develop-as-branch.sh`. It allows you to offer the current branch
+(usually this is develop) as feature/*, as well as send it to the server and all submodules (in their master
+branches). At the same time, the password for the key will be asked only once. We use the git:// protocol.
 
-Для затягивания всех изменений по всем сабмодулям можно использовать скрипт
+To pull all changes across all submodules, you can use the script
 `./build/git-pull-submodules.sh`.
 
-Коммиты во всех репозиториях должны содержать преффикс компонента. Например, если вы вносите
-изменения в csharp клиент, то в коммите должен быть преффикс `[csharp][client]`.
-Если вы вносите изменения на админке сервера, в engine проекте и java клиенте, то в коммите
-должен быть преффикс `[server][admin][engine][client][java]`. Описательная часть коммита
-должна быть на английском языке и подробно объяснять, что было сделано и почему. 
-Можно использовать несколько строк для этого.
+Commits in all repositories must contain a component prefix. For example, if you make
+changes to the csharp client, then the commit must have the prefix `[csharp] [client]`.
+If you make changes to the server admin, the engine project and the java client, then in the commit
+must have the prefix `[server] [admin] [engine] [client] [java]`. The descriptive part of the commit
+should be in English and explain in detail what was done and why.
+You can use multiple lines for this.
 
-Не используй amend, squash, rebase и прочие опции git, которые могут изменить историю коммитов.
-История коммитов важна для будущего анализа, что именно происходило в проекте. 
+Do not use amend, squash, rebase and other git options that can change the commit history.
+The commit history is important for future analysis of what exactly happened in the project.
 
-Комить всегда изменения в суб-модулях одновременно с hash-коммитами этих изменений 
-в основном репозитории с другими изменениями в основном репозитории. Так легче делать 
-код ревью - оно делается всегда в основном репозитории. Так же это позволяет легче отслеживать
-изменения в сабмодулях. 
+Commit always changes in sub-modules simultaneously with hash-commits of these changes
+in the main repository with other changes in the main repository. So it's easier to do
+code review - it is always done in the main repository. It also makes it easier to track
+changes in submodules.
 
-Старайся делать коммиты настолько атомарными (частыми), насколько это возможно. 
+Try to make commits as atomic (frequent) as possible.
 
-В работе на локали старайся держаться зеленой полосы в тестах - чтобы в любой момент 
-времени твои изменения могли быть предложены как pull-request и все работало. Не держи ветку 
-с изменениями долго на локали. Старайся каждый день предлагать PR (а лучше несколько). 
-Большую задачу стоит разбивать на подзадачи и делать PR по ним.
+In working on the locale, try to keep the green bar in the tests - so that at any time
+your changes could be offered as a pull-request and everything worked. Do not keep the branch
+with changes for a long time on the locale. Try to offer PR every day (and it's better several).
+A large task should be divided into subtasks and make PR on them.

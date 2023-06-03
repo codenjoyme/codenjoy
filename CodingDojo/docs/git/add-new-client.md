@@ -1,12 +1,12 @@
 ```bash
-# на примере csharp клиента который размещен 
+# in an example of a csharp client that is placed
 # в https://github.com/codenjoyme/codenjoy-csharp-client.git
-# добавим его сюда https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/clients  
+# add it here https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/clients
 
 cd /CodingDojo/clients
 git submodule add https://github.com/codenjoyme/codenjoy-csharp-client.git ./csharp
 
-# после стоит обновить https
+# after that you should update https
 cd ../../.git/
 cat config
 # ...
