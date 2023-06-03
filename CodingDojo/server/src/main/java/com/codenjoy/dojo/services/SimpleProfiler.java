@@ -24,7 +24,6 @@ package com.codenjoy.dojo.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -36,7 +35,7 @@ public class SimpleProfiler {
     private long phaseTime;
     private String message;
     private final TimeService timeService;
-    private final Deals deals;
+    private final DealsService dealsService;
 
     public synchronized void start(String message) {
         this.message = message;
@@ -54,7 +53,7 @@ public class SimpleProfiler {
     public synchronized void phase(String phase) {
         if (log.isDebugEnabled()) {
             log.debug(phase + " for all {} games is {} ms",
-                    deals.size(), now() - phaseTime);
+                    dealsService.size(), now() - phaseTime);
         }
         phaseTime = now();
     }
@@ -63,7 +62,7 @@ public class SimpleProfiler {
         long result = now() - time;
         if (log.isDebugEnabled()) {
             log.debug(message + " for all {} games is {} ms",
-                    deals.size(), result);
+                    dealsService.size(), result);
         }
         time = now();
         phaseTime = now();

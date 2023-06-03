@@ -45,7 +45,7 @@ public class SemifinalService implements Tickable {
     protected RoomService roomService;
 
     @Autowired
-    protected Deals deals;
+    protected DealsService dealsService;
 
     @Autowired
     protected GameSaver saver;
@@ -85,13 +85,13 @@ public class SemifinalService implements Tickable {
             state.resetTick();
 
             // если не с кем работать - выходим
-            if (deals.isEmpty()) continue; // TODO потестить
+            if (dealsService.size() == 0) continue; // TODO потестить
 
             // получаем мапу по комнатам, где значениями являются сортированные
             // по очкам списки Deal
             Predicate<Deal> withRoom = withRoom(state.getRoom());
             List<Deal> games =
-                    deals.getAll(withRoom).stream()
+                    dealsService.getAll(withRoom).stream()
                             .sorted(byScore())
                             .collect(toList());
 
@@ -117,11 +117,11 @@ public class SemifinalService implements Tickable {
             toRemove.addAll(games.subList(0, index));
 
             // собственно удаление
-            toRemove.forEach(game -> deals.remove(game.getPlayer().getId(), Sweeper.off()));
+            toRemove.forEach(game -> dealsService.remove(game.getPlayer().getId(), Sweeper.off()));
 
             // если после удаления надо перегруппировать участников по бордам
             if (reader.isResetBoard()) {
-                deals.reloadAll(reader.isShuffleBoard(), withRoom);
+                dealsService.reloadAll(reader.isShuffleBoard(), withRoom);
             }
 
             if (reader.isClearScores()) {
@@ -142,7 +142,7 @@ public class SemifinalService implements Tickable {
     public SemifinalStatus getSemifinalStatus(String room) {
         int current = roomService.getTick(room);
         SemifinalSettings settings = semifinalSettings(room);
-        int countPlayers = deals.getPlayersByRoom(room).size();
+        int countPlayers = dealsService.getPlayersByRoom(room).size();
         return new SemifinalStatus(current, countPlayers, settings);
     }
 

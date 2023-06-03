@@ -36,7 +36,7 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 public class ScoresCleaner {
 
-    private final Deals deals;
+    private final DealsService dealsService;
     private final GameSaver saver;
 
     private final RoomService roomService;
@@ -47,7 +47,7 @@ public class ScoresCleaner {
      * Clean scores for all available deals.
      */
     public void cleanAllScores() {
-        List<Deal> active = deals.all();
+        List<Deal> active = dealsService.all();
         List<String> saved = saver.getSavedList();
         cleanAllSavedScores(active, saved);
     }
@@ -56,7 +56,7 @@ public class ScoresCleaner {
      * Clean scores for deals in a particular room.
      */
     public void cleanAllScores(String room) {
-        List<Deal> active = deals.getAll(withRoom(room));
+        List<Deal> active = dealsService.getAll(withRoom(room));
         List<String> saved = saver.getSavedList(room);
         cleanAllSavedScores(active, saved);
     }
@@ -65,7 +65,7 @@ public class ScoresCleaner {
      * Clean scores for a particular deal.
      */
     public void cleanScores(String id) {
-        deals.get(id).clearScore();
+        dealsService.get(id).clearScore();
         cleanSavedScore(id);
     }
 

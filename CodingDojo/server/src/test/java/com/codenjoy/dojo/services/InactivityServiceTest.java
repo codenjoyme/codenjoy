@@ -43,13 +43,17 @@ public class InactivityServiceTest extends AbstractDealsTest {
 
     private InactivityService inactivity;
     private TimeService timeService;
+    private DealsService dealsService;
 
     @Before
     public void setup() {
         super.setup();
         deals = spy(deals);
+        dealsService = new DealsService(){{
+            this.deals = InactivityServiceTest.this.deals;
+        }};
         timeService = spy(new TimeService());
-        inactivity = new InactivityService(deals, timeService, roomService);
+        inactivity = new InactivityService(dealsService, timeService, roomService);
     }
 
     private void gavenPlayers(int timeout, long now) {

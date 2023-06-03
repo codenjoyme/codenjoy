@@ -24,10 +24,12 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.services.hero.HeroData;
+import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.Sweeper;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.transport.screen.ScreenData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
+import com.codenjoy.dojo.web.rest.pojo.PScoresOf;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -74,10 +76,12 @@ public class DealsService {
         });
     }
 
+    // TODO cant convert to rest because of consumer
     public void onAdd(Consumer<Deal> consumer) {
         deals.onAdd(consumer);
     }
 
+    // TODO cant convert to rest because of consumer
     public void onRemove(Consumer<Deal> consumer) {
         deals.onRemove(consumer);
     }
@@ -86,15 +90,18 @@ public class DealsService {
         return deals.get(id);
     }
 
+    // TODO cant convert to rest because of gameType
     public Deal deal(PlayerSave save, String room, String id, String callbackUrl, GameType gameType, long now) {
         deals.remove(id, Sweeper.on());
         return deals.deal(save, room, id, callbackUrl, gameType, now);
     }
 
+    // TODO cant convert to rest because of predicate
     public List<Deal> getAll(Predicate<Deal> filter) {
         return deals.getAll(filter);
     }
 
+    // TODO cant convert to rest because of sweeper
     public void remove(String id, Sweeper on) {
         deals.remove(id, on);
     }
@@ -107,6 +114,7 @@ public class DealsService {
         deals.changeRoom(id, game, newRoom);
     }
 
+    // TODO cant convert to rest because of filter
     public Pair<Integer, Integer> tick(Predicate<Deal> filter) {
         deals.tick(filter);
         int screenUpdates = sendScreenUpdates();
@@ -118,10 +126,49 @@ public class DealsService {
         deals.clear();
     }
 
+    public List<List<String>> getGroupsByField() {
+        return dealsView.getGroupsByField();
+    }
+
     public void reloadAll(boolean shuffle) {
         deals.reloadAll(shuffle);
     }
 
+    public Map<String, Object> getScores() {
+        return dealsView.getScores();
+    }
+
+    // TODO this method breaks encapsulation
+    public List<Deal> all() {
+        return deals.all();
+    }
+
+    public Map<String, List<String>> getGroupsMap() {
+        return dealsView.getGroupsMap();
+    }
+
+    public boolean changeLevel(String id, int level) {
+        return deals.changeLevel(id, level);
+    }
+
+    // TODO cant convert to rest because of deal and sweeper
+    public void reload(Deal deal, Sweeper sweeper) {
+        deals.reload(deal, sweeper);
+    }
+
+    public LevelProgress getLevel(String id) {
+        return deals.getLevel(id);
+    }
+
+    public List<PScoresOf> getScoresForGame(String game) {
+        return dealsView.getScoresForGame(game);
+    }
+
+    public List<PScoresOf> getScoresForRoom(String room) {
+        return dealsView.getScoresForRoom(room);
+    }
+
+    // TODO cant convert to rest because of filter
     public void reloadAll(boolean shuffle, Predicate<Deal> filter) {
         deals.reloadAll(shuffle, filter);
     }
@@ -130,6 +177,7 @@ public class DealsService {
         return deals.size();
     }
 
+    // TODO cant convert to rest because of filter
     private int requestControls(Predicate<Deal> filter) {
         int requested = 0;
 
@@ -210,14 +258,17 @@ public class DealsService {
         return 0;
     }
 
+    // TODO cant convert to rest because of players result
     public List<Player> players() {
         return deals.players();
     }
 
+    // TODO cant convert to rest because of players result
     public List<Player> getPlayersByRoom(String room) {
         return deals.getPlayersByRoom(room);
     }
 
+    // TODO cant convert to rest because of players result
     public List<Player> getPlayersByGame(String game) {
         return deals.getPlayersByGame(game);
     }

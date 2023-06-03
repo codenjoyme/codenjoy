@@ -23,7 +23,7 @@ package com.codenjoy.dojo.web.rest;
  */
 
 
-import com.codenjoy.dojo.services.Deals;
+import com.codenjoy.dojo.services.DealsService;
 import com.codenjoy.dojo.services.PlayerSave;
 import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.SaveService;
@@ -47,7 +47,7 @@ public class RestRegistrationController {
 
     private Registration registration;
     private PlayerService playerService;
-    private Deals deals;
+    private DealsService dealsService;
     private SaveService saveService;
     private Validator validator;
 
@@ -101,7 +101,7 @@ public class RestRegistrationController {
             PlayerSave save = player.buildPlayerSave();
             playerService.register(save);
 
-            deals.setLevel(player.getId(),
+            dealsService.setLevel(player.getId(),
                     new JSONObject(player.getSave()));
         }
 

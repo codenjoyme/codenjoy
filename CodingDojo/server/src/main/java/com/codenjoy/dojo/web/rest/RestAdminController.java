@@ -61,11 +61,10 @@ public class RestAdminController {
     private PlayerService playerService;
     private ErrorTicketService ticket;
     private SaveService saveService;
-    private DealsView dealsView;
+    private DealsService dealsService;
     private TimerService timerService;
     private RoomService roomService;
     private Registration registration;
-    private Deals deals;
     private GameService games;
 
     @GetMapping("version")
@@ -101,7 +100,7 @@ public class RestAdminController {
     public Map<String, List<List<String>>> getPlayersGroups() {
         Map<String, List<List<String>>> result = new HashMap<>();
         List<Player> players = playerService.getAll();
-        List<List<String>> groups = dealsView.getGroupsByField();
+        List<List<String>> groups = dealsService.getGroupsByField();
         for (List<String> group : groups) {
             String playerId = group.get(0);
             Player player = players.stream()
@@ -122,7 +121,7 @@ public class RestAdminController {
     // TODO test me
     @GetMapping("/player/all/scores")
     public Map<String, Object> getPlayersScores() {
-        return dealsView.getScores();
+        return dealsService.getScores();
     }
 
     // TODO test me
@@ -150,7 +149,7 @@ public class RestAdminController {
     public List<PlayerDetailInfo> getPlayersForMigrate() {
         List<Player> players = playerService.getAll();
         List<Registration.User> users = registration.getUsers();
-        Map<String, List<String>> groups = dealsView.getGroupsMap();
+        Map<String, List<String>> groups = dealsService.getGroupsMap();
 
         List<PlayerDetailInfo> result = new LinkedList<>();
         for (Player player : players) {
@@ -159,7 +158,7 @@ public class RestAdminController {
                     .findFirst()
                     .orElse(null);
 
-            Deal deal = deals.get(player.getId());
+            Deal deal = dealsService.get(player.getId());
             Game game = deal.getGame();
             String room = deal.getRoom();
             List<String> group = groups.get(player.getId());

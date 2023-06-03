@@ -40,11 +40,11 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 public class TeamService {
 
-    private final Deals deals;
+    private final DealsService dealsService;
     private final SaveService saveService;
 
     public List<PTeam> getTeamInfo(String room) {
-        return deals.getAll(Deals.withRoom(room)).stream()
+        return dealsService.getAll(Deals.withRoom(room)).stream()
                 .collect(Collectors.groupingBy(
                         Deal::getTeamId,
                         mapping(Deal::getPlayerId, toList())))
@@ -56,7 +56,7 @@ public class TeamService {
     public void distributePlayersByTeam(String room, List<PTeam> teams) {
         for (PTeam team : teams) {
             for (String id : team.getPlayers()) {
-                Deal deal = deals.get(id);
+                Deal deal = dealsService.get(id);
                 if (deal == NullDeal.INSTANCE) {
                     log.warn("Player with id '{}' has not been found", id);
                 }
@@ -64,7 +64,7 @@ public class TeamService {
                     deal.setTeamId(team.getTeamId());
                     // TODO #3d4w тут надо вначале всех вывести из комнат,
                     //      а потом органимзованно завести обратно
-                    deals.reload(deal, Sweeper.on().allRemaining());
+                    dealsService.reload(deal, Sweeper.on().allRemaining());
                 }
             }
         }
