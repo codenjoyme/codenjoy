@@ -1,44 +1,43 @@
-В дополнение к полноценному запуску сервера есть возможность запустить так же 
-легковесный сервер с одной единственной игрой. При этом codenjoy сервер в 
-классическом понимании не будет запускаться - запустится лишь WS сервер для 
-обслуживания подключаемых WS клиентов.
+In addition to the full-fledged server, it is also possible to run a lightweight
+server with a single game. In this case, the codenjoy server in
+the classic sense will not be launched - only the WS server for
+serving connected WS clients will be launched.
 
-Эта опция хорошо подходит для тех, кто хочет максимально использовать 
-возможности для машинного обучения. Преимуществ несколько:
-1. Можно сократить время таймаута 1 тика до 1мс, что уменьшит время обучения -
-   больше итераций за меньшее количество времени. 
-2. Можно настроить WS сервер так, чтобы он дожидался ответа WS клиента перед тем
-   как будет просчитан следующий тик (в оригинальной версии никто никого не ждет - 
-   успел за 1000 мс ответить ход засчитан, не успел - пропускаешь ход).
-3. Можно указать ответов скольких именно WS клиентов стоит ожидать перед просчетом 
-   следующего тика игры. 
-4. Перед запуском WS сервера можно гибко задать настройки игры 
-   (те самые, что настраивает Сенсей на админке - доступа к которой у игрока 
-   обычно нет).
-5. Можно настроить подробное логгирование, что позволит более детально рассмотреть игру.
-6. Можно влиять непосредственно на pseudo-random внутри игрового движка, что 
-   позволит обучать алгоритм на строго детерменированной машине.
+This option is good for those who want to maximize the use of
+machine learning capabilities. There are several advantages:
+1. You can reduce the timeout time for 1 tick to 1ms, which will reduce the learning time -
+   more iterations in less time.
+2. You can configure the WS server so that it waits for the response of the WS client before
+   the next game tick is calculated (in the original version, no one is waiting for anyone -
+   if you managed to answer the move in 1000 ms, you did it, you did not have time - you skip the move).
+3. You can specify the responses of how many exactly WS clients should be expected before calculating
+   the next game tick.
+4. Before starting the WS server, you can flexibly set the game settings
+   (the same ones that the Sensei sets on the admin panel - which the player usually does not have access to).
+5. You can configure detailed logging, which will allow you to more closely examine the game.
+6. You can directly influence the pseudo-random inside the game engine, which
+   will allow you to train the algorithm on a strictly deterministic machine.
 
-Для запуска сервера потребуется Java.
+To run the server, you will need Java.
 
-Для Windows:
-- Скачай Microsoft JDK ([для Windows тут](https://aka.ms/download-jdk/microsoft-jdk-11.0.11.9.1-windows-x64.zip))
-- Распакуй содержимое в папку `C:\Java\jdk-11` так чтобы папка `bin` и другие были внутри.
-- Создай переменную окружения `JAVA_HOME` равную `C:\Java\jdk-11`.
-- Добавь в конец переменной окружения `Path` строчку `;%JAVA_HOME%\bin`
+For Windows:
+- Download Microsoft JDK ([for Windows here](https://aka.ms/download-jdk/microsoft-jdk-11.0.11.9.1-windows-x64.zip))
+- Unpack the contents into the `C:\Java\jdk-11` folder so that the `bin` folder and others are inside.
+- Create an environment variable `JAVA_HOME` equal to `C:\Java\jdk-11`.
+- Add to the end of the environment variable `Path` the line `;%JAVA_HOME%\bin`
 
-Для Linux:
+For Linux:
 - TBD
 
-Чтобы самостоятельно сгенерировать jar с таким легковестным WS-сервером достаточно 
-запустить в исходниках [\CodingDojo\build\build-local-ws-game-server-jar.sh](https://github.com/codenjoyme/codenjoy/blob/master/CodingDojo/build/build-local-ws-game-server-jar.sh),
-указать название игры и ожидать результата в папке `.\out`. После сборки там 
-будет располагаться несколько файлов: 
-- `<GAMENAME>-engine.jar` - сам сервер.
-- `run-local-server.sh` - скрипт для запуска сервера.
-- `.env` - файл конфигурации сервера.
+To independently generate a jar with such a lightweight WS server, it is enough
+run in the sources [\CodingDojo\build\build-local-ws-game-server-jar.sh](https://github.com/codenjoyme/codenjoy/blob/master/CodingDojo/build/build-local-ws-game-server-jar.sh),
+specify the name of the game and wait for the result in the `.\out` folder. After assembly there
+will be several files:
+- `<GAMENAME>-engine.jar` - the server itself.
+- `run-local-server.sh` - script to run the server.
+- `.env` - server configuration file.
 
-Для изменения настроек WS-сервера служит файл конфигурации `.env`:
+To change the settings of the WS server, the `.env` configuration file is used:
 ```GAME=mollymage
 HOST=127.0.0.1
 PORT=8080
@@ -52,23 +51,23 @@ WAIT_FOR=2
 SETTINGS={'POTIONS_COUNT':11,'POTION_POWER':7}
 ```
 
-Тут:
-- `GAME` указывает на название игры.
-- `HOST` и `PORT` настройки WS-сервера.
-- `TIMEOUT` время задержки в ms после того, как все клиенты 
-  (заданное в `WAIT_FOR` их число) ответили.
-- `LOG_DISABLE` true если включено логгирование в файл.
-- `LOG_FILE` название файла лога.
-- `LOG_TIME` true - если стоит выводить время в файл лога.
-- `SHOW_PLAYERS` говорит о том для каких юзеров выводить информацию в лог
-  (порядковый номер определяется последовательностью подключения WS клиента).
-- `RANDOM_SEED` соль для pseudo-random в игровом движке. Если указать одну и ту же 
-  строчку игра (и все random'ные объекты) себя будет вести одинаково.
-- `WAIT_FOR` ответа скольких WS-клиентов ждем, прежде чем задержимся на 
-  время `TIMEOUT` с последующим рассчетом следующего тика игры.  
-- `SETTINGS` json с настройками игры (те самые, что Сенсей задает на админке).
+Here:
+- `GAME` points to the name of the game.
+- `HOST` and `PORT` are WS server settings.
+- `TIMEOUT` delay time in ms after all clients.
+  (specified in `WAIT_FOR`) responded.
+- `LOG_DISABLE` true if logging to a file is enabled.
+- `LOG_FILE` log file name.
+- `LOG_TIME` true - if you need to output the time to the log file.
+- `SHOW_PLAYERS` indicates for which users to output information to the log
+  (the ordinal number is determined by the sequence of connecting the WS client).
+- `RANDOM_SEED` salt for pseudo-random in the game engine. If you specify the same
+  line, the game (and all random objects) will behave the same.
+- `WAIT_FOR` how many WS clients to wait for before
+  delay for `TIMEOUT` with subsequent calculation of the next game tick.
+- `SETTINGS` json with game settings (the same ones that the Sensei sets on the admin panel).
 
-Пожалуйста, обрати внимание, что остановка сервера осуществляется по клавише 
-Ctrl-C в консоли скрипта `run-local-server.sh`. Если закрыть окно консоли - 
-сервер останется "висеть" в памяти и для его завершения потребуется найти java 
-процесс в Task Manager. 
+Please note that the server is stopped by the 
+Ctrl-C key in the console of the `run-local-server.sh` script. If you close the console window -
+the server will remain "hanging" in memory and to complete it you will need to find the java 
+process in the Task Manager.
