@@ -2415,7 +2415,7 @@ public class PlayerServiceImplTest {
         playerService.tick();
 
         // then
-        verify(actionLogger).log(deals);
+        verify(actionLogger).log(deals.all());
 //        verifyNoMoreInteractions(actionLogger);
     }
 

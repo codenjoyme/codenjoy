@@ -95,7 +95,7 @@ public class ActionLoggerTest {
         FieldService fields = mock(FieldService.class);
         Spreader spreader = new Spreader(fields);
         deals = new Deals(spreader);
-        setupChat(deals, null);
+        setupChat(deals);
         allRoomsAreActive();
     }
 
@@ -112,13 +112,17 @@ public class ActionLoggerTest {
         givenPlayers();
 
         // when
-        log(deals);
+        log();
         waitFor();
 
         // then
         assertAllLogs(
                 "[BoardLog(time=101, playerId=player1, game=game1, room=room1, score=123, board=player1Board:101, message=null, command=[]), \n" +
                 "BoardLog(time=101, playerId=player2, game=game2, room=room2, score=234, board=player2Board:101, message=null, command=[])]");
+    }
+
+    private void log() {
+        log(deals.getAll(roomService::isRoomActive));
     }
 
     private void allRoomsAreActive() {
@@ -131,7 +135,7 @@ public class ActionLoggerTest {
     }
 
     @SneakyThrows
-    private void log(Deals deals) {
+    private void log(List<Deal> deals) {
         logger.log(deals);
     }
 
@@ -153,7 +157,7 @@ public class ActionLoggerTest {
         givenPlayers();
 
         // when
-        log(deals);
+        log();
         waitFor();
 
         // then
@@ -198,7 +202,7 @@ public class ActionLoggerTest {
         givenPlayers();
 
         // when
-        log(deals);
+        log();
         waitFor();
 
         // then
@@ -212,10 +216,10 @@ public class ActionLoggerTest {
         givenPlayers();
 
         // when
-        log(deals); // time = 101
-        log(deals); // time = 102
-        log(deals); // time = 103
-        log(deals); // time = 104
+        log();
+        log();
+        log();
+        log();
         waitFor();
 
         // then
@@ -247,17 +251,17 @@ public class ActionLoggerTest {
         givenPlayers();
 
         // when
-        log(deals); // time = 101
-        log(deals); // time = 102
-        log(deals); // time = 103
-        log(deals); // time = 104
-        log(deals); // time = 105
-        log(deals); // time = 106
-        log(deals); // time = 107
-        log(deals); // time = 108
-        log(deals); // time = 109
-        log(deals); // time = 110
-        log(deals); // time = 111
+        log();
+        log();
+        log();
+        log();
+        log();
+        log();
+        log();
+        log();
+        log();
+        log();
+        log();
         waitFor();
 
         // then

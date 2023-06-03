@@ -23,12 +23,14 @@ package com.codenjoy.dojo.services.dao;
  */
 
 
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.BoardLog;
+import com.codenjoy.dojo.services.Deal;
+import com.codenjoy.dojo.services.Player;
+import com.codenjoy.dojo.services.TimeService;
 import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
 import com.codenjoy.dojo.services.jdbc.JDBCTimeUtils;
 import com.codenjoy.dojo.services.log.Suspendable;
-import com.codenjoy.dojo.services.room.RoomService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -57,9 +59,6 @@ public class ActionLogger extends Suspendable {
     private int count;
 
     private CrudConnectionThreadPool pool;
-
-    @Autowired
-    protected RoomService roomService;
 
     public ActionLogger(ConnectionThreadPoolFactory factory) {
         pool = factory.create("CREATE TABLE IF NOT EXISTS player_boards (" +
@@ -111,12 +110,12 @@ public class ActionLogger extends Suspendable {
         return result;
     }
 
-    public void log(Deals deals) {
+    public void log(List<Deal> deals) {
         if (!active || deals.size() == 0) return;
 
         // для всех players одно и то же время используется - фактически как id группы сейвов
         long time = now();
-        for (Deal deal : deals.getAll(roomService::isRoomActive)) {
+        for (Deal deal : deals) {
             Player player = deal.getPlayer();
             cache.add(new BoardLog(time,
                     player.getId(),
