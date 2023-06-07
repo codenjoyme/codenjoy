@@ -42,16 +42,28 @@ eval_echo() {
 
 eval_echo "cd ../../.git"
 
+from=https://github.com/
+to=git@github.com:
+
+# because of different sed versions on different platforms (macos, linux)
+# we need to use different sed commands
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    platform_diff="''"
+else
+    platform_diff=""
+fi
+
 # iterate through all submodules
 while read -r line; do
     if [[ "$line" =~ ^\[submodule.* ]]; then
         path=$(echo $line | awk -F '"' '{print $2}')
         submodule_path="modules/$path"
+        color "Processing submodule: $submodule_path"
 
         # navigate to submodule path and modify config file
         eval_echo "cd $submodule_path"
         eval_echo "cat config"
-        eval_echo "sed -i 's#url = https://github.com/#url = git@github.com:#g' config"
+        eval_echo "sed -i $platform_diff 's#url = $from#url = $to#g' config"
         eval_echo "cat config"
         eval_echo "cd -"
     fi
