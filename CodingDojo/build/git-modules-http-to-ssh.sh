@@ -45,12 +45,18 @@ eval_echo "cd ../../.git"
 # iterate through all submodules
 while read -r line; do
     if [[ "$line" =~ ^\[submodule.* ]]; then
-        path=$(echo "$line" | sed -E 's/\[submodule "(.*)"\]/\1/')
+        path=$(echo $line | awk -F '"' '{print $2}')
         submodule_path="modules/$path"
 
         # navigate to submodule path and modify config file
         eval_echo "cd $submodule_path"
-        eval_echo "sed -i '' 's#url = https://github.com/#url = git@github.com:#g' config"
+        eval_echo "cat config"
+        eval_echo "sed -i 's#url = https://github.com/#url = git@github.com:#g' config"
+        eval_echo "cat config"
         eval_echo "cd -"
     fi
 done < config
+
+echo
+color "Press Enter to continue"
+read
