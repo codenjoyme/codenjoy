@@ -56,7 +56,7 @@ License along with this program.  If not, see
                         <span class="icon-bar"></span>
                     </button>
                     <a class="logo inline" href="#" title="Home"><img src="${ctx}/resources/img/logo.png"></a>
-                    <span class="title dojo-title">Coding DOJO&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <span class="title dojo-title">Codenjoy&nbsp;&nbsp;&nbsp;&nbsp;</span>
                     <c:if test="${activeProfiles.contains('icancode')}">
                         <!-- TODO to remove from here -->
                         <a class="logo inline" href="#" title="Home"><img src="${ctx}/resources/img/robot-logo.png"></a>

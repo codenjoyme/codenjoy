@@ -1151,7 +1151,7 @@ clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.pro
 
 + 93) Со странички регистрации-логина убрать все артефакты связывающие страничку с компанией
     хедер
-        оставляем иконку и надпись Coding Dojo вместо DOJO
+        оставляем иконку и надпись Codenjoy вместо DOJO
     футер
         оставляем About DOJO = codenjoy.com
         Codenjoy on GitHub  = github.com/codenjoyme
