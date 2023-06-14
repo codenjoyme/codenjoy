@@ -88,6 +88,7 @@ import static com.codenjoy.dojo.services.helper.ChatDealsUtils.setupReadableName
 import static com.codenjoy.dojo.services.multiplayer.GamePlayer.DEFAULT_TEAM_ID;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static com.codenjoy.dojo.utils.JsonUtils.clean;
+import static com.codenjoy.dojo.utils.TestUtils.assertMatch;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 import static org.fest.reflect.core.Reflection.field;
@@ -441,9 +442,9 @@ public class PlayerServiceImplTest {
         playerService.tick();
 
         // then
-        assertEquals("StatisticService(time=timeService bean, \n" +
+        assertMatch("StatisticService(time=timeService bean, \n" +
                         "tick=6000, \n" +
-                        "tickTime=1970-01-01T02:00:06.000+0200, \n" +
+                        "tickTime=1970-01-01T*:00:06.000+*, \n" +
                         "tickDuration=3000, \n" +
                         "screenUpdatesCount=0, \n" +
                         "requestControlsCount=0, \n" +
