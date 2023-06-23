@@ -32,7 +32,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static com.codenjoy.dojo.client.Utils.split;
 import static com.codenjoy.dojo.services.PlayerServiceImplTest.setupTimeService;
-import static com.codenjoy.dojo.utils.TestUtils.assertMatch;
+import static com.codenjoy.dojo.utils.smart.SmartAssert.assertEquals;
 
 public class StatisticServiceTest extends AbstractControllerTest<String, Joystick> {
 
@@ -89,9 +89,9 @@ public class StatisticServiceTest extends AbstractControllerTest<String, Joystic
         waitForServerReceived(false);
 
         // then
-        assertMatch("StatisticService(time=timeService bean, \n" +
+        assertEquals("StatisticService(time=timeService bean, \n" +
                         "tick=3000, \n" +
-                        "tickTime=1970-01-01T*:00:03.000+*, \n" +
+                        "tickTime=1970-01-01T02:00:03.000+0200, \n" +
                         "tickDuration=3000, \n" +
                         "screenUpdatesCount=0, \n" +
                         "requestControlsCount=2, \n" +
@@ -106,9 +106,9 @@ public class StatisticServiceTest extends AbstractControllerTest<String, Joystic
         waitForServerReceived(false);
 
         // then
-        assertMatch("StatisticService(time=timeService bean, \n" +
+        assertEquals("StatisticService(time=timeService bean, \n" +
                         "tick=9000, \n" +
-                        "tickTime=1970-01-01T*:00:09.000+*, \n" +
+                        "tickTime=1970-01-01T02:00:09.000+0200, \n" +
                         "tickDuration=3000, \n" +
                         "screenUpdatesCount=0, \n" +
                         "requestControlsCount=1, \n" +
@@ -131,9 +131,9 @@ public class StatisticServiceTest extends AbstractControllerTest<String, Joystic
         waitForServerReceived(false);
 
         // then
-        assertMatch("StatisticService(time=timeService bean, \n" +
+        assertEquals("StatisticService(time=timeService bean, \n" +
                         "tick=3000, \n" +
-                        "tickTime=1970-01-01T*:00:03.000+*, \n" +
+                        "tickTime=1970-01-01T02:00:03.000+0200, \n" +
                         "tickDuration=3000, \n" +
                         "screenUpdatesCount=2, \n" +
                         "requestControlsCount=0, \n" +
@@ -149,9 +149,9 @@ public class StatisticServiceTest extends AbstractControllerTest<String, Joystic
         waitForServerReceived(false);
 
         // then
-        assertMatch("StatisticService(time=timeService bean, \n" +
+        assertEquals("StatisticService(time=timeService bean, \n" +
                         "tick=9000, \n" +
-                        "tickTime=1970-01-01T*:00:09.000+*, \n" +
+                        "tickTime=1970-01-01T02:00:09.000+0200, \n" +
                         "tickDuration=3000, \n" +
                         "screenUpdatesCount=1, \n" +
                         "requestControlsCount=0, \n" +
