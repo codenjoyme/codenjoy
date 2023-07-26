@@ -24,7 +24,7 @@ package com.codenjoy.dojo.expansion.model.levels;
 
 
 import com.codenjoy.dojo.client.ElementsMap;
-import com.codenjoy.dojo.expansion.model.IField;
+import com.codenjoy.dojo.expansion.model.Field;
 import com.codenjoy.dojo.expansion.model.levels.items.*;
 import com.codenjoy.dojo.games.expansion.Element;
 import com.codenjoy.dojo.games.expansion.ElementUtils;
@@ -68,9 +68,9 @@ public class Level extends AbstractLevel {
 
             if (ElementUtils.layer(element) != LAYER1) {
                 Element atBottom = elements.get(Element.FLOOR.ch());
-                cell.addItem(baseItem(atBottom));
+                cell.add(baseItem(atBottom));
             }
-            cell.addItem(item);
+            cell.add(item);
         });
     }
 
@@ -91,9 +91,9 @@ public class Level extends AbstractLevel {
                 return;
             }
             Hero hero = heroes.get(index);
-            HeroForces oldItem = cell.getItem(HeroForces.class);
+            HeroForces oldItem = cell.item(HeroForces.class);
             if (oldItem != null) {
-                oldItem.removeFromCell();
+                oldItem.leaveCell();
             }
             cell.captureBy(new ChHeroForces(hero));
         });
@@ -105,7 +105,7 @@ public class Level extends AbstractLevel {
             if (count == 0) {
                 return;
             }
-            cell.getItem(ChHeroForces.class).setCount(count);
+            cell.item(ChHeroForces.class).setCount(count);
         });
     }
 
@@ -151,13 +151,13 @@ public class Level extends AbstractLevel {
     public boolean isBarrier(int x, int y) {
         boolean isAbroad = x > size() - 1 || x < 0 || y < 0 || y > size() - 1;
 
-        return isAbroad || !cell(x, y).isPassable();
+        return isAbroad || !cell(x, y).passable();
     }
 
     public <T> List<T> items(Class<T> clazz) {
         List<T> result = new LinkedList<>();
         for (Cell cell : cells) {
-            for (Item item : cell.getItems()) {
+            for (Item item : cell.items()) {
                 if (clazz.isInstance(item)) {
                     result.add((T) item);
                 }
@@ -169,7 +169,7 @@ public class Level extends AbstractLevel {
     public List<Cell> cellsWith(Class with) {
         List<Cell> result = new LinkedList<>();
         for (Cell cell : cells) {
-            for (Item item : cell.getItems()) {
+            for (Item item : cell.items()) {
                 if (with.isInstance(item)) {
                     result.add(cell);
                     break;
@@ -189,7 +189,7 @@ public class Level extends AbstractLevel {
         return result;
     }
 
-    public void field(IField field) {
+    public void field(Field field) {
         List<FieldItem> items = items(FieldItem.class);
 
         for (int i = 0; i < items.size(); ++i) {

@@ -23,23 +23,24 @@ package com.codenjoy.dojo.expansion.model.levels;
  */
 
 
-import com.codenjoy.dojo.games.expansion.Element;
 import com.codenjoy.dojo.expansion.model.Player;
-import com.codenjoy.dojo.services.printer.state.State;
 import com.codenjoy.dojo.expansion.model.levels.items.FeatureItem;
+import com.codenjoy.dojo.games.expansion.Element;
+import com.codenjoy.dojo.services.printer.state.State;
 
 import java.util.List;
 
 public interface Item extends State<Element, Player> {
+
     void action(Item item, boolean comeInOrLeave);
 
-    Cell getCell();
+    Cell cell();
 
     List<Item> getItemsInSameCell();
 
-    void setCell(Cell value);
+    void joinCell(Cell cell);
 
-    boolean hasFeature(FeatureItem feature);
+    boolean has(FeatureItem feature);
 
-    Cell removeFromCell();
+    void leaveCell();
 }

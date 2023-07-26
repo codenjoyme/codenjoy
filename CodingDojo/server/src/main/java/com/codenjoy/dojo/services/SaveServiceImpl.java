@@ -41,13 +41,13 @@ public class SaveServiceImpl implements SaveService {
     @Autowired protected GameSaver saver;
     @Autowired protected PlayerService players;
     @Autowired protected Registration registration;
-    @Autowired protected Deals deals;
+    @Autowired protected DealsService dealsService;
     @Autowired protected TimeService time;
     @Autowired protected ConfigProperties config;
 
     @Override
     public long saveAll() {
-        return saveAll(deals.all());
+        return saveAll(dealsService.all());
     }
 
     private long saveAll(List<Deal> deals) {
@@ -58,7 +58,7 @@ public class SaveServiceImpl implements SaveService {
 
     @Override
     public long saveAll(String room) {
-        return saveAll(deals.getAll(withRoom(room)));
+        return saveAll(dealsService.getAll(withRoom(room)));
     }
 
     @Override
@@ -77,7 +77,7 @@ public class SaveServiceImpl implements SaveService {
 
     @Override
     public long save(String id) {
-        Deal deal = deals.get(id);
+        Deal deal = dealsService.get(id);
         if (deal == NullDeal.INSTANCE) {
             return -1;
         }
@@ -160,7 +160,7 @@ public class SaveServiceImpl implements SaveService {
         for (Player player : active) {
             PlayerInfo info = new PlayerInfo(player, now);
             setDataFromRegistration(info, users, player.getId());
-            setSaveFromField(info, deals.get(player.getId()));
+            setSaveFromField(info, dealsService.get(player.getId()));
 
             map.put(player.getId(), info);
         }

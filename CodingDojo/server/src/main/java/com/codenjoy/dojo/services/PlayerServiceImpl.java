@@ -29,28 +29,21 @@ import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.chat.ChatService;
-import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.services.controller.chat.ChatController;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hash.Hash;
-import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.services.multiplayer.Sweeper;
 import com.codenjoy.dojo.services.nullobj.NullDeal;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
-import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.semifinal.SemifinalService;
 import com.codenjoy.dojo.services.semifinal.SemifinalStatus;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.whatsnext.WhatsNextService;
-import com.codenjoy.dojo.transport.screen.ScreenData;
-import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import com.codenjoy.dojo.web.rest.pojo.PTeam;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.fest.reflect.core.Reflection;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +54,6 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Supplier;
 
 import static com.codenjoy.dojo.services.Deals.withRoom;
@@ -71,24 +63,12 @@ import static java.util.stream.Collectors.toMap;
 @Slf4j
 public class PlayerServiceImpl implements PlayerService {
     
-    private ReadWriteLock lock = new ReentrantReadWriteLock(true);
-    private Map<Player, Pair> boards = new HashMap<>();
-
-    @Autowired protected Deals deals;
-    @Autowired private DealsView dealsView;
-
-    @Autowired
-    @Qualifier("playerController")
-    protected Controller playerController;
-
-    @Autowired
-    @Qualifier("screenController")
-    protected Controller screenController;
-
     @Autowired
     @Qualifier("chatController")
     protected ChatController chatController;
 
+    @Autowired protected LockService lockService;
+    @Autowired protected DealsService dealsService;
     @Autowired protected GameService gameService;
     @Autowired protected AutoSaver autoSaver;
     @Autowired protected GameSaver saver;
@@ -111,22 +91,17 @@ public class PlayerServiceImpl implements PlayerService {
 
     @PostConstruct
     public void init() {
-        deals.init(lock);
-        deals.onAdd(deal -> {
-            playerController.register(deal);
-            screenController.register(deal);
+        dealsService.onAdd(deal -> {
             chatController.register(deal);
         });
-        deals.onRemove(deal -> {
-            playerController.unregister(deal);
-            screenController.unregister(deal);
+        dealsService.onRemove(deal -> {
             chatController.unregister(deal);
         });
     }
 
     @Override
     public Player register(String id, String game, String room, String ip) {
-        lock.writeLock().lock();
+        lock().writeLock().lock();
         try {
             log.debug("Registered user {} in game {}", id, game);
 
@@ -150,34 +125,38 @@ public class PlayerServiceImpl implements PlayerService {
 
             return player;
         } finally {
-            lock.writeLock().unlock();
+            lock().writeLock().unlock();
         }
+    }
+
+    private ReadWriteLock lock() {
+        return lockService.get();
     }
 
     @Override
     public void reloadAI(String id) {
-        lock.writeLock().lock();
+        lock().writeLock().lock();
         try {
-            Deal deal = deals.get(id);
+            Deal deal = dealsService.get(id);
             registerAI(id, deal.getGameType().name(), deal.getRoom()); // TODO ROOM test me
         } finally {
-            lock.writeLock().unlock();
+            lock().writeLock().unlock();
         }
     }
 
     @Override
     public SemifinalStatus getSemifinalStatus(String room) {
-        lock.writeLock().lock();
+        lock().writeLock().lock();
         try {
             return semifinal.getSemifinalStatus(room);
         } finally {
-            lock.writeLock().unlock();
+            lock().writeLock().unlock();
         }
     }
 
     @Override
     public String whatsNext(String room, String board, String allActions) {
-        lock.writeLock().lock();
+        lock().writeLock().lock();
         try {
             if (!roomService.exists(room)) {
                 throw new IllegalArgumentException("Room not exists: " + room);
@@ -185,7 +164,7 @@ public class PlayerServiceImpl implements PlayerService {
             GameType gameType = roomService.gameType(room);
             return whatsNext.calculate(gameType, board, allActions);
         } finally {
-            lock.writeLock().unlock();
+            lock().writeLock().unlock();
         }
     }
 
@@ -197,7 +176,7 @@ public class PlayerServiceImpl implements PlayerService {
 
         // если в эту игру ai еще не играет
         String aiId = game + WebSocketRunner.BOT_ID_SUFFIX;
-        Deal deal = deals.get(aiId);
+        Deal deal = dealsService.get(aiId);
 
         if (deal instanceof NullDeal) {
             registerAI(aiId, game, room);
@@ -234,11 +213,11 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public Player register(PlayerSave save) {
-        lock.writeLock().lock();
+        lock().writeLock().lock();
         try {
             return justRegister(save);
         } finally {
-            lock.writeLock().unlock();
+            lock().writeLock().unlock();
         }
     }
 
@@ -310,15 +289,13 @@ public class PlayerServiceImpl implements PlayerService {
 
         GameType gameType = gameService.getGameType(game, room);
         Player player = getPlayer(id);
-        Deal oldDeal = deals.get(id);
+        Deal oldDeal = dealsService.get(id);
 
         boolean newPlayer = (player instanceof NullPlayer) 
                 || !game.equals(player.getGame())
                 || !room.equals(oldDeal.getRoom()); // TODO ROOM test me
         if (newPlayer) {
-            deals.remove(player.getId(), Sweeper.on());
-
-            Deal deal = deals.deal(save, room, id, callbackUrl, gameType, time.now());
+            Deal deal = dealsService.deal(save, room, id, callbackUrl, gameType, time.now());
 
             player = deal.getPlayer();
 
@@ -334,163 +311,80 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public void tick() {
-        lock.writeLock().lock();
+        lock().writeLock().lock();
         try {
             profiler.start("PSI.tick()");
 
             statistic.tick();
 
-            actionLogger.log(deals);
+            actionLogger.log(dealsService.getAll(roomService::isRoomActive));
             autoSaver.tick();
 
-            deals.tick();
-            sendScreenUpdates();
-            requestControls();
+            statistic.log(dealsService.tick(roomService::isRoomActive));
 
             chatController.tick();
 
             inactivity.tick();
             semifinal.tick();
 
-            statistic.dealsCount(deals.size());
+            statistic.dealsCount(dealsService.size());
             statistic.tickDuration(profiler.end());
         } catch (Error e) {
             e.printStackTrace();
             log.error("PlayerService.tick() throws", e);
         } finally {
-            lock.writeLock().unlock();
-        }
-    }
-
-    private void requestControls() {
-        int requested = 0;
-
-        for (Deal deal : deals.active()) {
-            Player player = deal.getPlayer();
-            try {
-                Object clientBoard = boards.get(player).getRight();
-                // TODO в конце концов если if (pair == null || pair.noSockets()) то
-                //      ничего не отправляется, и зря гоняли но вроде как из кеша берем,
-                //      так что проблем быть не должно.
-                requested += playerController.requestControl(player, clientBoard);
-            } catch (Exception e) {
-                log.error("Unable to send control request to player " + player.getId() +
-                        " URL: " + player.getCallbackUrl(), e);
-            }
-        }
-
-        statistic.requestControlsCount(requested);
-    }
-
-    private void sendScreenUpdates() {
-        Map<ScreenRecipient, ScreenData> map = buildScreenData();
-        sendScreenForWebSockets(map);
-    }
-
-    private Map<ScreenRecipient, ScreenData> buildScreenData() {
-        Map<ScreenRecipient, ScreenData> map = new HashMap<>();
-        boards.clear();
-
-        Map<String, GameData> gameDataMap = dealsView.getGamesDataMap();
-        for (Deal deal : deals) {
-            Game game = deal.getGame();
-            Player player = deal.getPlayer();
-            try {
-                String gameType = deal.getGameType().name();
-                GameData gameData = gameDataMap.get(player.getId());
-                GuiPlotColorDecoder decoder = gameData.getDecoder();
-
-                ImmutablePair data = decoder.buildBoards(game, player.getId());
-                boards.put(player, data);
-                Object screenBoard = data.getLeft();
-
-                int boardSize = gameData.getBoardSize();
-                Object score = player.getScore();
-                String message = player.getMessage();
-                Map<String, Object> scores = gameData.getScores();
-                Map<String, Integer> teams = gameData.getTeams();
-                List<String> group = gameData.getGroup();
-                Map<String, HeroData> coordinates = gameData.getCoordinates();
-                Map<String, String> readableNames = gameData.getReadableNames();
-                map.put(player, new PlayerData(boardSize,
-                        screenBoard,
-                        gameType,
-                        score,
-                        message,
-                        scores,
-                        teams,
-                        coordinates,
-                        readableNames,
-                        group));
-
-            } catch (Exception e) {
-                log.error("Unable to send screen updates to player " + player.getId() +
-                        " URL: " + player.getCallbackUrl(), e);
-                e.printStackTrace();
-            }
-        }
-
-        return map;
-    }
-
-    private void sendScreenForWebSockets(Map<ScreenRecipient, ScreenData> map) {
-        try {
-            int requested = screenController.requestControlToAll(map);
-            statistic.screenUpdatesCount(requested);
-        } catch (Exception e) {
-            log.error("Unable to send screen updates to all players", e);
-            e.printStackTrace();
+            lock().writeLock().unlock();
         }
     }
 
     @Override
     public List<Player> getAll() {
-        lock.readLock().lock();
+        lock().readLock().lock();
         try {
-            return Collections.unmodifiableList(deals.players());
+            return Collections.unmodifiableList(dealsService.players());
         } finally {
-            lock.readLock().unlock();
+            lock().readLock().unlock();
         }
     }
 
     @Override
     public List<Player> getAll(String game) {
-        lock.readLock().lock();
+        lock().readLock().lock();
         try {
-            return deals.getPlayersByGame(game);
+            return dealsService.getPlayersByGame(game);
         } finally {
-            lock.readLock().unlock();
+            lock().readLock().unlock();
         }
     }
 
     @Override
     public List<Player> getAllInRoom(String room) {
-        lock.readLock().lock();
+        lock().readLock().lock();
         try {
-            return deals.getPlayersByRoom(room);
+            return dealsService.getPlayersByRoom(room);
         } finally {
-            lock.readLock().unlock();
+            lock().readLock().unlock();
         }
     }
 
     @Override
     public void remove(String id) {
-        lock.writeLock().lock();
+        lock().writeLock().lock();
         try {
             Player player = getPlayer(id);
 
             log.debug("Unregistered user {} from game {}",
                     player.getId(), player.getGame());
 
-            deals.remove(player.getId(), Sweeper.on());
+            dealsService.remove(player.getId(), Sweeper.on());
         } finally {
-            lock.writeLock().unlock();
+            lock().writeLock().unlock();
         }
     }
 
     @Override
     public void updateAll(List<? extends Player> players) {
-        lock.writeLock().lock();
+        lock().writeLock().lock();
         try {
             if (players == null) {
                 return;
@@ -500,12 +394,12 @@ public class PlayerServiceImpl implements PlayerService {
                     .filter(player -> player.getId() != null)
                     .forEach(player -> updatePlayer(found(player), player));
         } finally {
-            lock.writeLock().unlock();
+            lock().writeLock().unlock();
         }
     }
 
     private Deal found(Player player) {
-        Deal deal = deals.get(player.getId());
+        Deal deal = dealsService.get(player.getId());
         if (deal == NullDeal.INSTANCE) {
             throw new IllegalArgumentException("Player not found by id: " + player.getId());
         }
@@ -514,11 +408,11 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public void update(Player player) {
-        lock.writeLock().lock();
+        lock().writeLock().lock();
         try {
             updatePlayer(found(player), player);
         } finally {
-            lock.writeLock().unlock();
+            lock().writeLock().unlock();
         }
     }
 
@@ -575,7 +469,7 @@ public class PlayerServiceImpl implements PlayerService {
             String newSave = input.getData();
             boolean updateSave = !PlayerSave.isSaveNull(newSave) && !newSave.equals(oldSave);
             if (updateSave) {
-                deals.setLevel(
+                dealsService.setLevel(
                         input.getId(),
                         new JSONObject(newSave));
             }
@@ -599,7 +493,7 @@ public class PlayerServiceImpl implements PlayerService {
         if (changeRoom) {
             // меняем комнату
             gameService.getGameType(game, newRoom);     // тут создастся новая комната
-            deals.changeRoom(id, game, newRoom);
+            dealsService.changeRoom(id, game, newRoom);
         } else {
             // меняем игру
             remove(id);
@@ -609,72 +503,72 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override // TODO test me
     public void loadSaveForAll(String room, String newSave) {
-        lock.writeLock().lock();
+        lock().writeLock().lock();
         try {
-            List<Player> players = deals.getPlayersByRoom(room);
-            players.forEach(player -> deals.setLevel(
+            List<Player> players = dealsService.getPlayersByRoom(room);
+            players.forEach(player -> dealsService.setLevel(
                     player.getId(),
                     new JSONObject(newSave)));
         } finally {
-            lock.writeLock().unlock();
+            lock().writeLock().unlock();
         }
     }
 
     @Override
     public boolean contains(String id) {
-        lock.readLock().lock();
+        lock().readLock().lock();
         try {
             return getPlayer(id) != NullPlayer.INSTANCE;
         } finally {
-            lock.readLock().unlock();
+            lock().readLock().unlock();
         }
     }
 
     @Override
     public Player get(String id) {
-        lock.readLock().lock();
+        lock().readLock().lock();
         try {
             return getPlayer(id);
         } finally {
-            lock.readLock().unlock();
+            lock().readLock().unlock();
         }
     }
 
     private Player getPlayer(String id) {
-        return deals.get(id).getPlayer();
+        return dealsService.get(id).getPlayer();
     }
 
     @Override
     public void removeAll() {
-        lock.writeLock().lock();
+        lock().writeLock().lock();
         try {
-            deals.clear();
+            dealsService.clear();
         } finally {
-            lock.writeLock().unlock();
+            lock().writeLock().unlock();
         }
     }
 
     @Override
     public void removeAll(String room) {
-        lock.writeLock().lock();
+        lock().writeLock().lock();
         try {
-            deals.getAll(withRoom(room))
+            dealsService.getAll(withRoom(room))
                     .stream()
                     .map(deal -> deal.getPlayer())
             // TODO тут раньше сносились все комнаты напрямую, но spreader не трогали, и тесты не тестируют это
-                    .forEach(player -> deals.remove(player.getId(), Sweeper.off()));
+                    .forEach(player -> dealsService.remove(player.getId(), Sweeper.off()));
         } finally {
-            lock.writeLock().unlock();
+            lock().writeLock().unlock();
         }
     }
 
     @Override
     public Joystick getJoystick(String id) {
-        lock.writeLock().lock();
+        lock().writeLock().lock();
         try {
-            return deals.get(id).getGame().getJoystick();
+            return dealsService.get(id).getGame().getJoystick();
         } finally {
-            lock.writeLock().unlock();
+            lock().writeLock().unlock();
         }
     }
 
@@ -702,91 +596,91 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public void cleanAllScores() {
-        lock.writeLock().lock();
+        lock().writeLock().lock();
         try {
             semifinal.clean();
             scoresCleaner.cleanAllScores();
         } finally {
-            lock.writeLock().unlock();
+            lock().writeLock().unlock();
         }
     }
 
     @Override
     public void cleanAllScores(String room) {
-        lock.writeLock().lock();
+        lock().writeLock().lock();
         try {
             semifinal.clean(room);
             scoresCleaner.cleanAllScores(room);
         } finally {
-            lock.writeLock().unlock();
+            lock().writeLock().unlock();
         }
     }
 
     @Override
     public void cleanScores(String id) {
-        lock.writeLock().lock();
+        lock().writeLock().lock();
         try {
             scoresCleaner.cleanScores(id);
         } finally {
-            lock.writeLock().unlock();
+            lock().writeLock().unlock();
         }
     }
 
     @Override // TODO test me
     public void reloadAllRooms() {
-        lock.writeLock().lock();
+        lock().writeLock().lock();
         try {
-            deals.reloadAll(true);
+            dealsService.reloadAll(true);
         } finally {
-            lock.writeLock().unlock();
+            lock().writeLock().unlock();
         }
     }
 
     @Override // TODO test me
     public void reloadAllRooms(String room) {
-        lock.writeLock().lock();
+        lock().writeLock().lock();
         try {
-            deals.reloadAll(true, withRoom(room));
+            dealsService.reloadAll(true, withRoom(room));
         } finally {
-            lock.writeLock().unlock();
+            lock().writeLock().unlock();
         }
     }
 
     @Override
     public Player getRandomInRoom(String room) {
-        lock.readLock().lock();
+        lock().readLock().lock();
         try {
-            if (deals.isEmpty()) return NullPlayer.INSTANCE;
+            if (dealsService.size() == 0) return NullPlayer.INSTANCE;
 
             if (room == null) {
-                return deals.iterator().next().getPlayer();
+                return dealsService.getAll(deal -> true).get(0).getPlayer();
             }
 
-            Iterator<Player> iterator = deals.getPlayersByRoom(room).iterator();
+            Iterator<Player> iterator = dealsService.getPlayersByRoom(room).iterator();
             if (!iterator.hasNext()) return NullPlayer.INSTANCE;
             return iterator.next();
         } finally {
-            lock.readLock().unlock();
+            lock().readLock().unlock();
         }
     }
 
     @Override
     public String getAnyRoomWithPlayers() {
-        lock.readLock().lock();
+        lock().readLock().lock();
         try {
-            if (deals.isEmpty()) return null;
+            if (dealsService.size() == 0) return null;
 
-            return deals.iterator().next().getRoom();
+            return dealsService.getAll(deal -> true).get(0).getRoom();
         } finally {
-            lock.readLock().unlock();
+            lock().readLock().unlock();
         }
     }
 
     @Override
     public Map<String, Integer> getRoomCounts() {
-        lock.readLock().lock();
+        lock().readLock().lock();
         try {
-            List<Player> players = deals.players();
+            List<Player> players = dealsService.players();
             return roomService.rooms().stream()
                     .map(room -> new HashMap.SimpleEntry<>(room, count(players, room)))
                     .collect(toMap(entry -> entry.getKey(),
@@ -794,7 +688,7 @@ public class PlayerServiceImpl implements PlayerService {
                             (value1, value2) -> value2,
                             LinkedHashMap::new));
         } finally {
-            lock.readLock().unlock();
+            lock().readLock().unlock();
         }
     }
 

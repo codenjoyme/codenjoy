@@ -1,21 +1,21 @@
-Для создания новой конфигурации для запуска игры в IDE, необходимо выполнить 
-следующие действия.
+To create a new configuration for running the game in the IDE, you need to do
+the following.
 
 ![ide-run-configurations.png](ide-run-configurations.png)
 
-1. Открыть окно настроек запуска (Run -> Edit Configurations...).
-2. Выбрать раздел Maven.
-3. Клонировать конфигурацию `games/sample [install]` (1) (2)
-назвав игру соответственно (3). При этом не забыть поменять root directory проекта
-внутри настроек. 
-4. Проделать то же самое с конфигурацией `server [run sample]` - он служит для запуска
-сервера с одной этой игрой с предварительной сборкой всех зависимых артефактов: 
-client/java, games.pom, engine. Тут стоит обратить внимание на изменение билда игры (5)
-и параметра `-Pgame` запускающего профиль maven с этой игрой (6). Если есть необходимость
-запустить сервер с несколькими играми, то стоит их всех указать в (5), а в (6) 
-прописать имена через запятую: `-Pgame1,game2`.
-5. То же самое стоит сделать с конфигурацией `server [run-with sample]` - 
-он служит для запуска сервера с одной игрой, но без предварительной сборки всех 
-зависимостей, что ускоряет процесс. 
+1. Open the run settings window (Run -> Edit Configurations...).
+2. Select the Maven section.
+3. Clone the `games/sample [install]` configuration (1) (2)
+naming the game accordingly (3). Don't forget to change the root directory of the project
+inside the settings.
+4. Do the same with the `server [run sample]` configuration - it is used to run
+the server with one of these games with a pre-build of all dependent artifacts:
+client/java, games.pom, engine. Here it is worth paying attention to the change of the game build (5)
+and the `-Pgame` parameter that runs the maven profile with this game (6). If there is a need
+to run the server with several games, then you should specify all of them in (5), and in (6)
+write the names separated by commas: `-Pgame1,game2`.
+5. The same should be done with the `server [run-with sample]` configuration -
+it is used to run the server with one game, but without pre-building all
+dependencies, which speeds up the process.
 
-Эти ваши кастомные конфигурации не стоит коммитить в репозиторий.
+These custom configurations should not be committed to the repository.

@@ -23,17 +23,17 @@ package com.codenjoy.dojo.expansion.services;
  */
 
 
-import com.codenjoy.dojo.games.expansion.Element;
 import com.codenjoy.dojo.expansion.model.levels.Cell;
 import com.codenjoy.dojo.expansion.model.levels.CellImpl;
 import com.codenjoy.dojo.expansion.model.levels.items.ForcesState;
 import com.codenjoy.dojo.expansion.model.levels.items.Hero;
 import com.codenjoy.dojo.expansion.model.levels.items.HeroForces;
 import com.codenjoy.dojo.expansion.model.levels.items.Start;
+import com.codenjoy.dojo.games.expansion.Element;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class ForcesStateTest {
 
@@ -60,7 +60,7 @@ public class ForcesStateTest {
         };
         return new HeroForces(hero, count) {
             @Override
-            public Cell getCell() {
+            public Cell cell() {
                 return new CellImpl(0, 0);
             }
         };

@@ -26,6 +26,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
@@ -73,5 +74,10 @@ public class StatisticService {
 
     public void tickDuration(long mills) {
         tickDuration = mills;
+    }
+
+    public void log(Pair<Integer, Integer> tick) {
+        screenUpdatesCount(tick.getLeft());
+        requestControlsCount(tick.getRight());
     }
 }

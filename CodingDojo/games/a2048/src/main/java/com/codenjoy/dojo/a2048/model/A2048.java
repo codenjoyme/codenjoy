@@ -136,7 +136,7 @@ public class A2048 implements Field {
 
             @Override
             public void addAll(Player player, Consumer<Iterable<? extends Point>> processor) {
-                processor.accept(() -> new Iterator<Point>() {
+                processor.accept(() -> new Iterator<>() {
                     private int x = 0;
                     private int y = 0;
                     private Numbers numb = A2048.this.numbers;

@@ -55,6 +55,8 @@ public class PlayerServiceImplIntegrationTest {
 
     private PlayerService service;
 
+    private LockService lockService;
+    private DealsService dealsService;
     private SemifinalService semifinal;
     private ConfigProperties config;
     private ActionLogger actionLogger;
@@ -74,19 +76,29 @@ public class PlayerServiceImplIntegrationTest {
 
     @Before
     public void setup() {
-        service = new PlayerServiceImpl() {
+        dealsService = new DealsService() {
             {
                 FieldService fieldService = mock(FieldService.class);
                 Spreader spreader = new Spreader(fieldService);
 
                 PlayerServiceImplIntegrationTest.this.deals
-                        = this.deals = new Deals(spreader, roomService);
+                        = this.deals = new Deals(spreader);
 
                 PlayerServiceImplIntegrationTest.this.playerController
                         = this.playerController = mock(Controller.class);
 
                 PlayerServiceImplIntegrationTest.this.screenController
                         = this.screenController = mock(Controller.class);
+            }
+        };
+
+        service = new PlayerServiceImpl() {
+            {
+                PlayerServiceImplIntegrationTest.this.lockService
+                        = this.lockService = new LockService();
+
+                this.dealsService
+                        = PlayerServiceImplIntegrationTest.this.dealsService;
 
                 PlayerServiceImplIntegrationTest.this.chatController
                         = this.chatController = mock(ChatController.class);

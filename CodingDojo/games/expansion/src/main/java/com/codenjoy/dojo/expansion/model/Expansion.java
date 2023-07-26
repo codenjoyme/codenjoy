@@ -25,6 +25,7 @@ package com.codenjoy.dojo.expansion.model;
 import com.codenjoy.dojo.expansion.model.levels.Cell;
 import com.codenjoy.dojo.expansion.model.levels.Item;
 import com.codenjoy.dojo.expansion.model.levels.Level;
+import com.codenjoy.dojo.expansion.model.levels.Levels;
 import com.codenjoy.dojo.expansion.model.levels.items.*;
 import com.codenjoy.dojo.expansion.model.replay.GameLogger;
 import com.codenjoy.dojo.expansion.services.Event;
@@ -34,7 +35,8 @@ import com.codenjoy.dojo.games.expansion.ForcesMoves;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
-import com.codenjoy.dojo.services.printer.layeredview.LayeredBoardReader;
+import com.codenjoy.dojo.services.multiplayer.TriFunction;
+import com.codenjoy.dojo.services.printer.layeredview.LayeredField;
 import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
 import com.codenjoy.dojo.services.printer.state.State;
 import com.codenjoy.dojo.utils.JsonUtils;
@@ -44,11 +46,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.function.BiFunction;
 
 import static com.codenjoy.dojo.expansion.services.Event.Type.WIN;
 
-public class Expansion implements Tickable, IField {
+public class Expansion extends LayeredField<Player, Hero> implements Tickable, Field {
 
     public static Event WIN_MULTIPLE;
     public static Event DRAW_MULTIPLE;
@@ -197,7 +198,7 @@ public class Expansion implements Tickable, IField {
         }
 
         for (Cell cell : level.cellsWith(HeroForces.class)) {
-            List<HeroForces> forces = cell.getItems(HeroForces.class);
+            List<HeroForces> forces = cell.items(HeroForces.class);
             if (forces.size() <= 1) continue;
 
             nothingChanged &= !settings.attack().calculate(forces);
@@ -223,7 +224,7 @@ public class Expansion implements Tickable, IField {
         public int count() {
             return Arrays.asList(level.cells()).stream()
                     .mapToInt(cell -> {
-                        List<HeroForces> items = cell.getItems(HeroForces.class);
+                        List<HeroForces> items = cell.items(HeroForces.class);
                         if (items.isEmpty()) return 0;
                         return items.stream().mapToInt((heroForces) -> heroForces.getCount()).sum();
                     }).sum();
@@ -307,8 +308,8 @@ public class Expansion implements Tickable, IField {
     private Event checkStatus(Player player, Hero hero) {
         if (players.size() == 1) {
             List<Cell> freeCells = level.cellsWith(
-                    cell -> cell.getItems(HeroForces.class).isEmpty() &&
-                            cell.isPassable() && cell.getItem(Hole.class) == null
+                    cell -> cell.items(HeroForces.class).isEmpty() &&
+                            cell.passable() && cell.item(Hole.class) == null
             );
             if (freeCells.isEmpty()) {
                 return DRAW_MULTIPLE;
@@ -390,7 +391,7 @@ public class Expansion implements Tickable, IField {
     }
 
     private HeroForces getHeroForces(Hero hero, Cell cell) {
-        List<HeroForces> forces = cell.getItems(HeroForces.class);
+        List<HeroForces> forces = cell.items(HeroForces.class);
         for (HeroForces force : forces) {
             if (force.itsMe(hero)) {
                 return force;
@@ -402,9 +403,9 @@ public class Expansion implements Tickable, IField {
     @Override
     public void removeForces(Hero hero, int x, int y) {
         Cell cell = level.cell(x, y);
-        HeroForces force = cell.getItem(HeroForces.class);
+        HeroForces force = cell.item(HeroForces.class);
         if (force != null && force.itsMe(hero)) {
-            force.removeFromCell();
+            force.leaveCell();
         }
     }
 
@@ -443,8 +444,8 @@ public class Expansion implements Tickable, IField {
 
     @Override
     public int totalRegions(){
-        return level.cellsWith(cell -> cell.isPassable()
-                && cell.getItem(Hole.class) == null).size();
+        return level.cellsWith(cell -> cell.passable()
+                && cell.item(Hole.class) == null).size();
     }
 
     @Override
@@ -487,7 +488,7 @@ public class Expansion implements Tickable, IField {
     public void removeFromCell(Hero hero) {
         for (HeroForces forces : level.items(HeroForces.class)) {
             if (forces.itsMe(hero)) {
-                forces.removeFromCell();
+                forces.leaveCell();
             }
         }
         for (Start start : level.items(Start.class)) { // TODO test me
@@ -583,46 +584,41 @@ public class Expansion implements Tickable, IField {
         return lg.id();
     }
 
-    public LayeredBoardReader layeredReader() {
-        return new LayeredBoardReader() {
-            @Override
-            public int size() {
-                return Expansion.this.size();
-            }
+    @Override
+    public int countLayers() {
+        return Levels.COUNT_LAYERS;
+    }
 
-            @Override
-            public int viewSize() {
-                int viewSize = Expansion.this.level.viewSize();
-                return (viewSize == -1) ? size() : viewSize;
-            }
+    @Override
+    public int viewSize() {
+        int viewSize = Expansion.this.level.viewSize();
+        return (viewSize == -1) ? size() : viewSize;
+    }
 
-            @Override
-            public BiFunction<Integer, Integer, State> elements() {
-                Cell[] cells = Expansion.this.getCurrentLevel().cells();
-                return (index, layer) -> {
-                    if (layer == 2) {
-                        return new ForcesState(cells[index].getItem(HeroForces.class));
-                    } else {
-                        return cells[index].getItem(layer);
-                    }
-                };
-            }
-
-            @Override
-            public Point viewCenter(Object player) {
-                return ((Player)player).getHero().getPosition();
-            }
-
-            @Override
-            public Object[] itemsInSameCell(State item, int layer) {
-                if (item instanceof Item) {
-                    // TODO передавать дальше int layer и вообще сделать как в icancode от 2020-04-20
-                    return ((Item) item).getItemsInSameCell().toArray();
-                } else {
-                    return new Object[0];
-                }
+    @Override
+    public TriFunction<Integer, Integer, Integer, State> elements() {
+        Level level = Expansion.this.getCurrentLevel();
+        return (x, y, layer) -> {
+            if (layer == 2) {
+                return new ForcesState(level.cell(x, y).item(HeroForces.class));
+            } else {
+                return level.cell(x, y).item(layer);
             }
         };
+    }
+
+    @Override
+    public Point viewCenter(Player player) {
+        return player.getHero().getPosition();
+    }
+
+    @Override
+    public Object[] itemsInSameCell(State item, int layer) {
+        if (item instanceof ForcesState) {
+            return new Object[0];
+        }
+        // TODO передавать дальше int layer и вообще сделать как в icancode от 2020-04-20
+        return ((Item) item).getItemsInSameCell().toArray();
     }
 
     @Override

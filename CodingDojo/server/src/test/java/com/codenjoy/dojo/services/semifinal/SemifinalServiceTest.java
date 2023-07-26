@@ -53,11 +53,15 @@ public class SemifinalServiceTest extends AbstractDealsTest {
         timeout = 3;
         semifinal = new SemifinalService();
         semifinal.roomService = roomService;
-        semifinal.deals = deals;
+        semifinal.dealsService = new DealsService(){{
+            deals = SemifinalServiceTest.this.deals;
+        }};
         semifinal.saver = mock(GameSaver.class);
         GameService gameService = mock(GameService.class);
         TimeService timeService = new TimeService();
-        semifinal.scoresCleaner = spy(new ScoresCleaner(deals, semifinal.saver, roomService, gameService, timeService));
+        semifinal.scoresCleaner = spy(new ScoresCleaner(
+                semifinal.dealsService, semifinal.saver,
+                roomService, gameService, timeService));
         semifinal.clean();
         roomService.removeAll();
     }

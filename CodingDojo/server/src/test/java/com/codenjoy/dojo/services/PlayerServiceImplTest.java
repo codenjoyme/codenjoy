@@ -55,6 +55,7 @@ import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.semifinal.SemifinalService;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import com.codenjoy.dojo.transport.screen.ScreenSender;
+import com.codenjoy.dojo.utils.TestUtils;
 import lombok.SneakyThrows;
 import org.fest.reflect.core.Reflection;
 import org.json.JSONObject;
@@ -87,6 +88,7 @@ import static com.codenjoy.dojo.services.helper.ChatDealsUtils.setupReadableName
 import static com.codenjoy.dojo.services.multiplayer.GamePlayer.DEFAULT_TEAM_ID;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static com.codenjoy.dojo.utils.JsonUtils.clean;
+import static com.codenjoy.dojo.utils.TestUtils.assertMatch;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 import static org.fest.reflect.core.Reflection.field;
@@ -229,6 +231,7 @@ public class PlayerServiceImplTest {
 
         // по умолчанию все комнаты будут активными и открытыми для регистрации
         when(roomService.isActive(anyString())).thenReturn(true);
+        when(roomService.isRoomActive(any(Deal.class))).thenReturn(true);
         when(roomService.isOpened(anyString())).thenReturn(true);
         setRegistrationOpened(true);
 
@@ -439,9 +442,9 @@ public class PlayerServiceImplTest {
         playerService.tick();
 
         // then
-        assertEquals("StatisticService(time=timeService bean, \n" +
+        assertMatch("StatisticService(time=timeService bean, \n" +
                         "tick=6000, \n" +
-                        "tickTime=1970-01-01T02:00:06.000+0200, \n" +
+                        "tickTime=1970-01-01T*:00:06.000+*, \n" +
                         "tickDuration=3000, \n" +
                         "screenUpdatesCount=0, \n" +
                         "requestControlsCount=0, \n" +
@@ -461,11 +464,6 @@ public class PlayerServiceImplTest {
         // then
         assertSentToPlayers(user1, user2);
         assertHostsCaptured(USER1_URL, USER2_URL);
-    }
-
-    // тикаются ли борды в этой комнате
-    protected void setActive(String room, boolean active) {
-        when(roomService.isActive(room)).thenReturn(active);
     }
 
     // открыта ли эта комната для регистрации
@@ -618,7 +616,7 @@ public class PlayerServiceImplTest {
         Player user2 = createPlayer(USER2, "game1", "room2");
         Player user3 = createPlayer(USER3, "game2", "room3");
 
-        setActive("room1", false);
+        TestUtils.setActive(roomService, "room1", false);
 
         // when
         playerService.tick();
@@ -2418,7 +2416,7 @@ public class PlayerServiceImplTest {
         playerService.tick();
 
         // then
-        verify(actionLogger).log(deals);
+        verify(actionLogger).log(deals.all());
 //        verifyNoMoreInteractions(actionLogger);
     }
 

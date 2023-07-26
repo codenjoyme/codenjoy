@@ -32,6 +32,7 @@ import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.multiplayer.Spreader;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.room.RoomService;
+import com.codenjoy.dojo.utils.TestUtils;
 import com.codenjoy.dojo.utils.test.DealsUtils;
 import lombok.SneakyThrows;
 import org.junit.After;
@@ -63,6 +64,8 @@ public class ActionLoggerTest {
 
     @Before
     public void setup() {
+        roomService = mock(RoomService.class);
+
         String dbFile = "target/logs.db" + new Random().nextInt();
         logger = new ActionLogger(
                     new SqliteConnectionThreadPoolFactory(false, dbFile,
@@ -76,6 +79,8 @@ public class ActionLoggerTest {
             {
                 // пригодится, когда будем дожидаться завершения сохранения
                 ActionLoggerTest.this.executor = executor;
+
+                roomService = ActionLoggerTest.this.roomService;
             }
 
             @Override
@@ -87,11 +92,10 @@ public class ActionLoggerTest {
         logger.setTicks(1);
         time = 100;
 
-        roomService = mock(RoomService.class);
         FieldService fields = mock(FieldService.class);
         Spreader spreader = new Spreader(fields);
-        deals = new Deals(spreader, roomService);
-        setupChat(deals, null);
+        deals = new Deals(spreader);
+        setupChat(deals);
         allRoomsAreActive();
     }
 
@@ -108,7 +112,7 @@ public class ActionLoggerTest {
         givenPlayers();
 
         // when
-        log(deals);
+        log();
         waitFor();
 
         // then
@@ -117,16 +121,21 @@ public class ActionLoggerTest {
                 "BoardLog(time=101, playerId=player2, game=game2, room=room2, score=234, board=player2Board:101, message=null, command=[])]");
     }
 
+    private void log() {
+        log(deals.getAll(roomService::isRoomActive));
+    }
+
     private void allRoomsAreActive() {
-        when(roomService.isActive(anyString())).thenReturn(true);
+        TestUtils.setActive(roomService, anyString(), true);
     }
 
     private void thisRoomIsNotActive(String room) {
-        when(roomService.isActive(room)).thenReturn(false);
+        TestUtils.setActive(roomService, room, false);
+
     }
 
     @SneakyThrows
-    private void log(Deals deals) {
+    private void log(List<Deal> deals) {
         logger.log(deals);
     }
 
@@ -148,7 +157,7 @@ public class ActionLoggerTest {
         givenPlayers();
 
         // when
-        log(deals);
+        log();
         waitFor();
 
         // then
@@ -193,7 +202,7 @@ public class ActionLoggerTest {
         givenPlayers();
 
         // when
-        log(deals);
+        log();
         waitFor();
 
         // then
@@ -207,10 +216,10 @@ public class ActionLoggerTest {
         givenPlayers();
 
         // when
-        log(deals); // time = 101
-        log(deals); // time = 102
-        log(deals); // time = 103
-        log(deals); // time = 104
+        log();
+        log();
+        log();
+        log();
         waitFor();
 
         // then
@@ -242,17 +251,17 @@ public class ActionLoggerTest {
         givenPlayers();
 
         // when
-        log(deals); // time = 101
-        log(deals); // time = 102
-        log(deals); // time = 103
-        log(deals); // time = 104
-        log(deals); // time = 105
-        log(deals); // time = 106
-        log(deals); // time = 107
-        log(deals); // time = 108
-        log(deals); // time = 109
-        log(deals); // time = 110
-        log(deals); // time = 111
+        log();
+        log();
+        log();
+        log();
+        log();
+        log();
+        log();
+        log();
+        log();
+        log();
+        log();
         waitFor();
 
         // then

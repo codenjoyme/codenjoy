@@ -72,7 +72,8 @@ public class GameServiceImpl implements GameService {
     @Value("${plugins.game.package}")
     private String gamePackage;
 
-    protected boolean disableTesting = true;
+    @Value("${testing.disable}")
+    protected boolean disableTesting;
 
     @PostConstruct
     public void init() {

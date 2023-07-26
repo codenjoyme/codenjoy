@@ -24,7 +24,7 @@ package com.codenjoy.dojo.web.rest;
 
 
 import com.codenjoy.dojo.services.Deal;
-import com.codenjoy.dojo.services.Deals;
+import com.codenjoy.dojo.services.DealsService;
 import com.codenjoy.dojo.services.GameService;
 import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.dao.GameData;
@@ -62,7 +62,7 @@ public class RestSettingsController {
     public static final String SETTINGS = "_settings_";
     public static final String GENERAL = "general";
 
-    private Deals deals;
+    private DealsService dealsService;
     private GameService gameService;
     private GameData gameData;
     private Validator validator;
@@ -77,7 +77,7 @@ public class RestSettingsController {
         }
         String id = user.getId();
 
-        Deal deal = deals.get(id);
+        Deal deal = dealsService.get(id);
         GameType gameType = deal.getGameType();
 
         List<Parameter> parameters = gameType.getSettings().getParameters();

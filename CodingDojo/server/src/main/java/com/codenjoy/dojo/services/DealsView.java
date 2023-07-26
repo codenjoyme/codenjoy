@@ -79,8 +79,8 @@ public class DealsView {
     private <K, V> Map<K, V> filterByGroup(Map<K, V> map, List<String> group) {
         return map.entrySet().stream()
                 .filter(entry -> group.contains(entry.getKey()))
-                .collect(toMap(entry -> entry.getKey(),
-                        entry -> entry.getValue()));
+                .collect(toMap(Map.Entry::getKey,
+                        Map.Entry::getValue));
     }
 
     private Map<String, HeroData> getCoordinates() {
@@ -140,7 +140,7 @@ public class DealsView {
     private List<PScoresOf> scoresFor(Predicate<Deal> predicate) {
         return service.all().stream()
                 .filter(predicate)
-                .map(deal -> new PScoresOf(deal))
+                .map(PScoresOf::new)
                 .collect(toList());
     }
 

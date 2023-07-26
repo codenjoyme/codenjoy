@@ -25,7 +25,7 @@ package com.codenjoy.dojo.expansion.model.replay;
 
 import com.codenjoy.dojo.expansion.TestGameSettings;
 import com.codenjoy.dojo.expansion.model.Expansion;
-import com.codenjoy.dojo.expansion.model.IField;
+import com.codenjoy.dojo.expansion.model.Field;
 import com.codenjoy.dojo.expansion.model.Player;
 import com.codenjoy.dojo.expansion.model.Ticker;
 import com.codenjoy.dojo.expansion.model.levels.Level;
@@ -146,7 +146,7 @@ public class ExpansionGameLoggerTest {
     private Player createPlayer() {
         return new Player(mock(EventListener.class), null, settings) {
             @Override
-            public void newHero(IField field) {
+            public void newHero(Field field) {
                 Hero hero = new Hero() {
                     @Override
                     public void tick() {

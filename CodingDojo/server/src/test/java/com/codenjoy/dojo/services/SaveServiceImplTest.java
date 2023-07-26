@@ -30,7 +30,6 @@ import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.multiplayer.Spreader;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
-import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.codenjoy.dojo.utils.test.DealsUtils;
 import org.json.JSONObject;
@@ -68,11 +67,13 @@ public class SaveServiceImplTest {
     @Before
     public void setup() {
         saveService = new SaveServiceImpl(){{
-            RoomService roomService = mock(RoomService.class);
             FieldService fieldService = mock(FieldService.class);
             Spreader spreader = new Spreader(fieldService);
-            this.deals = SaveServiceImplTest.this.deals = new Deals(spreader, roomService);
-            setupChat(deals, null);
+            Deals deals = SaveServiceImplTest.this.deals = new Deals(spreader);
+            dealsService = new DealsService(){{
+                this.deals = SaveServiceImplTest.this.deals;
+            }};
+            setupChat(deals);
             this.players = SaveServiceImplTest.this.playerService = mock(PlayerService.class);
             this.saver = SaveServiceImplTest.this.saver = mock(GameSaver.class);
             this.registration = SaveServiceImplTest.this.registration = mock(Registration.class);

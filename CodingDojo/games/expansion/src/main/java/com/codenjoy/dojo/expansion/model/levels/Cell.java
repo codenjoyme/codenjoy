@@ -23,9 +23,9 @@ package com.codenjoy.dojo.expansion.model.levels;
  */
 
 
-import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.expansion.model.levels.items.Hero;
 import com.codenjoy.dojo.expansion.model.levels.items.HeroForces;
+import com.codenjoy.dojo.services.Point;
 
 import java.util.List;
 
@@ -33,19 +33,19 @@ public interface Cell extends Point {
 
     void captureBy(HeroForces income);
 
-    void addItem(Item item);
+    void add(Item item);
 
-    boolean isPassable();
+    boolean passable();
 
-    <T extends Item> T getItem(Class<T> type);
+    <T extends Item> T item(Class<T> type);
 
-    <T extends Item> T getItem(int layer);
+    <T extends Item> T item(int layer);
 
-    <T extends Item> List<T> getItems(Class<T> clazz);
+    <T extends Item> List<T> items(Class<T> clazz);
 
-    <T extends Item> List<T> getItems();
+    <T extends Item> List<T> items();
 
-    void removeItem(Item item);
+    void remove(Item item);
 
     boolean busy(Hero hero);
 }
