@@ -54,7 +54,7 @@ eval_echo "git checkout $current_branch"
 
 color "Do you want to create tag (Y/N)?"
 read answer
-if [[ "$answer" == "Y" ]]; then
+if [[ "$answer" =~ ^[Yy]$ ]]; then
   TAG=`date +%Y-%m-%d`_dojorena-release
   eval_echo "git tag -d $TAG"
   eval_echo "git tag $TAG"
