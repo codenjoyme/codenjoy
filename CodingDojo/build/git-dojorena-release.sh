@@ -58,6 +58,7 @@ if [[ "$answer" =~ ^[Yy]$ ]]; then
   TAG=`date +%Y-%m-%d`_dojorena-release
   eval_echo "git tag -d $TAG"
   eval_echo "git tag $TAG"
+  eval_echo "git push origin :refs/tags/$TAG"
   eval_echo "git push origin $TAG"
   eval_echo "git tag"
 fi
