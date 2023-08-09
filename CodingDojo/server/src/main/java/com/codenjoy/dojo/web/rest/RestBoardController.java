@@ -213,22 +213,4 @@ public class RestBoardController {
 
         return playerService.whatsNext(room, input.getBoard(), input.getActions());
     }
-
-    @GetMapping("/player/{player}")
-    public String getPlayerInfo(@PathVariable("player") String player) {
-
-        Player p = playerService.get(player);
-        JSONObject  jmap = new JSONObject();
-        jmap.put("id", p.getId());
-        jmap.put("readableName", p.getReadableName());
-        jmap.put("data", p.getData());
-        jmap.put("room", p.getRoom());
-        jmap.put("game", p.getGame());
-        jmap.put("lastResponse", p.getLastResponse());
-        jmap.put("teamId", p.getTeamId());
-        jmap.put("score", p.getScore());
-
-        return jmap.toString();
-
-    }
 }
