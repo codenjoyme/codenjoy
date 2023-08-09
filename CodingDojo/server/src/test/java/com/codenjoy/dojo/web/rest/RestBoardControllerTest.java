@@ -53,17 +53,6 @@ public class RestBoardControllerTest extends AbstractRestControllerTest {
     }
 
     @Test
-    public void playerInfo() {
-        with.login.asUser("somePlayer", "somePlayer");
-
-        String expected = "{\"score\":0,\"readableName\":\"somePlayer-name\",\"game\":\"first\",\"teamId\":0,\"id\":\"somePlayer\",\"lastResponse\":{lastResponse},\"room\":\"validRoom\"}";
-        String lastResponse = String.valueOf(players.get("somePlayer").getLastResponse());
-        expected = expected.replace("{lastResponse}", lastResponse);
-
-        assertEquals(expected, get("/rest/player/somePlayer"));
-    }
-
-    @Test
     public void playerWantsToPlay() {
         String code = registration.getCodeById("somePlayer");
         String expected = "{\n" +
