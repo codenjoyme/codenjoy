@@ -1,4 +1,4 @@
-| Settings name | Action |
-|---------------|--------|
-| SUCCESS_SCORE | [Score] Success score |
-| FIELD_SIZE | [Level] Field size |
+| Action | Settings name |
+|--------|---------------|
+| [Score] Success score | SUCCESS_SCORE |
+| [Level] Field size | FIELD_SIZE |

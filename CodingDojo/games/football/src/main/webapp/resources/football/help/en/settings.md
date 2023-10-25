@@ -1,7 +1,7 @@
-| Settings name | Action |
-|---------------|--------|
-| NUMBER_OF_PLAYERS | [Game] Number of players |
-| IS_NEED_AI | [Game] Is need AI |
-| WIN_SCORE | [Score] Win score |
-| LOSE_PENALTY | [Score] Lose penalty |
-| LEVEL_MAP | [Level] Level map |
+| Action | Settings name |
+|--------|---------------|
+| [Game] Number of players | NUMBER_OF_PLAYERS |
+| [Game] Is need AI | IS_NEED_AI |
+| [Score] Win score | WIN_SCORE |
+| [Score] Lose penalty | LOSE_PENALTY |
+| [Level] Level map | LEVEL_MAP |

@@ -1,5 +1,5 @@
-| Settings name | Action |
-|---------------|--------|
-| WIN_SCORE | [Score] Win score |
-| LOSE_PENALTY | [Score] Lose penalty |
-| SIZE | [Level] Size |
+| Action | Settings name |
+|--------|---------------|
+| [Score] Win score | WIN_SCORE |
+| [Score] Lose penalty | LOSE_PENALTY |
+| [Level] Size | SIZE |
