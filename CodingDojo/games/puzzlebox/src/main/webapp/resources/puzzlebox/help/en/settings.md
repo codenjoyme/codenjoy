@@ -1,5 +1,5 @@
 | Settings name | Action |
 |---------------|--------|
-| FILL_SCORE | [Score] Fill score |
 | WIN_SCORE | [Score] Win score |
+| FILL_SCORE | [Score] Fill score |
 | LEVEL_MAP | [Level] Level map |
