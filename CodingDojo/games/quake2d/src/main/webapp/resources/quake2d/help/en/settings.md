@@ -1,5 +1,5 @@
-| Settings name | Action |
-|---------------|--------|
-| LEVEL_MAP | [Level] Level map |
-| INJURE_SCORE | [Score] Injure score |
-| KILL_SCORE | [Score] Kill score |
+| Action | Settings name |
+|--------|---------------|
+| [Score] Kill score | KILL_SCORE |
+| [Score] Injure score | INJURE_SCORE |
+| [Level] Level map | LEVEL_MAP |

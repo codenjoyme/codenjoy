@@ -1,4 +1,4 @@
-| Settings name | Action |
-|---------------|--------|
-| BONUS_SCORE | [Score] Bonus score |
-| WIN_SCORE | [Score] Win score |
+| Action | Settings name |
+|--------|---------------|
+| [Score] Win score | WIN_SCORE |
+| [Score] Bonus score | BONUS_SCORE |

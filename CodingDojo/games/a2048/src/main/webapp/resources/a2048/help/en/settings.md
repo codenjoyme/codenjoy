@@ -1,12 +1,12 @@
-| Settings name | Action |
-|---------------|--------|
-| SIZE | [Level] Size |
-| BREAKS_NOT_EXISTS | Without breaks mode |
-| NEW_NUMBERS_IN_RANDOM | With random numbers mode |
-| LEVEL_MAP | [Level] Level map |
-| BREAKS_EXISTS | With breaks mode |
-| NEW_NUMBERS_IN_CORNERS | Classic (corner only) mode |
-| SCORE_COUNTING_TYPE | [Score] Counting score mode |
-| NUMBERS_MODE | [Game] Numbers mode |
-| BREAKS_MODE | [Game] Breaks mode |
-| NEW_NUMBERS | [Game] New numbers |
+| Action | Settings name |
+|--------|---------------|
+| With breaks mode | BREAKS_EXISTS |
+| Without breaks mode | BREAKS_NOT_EXISTS |
+| Classic (corner only) mode | NEW_NUMBERS_IN_CORNERS |
+| With random numbers mode | NEW_NUMBERS_IN_RANDOM |
+| [Level] Size | SIZE |
+| [Game] New numbers | NEW_NUMBERS |
+| [Game] Numbers mode | NUMBERS_MODE |
+| [Game] Breaks mode | BREAKS_MODE |
+| [Level] Level map | LEVEL_MAP |
+| [Score] Counting score mode | SCORE_COUNTING_TYPE |

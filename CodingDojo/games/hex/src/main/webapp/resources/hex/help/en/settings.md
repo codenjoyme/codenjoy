@@ -1,5 +1,5 @@
-| Settings name | Action |
-|---------------|--------|
-| LEVEL_MAP | [Level] Level map |
-| WIN_SCORE | [Score] Win score |
-| LOSE_PENALTY | [Score] Lose penalty |
+| Action | Settings name |
+|--------|---------------|
+| [Score] Win score | WIN_SCORE |
+| [Score] Lose penalty | LOSE_PENALTY |
+| [Level] Level map | LEVEL_MAP |
