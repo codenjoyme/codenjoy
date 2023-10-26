@@ -24,112 +24,80 @@ package com.codenjoy.dojo.quake2d.services;
 
 
 import com.codenjoy.dojo.quake2d.TestGameSettings;
-import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.event.Calculator;
-import com.codenjoy.dojo.services.event.ScoresImpl;
-import org.junit.Before;
+import com.codenjoy.dojo.services.event.ScoresMap;
+import com.codenjoy.dojo.utils.scorestest.AbstractScoresTest;
 import org.junit.Test;
 
-import static com.codenjoy.dojo.quake2d.services.Event.INJURE;
-import static com.codenjoy.dojo.quake2d.services.Event.KILL;
 import static com.codenjoy.dojo.quake2d.services.GameSettings.Keys.INJURE_SCORE;
 import static com.codenjoy.dojo.quake2d.services.GameSettings.Keys.KILL_SCORE;
-import static org.junit.Assert.assertEquals;
 
-public class ScoresTest {
+public class ScoresTest extends AbstractScoresTest {
 
-    private PlayerScores scores;
-    private GameSettings settings;
-
-    private void kill() {
-        scores.event(KILL);
+    @Override
+    public GameSettings settings() {
+        return new TestGameSettings()
+                .integer(KILL_SCORE, 1)
+                .integer(INJURE_SCORE, -1);
     }
 
-    private void injure() {
-        scores.event(INJURE);
+    @Override
+    protected Class<? extends ScoresMap> scores() {
+        return Scores.class;
     }
 
-    @Before
-    public void setup() {
-        settings = new TestGameSettings();
+    @Override
+    protected Class<? extends Enum> eventTypes() {
+        return Event.class;
     }
 
     @Test
     public void shouldCollectScores() {
-        // given
-        givenScores(140);
-
-        // when
-        kill();
-        kill();
-        kill();
-
-        injure();
-
-        // then
-        assertEquals(140
-                    + 3 * settings.integer(KILL_SCORE)
-                    + settings.integer(INJURE_SCORE),
-                scores.getScore());
-    }
-
-    private void givenScores(int score) {
-        scores = new ScoresImpl<>(score, new Calculator<>(new Scores(settings)));
+        assertEvents("100:\n" +
+                "KILL > +1 = 101\n" +
+                "KILL > +1 = 102\n" +
+                "KILL > +1 = 103\n" +
+                "INJURE > -1 = 102");
     }
 
     @Test
-    public void shouldStillZero_ifLessThan0() {
+    public void shouldNotBeLessThanZero() {
         // given
         settings.integer(INJURE_SCORE, -10);
-        givenScores(0);
 
         // when
-        injure();
-
-        // then
-        assertEquals(0, scores.getScore());
+        assertEvents("15:\n" +
+                "INJURE > -10 = 5\n" +
+                "INJURE > -5 = 0\n" +
+                "INJURE > +0 = 0");
     }
 
     @Test
     public void shouldCleanScore() {
-        // given
-        givenScores(0);
-        kill();
-
-        // when
-        scores.clear();
-
-        // then
-        assertEquals(0, scores.getScore());
+        assertEvents("0:\n" +
+                "KILL > +1 = 1\n" +
+                "(CLEAN) > -1 = 0\n" +
+                "KILL > +1 = 1");
     }
 
     @Test
     public void shouldCollectScores_whenKill() {
         // given
-        givenScores(140);
+        settings.integer(KILL_SCORE, 1);
 
-        // when
-        kill();
-        kill();
-
-        // then
-        assertEquals(140
-                    + 2 * settings.integer(KILL_SCORE),
-                scores.getScore());
+        // when then
+        assertEvents("100:\n" +
+                "KILL > +1 = 101\n" +
+                "KILL > +1 = 102");
     }
 
     @Test
     public void shouldCollectScores_whenInjure() {
         // given
-        givenScores(140);
+        settings.integer(INJURE_SCORE, -1);
 
-        // when
-        injure();
-        injure();
-
-        // then
-        assertEquals(140
-                    + 2 * settings.integer(INJURE_SCORE),
-                scores.getScore());
+        // when then
+        assertEvents("100:\n" +
+                "INJURE > -1 = 99\n" +
+                "INJURE > -1 = 98");
     }
 }

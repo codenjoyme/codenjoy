@@ -22,156 +22,104 @@ package com.codenjoy.dojo.spacerace.services;
  * #L%
  */
 
-import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.event.Calculator;
-import com.codenjoy.dojo.services.event.ScoresImpl;
+import com.codenjoy.dojo.services.event.ScoresMap;
 import com.codenjoy.dojo.spacerace.TestGameSettings;
-import org.junit.Before;
+import com.codenjoy.dojo.utils.scorestest.AbstractScoresTest;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.spacerace.services.GameSettings.Keys.*;
-import static org.junit.Assert.assertEquals;
 
-public class ScoresTest {
+public class ScoresTest extends AbstractScoresTest {
 
-    private PlayerScores scores;
-
-    private GameSettings settings;
-
-    public void lose() {
-        scores.event(Event.LOSE);
+    @Override
+    public GameSettings settings() {
+        return new TestGameSettings()
+                .integer(DESTROY_ENEMY_SCORE, 1)
+                .integer(DESTROY_STONE_SCORE, 2)
+                .integer(DESTROY_BOMB_SCORE, 3)
+                .integer(LOSE_PENALTY, -1);
     }
 
-    public void destroyEnemy() {
-        scores.event(Event.DESTROY_ENEMY);
+    @Override
+    protected Class<? extends ScoresMap> scores() {
+        return Scores.class;
     }
 
-    public void destroyBomb() {
-        scores.event(Event.DESTROY_BOMB);
-    }
-
-    public void destroyStone() {
-        scores.event(Event.DESTROY_STONE);
-    }
-
-    @Before
-    public void setup() {
-        settings = new TestGameSettings();
+    @Override
+    protected Class<? extends Enum> eventTypes() {
+        return Event.class;
     }
 
     @Test
     public void shouldCollectScores() {
-        // given
-        givenScores(140);
-
-        // when
-        destroyEnemy();
-        destroyEnemy();
-        destroyEnemy();
-        destroyEnemy();
-
-        destroyStone();
-        destroyStone();
-
-        destroyBomb();
-
-        lose();
-
-        // then
-        assertEquals(140
-                    + 4 *  settings.integer(DESTROY_ENEMY_SCORE)
-                    + 2 *  settings.integer(DESTROY_STONE_SCORE)
-                    + settings.integer(DESTROY_BOMB_SCORE)
-                    + settings.integer(LOSE_PENALTY),
-                scores.getScore());
-    }
-
-    private void givenScores(int score) {
-        scores = new ScoresImpl<>(score, new Calculator<>(new Scores(settings)));
+        assertEvents("100:\n" +
+                "DESTROY_ENEMY > +1 = 101\n" +
+                "DESTROY_ENEMY > +1 = 102\n" +
+                "DESTROY_ENEMY > +1 = 103\n" +
+                "DESTROY_ENEMY > +1 = 104\n" +
+                "DESTROY_STONE > +2 = 106\n" +
+                "DESTROY_STONE > +2 = 108\n" +
+                "DESTROY_BOMB > +3 = 111\n" +
+                "LOSE > -1 = 110");
     }
 
     @Test
     public void shouldNotBeLessThanZero() {
-        // given
-        givenScores(0);
-
-        // when
-        lose();
-
-        // then
-        assertEquals(0, scores.getScore());
+        assertEvents("2:\n" +
+                "LOSE > -1 = 1\n" +
+                "LOSE > -1 = 0\n" +
+                "LOSE > +0 = 0");
     }
 
     @Test
     public void shouldCleanScore() {
-        // given
-        givenScores(0);
-        destroyEnemy();
-
-        // when
-        scores.clear();
-
-        // then
-        assertEquals(0, scores.getScore());
+        assertEvents("100:\n" +
+                "DESTROY_ENEMY > +1 = 101\n" +
+                "(CLEAN) > -101 = 0\n" +
+                "DESTROY_BOMB > +3 = 3");
     }
 
     @Test
     public void shouldCollectScores_whenDestroyEnemy() {
         // given
-        givenScores(140);
+        settings().integer(DESTROY_ENEMY_SCORE, 1);
 
-        // when
-        destroyEnemy();
-        destroyEnemy();
-
-        // then
-        assertEquals(140
-                    + 2 *  settings.integer(DESTROY_ENEMY_SCORE),
-                scores.getScore());
+        // when then
+        assertEvents("100:\n" +
+                "DESTROY_ENEMY > +1 = 101\n" +
+                "DESTROY_ENEMY > +1 = 102");
     }
 
     @Test
     public void shouldCollectScores_whenDestroyStone() {
         // given
-        givenScores(140);
+        settings().integer(DESTROY_STONE_SCORE, 2);
 
-        // when
-        destroyStone();
-        destroyStone();
-
-        // then
-        assertEquals(140
-                    + 2 *  settings.integer(DESTROY_STONE_SCORE),
-                scores.getScore());
+        // when then
+        assertEvents("100:\n" +
+                "DESTROY_STONE > +2 = 102\n" +
+                "DESTROY_STONE > +2 = 104");
     }
 
     @Test
     public void shouldCollectScores_whenDestroyBomb() {
         // given
-        givenScores(140);
+        settings().integer(DESTROY_BOMB_SCORE, 3);
 
-        // when
-        destroyBomb();
-        destroyBomb();
-
-        // then
-        assertEquals(140
-                    + 2 * settings.integer(DESTROY_BOMB_SCORE),
-                scores.getScore());
+        // when then
+        assertEvents("100:\n" +
+                "DESTROY_BOMB > +3 = 103\n" +
+                "DESTROY_BOMB > +3 = 106");
     }
 
     @Test
     public void shouldCollectScores_whenLose() {
         // given
-        givenScores(140);
+        settings().integer(LOSE_PENALTY, -1);
 
-        // when
-        lose();
-        lose();
-
-        // then
-        assertEquals(140
-                    + 2 * settings.integer(LOSE_PENALTY),
-                scores.getScore());
+        // when then
+        assertEvents("100:\n" +
+                "LOSE > -1 = 99\n" +
+                "LOSE > -1 = 98");
     }
 }
