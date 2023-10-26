@@ -22,63 +22,49 @@ package com.codenjoy.dojo.pong.services;
  * #L%
  */
 
-
 import com.codenjoy.dojo.pong.TestGameSettings;
-import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.event.Calculator;
-import com.codenjoy.dojo.services.event.ScoresImpl;
-import org.junit.Before;
+import com.codenjoy.dojo.services.event.ScoresMap;
+import com.codenjoy.dojo.utils.scorestest.AbstractScoresTest;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.pong.services.GameSettings.Keys.WIN_SCORE;
-import static org.junit.Assert.assertEquals;
 
-public class ScoresTest {
+public class ScoresTest extends AbstractScoresTest {
 
-    private PlayerScores scores;
-    private GameSettings settings;
-
-    public void win() {
-        scores.event(Event.WIN);
+    @Override
+    public GameSettings settings() {
+        return new TestGameSettings()
+                .integer(WIN_SCORE, 50);
     }
 
-    @Before
-    public void setup() {
-        settings = new TestGameSettings();
+    @Override
+    protected Class<? extends ScoresMap> scores() {
+        return Scores.class;
     }
 
-    private void givenScores(int score) {
-        scores = new ScoresImpl<>(score, new Calculator<>(new Scores(settings)));
+    @Override
+    protected Class<? extends Enum> eventTypes() {
+        return Event.class;
     }
 
     @Test
     public void shouldCollectScores_whenWin() {
-        // given
-        givenScores(140);
-
-        // when
-        win();
-        win();
-        win();
-        win();
-
-        // then
-        assertEquals(140
-                    + 4 * settings.integer(WIN_SCORE),
-                scores.getScore());
+        // when then
+        assertEvents("140:\n" +
+                "WIN > +50 = 190\n" +
+                "WIN > +50 = 240\n" +
+                "WIN > +50 = 290\n" +
+                "WIN > +50 = 340");
     }
 
     @Test
     public void shouldCollectScoresIfMoreThanOne_caseMultiple() {
         // given
         settings.integer(WIN_SCORE, -100);
-        givenScores(140);
 
-        // when
-        win();
-        win();
-
-        // then
-        assertEquals(0, scores.getScore());
+        // when then
+        assertEvents("140:\n" +
+                "WIN > -100 = 40\n" +
+                "WIN > -40 = 0");
     }
 }
