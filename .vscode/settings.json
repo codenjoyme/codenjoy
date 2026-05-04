@@ -1,0 +1,7 @@
+{
+  "github.copilot.chat.codeGeneration.useInstructionFiles": true,
+  "chat.mcp.access": "all",
+  "chat.agent.maxRequests": 2500,
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 100
+}
